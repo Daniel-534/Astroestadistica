@@ -1,0 +1,260 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{geometry}
+
+\geometry{a4paper, margin=1in}
+
+\begin{document}
+
+\section{Enunciado del Problema}
+Se clasifican las estrellas de un cúmulo según su color y tamaño. Se observa una estrella al azar con los siguientes datos:
+\begin{itemize}
+    \item El $70\%$ de las estrellas son rojas ($A$).
+    \item El $60\%$ de las estrellas rojas son enanas.
+    \item El $80\%$ de las estrellas azules son gigantes ($B$).
+\end{itemize}
+
+Sea $A$ el suceso "se observa una estrella roja" y $B$ el suceso "se observa una estrella gigante". Se requiere describir y calcular la probabilidad de los eventos solicitados.
+
+\section{Identificación de Probabilidades Básicas}
+A partir de la información suministrada, definimos las probabilidades iniciales:
+\begin{itemize}
+    \item Probabilidad de estrella roja: $P(A) = 0.70$.
+    \item Probabilidad de estrella azul (complemento): $P(A') = 1 - 0.70 = 0.30$.
+\end{itemize}
+
+Condiciones sobre el tamaño (Gigante $B$ o Enana $B'$):
+\begin{itemize}
+    \item Para estrellas rojas: $P(B'|A) = 0.60$, por lo tanto $P(B|A) = 1 - 0.60 = 0.40$.
+    \item Para estrellas azules: $P(B|A') = 0.80$, por lo tanto $P(B'|A') = 1 - 0.80 = 0.20$.
+\end{itemize}
+
+\subsection{Probabilidades de Intersección}
+Utilizando la regla de la multiplicación $P(A \cap B) = P(B|A)P(A)$:
+\begin{enumerate}
+    \item Roja y Gigante: $P(A \cap B) = (0.40)(0.70) = 0.28$.
+    \item Roja y Enana: $P(A \cap B') = (0.60)(0.70) = 0.42$.
+    \item Azul y Gigante: $P(A' \cap B) = (0.80)(0.30) = 0.24$.
+    \item Azul y Enana: $P(A' \cap B') = (0.20)(0.30) = 0.06$.
+\end{enumerate}
+
+La probabilidad total de que sea gigante es $P(B) = P(A \cap B) + P(A' \cap B) = 0.28 + 0.24 = 0.52$.
+
+\section{Resolución de los Eventos Solicitados}
+
+\begin{enumerate}
+    \item \textbf{$A \cup B$ (Estrella roja o gigante):} Aplicando la regla de la adición, $P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.70 + 0.52 - 0.28 = 0.94$.
+
+    \item \textbf{$A \cap B$ (Estrella roja y gigante):} De los cálculos previos, $P(A \cap B) = 0.28$.
+
+    \item \textbf{$A' \cup B$ (Estrella azul o gigante):} $P(A' \cup B) = P(A') + P(B) - P(A' \cap B) = 0.30 + 0.52 - 0.24 = 0.58$.
+
+    \item \textbf{$A' \cup B'$ (Estrella azul o enana):} Por leyes de De Morgan, este evento es el complemento de la intersección roja-gigante, $P(A' \cup B') = 1 - P(A \cap B) = 1 - 0.28 = 0.72$.
+
+    \item \textbf{$A \cap B'$ (Estrella roja y enana):} Calculado previamente como $P(A \cap B') = 0.42$.
+
+    \item \textbf{$A' \cap B$ (Estrella azul y gigante):} Calculado previamente como $P(A' \cap B) = 0.24$.
+
+    \item \textbf{$(A \cap B) \cup (A' \cap B')$ (Estrella roja gigante o azul enana):} Al ser eventos mutuamente excluyentes, sumamos sus probabilidades: $P((A \cap B) \cup (A' \cap B')) = 0.28 + 0.06 = 0.34$.
+\end{enumerate}
+
+\section{Enunciado del Problema}
+En la clasificación de Hubble, las galaxias espirales se dividen en dos tipos: barradas ($SB$) y no barradas ($S$). Además, se subclasifican según la disposición de sus brazos y el tamaño del bulbo con etiquetas que van desde la $a$ hasta la $c$ (denotadas aquí como subtipos $S$, $a$ y $b$ según la tabla adjunta).
+
+Se presentan los siguientes porcentajes conjuntos para cada combinación:
+
+\begin{center}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Tipo / Subtipo} & \textbf{S} & \textbf{a} & \textbf{b} \\ \hline
+\textbf{No Barrada (Q)} & $13\%$ & $28\%$ & $15\%$ \\ \hline
+\textbf{Barrada (QA)}   & $20\%$ & $14\%$ & $10\%$ \\ \hline
+\end{tabular}
+\end{center}
+
+Considere una galaxia espiral elegida aleatoriamente. Se requiere resolver los siguientes literales.
+
+\section{Definición de Eventos y Probabilidades}
+Sean los eventos:
+\begin{itemize}
+    \item $Q$: La galaxia es de tipo no barrada.
+    \item $QA$: La galaxia es de tipo barrada.
+    \item $S, a, b$: La galaxia pertenece a dicho subtipo.
+\end{itemize}
+
+A partir de la tabla, las probabilidades conjuntas son:
+\begin{itemize}
+    \item $P(Q \cap S) = 0.13, \quad P(Q \cap a) = 0.28, \quad P(Q \cap b) = 0.15$
+    \item $P(QA \cap S) = 0.20, \quad P(QA \cap a) = 0.14, \quad P(QA \cap b) = 0.10$
+\end{itemize}
+
+\section{Resolución de los Eventos Solicitados}
+
+\subsection*{a) Probabilidad de tipo S y probabilidad de ser barrada}
+La probabilidad de que sea subtipo $S$ (marginal) es la suma de su columna:
+$P(S) = P(Q \cap S) + P(QA \cap S) = 0.13 + 0.20 = \mathbf{0.33}$
+
+La probabilidad de que sea barrada (marginal) es la suma de su fila:
+$P(QA) = P(QA \cap S) + P(QA \cap a) + P(QA \cap b) = 0.20 + 0.14 + 0.10 = \mathbf{0.44}$
+
+\subsection*{b) Probabilidad condicional: Barrada dado tipo S}
+Si se encuentra que la galaxia es subtipo $S$, la probabilidad de que sea barrada se calcula como:
+$P(QA | S) = \frac{P(QA \cap S)}{P(S)} = \frac{0.20}{0.33} \approx \mathbf{0.6061}$
+
+\textbf{Interpretación:} Dado que la galaxia pertenece al subtipo $S$, existe un $60.61\%$ de probabilidad de que presente una estructura barrada. Esta información aumenta la probabilidad inicial del $44\%$ (encontrada en el inciso a), indicando que el subtipo $S$ está más asociado a las barras que el promedio general de las galaxias.
+
+\subsection*{c) Probabilidad condicional: Tipo S dado que es barrada}
+Si se sabe que la galaxia es barrada, la probabilidad de que sea subtipo $S$ es:
+$P(S | QA) = \frac{P(S \cap QA)}{P(QA)} = \frac{0.20}{0.44} \approx \mathbf{0.4545}$
+
+\textbf{Comparación:} Al comparar este resultado ($\approx 0.4545$) con la probabilidad marginal de ser tipo $S$ encontrada en el literal a ($0.33$), se observa que es notablemente \textbf{mayor}. Esto refuerza la interpretación de que, bajo la condición de ser una galaxia barrada, la probabilidad de encontrar específicamente el subtipo $S$ se incrementa significativamente.
+
+
+\section*{Problema 3: Sistemas Binarios}
+
+\textbf{Enunciado:}
+La mayoría de las estrellas que vemos en el cielo son sistemas binarios, con dos (o a veces más) estrellas orbitando un centro de masa común. Tal vez el $75\%$ de las estrellas son sistemas binarios. Además, se estima que el $4.5\%$ de las estrellas binarias son capaces de soportar planetas tipo terrestres habitables dentro de los rangos orbitales estables.
+
+\begin{itemize}
+    \item[\textbf{a)}] ¿Cuál es la probabilidad de que, al mirar 10 estrellas en una noche de forma aleatoria, todas sean sistemas binarios? Suponga que el universo es homogéneo e isotrópico.
+    \item[\textbf{b)}] ¿Cuál es la probabilidad de que, al mirar una estrella de forma aleatoria, se esté mirando un sistema binario capaz de soportar planetas tipo terrestres habitables?
+\end{itemize}
+
+\textbf{Solución:}
+
+\textbf{Literal a):} 
+Se define el evento $B$ como "la estrella es un sistema binario". Según los datos, $P(B) = 0.75$. Al observar 10 estrellas de forma aleatoria e independiente (bajo la suposición de un universo homogéneo e isotrópico), la probabilidad de que todas cumplan la condición es el producto de sus probabilidades individuales:
+$P(\text{Todas binarias}) = P(B)^{10}$
+$P(\text{Todas binarias}) = (0.75)^{10}$
+$P(\text{Todas binarias}) \approx \mathbf{0.0563}$ (o $5.63\%$).
+
+\textbf{Literal b):} 
+Se requiere la probabilidad de la intersección de dos eventos: que la estrella sea binaria ($B$) y que sea capaz de soportar planetas habitables ($H$). Los datos proporcionan la probabilidad condicional: $P(H|B) = 0.045$ ($4.5\%$). Aplicando la regla de la multiplicación:
+$P(B \cap H) = P(H|B) \cdot P(B)$
+$P(B \cap H) = (0.045) \cdot (0.75)$
+$P(B \cap H) = \mathbf{0.03375}$ (o $3.375\%$).
+
+\vspace{1cm}
+
+\section*{Problema 4: Combinaciones con Repetición}
+
+\textbf{Enunciado:}
+Una combinación con repetición de orden $n$ de los $r$ elementos de $A$ es una selección no ordenada de $n$ elementos de $A$ que pueden repetirse. El número de tales combinaciones se denota $CR_{n,r}$ y está dado por:
+$CR_{n,r} = \binom{r+n-1}{n}$
+
+\begin{itemize}
+    \item[\textbf{a)}] Demuestre la expresión anterior (Consulte sobre el método de barras y estrellas).
+    \item[\textbf{b)}] ¿De cuántas formas se pueden elegir 15 estrellas entre 6 tipos espectrales si:
+    \begin{itemize}
+        \item[1.] Se pueden elegir de cualquier forma.
+        \item[2.] Se debe elegir una de cada tipo.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Solución:}
+
+\textbf{Literal a):} 
+Para seleccionar $n$ objetos de $r$ tipos con repetición, imaginamos los objetos como $n$ puntos (estrellas) y los tipos separados por $r-1$ barras divisorias. Por ejemplo, si $r=3$ y $n=4$, una selección podría ser $**|*|*$, indicando 2 del tipo 1, 1 del tipo 2 y 1 del tipo 3.
+El total de posiciones necesarias es la suma de objetos y barras: $n + (r-1)$. El problema se reduce a elegir en qué posiciones de ese total irán los $n$ objetos (o las $r-1$ barras):
+$CR_{n,r} = \binom{n + r - 1}{n} = \frac{(n+r-1)!}{n!(r-1)!}$
+
+\textbf{Literal b.1):} 
+Aquí $n = 15$ estrellas y $r = 6$ tipos espectrales.
+$CR_{15,6} = \binom{6 + 15 - 1}{15} = \binom{20}{15}$
+Calculando el coeficiente binomial:
+$\binom{20}{15} = \frac{20!}{15!5!} = \frac{20 \cdot 19 \cdot 18 \cdot 17 \cdot 16}{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = \mathbf{15,504}$ formas.
+
+\textbf{Literal b.2):} 
+Si se debe elegir al menos una de cada tipo, primero asignamos una estrella a cada uno de los 6 tipos. Restan por elegir $15 - 6 = 9$ estrellas de los mismos 6 tipos sin restricciones adicionales.
+$n' = 9, r = 6$
+$CR_{9,6} = \binom{6 + 9 - 1}{9} = \binom{14}{9}$
+Calculando el coeficiente binomial:
+$\binom{14}{9} = \frac{14!}{9!5!} = \frac{14 \cdot 13 \cdot 12 \cdot 11 \cdot 10}{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = \mathbf{2,002}$ formas.
+
+\section*{Problema 5: Detección de Nubes Interestelares}
+
+\textbf{Enunciado:}
+Se dispone de un sensor infrarrojo para detectar la presencia de nubes de polvo interestelar. La probabilidad de que el sensor detecte una nube cuando esta existe es del $0.98$. La probabilidad de que el sensor de una falsa alarma (detectar cuando no hay nube) es del $0.05$. Se estima que el $10\%$ de las regiones observadas contienen nubes.
+
+\begin{itemize}
+    \item[\textbf{a)}] Calcule la probabilidad de obtener una detección positiva.
+    \item[\textbf{b)}] Si el sensor indica una detección, ¿cuál es la probabilidad de que realmente haya una nube en esa región?
+\end{itemize}
+
+\textbf{Solución:}
+
+Sean los eventos:
+\begin{itemize}
+    \item $N$: La región contiene una nube interestelar. $P(N) = 0.10$.
+    \item $N^c$: La región no contiene una nube. $P(N^c) = 0.90$.
+    \item $D$: El sensor indica una detección (señal positiva).
+\end{itemize}
+
+Datos proporcionados: $P(D|N) = 0.98$ y $P(D|N^c) = 0.05$.
+
+\textbf{Literal a):} 
+Para hallar la probabilidad total de detección $P(D)$, usamos la Ley de Probabilidad Total:
+$P(D) = P(D|N)P(N) + P(D|N^c)P(N^c)$
+$P(D) = (0.98)(0.10) + (0.05)(0.90)$
+$P(D) = 0.098 + 0.045 = \mathbf{0.143}$ (o $14.3\%$).
+
+\textbf{Literal b):} 
+Se requiere la probabilidad condicional $P(N|D)$. Aplicando la definición de probabilidad condicional (o Teorema de Bayes):
+$P(N|D) = \frac{P(D \cap N)}{P(D)} = \frac{P(D|N)P(N)}{P(D)}$
+$P(N|D) = \frac{0.098}{0.143} \approx \mathbf{0.6853}$ (o $68.53\%$).
+
+\vspace{1cm}
+
+\section*{Problema 6: Tránsito de Asteroides}
+
+\textbf{Enunciado:}
+En una región del espacio, el número de asteroides que cruzan una zona determinada en un año sigue una distribución de Poisson con una media de $\lambda = 2$.
+
+\begin{itemize}
+    \item[\textbf{a)}] ¿Cuál es la probabilidad de que no cruce ningún asteroide en un año determinado?
+    \item[\textbf{b)}] ¿Cuál es la probabilidad de que crucen al menos 2 asteroides en un año?
+\end{itemize}
+
+\textbf{Solución:}
+
+La función de masa de probabilidad de Poisson es $p(x; \lambda) = \frac{e^{-\lambda} \lambda^x}{x!}$ para $x = 0, 1, 2, \dots$
+
+\textbf{Literal a):} 
+Para $x = 0$ y $\lambda = 2$:
+$P(X=0) = \frac{e^{-2} 2^0}{0!} = e^{-2}$
+$P(X=0) \approx \mathbf{0.1353}$ (o $13.53\%$).
+
+\textbf{Literal b):} 
+"Al menos 2" significa $P(X \ge 2)$. Usamos el complemento:
+$P(X \ge 2) = 1 - P(X < 2) = 1 - [P(X=0) + P(X=1)]$
+$P(X=1) = \frac{e^{-2} 2^1}{1!} = 2e^{-2} \approx 0.2707$
+$P(X \ge 2) = 1 - (0.1353 + 0.2707) = 1 - 0.4060 = \mathbf{0.5940}$ (o $59.40\%$).
+
+\vspace{1cm}
+
+\section*{Problema 7: Confiabilidad de Componentes de Satélite}
+
+\textbf{Enunciado:}
+Se seleccionan 3 componentes electrónicos para un satélite. La probabilidad de que un componente falle es de $0.1$, independientemente de los otros. El sistema funciona correctamente si al menos 2 de los 3 componentes funcionan. ¿Cuál es la probabilidad de que el sistema funcione?
+
+\textbf{Solución:}
+
+Este es un experimento binomial donde:
+\begin{itemize}
+    \item $n = 3$ (número de componentes/ensayos).
+    \item Éxito ($E$): El componente funciona. $p = 1 - 0.1 = 0.9$.
+    \item Falla ($F$): El componente no funciona. $q = 0.1$.
+\end{itemize}
+
+Se busca $P(X \ge 2)$, donde $X$ es el número de componentes que funcionan:
+$P(X \ge 2) = P(X=2) + P(X=3)$
+Utilizando la fórmula binomial $b(x; n, p) = \binom{n}{x} p^x (1-p)^{n-x}$:
+$P(X=2) = \binom{3}{2} (0.9)^2 (0.1)^1 = 3 \cdot 0.81 \cdot 0.1 = 0.243$
+$P(X=3) = \binom{3}{3} (0.9)^3 (0.1)^0 = 1 \cdot 0.729 \cdot 1 = 0.729$
+$P(X \ge 2) = 0.243 + 0.729 = \mathbf{0.972}$ (o $97.2\%$).
+
+
+\end{document}
