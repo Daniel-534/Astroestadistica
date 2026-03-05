@@ -1,0 +1,506 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Notas de Clase Parte 1}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\Large Universidad de Antioquia\par}
+  \vspace{2cm}
+  {\huge\bfseries Astroestadística\par}
+  \vspace{0.4cm}
+  {\Large Notas de Clase Parte 1\par}
+  \vspace{2.5cm}
+  {\large Autor:\par}
+  \vspace{0.2cm}
+  {\large Daniel Soto Villada\par}
+  {\large Estudiante de Astronomía\par}
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Espacios Muestrales y Eventos}
+
+El estudio de la probabilidad se centra en situaciones donde el resultado de una acción es incierto, proporcionando métodos para cuantificar las oportunidades asociadas con diversos sucesos.
+
+\subsection{Experimentos y el Espacio Muestral}
+
+Un experimento se define como cualquier acción o proceso cuyo resultado está sujeto a la incertidumbre. Ejemplos comunes incluyen lanzar una moneda, medir la resistencia de una viga o el tiempo de recorrido hacia el trabajo.
+
+\subsubsection{Definición de Espacio Muestral}
+
+El espacio muestral de un experimento, denotado por $\hat{S}$, es el conjunto que contiene todos los posibles resultados del experimento. En el caso más simple, como examinar si un fusible funciona o no, el espacio muestral se abrevia como $\hat{S} = \{N, D\}$, donde $N$ representa un fusible no defectuoso y $D$ uno defectuoso.
+
+\subsubsection{Ejemplos de Espacios Muestrales}
+
+Si se lanzan tres fusibles en secuencia, el resultado es una secuencia de longitud tres. El espacio muestral completo es $\hat{S} = \{NNN, NND, NDN, NDD, DNN, DND, DDN, DDD\}$. Existen experimentos donde el espacio muestral es infinito, como probar baterías hasta observar el primer éxito ($E$), donde el conjunto de resultados es $\hat{S} = \{E, FE, FFE, FFFE, \dots\}$.
+
+\subsection{Eventos}
+
+Un evento es cualquier recopilación o subconjunto de resultados contenidos en el espacio muestral $\hat{S}$. Se dice que un evento ocurre si el resultado experimental obtenido está contenido en dicho conjunto.
+
+\subsubsection{Tipos de Eventos}
+
+Un evento es simple si consiste en exactamente un resultado de $\hat{S}$. Por otro lado, un evento es compuesto si consiste en más de un resultado. Por ejemplo, en un experimento de lanzamiento de dados, un evento simple podría ser obtener un 3, mientras que un evento compuesto sería obtener un número impar.
+
+\subsection{Relaciones de la Teoría de Conjuntos}
+
+Debido a que los eventos son conjuntos, se utilizan las operaciones de la teoría elemental de conjuntos para definir nuevos sucesos.
+
+\subsubsection{Complemento, Unión e Intersección}
+
+El complemento de un evento $A$, denotado por $A'$, es el conjunto de todos los resultados en $\hat{S}$ que no están contenidos en $A$. La unión de dos eventos $A$ y $B$, denotada por $A \cup B$, contiene todos los resultados que están en $A$, en $B$ o en ambos. La intersección de dos eventos, $A \cap B$, contiene solo los resultados que están tanto en $A$ como en $B$.
+
+\subsubsection{Eventos Mutuamente Excluyentes}
+
+Se dice que dos eventos $A$ y $B$ son mutuamente excluyentes o disjuntos cuando su intersección es el evento nulo $\emptyset$, lo que significa que no tienen resultados en común. Un ejemplo es la venta de marcas de autos de diferentes distribuidores; un vehículo vendido no puede ser simultáneamente de dos marcas distintas.
+
+\section{Probabilidad y sus Axiomas}
+
+El objetivo es asignar a cada evento $A$ un número $P(A)$, denominado probabilidad del evento $A$, que ofrezca una medida precisa de la oportunidad de que dicho evento ocurra.
+
+\subsection{Los Axiomas de Probabilidad}
+
+Para que las asignaciones de probabilidad sean consistentes con la noción intuitiva, deben satisfacer tres propiedades básicas denominadas axiomas.
+
+\subsubsection{Primer y Segundo Axioma}
+
+El Axioma 1 establece que para cualquier evento $A$, su probabilidad debe ser no negativa: $P(A) \geq 0$. El Axioma 2 indica que la máxima probabilidad posible es 1 y se asigna al espacio muestral: $P(\hat{S}) = 1$.
+
+\subsubsection{Tercer Axioma}
+
+Si $A_1, A_2, A_3, \dots$ es un conjunto de eventos mutuamente excluyentes, la probabilidad de la unión de estos eventos es la suma de sus probabilidades individuales: $P(A_1 \cup A_2 \cup A_3 \dots) = \sum P(A_i)$. Este axioma permite derivar probabilidades para conjuntos finitos de eventos disjuntos, demostrando también que la probabilidad del evento nulo es cero: $P(\emptyset) = 0$.
+
+\subsection{Interpretaciones de la Probabilidad}
+
+Existen dos enfoques principales para interpretar los números asignados a las probabilidades: el objetivo y el subjetivo.
+
+\subsubsection{Interpretación Frecuentista}
+
+Esta interpretación objetiva identifica la probabilidad $P(A)$ con la frecuencia relativa límite del evento $A$ cuando el experimento se realiza repetidamente bajo condiciones idénticas. Si el experimento se realiza $n$ veces y el evento ocurre $n(A)$ veces, a medida que $n$ crece, la relación $n(A)/n$ tiende a estabilizarse en el valor $P(A)$.
+
+\subsubsection{Interpretación Subjetiva}
+
+Se aplica en situaciones inherentemente irrepetibles donde la probabilidad representa el grado de creencia personal de un individuo sobre la ocurrencia de un evento, basándose en su información y opiniones previas.
+
+\subsection{Propiedades Derivadas y Resultados Igualmente Probables}
+
+A partir de los axiomas se derivan reglas fundamentales para el cálculo de probabilidades.
+
+\subsubsection{Regla del Complemento y de la Adición}
+
+Para cualquier evento $A$, $P(A) = 1 - P(A')$. Esta regla es útil cuando calcular la probabilidad de que algo no ocurra es más sencillo que el cálculo directo. Para dos eventos cualesquiera $A$ y $B$, la probabilidad de su unión es $P(A \cup B) = P(A) + P(B) - P(A \cap B)$. Esta fórmula corrige el "doble conteo" de los resultados presentes en la intersección.
+
+\subsubsection{Resultados Igualmente Probables}
+
+En experimentos con $N$ resultados donde cada uno tiene la misma oportunidad de ocurrir, la probabilidad de cada evento simple es $1/N$. Para cualquier evento compuesto $A$, la probabilidad es la proporción de resultados favorables: $P(A) = N(A)/N$, donde $N(A)$ es el número de resultados en $A$. Por ejemplo, al lanzar dos dados imparciales, hay $N = 36$ resultados equiprobables y la probabilidad de que la suma sea 7 es $6/36 = 1/6$.
+
+\section{Probabilidad Condicional}
+
+Las probabilidades asignadas a los eventos pueden cambiar cuando se dispone de información parcial sobre el resultado del experimento. La probabilidad original se denomina probabilidad no condicional, mientras que la probabilidad revisada ante la ocurrencia de un evento se llama probabilidad condicional.
+
+\subsection{Definición de Probabilidad Condicional}
+
+Para dos eventos cualesquiera $A$ y $B$ con $P(B) > 0$, la probabilidad condicional de $A$ dado que $B$ ha ocurrido se define como:
+$P(A | B) = \frac{P(A \cap B)}{P(B)}$
+
+En esta situación, $B$ actúa como el "evento condicionante". Una interpretación intuitiva es que, una vez que sabemos que $B$ ha ocurrido, el espacio muestral pertinente ya no es $\hat{S}$, sino que se reduce exclusivamente a los resultados contenidos en $B$.
+
+\subsubsection{La Regla de Multiplicación}
+
+Al despejar la intersección de la definición anterior, obtenemos la regla de multiplicación, fundamental para calcular la probabilidad de que dos eventos ocurran simultáneamente:
+$P(A \cap B) = P(A | B) \cdot P(B)$
+
+Esta regla es especialmente útil en experimentos que se componen de varias etapas sucesivas. Por ejemplo, para tres eventos $A_1, A_2, A_3$, la probabilidad de su intersección conjunta es:
+$P(A_1 \cap A_2 \cap A_3) = P(A_3 | A_1 \cap A_2) \cdot P(A_2 | A_1) \cdot P(A_1)$
+
+\section{Independencia de Eventos}
+
+El concepto de independencia se refiere a situaciones donde la ocurrencia o no ocurrencia de un evento no afecta la probabilidad de que el otro ocurra.
+
+\subsection{Definición Formal de Independencia}
+
+Se dice que dos eventos $A$ y $B$ son independientes si se cumple que:
+$P(A | B) = P(A)$
+De lo contrario, se dice que los eventos son dependientes. Esta definición es simétrica, lo que implica que si $A$ es independiente de $B$, entonces $B$ es también independiente de $A$ ($P(B | A) = P(B)$).
+
+\subsubsection{La Regla de Multiplicación para Eventos Independientes}
+
+Una propiedad equivalente y muy utilizada para verificar la independencia es que la probabilidad de la intersección sea el producto de las probabilidades individuales:
+$A$ y $B$ son independientes si y solo si $P(A \cap B) = P(A) \cdot P(B)$
+
+Es importante notar que la independencia es distinta a la exclusión mutua. Si dos eventos con probabilidad positiva son mutuamente excluyentes ($P(A \cap B) = 0$), entonces no pueden ser independientes, ya que saber que uno ocurrió garantiza que el otro no pudo haber ocurrido.
+
+\subsubsection{Independencia Mutua de $n$ Eventos}
+
+Un conjunto de eventos $A_1, \dots, A_n$ son mutuamente independientes si para cualquier subconjunto de $k$ eventos, la probabilidad de su intersección es igual al producto de sus probabilidades individuales:
+$P(A_{i1} \cap \dots \cap A_{ik}) = P(A_{i1}) \cdot \dots \cdot P(A_{ik})$
+
+\section{Teorema de Bayes}
+
+El Teorema de Bayes permite calcular probabilidades "posteriores" a partir de probabilidades "previas" (antes de la nueva información) y probabilidades condicionales.
+
+\subsection{Ley de Probabilidad Total}
+
+Sea $A_1, \dots, A_k$ un conjunto de eventos mutuamente excluyentes y exhaustivos (una partición del espacio muestral $\hat{S}$). Para cualquier otro evento $B$, su probabilidad se puede calcular como:
+$P(B) = \sum_{i=1}^{k} P(B | A_i)P(A_i)$
+
+Visualmente, esto representa una "división de $B$" entre los diversos eventos $A_i$ que conforman el espacio muestral.
+
+\subsection{Formulación del Teorema de Bayes}
+
+Combinando la regla de multiplicación y la ley de probabilidad total, el teorema de Bayes establece que para cualquier evento $A_j$ de la partición:
+$P(A_j | B) = \frac{P(B | A_j)P(A_j)}{\sum_{i=1}^{k} P(B | A_i)P(A_i)}$
+
+\subsubsection{Interpretación de Probabilidades Previas y Posteriores}
+
+\begin{itemize}
+    \item \textbf{Probabilidad Previa:} $P(A_j)$ es la creencia inicial sobre la ocurrencia de $A_j$.
+    \item \textbf{Probabilidad Posterior:} $P(A_j | B)$ es la creencia actualizada después de observar que el evento $B$ ha ocurrido.
+\end{itemize}
+
+Un ejemplo clásico es el diagnóstico de enfermedades raras. Aunque una prueba sea muy precisa (alta probabilidad condicional de detección), si la enfermedad es extremadamente rara (baja probabilidad previa), la probabilidad posterior de estar enfermo dado un resultado positivo puede seguir siendo sorprendentemente baja debido a la proporción de falsos positivos en la población sana.
+
+
+\section{Técnicas de Conteo}
+
+Cuando los resultados de un experimento son igualmente probables, el cálculo de probabilidades se reduce a determinar el tamaño del espacio muestral $\hat{S}$ y del evento $A$ de interés. Sin embargo, cuando el número de resultados $N$ es muy grande, enlistarlos resulta prohibitivo, por lo que se emplean reglas matemáticas de conteo.
+
+\subsection{La Regla del Producto}
+
+La regla del producto es el principio fundamental para contar pares ordenados o conjuntos de elementos seleccionados en etapas sucesivas.
+
+\subsubsection{Regla para Pares Ordenados}
+
+Si el primer elemento de un par ordenado puede ser seleccionado de $n_1$ maneras, y por cada una de estas, el segundo elemento puede seleccionarse de $n_2$ maneras, entonces el número de pares es $n_1 n_2$. 
+
+Ejemplo: Si un propietario necesita un contratista de fontanería (hay 12 disponibles) y uno de electricidad (hay 9 disponibles), el número de formas de elegir la pareja es $12 \times 9 = 108$.
+
+\subsubsection{Regla Generalizada ($k$-tuplas)}
+
+Si un conjunto se compone de conjuntos ordenados de $k$ elementos ($k$-tuplas), donde hay $n_1$ opciones para el primero, $n_2$ para el segundo dado el primero, y así sucesivamente hasta $n_k$, el número total de $k$-tuplas es el producto $n_1 n_2 \dots n_k$.
+
+\subsection{Permutaciones}
+
+Una permutación es un subconjunto donde el \textbf{orden de selección es importante}.
+
+\subsubsection{Definición y Notación}
+
+Dado un grupo de $n$ individuos distintos, una permutación de tamaño $k$ es un subconjunto ordenado de ellos. El número de permutaciones se denota como $P_{k,n}$.
+
+\subsubsection{Formulación Matemática}
+
+Utilizando la regla del producto y la notación factorial (donde $n! = n(n-1)\dots(2)(1)$ y $0! = 1$), la fórmula para calcular el número de permutaciones es:
+$P_{k,n} = \frac{n!}{(n-k)!}$
+
+Ejemplo: Si un colegio de ingeniería con 7 departamentos debe elegir un presidente, un vicepresidente y un secretario de entre sus representantes, el número de formas posibles es $P_{3,7} = 7 \times 6 \times 5 = 210$.
+
+\subsection{Combinaciones}
+
+Una combinación es un subconjunto donde el \textbf{orden no es importante}; solo interesa qué elementos fueron seleccionados.
+
+\subsubsection{Definición y Notación}
+
+El número de combinaciones de tamaño $k$ que se pueden formar con $n$ objetos se denota comúnmente como $\binom{n}{k}$, que se lee "de $n$ se eligen $k$".
+
+\subsubsection{Formulación Matemática}
+
+Como cada combinación de tamaño $k$ puede ordenarse de $k!$ formas distintas para producir permutaciones, la relación es $P_{k,n} = k! \binom{n}{k}$. Despejando, obtenemos:
+$\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+
+Ejemplo: Si de los mismos 7 representantes anteriores se deben elegir 3 para asistir a una convención (sin cargos específicos), el orden no importa. El número de combinaciones es $\binom{7}{3} = \frac{7!}{3!4!} = \frac{210}{6} = 35$.
+
+\subsubsection{Propiedades de los Coeficientes Binomiales}
+
+Existen resultados útiles para cálculos rápidos:
+\begin{itemize}
+    \item $\binom{n}{n} = 1$: Solo hay una forma de elegir todos los elementos.
+    \item $\binom{n}{0} = 1$: Solo hay una forma de no elegir ningún elemento.
+    \item $\binom{n}{1} = n$: Hay $n$ formas de elegir un solo objeto.
+    \item $\binom{n}{k} = \binom{n}{n-k}$: Elegir $k$ objetos es equivalente a elegir los $n-k$ que se van a dejar fuera.
+\end{itemize}
+
+\section{Variables Aleatorias}
+
+En muchas situaciones experimentales, los resultados son numéricos por naturaleza o pueden ser asociados con números mediante una regla específica. El concepto de variable aleatoria permite pasar de resultados cualitativos o cuantitativos a una función numérica.
+
+\subsection{Definición de Variable Aleatoria}
+
+Para un espacio muestral dado $\hat{S}$ de algún experimento, una **variable aleatoria (va)** es cualquier regla que asocia un número con cada resultado en $\hat{S}$. En lenguaje matemático, es una función cuyo dominio es el espacio muestral y cuyo rango es el conjunto de los números reales.
+
+\subsubsection{Clasificación de Variables Aleatorias}
+
+Existen dos tipos fundamentales de variables aleatorias:
+\begin{enumerate}
+    \item \textbf{Variable aleatoria discreta:} Sus valores posibles constituyen un conjunto finito o pueden ser puestos en una lista en una secuencia infinita (contablemente infinita). Un ejemplo es el número de proyectiles que impactan un objetivo.
+    \item \textbf{Variable aleatoria continua:} Sus valores posibles abarcan un intervalo completo de la línea numérica (o una unión de intervalos). Además, ningún valor individual tiene una probabilidad positiva, es decir, $P(X = c) = 0$ para cualquier valor $c$.
+\end{enumerate}
+
+\section{Distribuciones de Probabilidad y Funciones de Densidad}
+
+La distribución de probabilidad describe cómo se asigna la probabilidad total de 1 entre los diversos valores posibles de la variable aleatoria $X$.
+
+\subsection{Caso Discreto: Función Masa de Probabilidad (fmp)}
+
+Para una variable discreta, la distribución se define mediante la función masa de probabilidad $p(x)$, que especifica la probabilidad de observar cada valor $x$.
+Se deben cumplir dos condiciones:
+\begin{itemize}
+    \item $p(x) \geq 0$ para todo $x$ posible.
+    \item $\sum_{x} p(x) = 1$.
+\end{itemize}
+
+Un caso especial es la **variable aleatoria de Bernoulli**, cuyos únicos valores posibles son 0 (falla) y 1 (éxito). Su fmp se denota como $p(1) = \alpha$ y $p(0) = 1 - \alpha$.
+
+\subsection{Caso Continuo: Función de Densidad de Probabilidad (fdp)}
+
+Para variables continuas, la probabilidad no se asigna a puntos, sino a intervalos. Una fdp es una función $f(x)$ tal que para dos números cualesquiera $a$ y $b$ con $a \leq b$:
+$P(a \leq X \leq b) = \int_{a}^{b} f(x) dx$.
+Esta probabilidad corresponde al área bajo la curva de densidad entre $a$ y $b$.
+
+Condiciones para una fdp legítima:
+\begin{itemize}
+    \item $f(x) \geq 0$ para toda $x$.
+    \item $\int_{-\infty}^{\infty} f(x) dx = 1$.
+\end{itemize}
+
+\section{Función de Distribución Acumulativa (CDF)}
+
+La función de distribución acumulativa $F(x)$ da la probabilidad de que el valor observado de $X$ sea a lo sumo $x$.
+
+\subsection{Definición Matemática}
+
+\subsubsection{Para Variables Discretas}
+$F(x) = P(X \leq x) = \sum_{y \leq x} p(y)$.
+Gráficamente, esta función es una función escalonada que muestra un salto en cada valor posible de $X$.
+
+\subsubsection{Para Variables Continuas}
+$F(x) = P(X \leq x) = \int_{-\infty}^{x} f(y) dy$.
+En este caso, $F(x)$ es el área bajo la curva de densidad a la izquierda de $x$. Una propiedad fundamental es que si la derivada existe, $F'(x) = f(x)$.
+
+\subsection{Cálculo de Probabilidades de Intervalo}
+
+Para cualquier variable aleatoria continua, la probabilidad de que $X$ caiga entre $a$ y $b$ es:
+$P(a \leq X \leq b) = F(b) - F(a)$.
+Es importante notar que en el caso continuo, incluir o no los extremos no afecta la probabilidad: $P(a \leq X \leq b) = P(a < X < b)$.
+
+\section{Valores Esperados y Varianza}
+
+Estas medidas describen el centro y la dispersión de la distribución de probabilidad.
+
+\subsection{Valor Esperado (Media de la Población)}
+
+El valor esperado de $X$, denotado por $E(X)$ o $\mu_X$, es el promedio ponderado de los valores posibles.
+
+\subsubsection{Formulación Matemática}
+\begin{itemize}
+    \item \textbf{Discreto:} $E(X) = \sum_{x \in D} x \cdot p(x)$.
+    \item \textbf{Continuo:} $E(X) = \int_{-\infty}^{\infty} x \cdot f(x) dx$.
+\end{itemize}
+
+\subsubsection{Reglas del Valor Esperado}
+Para constantes $a$ y $b$: $E(aX + b) = aE(X) + b$.
+Si $h(X)$ es una función de $X$, entonces $E[h(X)] = \int h(x) \cdot f(x) dx$ (o suma en el caso discreto).
+
+\subsection{Varianza y Desviación Estándar}
+
+La varianza de $X$, denotada por $V(X)$ o $\sigma^2_X$, es la desviación al cuadrado esperada con respecto a la media $\mu$.
+
+\subsubsection{Definición}
+$V(X) = E[(X - \mu)^2]$.
+La **desviación estándar** es la raíz cuadrada positiva de la varianza: $\sigma_X = \sqrt{V(X)}$.
+
+\subsubsection{Fórmula Abreviada}
+Para facilitar el cálculo, se utiliza:
+$V(X) = E(X^2) - [E(X)]^2$.
+
+\subsubsection{Reglas de la Varianza}
+Para constantes $a$ y $b$: $V(aX + b) = a^2 V(X)$.
+Esto implica que sumar una constante no cambia la varianza, pero multiplicar por $a$ incrementa la varianza por un factor de $a^2$.
+
+\section{La Distribución de Probabilidad Binomial}
+
+La distribución binomial es una de las distribuciones de probabilidad discreta más importantes y utilizadas en estadística. Se aplica a experimentos que consisten en una serie de ensayos donde solo existen dos resultados posibles, como éxito o falla.
+
+\subsection{El Experimento Binomial}
+
+Un experimento se clasifica como binomial si cumple con los siguientes cuatro requerimientos fundamentales:
+
+\begin{enumerate}
+    \item \textbf{Número fijo de ensayos:} El experimento consta de una secuencia de $n$ ensayos más pequeños, donde $n$ se fija antes de iniciar el proceso.
+    \item \textbf{Ensayos dicotómicos:} Cada ensayo puede dar por resultado uno de solo dos resultados posibles, denominados tradicionalmente como \textbf{éxito ($E$)} y \textbf{falla ($F$)}.
+    \item \textbf{Independencia:} Los ensayos son independientes entre sí, lo que significa que el resultado de un ensayo no influye en el resultado de cualquier otro.
+    \item \textbf{Probabilidad constante:} La probabilidad de éxito, denotada por $p$, es constante en cada uno de los ensayos. La probabilidad de falla se denota comúnmente como $q = 1 - p$.
+\end{enumerate}
+
+\subsubsection{Variable Aleatoria de Bernoulli}
+
+La distribución binomial tiene sus raíces en el ensayo de Bernoulli. Cualquier variable aleatoria cuyos únicos valores posibles son 0 (falla) y 1 (éxito) se denomina \textbf{variable aleatoria de Bernoulli}. El experimento binomial puede verse como la suma de $n$ variables de Bernoulli independientes e idénticamente distribuidas.
+
+\subsection{La Variable Aleatoria Binomial}
+
+En un experimento binomial, el interés principal no radica en el orden de los resultados, sino en el número total de éxitos obtenidos.
+
+\subsubsection{Definición}
+
+La \textbf{variable aleatoria binomial} $X$ asociada con un experimento de $n$ ensayos se define como el número de éxitos ($E$) entre los $n$ ensayos realizados. Los valores posibles que puede tomar $X$ son los enteros del conjunto $\{0, 1, 2, \dots, n\}$.
+
+\subsection{Función Masa de Probabilidad (fmp)}
+
+La distribución de probabilidad de $X$ depende de los parámetros $n$ (número de ensayos) y $p$ (probabilidad de éxito). Se utiliza la notación $b(x; n, p)$ para representar esta función.
+
+\subsubsection{Derivación Matemática}
+
+Para obtener $x$ éxitos en $n$ ensayos, deben ocurrir exactamente $x$ éxitos y $n - x$ fallas. La probabilidad de cualquier secuencia específica con este conteo es $p^x(1 - p)^{n-x}$ debido a la independencia de los ensayos. Como existen $\binom{n}{x}$ formas distintas de organizar esos $x$ éxitos en los $n$ lugares disponibles, la fórmula general es:
+
+$b(x; n, p) = \binom{n}{x} p^x (1 - p)^{n-x} \quad \text{para } x = 0, 1, 2, \dots, n$
+
+Donde el coeficiente binomial $\binom{n}{x} = \frac{n!}{x!(n-x)!}$ representa el número de combinaciones posibles.
+
+\subsubsection{Ejemplo: Preferencia de Bebidas}
+
+Suponga que a seis personas se les da a elegir entre dos marcas de refresco ($A$ y $B$). Si no hay preferencia ($p = 0.5$) y $X$ es el número de personas que eligen la marca $A$, la probabilidad de que exactamente tres personas la prefieran es:
+$P(X = 3) = b(3; 6, 0.5) = \binom{6}{3} (0.5)^3 (0.5)^3 = 20(0.5)^6 = 0.313$
+
+\subsection{Función de Distribución Acumulativa (CDF)}
+
+A menudo es necesario calcular la probabilidad de que ocurran "a lo sumo" cierto número de éxitos. Esta probabilidad se obtiene sumando las probabilidades individuales de la fmp.
+
+\subsubsection{Definición de $B(x; n, p)$}
+
+Para una variable binomial $X$, la función de distribución acumulativa se denota como:
+$P(X \leq x) = B(x; n, p) = \sum_{y=0}^{x} b(y; n, p)$
+
+\subsubsection{Cálculo de Intervalos}
+
+Utilizando la CDF, se pueden calcular diversas probabilidades de intervalo para enteros $a$ y $b$ ($a \leq b$):
+$P(a \leq X \leq b) = B(b; n, p) - B(a - 1; n, p)$
+
+\subsection{Media y Varianza de la Distribución Binomial}
+
+Aunque se podrían calcular mediante sumatorias exhaustivas, existen fórmulas simplificadas para los momentos de la variable binomial basadas en sus parámetros.
+
+\subsubsection{Valor Esperado}
+
+El valor esperado (media de la población) de una variable binomial es el producto del número de ensayos por la probabilidad de éxito en un solo ensayo:
+$E(X) = \mu_X = np$
+
+\subsubsection{Varianza y Desviación Estándar}
+
+La varianza mide la dispersión de los éxitos en torno a la media y está dada por:
+$V(X) = \sigma^2_X = np(1 - p) = npq$
+La desviación estándar es la raíz cuadrada de la varianza: $\sigma_X = \sqrt{npq}$.
+
+\subsection{Aproximación por Población Finita}
+
+En la práctica, muchos experimentos consisten en seleccionar una muestra de tamaño $n$ de una población finita de tamaño $N$ sin reemplazo. Aunque esto técnicamente violaría la independencia (haciendo el experimento hipergeométrico), se puede usar la distribución binomial como una aproximación muy precisa si $n$ es pequeño con respecto a $N$.
+
+\subsubsection{Regla Empírica}
+
+Si el tamaño de la muestra $n$ es a lo sumo el $5\%$ del tamaño de la población ($n/N \leq 0.05$), el experimento puede analizarse como si fuera exactamente binomial.
+
+
+\section{Distribución de Probabilidad de Poisson}
+
+A diferencia de las distribuciones binomiales o hipergeométricas, la distribución de Poisson no se basa en un experimento simple de ensayos, sino que surge frecuentemente en relación con la ocurrencia de eventos en el transcurso del tiempo o en una región específica.
+
+\subsection{Definición y Parámetros}
+
+Se dice que una variable aleatoria discreta $X$ tiene una distribución de Poisson con parámetro $\lambda$ ($\lambda > 0$) si su función masa de probabilidad (fmp) es:
+$p(x; \lambda) = \frac{e^{-\lambda} \lambda^x}{x!}$ para $x = 0, 1, 2, \dots$.
+
+El parámetro $\lambda$ representa el valor promedio de eventos por unidad de tiempo o área. Una propiedad fundamental es que tanto el valor esperado como la varianza de esta distribución son iguales al parámetro: $E(X) = V(X) = \lambda$.
+
+\subsubsection{La Distribución de Poisson como Límite}
+
+La distribución de Poisson puede utilizarse para aproximar probabilidades binomiales cuando el número de ensayos $n$ es grande y la probabilidad de éxito $p$ es pequeña, de modo que $np$ tiende a un valor constante $\lambda$. Como regla empírica, la aproximación es segura si $n \geq 50$ y $np \leq 5$.
+
+\subsubsection{Procesos de Poisson}
+
+Una aplicación crucial surge al modelar eventos como visitas a un sitio web, pulsos en un contador o lluvias de rayos cósmicos observadas por astrónomos. En un intervalo de tiempo $t$, si la tasa de eventos es $\alpha$, el número de eventos sigue una distribución de Poisson con parámetro $\lambda = \alpha t$.
+
+\section{Variables Aleatorias Continuas}
+
+Una variable aleatoria es continua si sus valores posibles abarcan un intervalo completo de la línea numérica y la probabilidad de que tome un valor puntual específico $c$ es siempre cero: $P(X = c) = 0$.
+
+\subsection{Funciones de Densidad de Probabilidad (fdp)}
+
+La distribución de probabilidad de una variable continua se especifica mediante una función $f(x)$ tal que la probabilidad de que $X$ caiga en un intervalo $[a, b]$ es el área bajo la curva entre esos puntos:
+$P(a \leq X \leq b) = \int_{a}^{b} f(x) dx$.
+
+Para que $f(x)$ sea legítima debe cumplir: $f(x) \geq 0$ para toda $x$ y el área total bajo la curva debe ser 1: $\int_{-\infty}^{\infty} f(x) dx = 1$.
+
+\section{Percentiles de una Distribución Continua}
+
+Los percentiles proporcionan una forma de dividir la distribución en términos de área acumulada.
+
+\subsection{Definición Matemática}
+
+Para un número $p$ entre 0 y 1, el $(100p)$-ésimo percentil, denotado por $\eta(p)$, es el valor tal que el área bajo la curva de densidad a su izquierda es exactamente $p$:
+$p = F(\eta(p)) = \int_{-\infty}^{\eta(p)} f(y) dy$.
+
+\subsubsection{La Mediana}
+
+La \textbf{mediana} de una distribución continua, denotada por $\tilde{\mu}$, es el percentil 50. Divide la curva de densidad en dos partes iguales, donde la mitad del área queda a su izquierda y la otra mitad a su derecha: $F(\tilde{\mu}) = 0.5$.
+
+\section{La Distribución Normal}
+
+La distribución normal es la más importante en toda la probabilidad y estadística debido a que muchas poblaciones numéricas reales siguen este modelo de "campana".
+
+\subsection{Función de Densidad Normal}
+
+Una variable aleatoria continua $X$ tiene una distribución normal con parámetros $\mu$ (media) y $\sigma$ (desviación estándar) si su fdp es:
+$f(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi}\sigma} e^{-(x-\mu)^2/(2\sigma^2)}$.
+
+La curva es simétrica con respecto a $\mu$, que es simultáneamente la media y la mediana. El parámetro $\sigma$ determina la dispersión; valores grandes de $\sigma$ producen curvas más extendidas y aplanadas.
+
+\subsection{Distribución Normal Estándar}
+
+Se denota por $Z$ a la variable aleatoria normal con $\mu = 0$ y $\sigma = 1$. Su función de distribución acumulativa se denota como $\Phi(z) = P(Z \leq z)$ y está ampliamente tabulada.
+
+\subsubsection{Estandarización}
+
+Cualquier variable normal $X$ con parámetros $\mu$ y $\sigma$ puede convertirse en una variable normal estándar $Z$ mediante la fórmula:
+$Z = \frac{X - \mu}{\sigma}$.
+
+Esto permite calcular probabilidades de cualquier distribución normal usando la tabla normal estándar: $P(a \leq X \leq b) = \Phi(\frac{b-\mu}{\sigma}) - \Phi(\frac{a-\mu}{\sigma})$.
+
+\subsection{La Regla Empírica}
+
+Para cualquier población con distribución normal:
+\begin{enumerate}
+    \item El $68\%$ de los valores están dentro de $1\sigma$ de la media.
+    \item El $95\%$ de los valores están dentro de $2\sigma$ de la media.
+    \item El $99.7\%$ de los valores están dentro de $3\sigma$ de la media.
+\end{enumerate}
+
+
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}
