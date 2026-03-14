@@ -65,6 +65,7 @@ Existen diferentes formas de construir un histograma dependiendo de la naturalez
 \textbf{Casos de uso:}
 Los histogramas se usan para obtener una impresión preliminar de los datos, permitiendo identificar valores típicos, el grado de dispersión, la simetría (o asimetría), la presencia de brechas y el número de crestas (unimodal, bimodal o multimodal). El uso de bines desiguales es específico para casos con alta concentración de datos en una región y observaciones muy dispersas en otras.
 
+\newpage
 
 \section{Problema \# 2}
 \textbf{Enunciado:}
@@ -79,17 +80,35 @@ Realice o simule el lanzamiento de dos dados de seis caras cada uno y guarde el 
 
 \subsection*{Solución}
 
-Para abordar este problema, se realizó una simulación programada que sigue la lógica de lanzamientos independientes para cada valor de $n$. A continuación, se presenta el desarrollo de cada inciso basado en los resultados obtenidos:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{HistogramasProblema2.png}
+    \caption{Distribución de frecuencia relativa de la suma de dos dados de seis caras para diferentes tamaños de muestra ($n\in\{10,100,1000,10000,100000\})$}
+    \label{fig:histograma}
+\end{figure}
 
 \begin{enumerate}[a.]
-    \item \textbf{Resultados gráficos:} Se utilizó un \textbf{histograma para datos discretos}, escalando el eje vertical a \textbf{frecuencia relativa} para facilitar la comparación entre muestras. Como se observa en la imagen proporcionada, para $n=10$ la distribución es sumamente irregular y presenta brechas en valores posibles como el 2, 6, 7 y 8; sin embargo, conforme $n$ crece, los bines se estabilizan.
+    \item Como se observa en la Figura 1, para $n=10$ la distribución es muy irregular y presenta brechas en valores posibles como el 2, 6, 7 y 8. Pero cuando $n$ crece, los bines se estabilizan.
     
-    \item \textbf{Cambios con el aumento de $n$:} A medida que el tamaño de la muestra aumenta, el histograma se vuelve progresivamente más "suave", simétrico y concentrado en torno a un valor central. Mientras que para $n=10$ y $n=100$ existe mucha fluctuación y asimetría por la variabilidad del muestreo, en $n=10000$ y $n=100000$ la forma de la distribución se estabiliza de manera notable, mostrando una figura triangular clara con su cresta en la suma igual a 7.
+    \item A medida que el tamaño de la muestra aumenta, el histograma se vuelve progresivamente más suave, simétrico y concentrado en torno a un valor central. Mientras que para $n=10$ y $n=100$ existen muchas irregularidades por la variabilidad del muestreo, en $n=10 000$ y $n=100 000$ la forma de la distribución se estabiliza bastante, mostrando una figura gaussiana con $\mu=7$.
     
-    \item \textbf{Expectativas de los resultados:} Los resultados son los esperados según la teoría de probabilidad para dados imparciales. Para dos dados, existen 36 resultados posibles en el espacio muestral. La suma con mayor probabilidad es el 7, ya que cuenta con 6 combinaciones favorables: (1,6), (2,5), (3,4), (4,3), (5,2) y (6,1), lo que equivale a $P(7) = 6/36 \approx 0.1667$. Las sumas de los extremos (2 y 12) son las menos probables con una frecuencia teórica de $1/36 \approx 0.0278$. Los histogramas de $n=100000$ reflejan casi exactamente estas proporciones teóricas.
+    \item Los resultados son los esperados según la teoría de probabilidad para dados imparciales. Para dos dados, existen 36 resultados posibles en el espacio muestral. La suma con mayor probabilidad es el 7, ya que cuenta con 6 combinaciones favorables: (1,6), (2,5), (3,4), (4,3), (5,2) y (6,1), lo que equivale a $P(7) = 6/36 \approx 0.1667$. Las sumas de los extremos (2 y 12) son las menos probables con una frecuencia teórica de $1/36 \approx 0.0278$. Los histogramas de $n=100000$ reflejan casi exactamente estas proporciones teóricas.
     
-    \item \textbf{Comportamiento con $n$ grande e interpretación:} Cuando $n$ es muy grande, la frecuencia relativa observada de cada suma tiende a un valor límite. Este fenómeno ilustra la \textbf{interpretación de la probabilidad como frecuencia relativa de largo plazo}. En términos estadísticos, esto significa que la probabilidad de un evento (como obtener una suma de 7) es la proporción de veces que ocurrirá dicho evento en una secuencia interminable de ensayos idénticos e independientes. El hecho de que el histograma se estabilice en una forma definida al aumentar $n$ demuestra empíricamente cómo la incertidumbre individual se convierte en una regularidad estadística poblacional.
+    \item Cuando $n$ es muy grande, la frecuencia relativa observada de cada suma tiende a un valor límite. Esto significa que la probabilidad de un evento (como obtener una suma de 7) es la proporción de veces que ocurrirá dicho evento en una secuencia interminable de ensayos idénticos e independientes. El hecho de que el histograma se estabilice en una forma definida al aumentar $n$ demuestra empíricamente cómo la incertidumbre individual se convierte en una regularidad estadística.
 \end{enumerate}
+
+
+\section{Problema \# 3}
+\textbf{Enunciado:}
+Haga un análisis bien fundamentado (y en la medida de las posibilidades, basado en evidencia) que le permita, a través de sus priors, asignar una probabilidad subjetiva al evento de aprobar el curso de astroestadística. Argumente su respuesta.
+
+\subsection*{Solución}
+
+El \textbf{prior} o probabilidad inicial ($P(A)$) se establece en un $50\%$,se fundamenta en la evidencia histórica de que usualmente apruebo la mitad de mis materias cursadas.
+
+Al transcurrir el primer $15\%$ del curso aproximadamente, obserbo desde dos perspectivas: \textbf{Evidencia negativa:} Desempeño deficiente en las primeras clases y tareas. \textbf{Evidencia positiva:} dedico 6 horas semanales al estudio de este curso, me gusta la estadística y estoy mejorando mi estado de salud.
+
+Ahora podemos calcular una \textbf{probabilidad posterior} ($P(A|B)$). A pesar del inicio difícil (debido a problemas de salud críticos), el aumento en el tiempo de estudio, la mejoría en la salud y el ánimo para aprender, actúan como factores que reducen la incertidumbrey inicial. La nueva \textbf{probabilidad subjetiva} asignada al evento de aprobar es del $90\%$
 
 
 \bibliographystyle{plainurl}
