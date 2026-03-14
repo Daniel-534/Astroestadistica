@@ -1,260 +1,406 @@
-\documentclass[12pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{geometry}
+\documentclass[a4paper]{article}
 
-\geometry{a4paper, margin=1in}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Problemset 1}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
 
 \begin{document}
 
-\section{Enunciado del Problema}
-Se clasifican las estrellas de un cúmulo según su color y tamaño. Se observa una estrella al azar con los siguientes datos:
-\begin{itemize}
-    \item El $70\%$ de las estrellas son rojas ($A$).
-    \item El $60\%$ de las estrellas rojas son enanas.
-    \item El $80\%$ de las estrellas azules son gigantes ($B$).
-\end{itemize}
+\begin{titlepage}
+  \centering
+  {\Large Universidad de Antioquia\par}
+  \vspace{2cm}
+  {\huge\bfseries Astroestadística\par}
+  \vspace{0.4cm}
+  {\Large Solución al problemset 1 \par}
+  \vspace{2.5cm}
+  {\large Autor:\par}
+  \vspace{0.2cm}
+  {\large Daniel Soto Villada\par}
+  {\large Estudiante de Astronomía\par}
+  \vfill
+  {\large \today\par}
+\end{titlepage}
 
-Sea $A$ el suceso "se observa una estrella roja" y $B$ el suceso "se observa una estrella gigante". Se requiere describir y calcular la probabilidad de los eventos solicitados.
+\newpage
+\tableofcontents
+\newpage
 
-\section{Identificación de Probabilidades Básicas}
-A partir de la información suministrada, definimos las probabilidades iniciales:
-\begin{itemize}
-    \item Probabilidad de estrella roja: $P(A) = 0.70$.
-    \item Probabilidad de estrella azul (complemento): $P(A') = 1 - 0.70 = 0.30$.
-\end{itemize}
 
-Condiciones sobre el tamaño (Gigante $B$ o Enana $B'$):
-\begin{itemize}
-    \item Para estrellas rojas: $P(B'|A) = 0.60$, por lo tanto $P(B|A) = 1 - 0.60 = 0.40$.
-    \item Para estrellas azules: $P(B|A') = 0.80$, por lo tanto $P(B'|A') = 1 - 0.80 = 0.20$.
-\end{itemize}
-
-\subsection{Probabilidades de Intersección}
-Utilizando la regla de la multiplicación $P(A \cap B) = P(B|A)P(A)$:
-\begin{enumerate}
-    \item Roja y Gigante: $P(A \cap B) = (0.40)(0.70) = 0.28$.
-    \item Roja y Enana: $P(A \cap B') = (0.60)(0.70) = 0.42$.
-    \item Azul y Gigante: $P(A' \cap B) = (0.80)(0.30) = 0.24$.
-    \item Azul y Enana: $P(A' \cap B') = (0.20)(0.30) = 0.06$.
+\section{Problema 1}
+\textbf{Enunciado:}
+Estrellas. Suponga que las estrellas en un cúmulo estelar se pueden clasificar según 2 características: color (\textbf{rojas} y \textbf{azules}) y tamaño (\textbf{gigantes} y \textbf{enanas}). Un experimento consiste en observar una estrella de dicho cúmulo de forma aleatoria, considerando que el 80\% de las estrellas son rojas, el 70\% de las estrellas rojas son enanas y el 90\% de las estrellas azules son gigantes. Sea $A$ el suceso o evento en el cual se observa una estrella roja y $B$ el suceso en el cual se observa una estrella gigante. Describa los siguientes sucesos y calcule su probabilidad basándose en los axiomas y propiedades de la probabilidad:
+\begin{enumerate}[a.]
+    \item $A \cup B$
+    \item $A \cap B$
+    \item $A \cup B'$
+    \item $A' \cup B'$
+    \item $A - B$
+    \item $A' - B'$
+    \item $(A \cap B) \cup (A \cap B')$
 \end{enumerate}
 
-La probabilidad total de que sea gigante es $P(B) = P(A \cap B) + P(A' \cap B) = 0.28 + 0.24 = 0.52$.
+\subsection*{Solución}
 
-\section{Resolución de los Eventos Solicitados}
+\textbf{Interpretación en notación matemática:}
 
+Para resolver este problema, primero debemos definir los eventos fundamentales y traducir los porcentajes proporcionados a valores de probabilidad según la teoría de Devore. Definimos el espacio muestral $S$ como el conjunto de todas las estrellas del cúmulo.
+
+Eventos principales:
+\begin{itemize}
+    \item $A$: La estrella es roja.
+    \item $A'$: La estrella es azul (complemento de $A$, dado que solo hay dos colores).
+    \item $B$: La estrella es gigante.
+    \item $B'$: La estrella es enana (complemento de $B$).
+\end{itemize}
+
+\textbf{Información proporcionada:}
+\begin{itemize}
+    \item $P(A) = 0.80$ (Proporción de estrellas rojas).
+    \item $P(B' | A) = 0.70$ (Probabilidad condicional de ser enana dado que es roja).
+    \item $P(B | A') = 0.90$ (Probabilidad condicional de ser gigante dado que es azul).
+\end{itemize}
+
+\textbf{Información a hallar:}
+Se requiere describir conceptualmente y calcular numéricamente la probabilidad de diversas operaciones entre estos conjuntos astronómicos.
+
+\textbf{Cálculos preliminares:}
+Antes de proceder con los incisos, calculamos las probabilidades de las intersecciones y las marginales necesarias usando la regla de la multiplicación y la ley de probabilidad total:
 \begin{enumerate}
-    \item \textbf{$A \cup B$ (Estrella roja o gigante):} Aplicando la regla de la adición, $P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.70 + 0.52 - 0.28 = 0.94$.
-
-    \item \textbf{$A \cap B$ (Estrella roja y gigante):} De los cálculos previos, $P(A \cap B) = 0.28$.
-
-    \item \textbf{$A' \cup B$ (Estrella azul o gigante):} $P(A' \cup B) = P(A') + P(B) - P(A' \cap B) = 0.30 + 0.52 - 0.24 = 0.58$.
-
-    \item \textbf{$A' \cup B'$ (Estrella azul o enana):} Por leyes de De Morgan, este evento es el complemento de la intersección roja-gigante, $P(A' \cup B') = 1 - P(A \cap B) = 1 - 0.28 = 0.72$.
-
-    \item \textbf{$A \cap B'$ (Estrella roja y enana):} Calculado previamente como $P(A \cap B') = 0.42$.
-
-    \item \textbf{$A' \cap B$ (Estrella azul y gigante):} Calculado previamente como $P(A' \cap B) = 0.24$.
-
-    \item \textbf{$(A \cap B) \cup (A' \cap B')$ (Estrella roja gigante o azul enana):} Al ser eventos mutuamente excluyentes, sumamos sus probabilidades: $P((A \cap B) \cup (A' \cap B')) = 0.28 + 0.06 = 0.34$.
+    \item $P(A') = 1 - P(A) = 1 - 0.80 = 0.20$.
+    \item $P(B | A) = 1 - P(B' | A) = 1 - 0.70 = 0.30$.
+    \item $P(A \cap B) = P(B | A) \cdot P(A) = (0.30)(0.80) = 0.24$.
+    \item $P(A \cap B') = P(B' | A) \cdot P(A) = (0.70)(0.80) = 0.56$.
+    \item $P(A' \cap B) = P(B | A') \cdot P(A') = (0.90)(0.20) = 0.18$.
+    \item $P(A' \cap B') = P(B' | A') \cdot P(A') = (1 - 0.90)(0.20) = (0.10)(0.20) = 0.02$.
+    \item $P(B) = P(A \cap B) + P(A' \cap B) = 0.24 + 0.18 = 0.42$.
+    \item $P(B') = 1 - P(B) = 0.58$.
 \end{enumerate}
 
-\section{Enunciado del Problema}
-En la clasificación de Hubble, las galaxias espirales se dividen en dos tipos: barradas ($SB$) y no barradas ($S$). Además, se subclasifican según la disposición de sus brazos y el tamaño del bulbo con etiquetas que van desde la $a$ hasta la $c$ (denotadas aquí como subtipos $S$, $a$ y $b$ según la tabla adjunta).
+\textbf{Solución de los incisos:}
 
-Se presentan los siguientes porcentajes conjuntos para cada combinación:
+\begin{enumerate}[a.]
+    \item \textbf{$A \cup B$ (Unión):} Representa el evento en que la estrella es \textit{roja o gigante} (incluyendo las que son ambas). Según la regla de la adición:
+    $$P(A \cup B) = P(A) + P(B) - P(A \cap B) = 0.80 + 0.42 - 0.24 = 0.98$$
 
-\begin{center}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Tipo / Subtipo} & \textbf{S} & \textbf{a} & \textbf{b} \\ \hline
-\textbf{No Barrada (Q)} & $13\%$ & $28\%$ & $15\%$ \\ \hline
-\textbf{Barrada (QA)}   & $20\%$ & $14\%$ & $10\%$ \\ \hline
-\end{tabular}
-\end{center}
+    \item \textbf{$A \cap B$ (Intersección):} Es el evento en que la estrella es \textit{roja y gigante} simultáneamente. Según el cálculo previo:
+    $$P(A \cap B) = 0.24$$
 
-Considere una galaxia espiral elegida aleatoriamente. Se requiere resolver los siguientes literales.
+    \item \textbf{$A \cup B'$ (Unión con el complemento):} Representa el evento en que la estrella es \textit{roja o enana}. Usando la regla de adición:
+    $$P(A \cup B') = P(A) + P(B') - P(A \cap B') = 0.80 + 0.58 - 0.56 = 0.82$$
 
-\section{Definición de Eventos y Probabilidades}
-Sean los eventos:
-\begin{itemize}
-    \item $Q$: La galaxia es de tipo no barrada.
-    \item $QA$: La galaxia es de tipo barrada.
-    \item $S, a, b$: La galaxia pertenece a dicho subtipo.
-\end{itemize}
+    \item \textbf{$A' \cup B'$ (Unión de complementos):} Representa que la estrella \textit{no es roja o no es gigante}. Por las leyes de De Morgan, esto equivale al complemento de la intersección $(A \cap B)'$:
+    $$P(A' \cup B') = 1 - P(A \cap B) = 1 - 0.24 = 0.76$$
 
-A partir de la tabla, las probabilidades conjuntas son:
-\begin{itemize}
-    \item $P(Q \cap S) = 0.13, \quad P(Q \cap a) = 0.28, \quad P(Q \cap b) = 0.15$
-    \item $P(QA \cap S) = 0.20, \quad P(QA \cap a) = 0.14, \quad P(QA \cap b) = 0.10$
-\end{itemize}
+    \item \textbf{$A - B$ (Diferencia):} Representa el evento de observar una estrella que es \textit{roja pero no gigante} (es decir, una estrella roja enana). Es equivalente a $A \cap B'$:
+    $$P(A - B) = P(A) - P(A \cap B) = 0.80 - 0.24 = 0.56$$
 
-\section{Resolución de los Eventos Solicitados}
+    \item \textbf{$A' - B'$ (Diferencia de complementos):} Describe una estrella que \textit{no es roja y no es enana}. Esto equivale a observar una estrella azul gigante ($A' \cap B$):
+    $$P(A' - B') = P(A') - P(A' \cap B') = 0.20 - 0.02 = 0.18$$
 
-\subsection*{a) Probabilidad de tipo S y probabilidad de ser barrada}
-La probabilidad de que sea subtipo $S$ (marginal) es la suma de su columna:
-$P(S) = P(Q \cap S) + P(QA \cap S) = 0.13 + 0.20 = \mathbf{0.33}$
-
-La probabilidad de que sea barrada (marginal) es la suma de su fila:
-$P(QA) = P(QA \cap S) + P(QA \cap a) + P(QA \cap b) = 0.20 + 0.14 + 0.10 = \mathbf{0.44}$
-
-\subsection*{b) Probabilidad condicional: Barrada dado tipo S}
-Si se encuentra que la galaxia es subtipo $S$, la probabilidad de que sea barrada se calcula como:
-$P(QA | S) = \frac{P(QA \cap S)}{P(S)} = \frac{0.20}{0.33} \approx \mathbf{0.6061}$
-
-\textbf{Interpretación:} Dado que la galaxia pertenece al subtipo $S$, existe un $60.61\%$ de probabilidad de que presente una estructura barrada. Esta información aumenta la probabilidad inicial del $44\%$ (encontrada en el inciso a), indicando que el subtipo $S$ está más asociado a las barras que el promedio general de las galaxias.
-
-\subsection*{c) Probabilidad condicional: Tipo S dado que es barrada}
-Si se sabe que la galaxia es barrada, la probabilidad de que sea subtipo $S$ es:
-$P(S | QA) = \frac{P(S \cap QA)}{P(QA)} = \frac{0.20}{0.44} \approx \mathbf{0.4545}$
-
-\textbf{Comparación:} Al comparar este resultado ($\approx 0.4545$) con la probabilidad marginal de ser tipo $S$ encontrada en el literal a ($0.33$), se observa que es notablemente \textbf{mayor}. Esto refuerza la interpretación de que, bajo la condición de ser una galaxia barrada, la probabilidad de encontrar específicamente el subtipo $S$ se incrementa significativamente.
+    \item \textbf{$(A \cap B) \cup (A \cap B')$ (Propiedad distributiva):} Este evento describe una estrella que es \textit{(roja y gigante) o (roja y enana)}. Dado que ser gigante y enana son eventos mutuamente excluyentes, esta unión recompone exactamente el evento $A$ (la estrella es roja). Estadísticamente, estamos sumando las particiones del evento $A$ basadas en $B$:
+    $$P((A \cap B) \cup (A \cap B')) = P(A) = 0.80$$
+\end{enumerate}
 
 
-\section*{Problema 3: Sistemas Binarios}
-
+\section{Problema 2}
 \textbf{Enunciado:}
-La mayoría de las estrellas que vemos en el cielo son sistemas binarios, con dos (o a veces más) estrellas orbitando un centro de masa común. Tal vez el $75\%$ de las estrellas son sistemas binarios. Además, se estima que el $4.5\%$ de las estrellas binarias son capaces de soportar planetas tipo terrestres habitables dentro de los rangos orbitales estables.
+2. Clasificación de galaxias. Basándose en el diagrama de la secuencia de Hubble (tuning fork) proporcionado en la imagen del conjunto de problemas:
+\begin{enumerate}[a.]
+    \item Identifique cuántas subcategorías existen para las galaxias elípticas (E) según su grado de elipticidad.
+    \item Determine cuántas clasificaciones posibles existen para las galaxias espirales, considerando tanto las familias no barradas (S) como las barradas (SB) y sus respectivas subcategorías morfológicas (a, b, c).
+    \item Calcule el número total de clasificaciones morfológicas distintas presentes en el diagrama completo.
+    \item Si se selecciona una galaxia al azar de este esquema y se asume que cada clasificación es igualmente probable, ¿cuál es la probabilidad de que la galaxia sea de tipo espiral barrada?
+\end{enumerate}
+
+\subsection*{Solución}
+
+\textbf{Interpretación en notación matemática:}
+Este problema se resuelve mediante técnicas de conteo, específicamente la **regla del producto** para experimentos en etapas y la enumeración de elementos en un espacio muestral discreto $S$.
 
 \begin{itemize}
-    \item[\textbf{a)}] ¿Cuál es la probabilidad de que, al mirar 10 estrellas en una noche de forma aleatoria, todas sean sistemas binarios? Suponga que el universo es homogéneo e isotrópico.
-    \item[\textbf{b)}] ¿Cuál es la probabilidad de que, al mirar una estrella de forma aleatoria, se esté mirando un sistema binario capaz de soportar planetas tipo terrestres habitables?
+    \item Sea $n_E$ el número de categorías elípticas.
+    \item Sea $n_{S0}$ el número de categorías lenticulares.
+    \item Sea $n_S$ el número de categorías espirales no barradas.
+    \item Sea $n_{SB}$ el número de categorías espirales barradas.
 \end{itemize}
 
-\textbf{Solución:}
+\textbf{Información proporcionada (según la tabla/diagrama visual):}
+\begin{itemize}
+    \item Elípticas: El índice numérico va de 0 a 7.
+    \item Lenticulares: Representadas por S0.
+    \item Espirales: Dos ramas con tres subcategorías cada una (a, b, c).
+\end{itemize}
 
-\textbf{Literal a):} 
-Se define el evento $B$ como "la estrella es un sistema binario". Según los datos, $P(B) = 0.75$. Al observar 10 estrellas de forma aleatoria e independiente (bajo la suposición de un universo homogéneo e isotrópico), la probabilidad de que todas cumplan la condición es el producto de sus probabilidades individuales:
-$P(\text{Todas binarias}) = P(B)^{10}$
-$P(\text{Todas binarias}) = (0.75)^{10}$
-$P(\text{Todas binarias}) \approx \mathbf{0.0563}$ (o $5.63\%$).
+\textbf{Información a hallar:}
+El conteo total y las probabilidades asociadas bajo el supuesto de equiprobabilidad.
 
-\textbf{Literal b):} 
-Se requiere la probabilidad de la intersección de dos eventos: que la estrella sea binaria ($B$) y que sea capaz de soportar planetas habitables ($H$). Los datos proporcionan la probabilidad condicional: $P(H|B) = 0.045$ ($4.5\%$). Aplicando la regla de la multiplicación:
-$P(B \cap H) = P(H|B) \cdot P(B)$
-$P(B \cap H) = (0.045) \cdot (0.75)$
-$P(B \cap H) = \mathbf{0.03375}$ (o $3.375\%$).
+\textbf{Desarrollo extenso del problema:}
 
-\vspace{1cm}
+\begin{enumerate}[a.]
+    \item \textbf{Conteo de galaxias elípticas:} 
+    Observando la información numérica del eje horizontal del diagrama, las galaxias elípticas se clasifican desde E0 hasta E7. Contando los elementos:
+    $$ n_E = \{0, 1, 2, 3, 4, 5, 6, 7\} \implies n_E = 8 $$
+    Existen **8** formas de clasificar una galaxia elíptica según este esquema.
 
-\section*{Problema 4: Combinaciones con Repetición}
+    \item \textbf{Conteo de galaxias espirales:}
+    Para las galaxias espirales, el experimento tiene dos etapas: 
+    1. Selección de la familia (Barrada $SB$ o No barrada $S$): $n_{fam} = 2$.
+    2. Selección de la apertura de brazos ($a, b, c$): $n_{sub} = 3$.
+    Aplicando la **regla del producto** (Devore, Sección 2.3):
+    $$ N_{espirales} = n_{fam} \cdot n_{sub} = 2 \cdot 3 = 6 $$
+    Las clasificaciones son: Sa, Sb, Sc, SBa, SBb, SBc.
 
+    \item \textbf{Número total de clasificaciones ($N$):}
+    El total es la suma de todas las categorías mutuamente excluyentes presentes en el diagrama (Elípticas + Lenticulares + Espirales):
+    $$ N = n_E + n_{S0} + n_S + n_{SB} $$
+    $$ N = 8 + 1 + 3 + 3 = 15 $$
+    El diagrama muestra un total de **15** clasificaciones morfológicas distintas.
+
+    \item \textbf{Cálculo de probabilidad:}
+    Si los resultados son igualmente probables, la probabilidad de un evento $A$ es $P(A) = \frac{N(A)}{N}$. Sea $A$ el evento de observar una espiral barrada ($SB$):
+    - Resultados en $A$: {SBa, SBb, SBc} $\implies N(A) = 3$.
+    - Resultados totales: $N = 15$.
+    $$ P(SB) = \frac{3}{15} = \frac{1}{5} = 0.20 $$
+    La probabilidad de observar una galaxia espiral barrada es del $20\%$.
+\end{enumerate}
+
+\section{Problema 3}
 \textbf{Enunciado:}
-Una combinación con repetición de orden $n$ de los $r$ elementos de $A$ es una selección no ordenada de $n$ elementos de $A$ que pueden repetirse. El número de tales combinaciones se denota $CR_{n,r}$ y está dado por:
-$CR_{n,r} = \binom{r+n-1}{n}$
+3. Sistemas binarios. La mayoŕıa de las estrellas que vemos en el cielo son sistemas binarios, con dos (o a veces más) estrellas orbitando un centro de masa común. Tal vez el 85\% de las estrellas son sistemas binarios. Además, se estima que el 50–60\% de las estrellas binarias son capaces de soportar planetas tipo terrestres habitables dentro de los rangos orbitales estables.
+\begin{enumerate}[a.]
+    \item ¿Cuál es la probabilidad de que, al mirar 10 estrellas en una noche de forma aleatoria, todas sean sistemas binarios? Suponga que el universo es homogéneo e isotrópico.
+    \item ¿Cuál es la probabilidad de que, al mirar una estrella de forma aleatoria, se esté mirando un sistema binario capaz de soportar planetas tipo terrestres habitables?
+\end{enumerate}
+
+\subsection*{Solución}
+
+\textbf{Interpretación en notación matemática:}
+
+Este problema se aborda utilizando la teoría de \textbf{probabilidad elemental} y la \textbf{distribución binomial}, fundamentadas en el texto de Devore. Definimos los sucesos o eventos relevantes en nuestro espacio muestral estelar:
 
 \begin{itemize}
-    \item[\textbf{a)}] Demuestre la expresión anterior (Consulte sobre el método de barras y estrellas).
-    \item[\textbf{b)}] ¿De cuántas formas se pueden elegir 15 estrellas entre 6 tipos espectrales si:
+    \item \textbf{Evento $B$:} La estrella observada pertenece a un sistema binario.
+    \item \textbf{Evento $H$:} El sistema estelar es capaz de soportar planetas tipo terrestres habitables.
+\end{itemize}
+
+\textbf{Información proporcionada:}
+\begin{itemize}
+    \item $P(B) = 0.85$: Probabilidad de que una estrella sea un sistema binario (85\% de la población estelar).
+    \item $P(H|B) \in [0.50, 0.60]$: Probabilidad condicional de que un sistema soporte planetas habitables, dado que es binario (entre el 50\% y el 60\%).
+    \item $n = 10$: Tamaño de la muestra (estrellas observadas) para el inciso (a).
+\end{itemize}
+
+\textbf{Información a hallar:}
+\begin{itemize}
+    \item En el inciso \textbf{a}, se requiere la probabilidad de obtener 10 éxitos en 10 ensayos independientes bajo un modelo binomial.
+    \item En el inciso \textbf{b}, se requiere la probabilidad de la intersección de dos eventos, $P(B \cap H)$.
+\end{itemize}
+
+\textbf{Desarrollo de la solución:}
+
+\begin{enumerate}[a.]
+    \item \textbf{Análisis de probabilidad conjunta para eventos independientes:}
+    Para calcular la probabilidad de que 10 estrellas observadas sean todas binarias, debemos considerar cada observación como un \textit{ensayo de Bernoulli} independiente. Según el enunciado, la suposición de un universo \textit{homogéneo e isotrópico} garantiza que la probabilidad de éxito $p$ sea constante en cada observación y que los resultados sean independientes entre sí.
+    
+    Sea $X$ la variable aleatoria que cuenta el número de sistemas binarios en la muestra. Bajo estas condiciones, $X$ sigue una distribución binomial con parámetros $n=10$ y $p=0.85$. La función masa de probabilidad (fmp) es:
+    $$ b(x; n, p) = \binom{n}{x} p^x (1-p)^{n-x} $$
+    
+    Para hallar la probabilidad de que \textit{todas} sean sistemas binarios ($x=10$):
+    $$ P(X = 10) = \binom{10}{10} (0.85)^{10} (0.15)^0 $$
+    $$ P(X = 10) = 1 \cdot (0.85)^{10} \cdot 1 $$
+    $$ P(X = 10) \approx 0.19687 $$
+    
+    Por lo tanto, la probabilidad de que las 10 estrellas sean sistemas binarios es aproximadamente del \textbf{19.69\%}.
+
+    \item \textbf{Cálculo de la probabilidad de la intersección:}
+    Se nos pide la probabilidad de observar una estrella que sea \textit{simultáneamente} un sistema binario \textbf{y} capaz de soportar planetas habitables. Según la regla de multiplicación de probabilidades (Devore, Sección 2.4):
+    $$ P(B \cap H) = P(H|B) \cdot P(B) $$
+    
+    Dado que la probabilidad condicional $P(H|B)$ se proporciona como un rango ($50-60\%$), el resultado se puede expresar mediante el valor esperado promedio del rango (55\%) o como un intervalo de probabilidad:
     \begin{itemize}
-        \item[1.] Se pueden elegir de cualquier forma.
-        \item[2.] Se debe elegir una de cada tipo.
+        \item \textbf{Límite inferior:} $0.50 \cdot 0.85 = 0.425$
+        \item \textbf{Límite superior:} $0.60 \cdot 0.85 = 0.510$
     \end{itemize}
-\end{itemize}
+    
+    Si tomamos el valor medio del estimado ($55\%$):
+    $$ P(B \cap H) = 0.55 \cdot 0.85 = 0.4675 $$
+    
+    Estadísticamente, esto se interpreta como que existe aproximadamente un \textbf{46.75\%} de probabilidad de que una estrella seleccionada al azar cumpla con ambas condiciones astronómicas.
+\end{enumerate}
 
-\textbf{Solución:}
-
-\textbf{Literal a):} 
-Para seleccionar $n$ objetos de $r$ tipos con repetición, imaginamos los objetos como $n$ puntos (estrellas) y los tipos separados por $r-1$ barras divisorias. Por ejemplo, si $r=3$ y $n=4$, una selección podría ser $**|*|*$, indicando 2 del tipo 1, 1 del tipo 2 y 1 del tipo 3.
-El total de posiciones necesarias es la suma de objetos y barras: $n + (r-1)$. El problema se reduce a elegir en qué posiciones de ese total irán los $n$ objetos (o las $r-1$ barras):
-$CR_{n,r} = \binom{n + r - 1}{n} = \frac{(n+r-1)!}{n!(r-1)!}$
-
-\textbf{Literal b.1):} 
-Aquí $n = 15$ estrellas y $r = 6$ tipos espectrales.
-$CR_{15,6} = \binom{6 + 15 - 1}{15} = \binom{20}{15}$
-Calculando el coeficiente binomial:
-$\binom{20}{15} = \frac{20!}{15!5!} = \frac{20 \cdot 19 \cdot 18 \cdot 17 \cdot 16}{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = \mathbf{15,504}$ formas.
-
-\textbf{Literal b.2):} 
-Si se debe elegir al menos una de cada tipo, primero asignamos una estrella a cada uno de los 6 tipos. Restan por elegir $15 - 6 = 9$ estrellas de los mismos 6 tipos sin restricciones adicionales.
-$n' = 9, r = 6$
-$CR_{9,6} = \binom{6 + 9 - 1}{9} = \binom{14}{9}$
-Calculando el coeficiente binomial:
-$\binom{14}{9} = \frac{14!}{9!5!} = \frac{14 \cdot 13 \cdot 12 \cdot 11 \cdot 10}{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = \mathbf{2,002}$ formas.
-
-\section*{Problema 5: Detección de Nubes Interestelares}
-
+\section{Problema 4}
 \textbf{Enunciado:}
-Se dispone de un sensor infrarrojo para detectar la presencia de nubes de polvo interestelar. La probabilidad de que el sensor detecte una nube cuando esta existe es del $0.98$. La probabilidad de que el sensor de una falsa alarma (detectar cuando no hay nube) es del $0.05$. Se estima que el $10\%$ de las regiones observadas contienen nubes.
+4. La bolita roja. La caja I contiene 3 bolas rojas y 7 azules, la caja II contiene 8 bolas rojas y 2 azules, y la caja III contiene 4 bolas rojas y 6 azules. Se requiere sacar la bola roja para ganarse un regalito.
+\begin{enumerate}[a.]
+    \item ¿Con cuál caja se tiene mayor probabilidad de ganar?
+    \item Usted no conoce el contenido de cada caja, así que debe elegir una al azar. ¿Qué probabilidad tiene de ganar?
+    \item Suponga que usted es un feliz ganador, ¿cuál es la probabilidad de haber sacado la bolita de la caja III? ¿Y de la caja II?
+\end{enumerate}
 
+\subsection*{Solución}
+
+\textbf{Interpretación en notación matemática:}
+
+Para resolver este problema, aplicamos los conceptos de \textbf{probabilidad condicional}, la \textbf{Ley de Probabilidad Total} y el \textbf{Teorema de Bayes}, siguiendo la teoría expuesta en el texto de Devore. Primero, definimos los eventos relevantes:
 \begin{itemize}
-    \item[\textbf{a)}] Calcule la probabilidad de obtener una detección positiva.
-    \item[\textbf{b)}] Si el sensor indica una detección, ¿cuál es la probabilidad de que realmente haya una nube en esa región?
+    \item $C_I, C_{II}, C_{III}$: Eventos en los que se selecciona la Caja I, II o III, respectivamente.
+    \item $R$: Evento en el que se extrae una bola roja (ganar).
+    \item $A$: Evento en el que se extrae una bola azul (perder).
 \end{itemize}
 
-\textbf{Solución:}
-
-Sean los eventos:
+\textbf{Información proporcionada:}
+Basándonos en la composición de cada caja (donde cada una tiene un total de 10 bolas), las probabilidades condicionales de éxito dado que se elige una caja específica son:
 \begin{itemize}
-    \item $N$: La región contiene una nube interestelar. $P(N) = 0.10$.
-    \item $N^c$: La región no contiene una nube. $P(N^c) = 0.90$.
-    \item $D$: El sensor indica una detección (señal positiva).
+    \item $P(R|C_I) = \frac{3}{10} = 0.30$ (o $30\%$)
+    \item $P(R|C_{II}) = \frac{8}{10} = 0.80$ (o $80\%$)
+    \item $P(R|C_{III}) = \frac{4}{10} = 0.40$ (o $40\%$)
+\end{itemize}
+Para el inciso b, al elegir una caja al azar sin conocer su contenido, asignamos probabilidades iguales a la selección de cada caja (\textit{priors} equiprobables):
+\begin{itemize}
+    \item $P(C_I) = P(C_{II}) = P(C_{III}) = \frac{1}{3} \approx 0.3333$
 \end{itemize}
 
-Datos proporcionados: $P(D|N) = 0.98$ y $P(D|N^c) = 0.05$.
+\textbf{Información a hallar:}
+\begin{itemize}
+    \item Identificar el máximo entre las probabilidades condicionales.
+    \item La probabilidad marginal de ganar, $P(R)$.
+    \item Las probabilidades posteriores $P(C_{III}|R)$ y $P(C_{II}|R)$.
+\end{itemize}
 
-\textbf{Literal a):} 
-Para hallar la probabilidad total de detección $P(D)$, usamos la Ley de Probabilidad Total:
-$P(D) = P(D|N)P(N) + P(D|N^c)P(N^c)$
-$P(D) = (0.98)(0.10) + (0.05)(0.90)$
-$P(D) = 0.098 + 0.045 = \mathbf{0.143}$ (o $14.3\%$).
+\textbf{Desarrollo extenso del problema:}
 
-\textbf{Literal b):} 
-Se requiere la probabilidad condicional $P(N|D)$. Aplicando la definición de probabilidad condicional (o Teorema de Bayes):
-$P(N|D) = \frac{P(D \cap N)}{P(D)} = \frac{P(D|N)P(N)}{P(D)}$
-$P(N|D) = \frac{0.098}{0.143} \approx \mathbf{0.6853}$ (o $68.53\%$).
+\begin{enumerate}[a.]
+    \item \textbf{Identificación de la mejor opción:}
+    Para determinar con cuál caja se tiene mayor probabilidad de ganar, simplemente comparamos las probabilidades condicionales calculadas a partir de la composición de las cajas.
+    $$ P(R|C_{II}) = 0.80 > P(R|C_{III}) = 0.40 > P(R|C_I) = 0.30 $$
+    Se tiene la mayor probabilidad de ganar con la \textbf{Caja II}, ya que posee la mayor proporción de bolas rojas en su interior.
 
-\vspace{1cm}
+    \item \textbf{Cálculo de la probabilidad total:}
+    Cuando el experimento se realiza en dos etapas (primero elegir una caja al azar y luego extraer la bola), el evento de interés es la probabilidad marginal $P(R)$. Según la \textbf{Ley de Probabilidad Total} (Devore, Sección 2.4):
+    $$ P(R) = P(R|C_I)P(C_I) + P(R|C_{II})P(C_{II}) + P(R|C_{III})P(C_{III}) $$
+    Sustituyendo los valores:
+    $$ P(R) = (0.30)(\frac{1}{3}) + (0.80)(\frac{1}{3}) + (0.40)(\frac{1}{3}) $$
+    $$ P(R) = \frac{0.30 + 0.80 + 0.40}{3} = \frac{1.50}{3} = 0.50 $$
+    La probabilidad de ganar bajo estas condiciones es del \textbf{50\%}.
 
-\section*{Problema 6: Tránsito de Asteroides}
+    \item \textbf{Aplicación del Teorema de Bayes:}
+    Si sabemos que el evento $R$ ya ocurrió (el jugador ganó), queremos actualizar nuestra creencia sobre de qué caja provino la bola. Utilizamos el \textbf{Teorema de Bayes} (Devore, Sección 2.4), que relaciona las probabilidades posteriores con la verosimilitud y los priors:
+    $$ P(C_j|R) = \frac{P(R|C_j)P(C_j)}{P(R)} $$
+    
+    \textbf{Probabilidad para la Caja III:}
+    $$ P(C_{III}|R) = \frac{(0.40)(\frac{1}{3})}{0.50} = \frac{0.1333}{0.50} = 0.2666... \approx 26.67\% $$
+    (Equivalentemente, $\frac{4/30}{1/2} = \frac{8}{30} = \frac{4}{15}$).
 
+    \textbf{Probabilidad para la Caja II:}
+    $$ P(C_{II}|R) = \frac{(0.80)(\frac{1}{3})}{0.50} = \frac{0.2666}{0.50} = 0.5333... \approx 53.33\% $$
+    (Equivalentemente, $\frac{8/30}{1/2} = \frac{16}{30} = \frac{8}{15}$).
+\end{enumerate}
+
+
+
+\section{Problema 5}
 \textbf{Enunciado:}
-En una región del espacio, el número de asteroides que cruzan una zona determinada en un año sigue una distribución de Poisson con una media de $\lambda = 2$.
+5. Combinaciones con repetición. Una combinación con repetición de orden $r$ de los $n$ elementos de $A$ es una selección no ordenada de $r$ elementos de $A$ que pueden repetirse. El número de tales combinaciones se denota $CR_{n,r}$ y está dado por:
+$$ CR_{n,r} = \binom{n + r - 1}{r} $$
+\begin{enumerate}[a.]
+    \item Demuestre la expresión anterior (Ayuda: Consulte sobre el método de barras y estrellas).
+    \item De cuántas formas se pueden elegir 15 estrellas entre 7 tipos espectrales si:
+    \begin{itemize}
+        \item Se pueden elegir de cualquier forma.
+        \item Se debe elegir una de cada tipo.
+    \end{itemize}
+\end{enumerate}
 
+\subsection*{Solución}
+
+\textbf{Interpretación en notación matemática:}
+
+Este problema se fundamenta en las \textbf{técnicas de conteo} dentro de la teoría de la probabilidad. Según Devore, cuando el orden en que se seleccionan los elementos no es importante, pero se permite que un mismo elemento sea seleccionado más de una vez, estamos ante un escenario de \textbf{combinaciones con repetición}. 
+
+Matemáticamente, si tenemos un conjunto con $n$ categorías distintas (en este caso, tipos espectrales) y deseamos realizar $r$ extracciones (selección de 15 estrellas), el problema consiste en hallar el número de formas de asignar $r$ objetos idénticos en $n$ contenedores distinguibles.
+
+\textbf{Información proporcionada:}
 \begin{itemize}
-    \item[\textbf{a)}] ¿Cuál es la probabilidad de que no cruce ningún asteroide en un año determinado?
-    \item[\textbf{b)}] ¿Cuál es la probabilidad de que crucen al menos 2 asteroides en un año?
+    \item Definición de combinación con repetición.
+    \item Fórmula general: $CR_{n,r} = \binom{n+r-1}{r}$.
+    \item Para el inciso (b): $n = 7$ tipos espectrales y $r = 15$ estrellas a elegir.
 \end{itemize}
 
-\textbf{Solución:}
-
-La función de masa de probabilidad de Poisson es $p(x; \lambda) = \frac{e^{-\lambda} \lambda^x}{x!}$ para $x = 0, 1, 2, \dots$
-
-\textbf{Literal a):} 
-Para $x = 0$ y $\lambda = 2$:
-$P(X=0) = \frac{e^{-2} 2^0}{0!} = e^{-2}$
-$P(X=0) \approx \mathbf{0.1353}$ (o $13.53\%$).
-
-\textbf{Literal b):} 
-"Al menos 2" significa $P(X \ge 2)$. Usamos el complemento:
-$P(X \ge 2) = 1 - P(X < 2) = 1 - [P(X=0) + P(X=1)]$
-$P(X=1) = \frac{e^{-2} 2^1}{1!} = 2e^{-2} \approx 0.2707$
-$P(X \ge 2) = 1 - (0.1353 + 0.2707) = 1 - 0.4060 = \mathbf{0.5940}$ (o $59.40\%$).
-
-\vspace{1cm}
-
-\section*{Problema 7: Confiabilidad de Componentes de Satélite}
-
-\textbf{Enunciado:}
-Se seleccionan 3 componentes electrónicos para un satélite. La probabilidad de que un componente falle es de $0.1$, independientemente de los otros. El sistema funciona correctamente si al menos 2 de los 3 componentes funcionan. ¿Cuál es la probabilidad de que el sistema funcione?
-
-\textbf{Solución:}
-
-Este es un experimento binomial donde:
+\textbf{Información a hallar:}
 \begin{itemize}
-    \item $n = 3$ (número de componentes/ensayos).
-    \item Éxito ($E$): El componente funciona. $p = 1 - 0.1 = 0.9$.
-    \item Falla ($F$): El componente no funciona. $q = 0.1$.
+    \item Demostración lógica de la fórmula mediante el método de barras y estrellas.
+    \item Cálculo numérico del total de formas de elección bajo dos restricciones distintas.
 \end{itemize}
 
-Se busca $P(X \ge 2)$, donde $X$ es el número de componentes que funcionan:
-$P(X \ge 2) = P(X=2) + P(X=3)$
-Utilizando la fórmula binomial $b(x; n, p) = \binom{n}{x} p^x (1-p)^{n-x}$:
-$P(X=2) = \binom{3}{2} (0.9)^2 (0.1)^1 = 3 \cdot 0.81 \cdot 0.1 = 0.243$
-$P(X=3) = \binom{3}{3} (0.9)^3 (0.1)^0 = 1 \cdot 0.729 \cdot 1 = 0.729$
-$P(X \ge 2) = 0.243 + 0.729 = \mathbf{0.972}$ (o $97.2\%$).
+\textbf{Desarrollo extenso del problema:}
+
+\begin{enumerate}[a.]
+    \item \textbf{Demostración mediante el método de barras y estrellas:}
+    
+    Para visualizar este problema, imaginemos que representamos cada uno de los $r$ elementos seleccionados como \textbf{estrellas} ($\star$). Para distinguir entre las $n$ categorías o tipos, utilizamos \textbf{barras} ($|$) como separadores.
+    
+    Si tenemos $n$ tipos de elementos, necesitaremos exactamente $n - 1$ barras para crear los compartimentos necesarios. Por ejemplo, si $n=3$, las barras $|$ $|$ dividen el espacio en tres secciones (Tipo 1, Tipo 2 y Tipo 3). Una selección de 5 elementos ($r=5$) podría verse así: $\star \star | \star | \star \star$. Esto indicaría 2 elementos del tipo 1, 1 del tipo 2 y 2 del tipo 3.
+    
+    El problema de conteo se reduce entonces a determinar cuántas formas hay de disponer un total de $r + (n - 1)$ símbolos en una línea, donde $r$ son estrellas y $n - 1$ son barras. Según la teoría de combinaciones de Devore, el número de formas de elegir $k$ posiciones para un símbolo (estrellas) de un total de $m$ posiciones disponibles es $\binom{m}{k}$.
+    
+    Sustituyendo nuestros valores:
+    \begin{itemize}
+        \item Total de posiciones ($m$): $r + (n - 1)$.
+        \item Elementos a posicionar ($k$): $r$ (estrellas).
+    \end{itemize}
+    
+    Por lo tanto, el número de combinaciones únicas es:
+    $$ CR_{n,r} = \binom{n + r - 1}{r} $$
+    Lo cual demuestra la expresión dada en el enunciado.
+
+    \item \textbf{Cálculo para la elección de estrellas:}
+    
+    En este escenario astronómico, tenemos $n = 7$ (tipos espectrales) y $r = 15$ (estrellas totales a elegir).
+    
+    \begin{itemize}
+        \item \textbf{Caso 1: Elección de cualquier forma.}
+        Aquí aplicamos la fórmula directamente, ya que no hay restricciones sobre cuántas estrellas de cada tipo deben elegirse (puede haber tipos con cero estrellas).
+        $$ n = 7, r = 15 $$
+        $$ CR_{7,15} = \binom{7 + 15 - 1}{15} = \binom{21}{15} $$
+        Usando la propiedad de simetría de las combinaciones $\binom{n}{k} = \binom{n}{n-k}$ mencionada en las fuentes:
+        $$ \binom{21}{15} = \binom{21}{6} = \frac{21 \cdot 20 \cdot 19 \cdot 18 \cdot 17 \cdot 16}{6 \cdot 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = 54,264 $$
+        Existen \textbf{54,264} formas de elegir las estrellas.
+
+        \item \textbf{Caso 2: Se debe elegir al menos una de cada tipo.}
+        Si es obligatorio tener una estrella de cada uno de los 7 tipos, primero "apartamos" o asignamos 7 estrellas (una para cada tipo). Esto nos deja con $15 - 7 = 8$ estrellas restantes por elegir libremente entre los 7 tipos.
+        
+        Ahora el problema se transforma en elegir $r' = 8$ estrellas de $n = 7$ tipos con repetición:
+        $$ CR_{7,8} = \binom{7 + 8 - 1}{8} = \binom{14}{8} $$
+        Calculando el valor:
+        $$ \binom{14}{8} = \binom{14}{6} = \frac{14 \cdot 13 \cdot 12 \cdot 11 \cdot 10 \cdot 9}{6 \cdot 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = 3,003 $$
+        Existen \textbf{3,003} formas de realizar la elección asegurando la presencia de todos los tipos espectrales.
+    \end{itemize}
+\end{enumerate}
 
 
+
+
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
 \end{document}
