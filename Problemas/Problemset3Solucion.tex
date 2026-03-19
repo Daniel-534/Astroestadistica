@@ -1,0 +1,373 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Problemset 3}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\Large Universidad de Antioquia\par}
+  \vspace{2cm}
+  {\huge\bfseries Astroestadística\par}
+  \vspace{0.4cm}
+  {\Large Solución al problemset 3 \par}
+  \vspace{2.5cm}
+  {\large Autor:\par}
+  \vspace{0.2cm}
+  {\large Daniel Soto Villada\par}
+  {\large Estudiante de Astronomía\par}
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+
+\section{Problema 1}
+\textbf{Rompimiento de una barra.} Una barra de 12 pulgadas que está sujeta en ambos extremos se someterá a una tensión creciente hasta que se rompa. Sea $Y$ la distancia desde el borde izquierdo en la que se rompe. Suponga que $Y$ tiene una f.d.p.:
+$$f(y) = \begin{cases} \left(\frac{1}{24}\right) y \left(1 - \frac{y}{12}\right), & 0 \le y \le 12 \\ 0, & \text{en otro caso} \end{cases}$$
+
+\textbf{Calcule:}
+\begin{enumerate}
+    \item[(a)] La función de distribución acumulada (f.d.a.) de $Y$ y haga una representación gráfica.
+    \item[(b)] $P(Y \le 4)$, $P(Y > 6)$, y $P(4 \le Y \le 6)$.
+    \item[(c)] Los valores esperados $E(Y)$, $E(Y^2)$, y la varianza $V(Y)$.
+    \item[(d)] La probabilidad de que el punto de ruptura ocurra a más de 2 pulgadas del valor esperado.
+    \item[(e)] La longitud esperada del segmento más corto de la barra al romperse.
+\end{enumerate}
+
+\subsection{Solución}
+
+Para resolver este problema, utilizaremos la teoría de variables aleatorias continuas presentada en los capítulos 4.1 y 4.2 del libro de Devore.
+
+\textbf{(a) Función de Distribución Acumulada (f.d.a.)}
+La f.d.a., denotada por $F(y)$, se define como la integral de la función de densidad de probabilidad (f.d.p.) desde el límite inferior hasta $y$: $F(y) = \int_{-\infty}^{y} f(t) dt$.
+Expandiendo la f.d.p.: $f(y) = \frac{y}{24} - \frac{y^2}{288}$ para $0 \le y \le 12$.
+
+\begin{itemize}
+    \item Para $y < 0$: $F(y) = 0$.
+    \item Para $0 \le y \le 12$:
+    $$F(y) = \int_{0}^{y} \left( \frac{t}{24} - \frac{t^2}{288} \right) dt = \left[ \frac{t^2}{48} - \frac{t^3}{864} \right]_{0}^{y} = \mathbf{\frac{y^2}{48} - \frac{y^3}{864}}$$
+    \item Para $y > 12$: $F(y) = 1$.
+\end{itemize}
+
+\textbf{(b) Cálculo de Probabilidades}
+De acuerdo con la proposición de la página 138 de Devore, $P(a \le Y \le b) = F(b) - F(a)$.
+
+\begin{itemize}
+    \item $P(Y \le 4) = F(4) = \frac{4^2}{48} - \frac{4^3}{864} = \frac{16}{48} - \frac{64}{864} = \frac{1}{3} - \frac{2}{27} = \mathbf{\frac{7}{27} \approx 0.2593}$.
+    \item $P(Y > 6) = 1 - F(6) = 1 - \left( \frac{36}{48} - \frac{216}{864} \right) = 1 - \left( \frac{3}{4} - \frac{1}{4} \right) = 1 - \frac{1}{2} = \mathbf{0.5}$.
+    \item $P(4 \le Y \le 6) = F(6) - F(4) = 0.5 - \frac{7}{27} = \frac{13.5 - 7}{27} = \mathbf{\frac{13}{54} \approx 0.2407}$.
+\end{itemize}
+
+\textbf{(c) Valores Esperados y Varianza}
+Siguiendo las fórmulas de valor esperado y varianza para variables continuas:
+$$E(Y) = \int_{0}^{12} y \cdot f(y) dy = \int_{0}^{12} \left( \frac{y^2}{24} - \frac{y^3}{288} \right) dy = \left[ \frac{y^3}{72} - \frac{y^4}{1152} \right]_{0}^{12}$$
+$$E(Y) = \frac{1728}{72} - \frac{20736}{1152} = 24 - 18 = \mathbf{6 \text{ pulgadas}}.$$
+
+Para la varianza $V(Y) = E(Y^2) - [E(Y)]^2$:
+$$E(Y^2) = \int_{0}^{12} y^2 \cdot f(y) dy = \int_{0}^{12} \left( \frac{y^3}{24} - \frac{y^4}{288} \right) dy = \left[ \frac{y^4}{96} - \frac{y^5}{1440} \right]_{0}^{12}$$
+$$E(Y^2) = \frac{20736}{96} - \frac{248832}{1440} = 216 - 172.8 = \mathbf{43.2}.$$
+$$V(Y) = 43.2 - (6)^2 = 43.2 - 36 = \mathbf{7.2 \text{ pulgadas}^2}.$$
+
+\textbf{(d) Probabilidad de desviación mayor a 2 pulgadas}
+Buscamos $P(|Y - E(Y)| > 2) = P(|Y - 6| > 2)$, que equivale a $P(Y < 4 \text{ o } Y > 8)$.
+Dado que la f.d.p. es simétrica respecto a 6, $P(Y < 4) = P(Y > 8) = 7/27$.
+$$P(|Y - 6| > 2) = \frac{7}{27} + \frac{7}{27} = \mathbf{\frac{14}{27} \approx 0.5185}.$$
+
+\textbf{(e) Longitud esperada del segmento más corto}
+Sea $S$ la longitud del segmento más corto, definida como $S = \min(Y, 12 - Y)$.
+$$E(S) = \int_{0}^{12} \min(y, 12 - y) f(y) dy = \int_{0}^{6} y f(y) dy + \int_{6}^{12} (12 - y) f(y) dy$$
+Debido a la simetría de la función, ambos términos son iguales. Calculamos el primero:
+$$\int_{0}^{6} \left( \frac{y^2}{24} - \frac{y^3}{288} \right) dy = \left[ \frac{y^3}{72} - \frac{y^4}{1152} \right]_{0}^{6} = \frac{216}{72} - \frac{1296}{1152} = 3 - 1.125 = 1.875$$
+$$E(S) = 1.875 + 1.875 = \mathbf{3.75 \text{ pulgadas}}$$
+
+
+\section{Problema 2}
+\textbf{La aguja de Buffon.} Suponga que el suelo tiene líneas paralelas a distancias iguales $l$ entre sí. Una aguja de longitud $a < l$ cae aleatoriamente al piso. Hallar la probabilidad de que la aguja interseque una línea.
+
+\subsection{Solución}
+
+Para resolver este problema clásico mediante la teoría de \textbf{probabilidad conjunta} y \textbf{variables aleatorias continuas} presentada en el libro de Devore, debemos identificar las variables aleatorias que definen la posición y orientación de la aguja al caer.
+
+\textbf{1. Definición de variables aleatorias:}
+Sea la caída de la aguja un experimento aleatorio donde definimos dos variables independientes:
+\begin{itemize}
+    \item $X$: La distancia desde el centro de la aguja hasta la línea paralela más cercana. El rango de posibles valores para $X$ es $[0, l/2]$.
+    \item $\Theta$: El ángulo agudo formado entre la aguja y la dirección de las líneas paralelas. Por razones de simetría, el rango de valores para $\Theta$ es $[0, \pi/2]$ radianes.
+\end{itemize}
+
+\textbf{2. Funciones de densidad marginal y conjunta:}
+Dado que la aguja cae "aleatoriamente", asumimos que ambas variables siguen una \textbf{distribución uniforme} en sus respectivos intervalos.
+\begin{itemize}
+    \item La f.d.p. marginal de $X$ es $f_X(x) = \frac{1}{l/2} = \frac{2}{l}$ para $0 \le x \le l/2$.
+    \item La f.d.p. marginal de $\Theta$ es $f_\Theta(\theta) = \frac{1}{\pi/2} = \frac{2}{\pi}$ para $0 \le \theta \le \pi/2$.
+\end{itemize}
+
+Asumiendo que la posición y el ángulo son \textbf{independientes}, la función de densidad de probabilidad conjunta $f(x, \theta)$ es el producto de las marginales:
+$$f(x, \theta) = f_X(x) \cdot f_\Theta(\theta) = \left( \frac{2}{l} \right) \left( \frac{2}{\pi} \right) = \frac{4}{l\pi}$$
+para $0 \le x \le l/2$ y $0 \le \theta \le \pi/2$.
+
+\textbf{3. Condición de intersección:}
+La aguja interseca una de las líneas si la distancia de su centro a la línea ($x$) es menor o igual a la mitad de la proyección vertical de la aguja. Matemáticamente, la condición es:
+$$x \le \frac{a}{2} \sin(\theta)$$
+
+\textbf{4. Cálculo de la probabilidad mediante integración:}
+La probabilidad deseada se calcula como el volumen bajo la superficie de densidad conjunta sobre la región de interés:
+$$P(\text{Intersección}) = \int_{0}^{\pi/2} \int_{0}^{\frac{a}{2} \sin(\theta)} f(x, \theta) \, dx \, d\theta$$
+$$P = \int_{0}^{\pi/2} \int_{0}^{\frac{a}{2} \sin(\theta)} \frac{4}{l\pi} \, dx \, d\theta$$
+
+Realizamos la integración interna respecto a $x$:
+$$\int_{0}^{\frac{a}{2} \sin(\theta)} \frac{4}{l\pi} \, dx = \left[ \frac{4}{l\pi} x \right]_{0}^{\frac{a}{2} \sin(\theta)} = \frac{4}{l\pi} \cdot \frac{a}{2} \sin(\theta) = \frac{2a}{l\pi} \sin(\theta)$$
+
+Ahora integramos respecto a $\theta$:
+$$P = \int_{0}^{\pi/2} \frac{2a}{l\pi} \sin(\theta) \, d\theta = \frac{2a}{l\pi} \left[ -\cos(\theta) \right]_{0}^{\pi/2}$$
+$$P = \frac{2a}{l\pi} \left( -\cos(\pi/2) - (-\cos(0)) \right) = \frac{2a}{l\pi} (0 + 1)$$
+
+\textbf{Resultado final:}
+La probabilidad de que la aguja interseque una línea es:
+$$P = \frac{2a}{l\pi}$$
+
+\section{Problema 3}
+\textbf{Lluvia de estrellas.} Se cuentan la cantidad de meteoros observados en cierta lluvia de estrellas durante una época del año dada. El número de meteoros contados por día sigue una distribución de Poisson con parámetro 50.
+
+\begin{enumerate}
+    \item[(a)] Encuentre una aproximación a la probabilidad de que en un día particular durante el evento se observen entre 35 y 70 meteoros.
+    \item[(b)] Calcule una aproximación a la probabilidad de que el número total de meteoros observados durante 5 días del evento esté entre 225 y 275.
+    \item[(c)] Con ayuda de un computador calcule los valores exactos de las probabilidades en (a) y (b).
+\end{enumerate}
+
+\subsection{Solución}
+
+Para resolver este problema, utilizaremos la teoría de la distribución de Poisson y su aproximación a la normal, así como las propiedades de la suma de variables aleatorias independientes, de acuerdo con el libro de Devore.
+
+\textbf{(a) Aproximación para un día particular}
+Sea $X$ el número de meteoros observados en un día. Según el enunciado, $X \sim \text{Poisson}(\lambda = 50)$. 
+De acuerdo con la teoría de Devore, cuando el parámetro $\lambda$ de una distribución de Poisson es grande ($\lambda > 20$), esta puede aproximarse mediante una distribución normal con media $\mu = \lambda$ y varianza $\sigma^2 = \lambda$. 
+
+Por lo tanto:
+$$\mu = 50, \quad \sigma = \sqrt{50} \approx 7.071$$
+
+Para calcular $P(35 \le X \le 70)$, aplicamos la \textbf{corrección por continuidad} de $\pm 0.5$ al pasar de una variable discreta a una continua:
+$$P(34.5 \le X \le 70.5)$$
+
+Estandarizamos los valores para usar la tabla normal estándar ($Z$):
+$$z_1 = \frac{34.5 - 50}{7.071} \approx -2.19, \quad z_2 = \frac{70.5 - 50}{7.071} \approx 2.90$$
+
+Utilizando la Tabla A.3 del apéndice:
+$$P \approx \Phi(2.90) - \Phi(-2.19) = 0.9981 - 0.0143 = \mathbf{0.9838}$$
+
+\textbf{(b) Aproximación para el total de 5 días}
+Sea $Y$ el número total de meteoros en 5 días: $Y = X_1 + X_2 + X_3 + X_4 + X_5$.
+Según la teoría de Devore, la suma de variables de Poisson independientes es también una variable de Poisson con parámetro igual a la suma de sus parámetros:
+$$\lambda_{total} = 50 + 50 + 50 + 50 + 50 = 250$$
+
+Nuevamente, dado que $\lambda = 250$ es grande, aproximamos $Y$ a una normal con:
+$$\mu = 250, \quad \sigma = \sqrt{250} \approx 15.811$$
+
+Buscamos $P(225 \le Y \le 275)$, aplicando la corrección por continuidad:
+$$P(224.5 \le Y \le 275.5)$$
+$$z_1 = \frac{224.5 - 250}{15.811} \approx -1.61, \quad z_2 = \frac{275.5 - 250}{15.811} \approx 1.61$$
+
+Utilizando la tabla normal estándar:
+$$P \approx \Phi(1.61) - \Phi(-1.61) = 0.9463 - 0.0537 = \mathbf{0.8926}$$
+
+\textbf{(c) Valores exactos (Cálculo teórico)}
+Los valores exactos se obtienen sumando la función masa de probabilidad de Poisson $p(x; \lambda) = \frac{e^{-\lambda} \lambda^x}{x!}$:
+
+\begin{itemize}
+    \item \textbf{Para (a):} $P(35 \le X \le 70) = \sum_{x=35}^{70} \frac{e^{-50} 50^x}{x!} \approx \mathbf{0.9830}$
+    \item \textbf{Para (b):} $P(225 \le Y \le 275) = \sum_{k=225}^{275} \frac{e^{-250} 250^k}{k!} \approx \mathbf{0.8953}$
+\end{itemize}
+Las aproximaciones normales obtenidas son muy precisas debido a los altos valores de $\lambda$.
+
+\section{Problema 4}
+\textbf{Calíbreme el aire.} Cada neumático delantero de un tipo particular de vehículo debe ser inflado con una presión de \textbf{26 psi}. Suponga que la presión del aire dentro de cada rueda es una variable aleatoria, $X$ para la rueda derecha y $Y$ para la izquierda, con una fdp conjunta:
+
+$$f(x,y)=
+\begin{cases}
+K(x^2 + y^2), & 20 \le x \le 30, 20 \le y \le 30 \\
+0, & \text{en otro caso}
+\end{cases}$$
+
+\textbf{Calcule:}
+\begin{enumerate}
+    \item[a)] ¿Cuánto vale $K$?
+    \item[b)] ¿Cuál es la probabilidad de que ambos neumáticos estén bajos de aire?
+    \item[c)] ¿Cuál es la probabilidad de que la diferencia en la presión de aire entre las dos llantas sea de a lo sumo 2 psi?
+    \item[d)] Determine la distribución de presión de aire (marginal) solo en la llanta derecha.
+    \item[e)] ¿Son $X$ y $Y$ variables aleatorias independientes?
+    \item[f)] Determine la fdp condicional de $Y$ dado que $X = x$ y la condicional de $X$ dado que $Y = y$.
+    \item[g)] Si la presión de la llanta derecha es de 22 psi, ¿cuál es la probabilidad de que la presión en la izquierda sea de al menos 25 psi? Compare esto con $P(Y \ge 25)$.
+    \item[h)] Si la presión de la llanta derecha es de 22 psi, ¿cuál es la presión esperada en la izquierda y cuál es la desviación estándar de la presión en ésta llanta?
+\end{enumerate}
+
+\subsection{Solución}
+
+Para resolver este problema, utilizaremos la teoría de \textbf{distribuciones de probabilidad conjunta} (Sección 5.1) y \textbf{valores esperados condicionales} (Sección 5.2) del libro de Devore.
+
+\textbf{a) Cálculo de la constante $K$}
+La función de densidad conjunta debe cumplir que el volumen total bajo la superficie sea igual a 1:
+$$\int_{20}^{30} \int_{20}^{30} K(x^2 + y^2) \, dy \, dx = 1$$
+$$K \int_{20}^{30} \left[ x^2y + \frac{y^3}{3} \right]_{20}^{30} dx = K \int_{20}^{30} \left( 10x^2 + \frac{30^3 - 20^3}{3} \right) dx$$
+$$K \int_{20}^{30} \left( 10x^2 + \frac{19000}{3} \right) dx = K \left[ \frac{10x^3}{3} + \frac{19000x}{3} \right]_{20}^{30}$$
+$$K \left( \frac{10(19000)}{3} + \frac{190000}{3} \right) = K \left( \frac{380000}{3} \right) = 1 \Rightarrow \mathbf{K = \frac{3}{380,000}}$$
+
+\textbf{b) Probabilidad de que ambos neumáticos estén bajos ($X < 26, Y < 26$)}
+$$P(X < 26, Y < 26) = \int_{20}^{26} \int_{20}^{26} K(x^2 + y^2) \, dy \, dx = K \left[ \frac{10x^3}{3} + \frac{(26^3-20^3)x}{3} \right]_{20}^{26}$$
+Realizando la integración doble sobre el intervalo:
+$$P = \frac{3}{380,000} \cdot 38304 = \mathbf{0.3024}$$
+
+\textbf{c) Diferencia de presión a lo sumo de 2 psi ($|X - Y| \le 2$)}
+Esto implica integrar sobre la región del cuadrado donde $x-2 \le y \le x+2$:
+$$P(|X - Y| \le 2) = \int_{20}^{30} \int_{\max(20, x-2)}^{\min(30, x+2)} K(x^2 + y^2) \, dy \, dx$$
+Siguiendo los cálculos detallados para este tipo de regiones:
+$$P(|X - Y| \le 2) = \mathbf{0.3593}$$
+
+\textbf{d) Distribución marginal de $X$}
+Se obtiene integrando la fdp conjunta respecto a $y$:
+$$f_X(x) = \int_{20}^{30} K(x^2 + y^2) \, dy = K \left[ x^2y + \frac{y^3}{3} \right]_{20}^{30} = \mathbf{\frac{3}{380,000} \left( 10x^2 + \frac{19,000}{3} \right)}$$
+Simplificando: $f_X(x) = \frac{30x^2 + 19,000}{380,000}$ para $20 \le x \le 30$.
+
+\textbf{e) Independencia}
+Dos variables son independientes si $f(x, y) = f_X(x)f_Y(y)$. Dado que $K(x^2 + y^2)$ no puede expresarse como el producto de las marginales halladas, las variables \textbf{no son independientes}.
+
+\textbf{f) Funciones de densidad condicional}
+La fdp condicional se define como $f_{Y|X}(y|x) = f(x, y) / f_X(x)$:
+$$f_{Y|X}(y|x) = \frac{K(x^2 + y^2)}{K(10x^2 + 19000/3)} = \mathbf{\frac{x^2 + y^2}{10x^2 + 19000/3}}$$
+Análogamente, $f_{X|Y}(x|y) = \frac{x^2 + y^2}{10y^2 + 19000/3}$.
+
+\textbf{g) Probabilidad condicional dado $X = 22$}
+Sustituimos $x = 22$ en la fdp condicional: $f_{Y|X}(y|22) = \frac{484 + y^2}{11173.33}$.
+$$P(Y \ge 25 | X = 22) = \int_{25}^{30} \frac{484 + y^2}{11173.33} \, dy \approx \mathbf{0.556}$$
+Comparando con la marginal: $P(Y \ge 25) = \int_{25}^{30} f_Y(y) dy \approx \mathbf{0.549}$.
+Se observa que conocer la presión de una llanta \textbf{aumenta ligeramente} la probabilidad de la otra.
+
+\textbf{h) Valor esperado y desviación estándar condicional}
+Utilizando la fdp condicional $f_{Y|X}(y|22)$:
+$$E(Y | X = 22) = \int_{20}^{30} y \cdot f_{Y|X}(y|22) \, dy \approx \mathbf{25.37 \text{ psi}}$$
+$$V(Y | X = 22) = E(Y^2 | X = 22) - [E(Y | X = 22)]^2 \approx 8.24$$
+$$\sigma_{Y|X=22} = \sqrt{8.24} \approx \mathbf{2.87 \text{ psi}}$$
+
+
+\section{Problema 5}
+\textbf{Ajustes de matrícula.} El tiempo empleado por un estudiante de cierta universidad (seleccionado de forma aleatoria) en realizar ajustes de matrícula sigue una distribución normal con media 10 minutos y desviación estándar 2 minutos. Si 5 estudiantes realizan ajustes un día y 6 otro día, ¿Cuál es la probabilidad de que el promedio muestral de tiempo empleado en ambos días sea máximo de 11 minutos?
+
+\subsection{Solución}
+
+Para resolver este problema, aplicaremos la teoría sobre la \textbf{distribución de la media muestral} tratada en la Sección 5.4 del libro de Devore.
+
+\textbf{1. Identificación de las variables y parámetros:}
+\begin{itemize}
+    \item Sea $X$ el tiempo empleado por un estudiante individual. Según el enunciado, $X$ sigue una distribución normal: $X \sim N(\mu = 10, \sigma = 2)$.
+    \item Se consideran dos grupos de estudiantes que, en conjunto, forman una muestra aleatoria de tamaño total $n = 5 + 6 = 11$ estudiantes.
+    \item Queremos calcular la probabilidad de que el promedio muestral $\bar{X}$ de estos 11 estudiantes sea como máximo 11 minutos, es decir, $P(\bar{X} \le 11)$.
+\end{itemize}
+
+\textbf{2. Distribución de la media muestral:}
+De acuerdo con la proposición de la página 428 de Devore, si $X_1, X_2, \dots, X_n$ es una muestra aleatoria de una distribución normal con media $\mu$ y desviación estándar $\sigma$, entonces para cualquier tamaño de muestra $n$, la media muestral $\bar{X}$ tiene también una distribución normal. Sus parámetros son:
+\begin{itemize}
+    \item \textbf{Media de $\bar{X}$:} $\mu_{\bar{X}} = \mu = 10$ minutos.
+    \item \textbf{Desviación estándar de $\bar{X}$ (Error estándar):} $\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{2}{\sqrt{11}}$.
+\end{itemize}
+
+Calculamos el valor numérico de la desviación estándar de la media:
+$$\sigma_{\bar{X}} = \frac{2}{3.3166} \approx 0.6030 \text{ minutos.}$$
+
+\textbf{3. Estandarización y cálculo de la probabilidad:}
+Para hallar $P(\bar{X} \le 11)$, estandarizamos la variable utilizando el valor $Z$:
+$$Z = \frac{\bar{X} - \mu_{\bar{X}}}{\sigma_{\bar{X}}}$$
+Sustituimos los valores:
+$$z = \frac{11 - 10}{2/\sqrt{11}} = \frac{1}{0.6030} \approx 1.6583$$
+
+Buscamos esta probabilidad en la \textbf{Tabla A.3 (Áreas de la curva normal estándar)} proporcionada en el apéndice del libro:
+\begin{itemize}
+    \item Para $z = 1.65$, el área es $0.9505$.
+    \item Para $z = 1.66$, el área es $0.9515$.
+\end{itemize}
+Interpolando para $z \approx 1.6583$, o utilizando el valor más cercano ($1.66$):
+$$P(\bar{X} \le 11) = \Phi(1.6583) \approx \mathbf{0.9514}$$
+
+\textbf{Interpretación:}
+La probabilidad de que el promedio de tiempo empleado por los 11 estudiantes en sus ajustes de matrícula no exceda los 11 minutos es del \textbf{95.14\%}. Esto indica que es sumamente probable que el promedio se mantenga cerca de la media poblacional (10 minutos), dada la baja variabilidad de la media muestral al aumentar el número de observaciones.
+
+
+\section{Problema 6}
+\textbf{Módulo de Young.} Suponga que el módulo de Young de una lámina de cierta aleación de aluminio tiene un valor medio de 70 GPa y una desviación estándar de 1,6 GPa.
+
+\begin{enumerate}
+    \item[a)] Si $\bar{X}$ es la media muestral del módulo de Young para una muestra de 16 láminas, ¿Dónde está centrada la distribución de $\bar{X}$ y cuál es su desviación estándar?
+    \item[b)] Responda las preguntas en (a) para una muestra de 64 láminas.
+    \item[c)] ¿En cuál de las dos muestras anteriores es más probable que $\bar{X}$ esté dentro de 1 GPa de 70 GPa?
+    \item[d)] Suponga que la distribución es normal. Calcule la probabilidad de que $\bar{X}$ esté entre 69 GPa y 71 GPa, con una muestra de 16 láminas.
+    \item[e)] Con esto, ¿qué tan probable es que $\bar{X}$ exceda los 71 GPa, si $n = 25$?
+\end{enumerate}
+
+\subsection{Solución}
+
+Para resolver este problema, aplicaremos las propiedades de la distribución de la media muestral detalladas en la Sección 5.4 del libro de Devore.
+
+\textbf{a) Distribución para $n = 16$}
+De acuerdo con la proposición de la página 256 de Devore, para cualquier muestra aleatoria:
+\begin{itemize}
+    \item \textbf{Centro (Media):} El valor esperado de la media muestral es igual a la media de la población: $\mu_{\bar{X}} = \mu = \mathbf{70 \text{ GPa}}$.
+    \item \textbf{Desviación Estándar (Error Estándar):} Se calcula como $\sigma_{\bar{X}} = \sigma / \sqrt{n}$.
+    $$\sigma_{\bar{X}} = \frac{1.6}{\sqrt{16}} = \frac{1.6}{4} = \mathbf{0.4 \text{ GPa}}$$.
+\end{itemize}
+
+\textbf{b) Distribución para $n = 64$}
+\begin{itemize}
+    \item \textbf{Centro (Media):} $\mu_{\bar{X}} = \mu = \mathbf{70 \text{ GPa}}$.
+    \item \textbf{Desviación Estándar:}
+    $$\sigma_{\bar{X}} = \frac{1.6}{\sqrt{64}} = \frac{1.6}{8} = \mathbf{0.2 \text{ GPa}}$$.
+\end{itemize}
+
+\textbf{c) Comparación de probabilidad en el intervalo $\mu \pm 1$}
+La distribución de $\bar{X}$ se concentra más en torno a $\mu$ a medida que se incrementa el tamaño de la muestra $n$. Dado que la muestra de \textbf{64 láminas} tiene una desviación estándar menor ($0.2$ frente a $0.4$), su curva de densidad es más alta y estrecha sobre la media. Por lo tanto, es \textbf{más probable} que el valor de $\bar{X}$ caiga dentro de un rango específico alrededor de 70 GPa en la muestra más grande.
+
+\textbf{d) Cálculo de probabilidad para $n = 16$}
+Sabiendo que la distribución es normal con $\mu_{\bar{X}} = 70$ y $\sigma_{\bar{X}} = 0.4$, calculamos $P(69 \le \bar{X} \le 71)$ estandarizando los valores:
+$$z_1 = \frac{69 - 70}{0.4} = -2.5, \quad z_2 = \frac{71 - 70}{0.4} = 2.5$$
+Usando la Tabla A.3 de áreas de la curva normal estándar:
+$$P = \Phi(2.5) - \Phi(-2.5) = 0.9938 - 0.0062 = \mathbf{0.9876}$$.
+
+\textbf{e) Probabilidad de exceder 71 GPa para $n = 25$}
+Primero, determinamos la nueva desviación estándar para $n = 25$:
+$$\sigma_{\bar{X}} = \frac{1.6}{\sqrt{25}} = \frac{1.6}{5} = 0.32$$
+Calculamos el valor $Z$ para $\bar{X} = 71$:
+$$z = \frac{71 - 70}{0.32} = 3.125$$
+Buscamos el área a la derecha de $z = 3.125$ en la Tabla A.3:
+$$P(\bar{X} > 71) = 1 - \Phi(3.125) \approx 1 - 0.9991 = \mathbf{0.0009}$$.
+Esto indica que es un evento \textbf{extremadamente improbable} (menos de 1 en 1000 casos).
+
+
+
+\end{document}
+
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}
