@@ -18,7 +18,7 @@
 % cabecera
 \pagestyle{fancy}
 \fancyhead[l]{Astroestadística}
-\fancyhead[c]{Notas de Clase Parte 1}
+\fancyhead[c]{Notas Parte 1}
 \fancyhead[r]{\today}
 \fancyfoot[c]{\thepage}
 \renewcommand{\headrulewidth}{0.2pt} % linea horizontal
@@ -31,7 +31,7 @@
   \vspace{2cm}
   {\huge\bfseries Astroestadística\par}
   \vspace{0.4cm}
-  {\Large Notas de Clase Parte 1\par}
+  {\Large Notas del Curso Parte 1\par}
   \vspace{2.5cm}
   {\large Autor:\par}
   \vspace{0.2cm}
@@ -45,461 +45,1732 @@
 \tableofcontents
 \newpage
 
-\section{Espacios Muestrales y Eventos}
+\section{Pobabilidad}
 
-El estudio de la probabilidad se centra en situaciones donde el resultado de una acción es incierto, proporcionando métodos para cuantificar las oportunidades asociadas con diversos sucesos.
+\subsection{Espacios muestrales y eventos}
+Un experimento es cualquier acción o proceso cuyo resultado está sujeto a la incertidumbre.
 
-\subsection{Experimentos y el Espacio Muestral}
+\subsubsection{El espacio muestral de un experimento}
 
-Un experimento se define como cualquier acción o proceso cuyo resultado está sujeto a la incertidumbre. Ejemplos comunes incluyen lanzar una moneda, medir la resistencia de una viga o el tiempo de recorrido hacia el trabajo.
+\textbf{Definición:}
+El \textbf{espacio muestral} de un experimento, denotado por $\hat{S}$, es el conjunto de todos los posibles resultados de dicho experimento.
 
-\subsubsection{Definición de Espacio Muestral}
+\textbf{Ejemplo 2.1 (Fusible):}
+Un experimento consiste en examinar un fusible para ver si está defectuoso. El espacio muestral de este experimento se abrevia como $\hat{S} = \{N, D\}$, donde N representa no defectuoso, D representa defectuoso y las llaves se utilizan para encerrar los elementos de un conjunto.
 
-El espacio muestral de un experimento, denotado por $\hat{S}$, es el conjunto que contiene todos los posibles resultados del experimento. En el caso más simple, como examinar si un fusible funciona o no, el espacio muestral se abrevia como $\hat{S} = \{N, D\}$, donde $N$ representa un fusible no defectuoso y $D$ uno defectuoso.
+\textbf{Ejemplo 2.2:}
+Si se examinan tres fusibles en secuencia y se anota el resultado de cada examen, entonces un resultado del experimento es cualquier secuencia de letras N y D de longitud 3. Por lo tanto, el espacio muestral es:
+$$ \hat{S} = \{NNN, NND, NDN, NDD, DNN, DND, DDN, DDD\} $$.
 
-\subsubsection{Ejemplos de Espacios Muestrales}
+\subsubsection{Eventos}
+En el estudio de la probabilidad, interesan no sólo los resultados individuales de $\hat{S}$ sino también varias recopilaciones de resultados de $\hat{S}$.
 
-Si se lanzan tres fusibles en secuencia, el resultado es una secuencia de longitud tres. El espacio muestral completo es $\hat{S} = \{NNN, NND, NDN, NDD, DNN, DND, DDN, DDD\}$. Existen experimentos donde el espacio muestral es infinito, como probar baterías hasta observar el primer éxito ($E$), donde el conjunto de resultados es $\hat{S} = \{E, FE, FFE, FFFE, \dots\}$.
+\textbf{Definición:}
+Un \textbf{evento} es cualquier recopilación (subconjunto) de resultados contenidos en el espacio muestral $\hat{S}$. Un evento es \textbf{simple} si consiste en exactamente un resultado y \textbf{compuesto} si consiste en más de un resultado.
 
-\subsection{Eventos}
+\fbox{
+\begin{minipage}{0.9\textwidth}
+Sea $s \in \hat{S}$ el resultado obtenido al realizar un experimento.
 
-Un evento es cualquier recopilación o subconjunto de resultados contenidos en el espacio muestral $\hat{S}$. Se dice que un evento ocurre si el resultado experimental obtenido está contenido en dicho conjunto.
+\textbf{Ocurrencia de un evento:}
+Se dice que el evento $A$ ocurre si:
+$$ s \in A $$
 
-\subsubsection{Tipos de Eventos}
+\textbf{Eventos simples y compuestos:}
 
-Un evento es simple si consiste en exactamente un resultado de $\hat{S}$. Por otro lado, un evento es compuesto si consiste en más de un resultado. Por ejemplo, en un experimento de lanzamiento de dados, un evento simple podría ser obtener un 3, mientras que un evento compuesto sería obtener un número impar.
+1. \textbf{Evento simple:} Es un conjunto que contiene un único resultado, $E = \{s\}$. Dado que un experimento resulta en un único valor de $s$, ocurre exactamente un evento simple $\{s\}$.
 
-\subsection{Relaciones de la Teoría de Conjuntos}
+2. \textbf{Evento compuesto:} Es cualquier subconjunto $A \subseteq \hat{S}$ tal que $|A| > 1$. Puesto que un mismo resultado $s$ puede pertenecer a múltiples subconjuntos de $\hat{S}$, muchos eventos compuestos ocurren simultáneamente si:
+$$ s \in A_1, s \in A_2, \dots, s \in A_k $$
+\end{minipage}
+}
 
-Debido a que los eventos son conjuntos, se utilizan las operaciones de la teoría elemental de conjuntos para definir nuevos sucesos.
+\textbf{Ejemplo 2.5:}
+Considérese un experimento en el cual cada uno de tres vehículos que toman una salida de una autopista particular vira a la izquierda (L) o la derecha (R) al final de la rampa de salida. Los ocho posibles resultados que constituyen el espacio muestral son LLL, RLL, LRL, LLR, LRR, RLR, RRL y RRR. Así pues existen ocho eventos simples, entre los cuales están $E_1 = \{LLL\}$ y $E_5 = \{LRR\}$. Algunos eventos compuestos incluyen:
 
-\subsubsection{Complemento, Unión e Intersección}
+$$ A = \{RLL, LRL, LLR\} = \text{el evento en que exactamente uno de los tres vehículos vire a la derecha.} $$
 
-El complemento de un evento $A$, denotado por $A'$, es el conjunto de todos los resultados en $\hat{S}$ que no están contenidos en $A$. La unión de dos eventos $A$ y $B$, denotada por $A \cup B$, contiene todos los resultados que están en $A$, en $B$ o en ambos. La intersección de dos eventos, $A \cap B$, contiene solo los resultados que están tanto en $A$ como en $B$.
+$$ B = \{LLL, RLL, LRL, LLR\} = \text{el evento en que cuando mucho uno de los vehículos vire a la derecha.} $$
 
-\subsubsection{Eventos Mutuamente Excluyentes}
+$$ C = \{LLL, RRR\} = \text{el evento en que los tres vehículos viren en la misma dirección.} $$
 
-Se dice que dos eventos $A$ y $B$ son mutuamente excluyentes o disjuntos cuando su intersección es el evento nulo $\emptyset$, lo que significa que no tienen resultados en común. Un ejemplo es la venta de marcas de autos de diferentes distribuidores; un vehículo vendido no puede ser simultáneamente de dos marcas distintas.
+Suponga que cuando se realiza el experimento, el resultado es LLL. Entonces ha ocurrido el evento simple $E_1$ y por lo tanto también comprende los eventos B y C (pero no A).
 
-\section{Probabilidad y sus Axiomas}
+\subsubsection{Algunas relaciones de la teoría de conjuntos}
 
-El objetivo es asignar a cada evento $A$ un número $P(A)$, denominado probabilidad del evento $A$, que ofrezca una medida precisa de la oportunidad de que dicho evento ocurra.
+\textbf{Definición:}
 
-\subsection{Los Axiomas de Probabilidad}
+1. El complemento de un evento $A$, denotado por $A'$, es el conjunto de todos los resultados en $\hat{S}$ que no están contenidos en $A$.
 
-Para que las asignaciones de probabilidad sean consistentes con la noción intuitiva, deben satisfacer tres propiedades básicas denominadas axiomas.
+2. La unión de dos eventos $A$ y $B$, denotados por $A \cup B$ y leídos 'A o B', es el evento que consiste en todos los resultados que están en $A$ o en $B$ o en ambos eventos (de tal suerte que la unión incluya resultados donde tanto $A$ como $B$ ocurren, así también resultados donde ocurre exactamente uno), es decir, todos los resultados en por lo menos uno de los eventos.
 
-\subsubsection{Primer y Segundo Axioma}
+3. La intersección de dos eventos $A$ y $B$, denotada por $A \cap B$ y leída 'A y B', es el evento que consiste en todos los resultados que están tanto en $A$ como en $B$.
 
-El Axioma 1 establece que para cualquier evento $A$, su probabilidad debe ser no negativa: $P(A) \geq 0$. El Axioma 2 indica que la máxima probabilidad posible es 1 y se asigna al espacio muestral: $P(\hat{S}) = 1$.
+\fbox{
+\begin{minipage}{0.9\textwidth}
 
-\subsubsection{Tercer Axioma}
+\textbf{Notación de conjuntos:}
 
-Si $A_1, A_2, A_3, \dots$ es un conjunto de eventos mutuamente excluyentes, la probabilidad de la unión de estos eventos es la suma de sus probabilidades individuales: $P(A_1 \cup A_2 \cup A_3 \dots) = \sum P(A_i)$. Este axioma permite derivar probabilidades para conjuntos finitos de eventos disjuntos, demostrando también que la probabilidad del evento nulo es cero: $P(\emptyset) = 0$.
+1. Complemento:
+$$ A' = \{s \in \hat{S} : s \notin A\} $$
 
-\subsection{Interpretaciones de la Probabilidad}
+2. Unión:
+$$ A \cup B = \{s \in \hat{S} : s \in A \text{ o } s \in B\} $$
 
-Existen dos enfoques principales para interpretar los números asignados a las probabilidades: el objetivo y el subjetivo.
+3. Intersección:
+$$ A \cap B = \{s \in \hat{S} : s \in A \text{ y } s \in B\} $$
 
-\subsubsection{Interpretación Frecuentista}
+\end{minipage}
+}
 
-Esta interpretación objetiva identifica la probabilidad $P(A)$ con la frecuencia relativa límite del evento $A$ cuando el experimento se realiza repetidamente bajo condiciones idénticas. Si el experimento se realiza $n$ veces y el evento ocurre $n(A)$ veces, a medida que $n$ crece, la relación $n(A)/n$ tiende a estabilizarse en el valor $P(A)$.
+\textbf{Ejemplo 2.8:}
+En el experimento en el cual se observa el número de bombas en uso en una sola gasolinería de seis bombas, sea $A = \{0, 1, 2, 3, 4\}$, $B = \{3, 4, 5, 6\}$ y $C = \{1, 3, 5\}$. Entonces:
 
-\subsubsection{Interpretación Subjetiva}
+$$ A' = \{5, 6\} $$
+$$ A \cup B = \{0, 1, 2, 3, 4, 5, 6\} = \hat{S} $$
+$$ A \cup C = \{0, 1, 2, 3, 4, 5\} $$
+$$ A \cap B = \{3, 4\} $$
+$$ A \cap C = \{1, 3\} $$
+$$ (A \cap C)' = \{0, 2, 4, 5, 6\} $$
 
-Se aplica en situaciones inherentemente irrepetibles donde la probabilidad representa el grado de creencia personal de un individuo sobre la ocurrencia de un evento, basándose en su información y opiniones previas.
+\textbf{Definición:}
+Que $\varnothing$ denote el evento nulo (el evento sin resultados). Cuando $A \cap B = \varnothing$, se dice que $A$ y $B$ son \textbf{eventos mutuamente excluyentes o disjuntos}. 
 
-\subsection{Propiedades Derivadas y Resultados Igualmente Probables}
+Se dice que los eventos $A_1, A_2, A_3, \dots$ son mutuamente excluyentes (disjuntos por pares) si ninguno de dos eventos tiene resultados en común. 
 
-A partir de los axiomas se derivan reglas fundamentales para el cálculo de probabilidades.
 
-\subsubsection{Regla del Complemento y de la Adición}
+\textbf{Problema 6}
 
-Para cualquier evento $A$, $P(A) = 1 - P(A')$. Esta regla es útil cuando calcular la probabilidad de que algo no ocurra es más sencillo que el cálculo directo. Para dos eventos cualesquiera $A$ y $B$, la probabilidad de su unión es $P(A \cup B) = P(A) + P(B) - P(A \cap B)$. Esta fórmula corrige el "doble conteo" de los resultados presentes en la intersección.
+La biblioteca de una universidad dispone de cinco ejemplares de un cierto texto en reserva. Dos ejemplares (1 y 2) son primeras impresiones y los otros tres (3, 4 y 5) son segundas impresiones. Un estudiante examina estos libros en orden aleatorio, y se detiene sólo cuando una segunda impresión ha sido seleccionada. Un posible resultado es 5 y otro 213.
 
-\subsubsection{Resultados Igualmente Probables}
+a. Ponga en lista los resultados en $\hat{S}$.
 
-En experimentos con $N$ resultados donde cada uno tiene la misma oportunidad de ocurrir, la probabilidad de cada evento simple es $1/N$. Para cualquier evento compuesto $A$, la probabilidad es la proporción de resultados favorables: $P(A) = N(A)/N$, donde $N(A)$ es el número de resultados en $A$. Por ejemplo, al lanzar dos dados imparciales, hay $N = 36$ resultados equiprobables y la probabilidad de que la suma sea 7 es $6/36 = 1/6$.
+b. Que $A$ denote el evento en que exactamente un libro debe ser examinado. ¿Qué resultados están en $A$?
 
-\section{Probabilidad Condicional}
+c. Sea $B$ el evento en que el libro 5 es seleccionado. ¿Qué resultados están en $B$?
 
-Las probabilidades asignadas a los eventos pueden cambiar cuando se dispone de información parcial sobre el resultado del experimento. La probabilidad original se denomina probabilidad no condicional, mientras que la probabilidad revisada ante la ocurrencia de un evento se llama probabilidad condicional.
+d. Sea $C$ el evento en que el libro 1 no es examinado. ¿Qué resultados están en $C$?
 
-\subsection{Definición de Probabilidad Condicional}
+\vspace{0.5cm}
 
-Para dos eventos cualesquiera $A$ y $B$ con $P(B) > 0$, la probabilidad condicional de $A$ dado que $B$ ha ocurrido se define como:
-$P(A | B) = \frac{P(A \cap B)}{P(B)}$
+\textbf{Solución}
 
-En esta situación, $B$ actúa como el "evento condicionante". Una interpretación intuitiva es que, una vez que sabemos que $B$ ha ocurrido, el espacio muestral pertinente ya no es $\hat{S}$, sino que se reduce exclusivamente a los resultados contenidos en $B$.
+Para resolver este problema, primero debemos entender claramente la naturaleza del experimento y las reglas de detención establecidas.
 
-\subsubsection{La Regla de Multiplicación}
-
-Al despejar la intersección de la definición anterior, obtenemos la regla de multiplicación, fundamental para calcular la probabilidad de que dos eventos ocurran simultáneamente:
-$P(A \cap B) = P(A | B) \cdot P(B)$
-
-Esta regla es especialmente útil en experimentos que se componen de varias etapas sucesivas. Por ejemplo, para tres eventos $A_1, A_2, A_3$, la probabilidad de su intersección conjunta es:
-$P(A_1 \cap A_2 \cap A_3) = P(A_3 | A_1 \cap A_2) \cdot P(A_2 | A_1) \cdot P(A_1)$
-
-\section{Independencia de Eventos}
-
-El concepto de independencia se refiere a situaciones donde la ocurrencia o no ocurrencia de un evento no afecta la probabilidad de que el otro ocurra.
-
-\subsection{Definición Formal de Independencia}
-
-Se dice que dos eventos $A$ y $B$ son independientes si se cumple que:
-$P(A | B) = P(A)$
-De lo contrario, se dice que los eventos son dependientes. Esta definición es simétrica, lo que implica que si $A$ es independiente de $B$, entonces $B$ es también independiente de $A$ ($P(B | A) = P(B)$).
-
-\subsubsection{La Regla de Multiplicación para Eventos Independientes}
-
-Una propiedad equivalente y muy utilizada para verificar la independencia es que la probabilidad de la intersección sea el producto de las probabilidades individuales:
-$A$ y $B$ son independientes si y solo si $P(A \cap B) = P(A) \cdot P(B)$
-
-Es importante notar que la independencia es distinta a la exclusión mutua. Si dos eventos con probabilidad positiva son mutuamente excluyentes ($P(A \cap B) = 0$), entonces no pueden ser independientes, ya que saber que uno ocurrió garantiza que el otro no pudo haber ocurrido.
-
-\subsubsection{Independencia Mutua de $n$ Eventos}
-
-Un conjunto de eventos $A_1, \dots, A_n$ son mutuamente independientes si para cualquier subconjunto de $k$ eventos, la probabilidad de su intersección es igual al producto de sus probabilidades individuales:
-$P(A_{i1} \cap \dots \cap A_{ik}) = P(A_{i1}) \cdot \dots \cdot P(A_{ik})$
-
-\section{Teorema de Bayes}
-
-El Teorema de Bayes permite calcular probabilidades "posteriores" a partir de probabilidades "previas" (antes de la nueva información) y probabilidades condicionales.
-
-\subsection{Ley de Probabilidad Total}
-
-Sea $A_1, \dots, A_k$ un conjunto de eventos mutuamente excluyentes y exhaustivos (una partición del espacio muestral $\hat{S}$). Para cualquier otro evento $B$, su probabilidad se puede calcular como:
-$P(B) = \sum_{i=1}^{k} P(B | A_i)P(A_i)$
-
-Visualmente, esto representa una "división de $B$" entre los diversos eventos $A_i$ que conforman el espacio muestral.
-
-\subsection{Formulación del Teorema de Bayes}
-
-Combinando la regla de multiplicación y la ley de probabilidad total, el teorema de Bayes establece que para cualquier evento $A_j$ de la partición:
-$P(A_j | B) = \frac{P(B | A_j)P(A_j)}{\sum_{i=1}^{k} P(B | A_i)P(A_i)}$
-
-\subsubsection{Interpretación de Probabilidades Previas y Posteriores}
+\textbf{Comprensión del Experimento}
 
 \begin{itemize}
-    \item \textbf{Probabilidad Previa:} $P(A_j)$ es la creencia inicial sobre la ocurrencia de $A_j$.
-    \item \textbf{Probabilidad Posterior:} $P(A_j | B)$ es la creencia actualizada después de observar que el evento $B$ ha ocurrido.
+    \item \textbf{Población de libros:} Hay 5 libros en total.
+    \begin{itemize}
+        \item Primeras impresiones (continuamos examinando): $\{1, 2\}$
+        \item Segundas impresiones (nos detenemos): $\{3, 4, 5\}$
+    \end{itemize}
+    \item \textbf{Regla de selección:} Los libros se examinan en orden aleatorio sin reemplazo.
+    \item \textbf{Regla de detención:} El experimento termina inmediatamente cuando se selecciona un libro que es una segunda impresión (es decir, cuando aparece el 3, el 4 o el 5).
+    \item \textbf{Representación de resultados:} Un resultado se representa como la secuencia de números de los libros examinados en el orden en que fueron seleccionados. Por ejemplo, el resultado $213$ significa que primero se examinó el libro 2 (primera impresión, continuar), luego el libro 1 (primera impresión, continuar), y finalmente el libro 3 (segunda impresión, detener).
 \end{itemize}
 
-Un ejemplo clásico es el diagnóstico de enfermedades raras. Aunque una prueba sea muy precisa (alta probabilidad condicional de detección), si la enfermedad es extremadamente rara (baja probabilidad previa), la probabilidad posterior de estar enfermo dado un resultado positivo puede seguir siendo sorprendentemente baja debido a la proporción de falsos positivos en la población sana.
+\vspace{0.3cm}
 
+\textbf{Parte a): Construcción del Espacio Muestral $\hat{S}$}
 
-\section{Técnicas de Conteo}
-
-Cuando los resultados de un experimento son igualmente probables, el cálculo de probabilidades se reduce a determinar el tamaño del espacio muestral $\hat{S}$ y del evento $A$ de interés. Sin embargo, cuando el número de resultados $N$ es muy grande, enlistarlos resulta prohibitivo, por lo que se emplean reglas matemáticas de conteo.
-
-\subsection{La Regla del Producto}
-
-La regla del producto es el principio fundamental para contar pares ordenados o conjuntos de elementos seleccionados en etapas sucesivas.
-
-\subsubsection{Regla para Pares Ordenados}
-
-Si el primer elemento de un par ordenado puede ser seleccionado de $n_1$ maneras, y por cada una de estas, el segundo elemento puede seleccionarse de $n_2$ maneras, entonces el número de pares es $n_1 n_2$. 
-
-Ejemplo: Si un propietario necesita un contratista de fontanería (hay 12 disponibles) y uno de electricidad (hay 9 disponibles), el número de formas de elegir la pareja es $12 \times 9 = 108$.
-
-\subsubsection{Regla Generalizada ($k$-tuplas)}
-
-Si un conjunto se compone de conjuntos ordenados de $k$ elementos ($k$-tuplas), donde hay $n_1$ opciones para el primero, $n_2$ para el segundo dado el primero, y así sucesivamente hasta $n_k$, el número total de $k$-tuplas es el producto $n_1 n_2 \dots n_k$.
-
-\subsection{Permutaciones}
-
-Una permutación es un subconjunto donde el \textbf{orden de selección es importante}.
-
-\subsubsection{Definición y Notación}
-
-Dado un grupo de $n$ individuos distintos, una permutación de tamaño $k$ es un subconjunto ordenado de ellos. El número de permutaciones se denota como $P_{k,n}$.
-
-\subsubsection{Formulación Matemática}
-
-Utilizando la regla del producto y la notación factorial (donde $n! = n(n-1)\dots(2)(1)$ y $0! = 1$), la fórmula para calcular el número de permutaciones es:
-$P_{k,n} = \frac{n!}{(n-k)!}$
-
-Ejemplo: Si un colegio de ingeniería con 7 departamentos debe elegir un presidente, un vicepresidente y un secretario de entre sus representantes, el número de formas posibles es $P_{3,7} = 7 \times 6 \times 5 = 210$.
-
-\subsection{Combinaciones}
-
-Una combinación es un subconjunto donde el \textbf{orden no es importante}; solo interesa qué elementos fueron seleccionados.
-
-\subsubsection{Definición y Notación}
-
-El número de combinaciones de tamaño $k$ que se pueden formar con $n$ objetos se denota comúnmente como $\binom{n}{k}$, que se lee "de $n$ se eligen $k$".
-
-\subsubsection{Formulación Matemática}
-
-Como cada combinación de tamaño $k$ puede ordenarse de $k!$ formas distintas para producir permutaciones, la relación es $P_{k,n} = k! \binom{n}{k}$. Despejando, obtenemos:
-$\binom{n}{k} = \frac{n!}{k!(n-k)!}$
-
-Ejemplo: Si de los mismos 7 representantes anteriores se deben elegir 3 para asistir a una convención (sin cargos específicos), el orden no importa. El número de combinaciones es $\binom{7}{3} = \frac{7!}{3!4!} = \frac{210}{6} = 35$.
-
-\subsubsection{Propiedades de los Coeficientes Binomiales}
-
-Existen resultados útiles para cálculos rápidos:
-\begin{itemize}
-    \item $\binom{n}{n} = 1$: Solo hay una forma de elegir todos los elementos.
-    \item $\binom{n}{0} = 1$: Solo hay una forma de no elegir ningún elemento.
-    \item $\binom{n}{1} = n$: Hay $n$ formas de elegir un solo objeto.
-    \item $\binom{n}{k} = \binom{n}{n-k}$: Elegir $k$ objetos es equivalente a elegir los $n-k$ que se van a dejar fuera.
-\end{itemize}
-
-\section{Variables Aleatorias}
-
-En muchas situaciones experimentales, los resultados son numéricos por naturaleza o pueden ser asociados con números mediante una regla específica. El concepto de variable aleatoria permite pasar de resultados cualitativos o cuantitativos a una función numérica.
-
-\subsection{Definición de Variable Aleatoria}
-
-Para un espacio muestral dado $\hat{S}$ de algún experimento, una **variable aleatoria (va)** es cualquier regla que asocia un número con cada resultado en $\hat{S}$. En lenguaje matemático, es una función cuyo dominio es el espacio muestral y cuyo rango es el conjunto de los números reales.
-
-\subsubsection{Clasificación de Variables Aleatorias}
-
-Existen dos tipos fundamentales de variables aleatorias:
-\begin{enumerate}
-    \item \textbf{Variable aleatoria discreta:} Sus valores posibles constituyen un conjunto finito o pueden ser puestos en una lista en una secuencia infinita (contablemente infinita). Un ejemplo es el número de proyectiles que impactan un objetivo.
-    \item \textbf{Variable aleatoria continua:} Sus valores posibles abarcan un intervalo completo de la línea numérica (o una unión de intervalos). Además, ningún valor individual tiene una probabilidad positiva, es decir, $P(X = c) = 0$ para cualquier valor $c$.
-\end{enumerate}
-
-\section{Distribuciones de Probabilidad y Funciones de Densidad}
-
-La distribución de probabilidad describe cómo se asigna la probabilidad total de 1 entre los diversos valores posibles de la variable aleatoria $X$.
-
-\subsection{Caso Discreto: Función Masa de Probabilidad (fmp)}
-
-Para una variable discreta, la distribución se define mediante la función masa de probabilidad $p(x)$, que especifica la probabilidad de observar cada valor $x$.
-Se deben cumplir dos condiciones:
-\begin{itemize}
-    \item $p(x) \geq 0$ para todo $x$ posible.
-    \item $\sum_{x} p(x) = 1$.
-\end{itemize}
-
-Un caso especial es la **variable aleatoria de Bernoulli**, cuyos únicos valores posibles son 0 (falla) y 1 (éxito). Su fmp se denota como $p(1) = \alpha$ y $p(0) = 1 - \alpha$.
-
-\subsection{Caso Continuo: Función de Densidad de Probabilidad (fdp)}
-
-Para variables continuas, la probabilidad no se asigna a puntos, sino a intervalos. Una fdp es una función $f(x)$ tal que para dos números cualesquiera $a$ y $b$ con $a \leq b$:
-$P(a \leq X \leq b) = \int_{a}^{b} f(x) dx$.
-Esta probabilidad corresponde al área bajo la curva de densidad entre $a$ y $b$.
-
-Condiciones para una fdp legítima:
-\begin{itemize}
-    \item $f(x) \geq 0$ para toda $x$.
-    \item $\int_{-\infty}^{\infty} f(x) dx = 1$.
-\end{itemize}
-
-\section{Función de Distribución Acumulativa (CDF)}
-
-La función de distribución acumulativa $F(x)$ da la probabilidad de que el valor observado de $X$ sea a lo sumo $x$.
-
-\subsection{Definición Matemática}
-
-\subsubsection{Para Variables Discretas}
-$F(x) = P(X \leq x) = \sum_{y \leq x} p(y)$.
-Gráficamente, esta función es una función escalonada que muestra un salto en cada valor posible de $X$.
-
-\subsubsection{Para Variables Continuas}
-$F(x) = P(X \leq x) = \int_{-\infty}^{x} f(y) dy$.
-En este caso, $F(x)$ es el área bajo la curva de densidad a la izquierda de $x$. Una propiedad fundamental es que si la derivada existe, $F'(x) = f(x)$.
-
-\subsection{Cálculo de Probabilidades de Intervalo}
-
-Para cualquier variable aleatoria continua, la probabilidad de que $X$ caiga entre $a$ y $b$ es:
-$P(a \leq X \leq b) = F(b) - F(a)$.
-Es importante notar que en el caso continuo, incluir o no los extremos no afecta la probabilidad: $P(a \leq X \leq b) = P(a < X < b)$.
-
-\section{Valores Esperados y Varianza}
-
-Estas medidas describen el centro y la dispersión de la distribución de probabilidad.
-
-\subsection{Valor Esperado (Media de la Población)}
-
-El valor esperado de $X$, denotado por $E(X)$ o $\mu_X$, es el promedio ponderado de los valores posibles.
-
-\subsubsection{Formulación Matemática}
-\begin{itemize}
-    \item \textbf{Discreto:} $E(X) = \sum_{x \in D} x \cdot p(x)$.
-    \item \textbf{Continuo:} $E(X) = \int_{-\infty}^{\infty} x \cdot f(x) dx$.
-\end{itemize}
-
-\subsubsection{Reglas del Valor Esperado}
-Para constantes $a$ y $b$: $E(aX + b) = aE(X) + b$.
-Si $h(X)$ es una función de $X$, entonces $E[h(X)] = \int h(x) \cdot f(x) dx$ (o suma en el caso discreto).
-
-\subsection{Varianza y Desviación Estándar}
-
-La varianza de $X$, denotada por $V(X)$ o $\sigma^2_X$, es la desviación al cuadrado esperada con respecto a la media $\mu$.
-
-\subsubsection{Definición}
-$V(X) = E[(X - \mu)^2]$.
-La **desviación estándar** es la raíz cuadrada positiva de la varianza: $\sigma_X = \sqrt{V(X)}$.
-
-\subsubsection{Fórmula Abreviada}
-Para facilitar el cálculo, se utiliza:
-$V(X) = E(X^2) - [E(X)]^2$.
-
-\subsubsection{Reglas de la Varianza}
-Para constantes $a$ y $b$: $V(aX + b) = a^2 V(X)$.
-Esto implica que sumar una constante no cambia la varianza, pero multiplicar por $a$ incrementa la varianza por un factor de $a^2$.
-
-\section{La Distribución de Probabilidad Binomial}
-
-La distribución binomial es una de las distribuciones de probabilidad discreta más importantes y utilizadas en estadística. Se aplica a experimentos que consisten en una serie de ensayos donde solo existen dos resultados posibles, como éxito o falla.
-
-\subsection{El Experimento Binomial}
-
-Un experimento se clasifica como binomial si cumple con los siguientes cuatro requerimientos fundamentales:
+El espacio muestral $\hat{S}$ contiene todos los resultados posibles del experimento. Dado que nos detenemos al encontrar una segunda impresión, la longitud de las secuencias puede variar. Analicemos las posibilidades por longitud de la secuencia:
 
 \begin{enumerate}
-    \item \textbf{Número fijo de ensayos:} El experimento consta de una secuencia de $n$ ensayos más pequeños, donde $n$ se fija antes de iniciar el proceso.
-    \item \textbf{Ensayos dicotómicos:} Cada ensayo puede dar por resultado uno de solo dos resultados posibles, denominados tradicionalmente como \textbf{éxito ($E$)} y \textbf{falla ($F$)}.
-    \item \textbf{Independencia:} Los ensayos son independientes entre sí, lo que significa que el resultado de un ensayo no influye en el resultado de cualquier otro.
-    \item \textbf{Probabilidad constante:} La probabilidad de éxito, denotada por $p$, es constante en cada uno de los ensayos. La probabilidad de falla se denota comúnmente como $q = 1 - p$.
+    \item \textbf{Secuencias de longitud 1:} El experimento termina en el primer intento. Esto ocurre si el primer libro seleccionado es una segunda impresión (3, 4 o 5).
+    $$ \{3, 4, 5\} $$
+
+    \item \textbf{Secuencias de longitud 2:} El experimento termina en el segundo intento. Esto implica que el primer libro fue una primera impresión (1 o 2) y el segundo fue una segunda impresión (3, 4 o 5).
+    \begin{itemize}
+        \item Si empieza con 1: $\{13, 14, 15\}$
+        \item Si empieza con 2: $\{23, 24, 25\}$
+    \end{itemize}
+    Total para longitud 2: $\{13, 14, 15, 23, 24, 25\}$
+
+    \item \textbf{Secuencias de longitud 3:} El experimento termina en el tercer intento. Esto implica que los dos primeros libros fueron las dos primeras impresiones disponibles (1 y 2 en algún orden), y el tercero fue una segunda impresión (3, 4 o 5). No es posible tener una longitud mayor porque solo hay dos primeras impresiones; si ya se seleccionaron el 1 y el 2, el siguiente \textit{debe} ser una segunda impresión.
+    \begin{itemize}
+        \item Si el orden de las primeras impresiones es 1 luego 2: $\{123, 124, 125\}$
+        \item Si el orden de las primeras impresiones es 2 luego 1: $\{213, 214, 215\}$
+    \end{itemize}
+    Total para longitud 3: $\{123, 124, 125, 213, 214, 215\}$
 \end{enumerate}
 
-\subsubsection{Variable Aleatoria de Bernoulli}
+Uniendo todos los casos, el espacio muestral completo es:
 
-La distribución binomial tiene sus raíces en el ensayo de Bernoulli. Cualquier variable aleatoria cuyos únicos valores posibles son 0 (falla) y 1 (éxito) se denomina \textbf{variable aleatoria de Bernoulli}. El experimento binomial puede verse como la suma de $n$ variables de Bernoulli independientes e idénticamente distribuidas.
+$$ \hat{S} = \{3, 4, 5, 13, 14, 15, 23, 24, 25, 123, 124, 125, 213, 214, 215\} $$
 
-\subsection{La Variable Aleatoria Binomial}
+El número total de resultados en $\hat{S}$ es 15.
 
-En un experimento binomial, el interés principal no radica en el orden de los resultados, sino en el número total de éxitos obtenidos.
+\vspace{0.3cm}
 
-\subsubsection{Definición}
+\textbf{Parte b): Evento $A$ (Exactamente un libro examinado)}
 
-La \textbf{variable aleatoria binomial} $X$ asociada con un experimento de $n$ ensayos se define como el número de éxitos ($E$) entre los $n$ ensayos realizados. Los valores posibles que puede tomar $X$ son los enteros del conjunto $\{0, 1, 2, \dots, n\}$.
+El evento $A$ consiste en todos los resultados donde el experimento terminó después de examinar exactamente un libro. Esto corresponde a las secuencias de longitud 1 identificadas en la parte anterior. Estos son los casos donde la primera selección fue directamente una segunda impresión.
 
-\subsection{Función Masa de Probabilidad (fmp)}
+$$ A = \{3, 4, 5\} $$
 
-La distribución de probabilidad de $X$ depende de los parámetros $n$ (número de ensayos) y $p$ (probabilidad de éxito). Se utiliza la notación $b(x; n, p)$ para representar esta función.
+\vspace{0.3cm}
 
-\subsubsection{Derivación Matemática}
+\textbf{Parte c): Evento $B$ (El libro 5 es seleccionado)}
 
-Para obtener $x$ éxitos en $n$ ensayos, deben ocurrir exactamente $x$ éxitos y $n - x$ fallas. La probabilidad de cualquier secuencia específica con este conteo es $p^x(1 - p)^{n-x}$ debido a la independencia de los ensayos. Como existen $\binom{n}{x}$ formas distintas de organizar esos $x$ éxitos en los $n$ lugares disponibles, la fórmula general es:
+El evento $B$ incluye todos los resultados en los que el libro número 5 aparece en la secuencia, independientemente de la posición que ocupe (siempre que sea consistente con la regla de detención). Revisamos $\hat{S}$ y seleccionamos aquellos que contienen el dígito 5:
 
-$b(x; n, p) = \binom{n}{x} p^x (1 - p)^{n-x} \quad \text{para } x = 0, 1, 2, \dots, n$
+\begin{itemize}
+    \item Longitud 1: $5$
+    \item Longitud 2: $15, 25$
+    \item Longitud 3: $125, 215$
+\end{itemize}
 
-Donde el coeficiente binomial $\binom{n}{x} = \frac{n!}{x!(n-x)!}$ representa el número de combinaciones posibles.
+Por lo tanto, el conjunto de resultados para $B$ es:
 
-\subsubsection{Ejemplo: Preferencia de Bebidas}
+$$ B = \{5, 15, 25, 125, 215\} $$
 
-Suponga que a seis personas se les da a elegir entre dos marcas de refresco ($A$ y $B$). Si no hay preferencia ($p = 0.5$) y $X$ es el número de personas que eligen la marca $A$, la probabilidad de que exactamente tres personas la prefieran es:
-$P(X = 3) = b(3; 6, 0.5) = \binom{6}{3} (0.5)^3 (0.5)^3 = 20(0.5)^6 = 0.313$
+\vspace{0.3cm}
 
-\subsection{Función de Distribución Acumulativa (CDF)}
+\textbf{Parte d): Evento $C$ (El libro 1 no es examinado)}
 
-A menudo es necesario calcular la probabilidad de que ocurran "a lo sumo" cierto número de éxitos. Esta probabilidad se obtiene sumando las probabilidades individuales de la fmp.
+El evento $C$ consiste en todos los resultados donde el libro número 1 \textit{no} aparece en la secuencia. Esto significa que buscamos en $\hat{S}$ todas las secuencias que no contienen el dígito 1.
 
-\subsubsection{Definición de $B(x; n, p)$}
+\begin{itemize}
+    \item De las secuencias de longitud 1: $\{3, 4, 5\}$ (Ninguna contiene 1)
+    \item De las secuencias de longitud 2: $\{23, 24, 25\}$ (Las que empiezan con 2. Las que empiezan con 1 se descartan).
+    \item De las secuencias de longitud 3: Ninguna, porque todas las secuencias de longitud 3 requieren que se hayan examinado tanto el 1 como el 2 antes de la tercera selección.
+\end{itemize}
 
-Para una variable binomial $X$, la función de distribución acumulativa se denota como:
-$P(X \leq x) = B(x; n, p) = \sum_{y=0}^{x} b(y; n, p)$
+Por lo tanto, el conjunto de resultados para $C$ es:
 
-\subsubsection{Cálculo de Intervalos}
+$$ C = \{3, 4, 5, 23, 24, 25\} $$
 
-Utilizando la CDF, se pueden calcular diversas probabilidades de intervalo para enteros $a$ y $b$ ($a \leq b$):
-$P(a \leq X \leq b) = B(b; n, p) - B(a - 1; n, p)$
+\vspace{0.5cm}
 
-\subsection{Media y Varianza de la Distribución Binomial}
+\textbf{Resumen de Resultados}
 
-Aunque se podrían calcular mediante sumatorias exhaustivas, existen fórmulas simplificadas para los momentos de la variable binomial basadas en sus parámetros.
-
-\subsubsection{Valor Esperado}
-
-El valor esperado (media de la población) de una variable binomial es el producto del número de ensayos por la probabilidad de éxito en un solo ensayo:
-$E(X) = \mu_X = np$
-
-\subsubsection{Varianza y Desviación Estándar}
-
-La varianza mide la dispersión de los éxitos en torno a la media y está dada por:
-$V(X) = \sigma^2_X = np(1 - p) = npq$
-La desviación estándar es la raíz cuadrada de la varianza: $\sigma_X = \sqrt{npq}$.
-
-\subsection{Aproximación por Población Finita}
-
-En la práctica, muchos experimentos consisten en seleccionar una muestra de tamaño $n$ de una población finita de tamaño $N$ sin reemplazo. Aunque esto técnicamente violaría la independencia (haciendo el experimento hipergeométrico), se puede usar la distribución binomial como una aproximación muy precisa si $n$ es pequeño con respecto a $N$.
-
-\subsubsection{Regla Empírica}
-
-Si el tamaño de la muestra $n$ es a lo sumo el $5\%$ del tamaño de la población ($n/N \leq 0.05$), el experimento puede analizarse como si fuera exactamente binomial.
+\begin{itemize}
+    \item \textbf{Espacio Muestral:} $\hat{S} = \{3, 4, 5, 13, 14, 15, 23, 24, 25, 123, 124, 125, 213, 214, 215\}$
+    \item \textbf{Evento $A$:} $\{3, 4, 5\}$
+    \item \textbf{Evento $B$:} $\{5, 15, 25, 125, 215\}$
+    \item \textbf{Evento $C$:} $\{3, 4, 5, 23, 24, 25\}$
+\end{itemize}
 
 
-\section{Distribución de Probabilidad de Poisson}
 
-A diferencia de las distribuciones binomiales o hipergeométricas, la distribución de Poisson no se basa en un experimento simple de ensayos, sino que surge frecuentemente en relación con la ocurrencia de eventos en el transcurso del tiempo o en una región específica.
+\subsection{Axiomas,interpretacionesy propiedades de probabilidad}
 
-\subsection{Definición y Parámetros}
 
-Se dice que una variable aleatoria discreta $X$ tiene una distribución de Poisson con parámetro $\lambda$ ($\lambda > 0$) si su función masa de probabilidad (fmp) es:
-$p(x; \lambda) = \frac{e^{-\lambda} \lambda^x}{x!}$ para $x = 0, 1, 2, \dots$.
+\textbf{Axiomas de probabilidad:}
 
-El parámetro $\lambda$ representa el valor promedio de eventos por unidad de tiempo o área. Una propiedad fundamental es que tanto el valor esperado como la varianza de esta distribución son iguales al parámetro: $E(X) = V(X) = \lambda$.
+\textbf{AXIOMA 1:}
+Para cualquier evento $A$, la probabilidad de que ocurra debe ser no negativa:
+$$ P(A) \ge 0 $$
 
-\subsubsection{La Distribución de Poisson como Límite}
+\textbf{AXIOMA 2:}
+La probabilidad máxima de 1 es asignada al espacio muestral $\hat{S}$:
+$$ P(\hat{S}) = 1 $$
 
-La distribución de Poisson puede utilizarse para aproximar probabilidades binomiales cuando el número de ensayos $n$ es grande y la probabilidad de éxito $p$ es pequeña, de modo que $np$ tiende a un valor constante $\lambda$. Como regla empírica, la aproximación es segura si $n \geq 50$ y $np \leq 5$.
+\textbf{AXIOMA 3:}
+Si $A_1, A_2, A_3, \dots$ es un conjunto de eventos mutuamente excluyentes, entonces la probabilidad de que por lo menos uno ocurra es la suma de las probabilidades de los eventos individuales:
+$$ P(A_1 \cup A_2 \cup A_3 \cup \dots) = \sum_{i=1}^{\infty} P(A_i) $$
 
-\subsubsection{Procesos de Poisson}
+\textbf{Proposición:}
+$$ P(\varnothing) = 0 $$
+donde $\varnothing$ es el evento nulo (el evento que no contiene resultados en absoluto). Esto a su vez implica que la propiedad contenida en el axioma 3 es válida para un conjunto finito de eventos.
 
-Una aplicación crucial surge al modelar eventos como visitas a un sitio web, pulsos en un contador o lluvias de rayos cósmicos observadas por astrónomos. En un intervalo de tiempo $t$, si la tasa de eventos es $\alpha$, el número de eventos sigue una distribución de Poisson con parámetro $\lambda = \alpha t$.
+\textbf{Ejemplo 2.11:}
+Considere lanzar una tachuela al aire. Cuando se detiene en el suelo, o su punta estará hacia arriba (el resultado $U$) o hacia abajo (el resultado $D$). El espacio muestral de este evento es por consiguiente $\hat{S} = \{U, D\}$. Los axiomas especifican $P(\hat{S}) = 1$, por lo que la asignación de probabilidad se completará determinando $P(U)$ y $P(D)$. Como $U$ y $D$ están desarticulados y su unión $\hat{S}$, la siguiente proposición implica que
+$$ 1 = P(\hat{S}) = P(U) + P(D) $$
+Se desprende que $P(D) = 1 - P(U)$. Una posible asignación de probabilidades es $P(U) = 0.5, P(D) = 0.5$, mientras que otra posible asignación es $P(U) = 0.75, P(D) = 0.25$. De hecho, si $p$ representa cualquier número fijo entre 0 y 1, $P(U) = p, P(D) = 1 - p$ es una asignación compatible con los axiomas. 
 
-\section{Variables Aleatorias Continuas}
+\subsubsection{Interpretación de la probabilidad}
 
-Una variable aleatoria es continua si sus valores posibles abarcan un intervalo completo de la línea numérica y la probabilidad de que tome un valor puntual específico $c$ es siempre cero: $P(X = c) = 0$.
+La probabilidad puede interpretarse de dos formas principales según el contexto del experimento:
 
-\subsection{Funciones de Densidad de Probabilidad (fdp)}
+1. \textbf{Interpretación objetiva (Frecuencia relativa):} Se aplica a experimentos que pueden repetirse de manera idéntica e independiente. Si un experimento se realiza $n$ veces, la frecuencia relativa $n(A)/n$ del evento $A$ tiende a estabilizarse en un valor límite conforme $n$ se hace arbitrariamente grande. Ese valor límite se identifica como $P(A)$.
 
-La distribución de probabilidad de una variable continua se especifica mediante una función $f(x)$ tal que la probabilidad de que $X$ caiga en un intervalo $[a, b]$ es el área bajo la curva entre esos puntos:
-$P(a \leq X \leq b) = \int_{a}^{b} f(x) dx$.
+2. \textbf{Interpretación subjetiva:} Se utiliza en situaciones inherentemente irrepetibles donde no existe una frecuencia relativa límite. En estos casos, la probabilidad representa un grado de creencia personal basado en información previa y opiniones, por lo que puede variar de un individuo a otro.
 
-Para que $f(x)$ sea legítima debe cumplir: $f(x) \geq 0$ para toda $x$ y el área total bajo la curva debe ser 1: $\int_{-\infty}^{\infty} f(x) dx = 1$.
+\textbf{Proposición:}
+Para cualquier evento $A$, $P(A) + P(A') = 1$, a partir de la cual $P(A) = 1 - P(A')$. 
 
-\section{Percentiles de una Distribución Continua}
+\textbf{Proposición:}
+Para cualquier evento $A$, $P(A) \le 1$.
 
-Los percentiles proporcionan una forma de dividir la distribución en términos de área acumulada.
+\textbf{Proposición:}
+Para dos eventos cualesquiera $A$ y $B$,
+$$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$
 
-\subsection{Definición Matemática}
+\textbf{Proposición:}
+Para tres eventos cualesquiera $A, B$ y $C$:
+$$ P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C) $$
 
-Para un número $p$ entre 0 y 1, el $(100p)$-ésimo percentil, denotado por $\eta(p)$, es el valor tal que el área bajo la curva de densidad a su izquierda es exactamente $p$:
-$p = F(\eta(p)) = \int_{-\infty}^{\eta(p)} f(y) dy$.
+\subsubsection{Determinación de probabilidades sistemáticamente}
 
-\subsubsection{La Mediana}
+Considérese un espacio muestral $\hat{S}$ que es o finito o contablemente infinito (lo segundo significa que los resultados pueden ser puestos en lista en una secuencia infinita, por lo que existe un primer resultado, un segundo, un tercero, y así sucesivamente). Que $E_1, E_2, E_3, \dots$ denoten los eventos simples correspondientes, cada uno compuesto de un solo resultado. Una estrategia sensible para el cálculo de probabilidad es determinar primero cada probabilidad de evento simple, con el requerimiento de que:
+$$ \sum P(E_i) = 1 $$
+Entonces la probabilidad de cualquier evento compuesto $A$ se calcula agregando los $P(E_i)$ para todos los $E_i$ que existen en $A$:
+$$ P(A) = \sum_{E_i \in A} P(E_i) $$
 
-La \textbf{mediana} de una distribución continua, denotada por $\tilde{\mu}$, es el percentil 50. Divide la curva de densidad en dos partes iguales, donde la mitad del área queda a su izquierda y la otra mitad a su derecha: $F(\tilde{\mu}) = 0.5$.
+\textbf{Ejemplo 2.15:}
 
-\section{La Distribución Normal}
+Durante las horas no pico el tren que viaja entre los suburbios y la ciudad utiliza cinco carros. Suponga que existe el doble de probabilidades de que un usuario seleccione el carro intermedio (\#3) que cualquier carro adyacente (\#2 o \#4) y el doble de probabilidades de que seleccione cualquier carro adyacente que cualquier carro extremo (\#1 o \#5). Sea $p_i = P(\text{carro } i \text{ seleccionado}) = P(E_i)$. Entonces se tiene $p_3 = 2p_2 = 2p_4$ y $p_2 = 2p_1 = 2p_5 = p_4$. Esto da:
+$$ 1 = \sum P(E_i) = p_1 + 2p_1 + 4p_1 + 2p_1 + p_1 = 10p_1 $$
+es decir, $p_1 = p_5 = 0.1, p_2 = p_4 = 0.2, p_3 = 0.4$. La probabilidad de que uno de los tres carros intermedios se seleccione (un evento compuesto) es entonces:
+$$ p_2 + p_3 + p_4 = 0.8 $$
 
-La distribución normal es la más importante en toda la probabilidad y estadística debido a que muchas poblaciones numéricas reales siguen este modelo de "campana".
+\subsubsection{Resultados igualmente probables}
 
-\subsection{Función de Densidad Normal}
+En muchos experimentos compuestos de $N$ resultados, es razonable asignar probabilidades iguales a los $N$ eventos simples. Éstos incluyen ejemplos tan obvios como lanzar al aire una moneda o un dado imparciales una o dos veces (o cualquier número fijo de veces) o seleccionar una o varias cartas de un mazo bien barajado de 52 cartas. Con $p = P(E_i)$ por cada $i$,
+$$ 1 = \sum_{i=1}^{N} P(E_i) = \sum_{i=1}^{N} p = p \cdot N $$
+por lo tanto $p = 1/N$.
 
-Una variable aleatoria continua $X$ tiene una distribución normal con parámetros $\mu$ (media) y $\sigma$ (desviación estándar) si su fdp es:
-$f(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi}\sigma} e^{-(x-\mu)^2/(2\sigma^2)}$.
+Es decir, si existen $N$ resultados igualmente probables, la probabilidad de cada uno es $1/N$. Ahora considérese un evento $A$, con $N(A)$ como el número de resultados contenidos en $A$. Entonces
+$$ P(A) = \sum_{E_i \in A} P(E_i) = \sum_{E_i \in A} \frac{1}{N} = \frac{N(A)}{N} $$
 
-La curva es simétrica con respecto a $\mu$, que es simultáneamente la media y la mediana. El parámetro $\sigma$ determina la dispersión; valores grandes de $\sigma$ producen curvas más extendidas y aplanadas.
+Por lo tanto, cuando los resultados son igualmente probables, el cálculo de probabilidades se reduce a contar: determinar tanto el número de resultados $N(A)$ en $A$ como el número de resultados $N$ en $\hat{S}$ y formar su relación.
 
-\subsection{Distribución Normal Estándar}
+\textbf{Ejemplo 2.16:}
 
-Se denota por $Z$ a la variable aleatoria normal con $\mu = 0$ y $\sigma = 1$. Su función de distribución acumulativa se denota como $\Phi(z) = P(Z \leq z)$ y está ampliamente tabulada.
+Cuando dos dados se lanzan por separado, existen $N = 36$ resultados (elimine la primera fila y la primera columna de la tabla del ejemplo 2.3). Si ambos dados son imparciales, los 36 resultados son igualmente probables, por lo tanto $P(E_i) = 1/36$. Entonces el evento $A = \{\text{suma de dos números} = 7\}$ consta de seis resultados $(1, 6), (2, 5), (3, 4), (4, 3), (5, 2)$ y $(6, 1)$, por lo tanto
+$$ P(A) = \frac{N(A)}{N} = \frac{6}{36} = \frac{1}{6} $$
 
-\subsubsection{Estandarización}
+\textbf{Problema 18}
 
-Cualquier variable normal $X$ con parámetros $\mu$ y $\sigma$ puede convertirse en una variable normal estándar $Z$ mediante la fórmula:
-$Z = \frac{X - \mu}{\sigma}$.
+Una caja contiene cuatro focos de 40 W, cinco de 60 W y seis de 75 W. Si los focos se eligen uno por uno en orden aleatorio, ¿cuál es la probabilidad de que por lo menos dos focos deban ser seleccionados para obtener uno de 75 W?
 
-Esto permite calcular probabilidades de cualquier distribución normal usando la tabla normal estándar: $P(a \leq X \leq b) = \Phi(\frac{b-\mu}{\sigma}) - \Phi(\frac{a-\mu}{\sigma})$.
+\vspace{0.5cm}
 
-\subsection{La Regla Empírica}
+\textbf{Solución}
 
-Para cualquier población con distribución normal:
+Para resolver este problema de probabilidad, primero debemos identificar claramente la composición de la población de focos disponible en la caja y definir el evento de interés.
+
+\textbf{1. Identificación de los datos}
+
+Tenemos la siguiente distribución de focos según su potencia:
+\begin{itemize}
+    \item Focos de 40 W: 4 unidades
+    \item Focos de 60 W: 5 unidades
+    \item Focos de 75 W: 6 unidades
+\end{itemize}
+
+Calculamos el número total de focos en la caja:
+$$ N_{\text{total}} = 4 + 5 + 6 = 15 $$
+
+\textbf{2. Definición del evento de interés}
+
+El problema pregunta por la probabilidad de que \textit{por lo menos dos focos deban ser seleccionados} para obtener uno de 75 W.
+
+Sea $E$ el evento de seleccionar un foco de 75 W.
+Sea $X$ la variable aleatoria que representa el número de focos seleccionados hasta obtener el primer foco de 75 W.
+
+La condición \textit{por lo menos dos focos} significa que el primer foco seleccionado \textbf{no} fue de 75 W. Si el primer foco hubiera sido de 75 W, solo habría sido necesario seleccionar un foco (es decir, $X = 1$). Por lo tanto, el evento solicitado es el complemento de obtener un foco de 75 W en la primera selección.
+
+Matemáticamente, buscamos:
+$$ P(X \ge 2) $$
+
+Esto es equivalente a:
+$$ P(X \ge 2) = 1 - P(X = 1) $$
+
+\textbf{3. Cálculo de la probabilidad}
+
+\textit{Método A: Usando el evento complemento}
+
+Calculamos primero la probabilidad de que el primer foco seleccionado sea de 75 W ($X = 1$).
+Dado que la selección es al azar de la caja, cada foco tiene la misma probabilidad de ser elegido primero.
+
+$$ P(X = 1) = \frac{\text{Número de focos de 75 W}}{\text{Número total de focos}} $$
+$$ P(X = 1) = \frac{6}{15} $$
+
+Simplificando la fracción:
+$$ P(X = 1) = \frac{2}{5} = 0.4 $$
+
+Ahora, aplicamos la regla del complemento para encontrar la probabilidad de que se necesiten al menos dos selecciones:
+$$ P(X \ge 2) = 1 - P(X = 1) $$
+$$ P(X \ge 2) = 1 - 0.4 $$
+$$ P(X \ge 2) = 0.6 $$
+
+\textit{Método B: Conteo directo de casos favorables}
+
+El evento \textit{por lo menos dos focos} ocurre si y solo si el primer foco seleccionado \textit{no} es de 75 W.
+Los focos que \textit{no} son de 75 W son los de 40 W y los de 60 W.
+
+Número de focos que no son de 75 W:
+$$ N_{\text{no 75W}} = 4 (\text{de 40 W}) + 5 (\text{de 60 W}) = 9 $$
+
+La probabilidad de seleccionar uno de estos focos en el primer intento es:
+$$ P(\text{Primero no es 75 W}) = \frac{N_{\text{no 75W}}}{N_{\text{total}}} $$
+$$ P(\text{Primero no es 75 W}) = \frac{9}{15} $$
+
+Simplificando la fracción dividiendo numerador y denominador entre 3:
+$$ \frac{9}{15} = \frac{3}{5} = 0.6 $$
+
+\textbf{4. Interpretación del resultado}
+
+Ambos métodos nos llevan al mismo resultado. La probabilidad de que sea necesario seleccionar dos o más focos para encontrar uno de 75 W es de 0.6.
+
+Esto tiene sentido intuitivo: dado que 6 de los 15 focos son del tipo deseado (75 W), hay una probabilidad de 0.4 de encontrarlo inmediatamente. Por consiguiente, en el 60\% de los casos (0.6), el primer intento fallará, obligando a realizar al menos un segundo intento.
+
+Es importante notar que este cálculo depende únicamente de la primera extracción. Aunque el muestreo se realiza \textit{uno por uno} (lo que implica sin reemplazo en el contexto de una caja finita), la condición de \textit{al menos dos} solo requiere evaluar el resultado del primer foco. Si el problema hubiera preguntado por la probabilidad de que se necesiten \textit{exactamente} dos focos, entonces el hecho de que sea sin reemplazo afectaría el cálculo del segundo paso. Sin embargo, para la condición $\ge 2$, solo importa que el primero no sea exitoso.
+
+\textbf{Respuesta Final}
+
+La probabilidad de que por lo menos dos focos deban ser seleccionados para obtener uno de 75 W es:
+$$ 0.6 $$
+
+\textbf{Problema 23}
+
+Las computadoras de seis miembros del cuerpo de profesores en cierto departamento tienen que ser reemplazadas. Dos de ellos seleccionaron computadoras portátiles y los otros cuatro escogieron computadoras de escritorio. Suponga que sólo dos de las configuraciones pueden ser realizadas en un día particular y las dos computadoras que van a ser configuradas se seleccionan al azar de entre las seis (lo que implica 15 resultados igualmente probables; si las computadoras se numeran 1, 2,..., 6 entonces un resultado se compone de las computadoras 1 y 2, otro de las computadoras 1 y 3, y así sucesivamente).
+
+a. ¿Cuál es la probabilidad de que las dos configuraciones seleccionadas sean computadoras portátiles?
+
+b. ¿Cuál es la probabilidad de que ambas configuraciones seleccionadas sean computadoras de escritorio?
+
+c. ¿Cuál es la probabilidad de que por lo menos una configuración seleccionada sea una computadora de escritorio?
+
+d. ¿Cuál es la probabilidad de que por lo menos una computadora de cada tipo sea elegida para configurarla?
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este problema, utilizaremos técnicas de conteo combinatorio y la definición clásica de probabilidad. Dado que los resultados son igualmente probables, la probabilidad de un evento $E$ se define como:
+
+$$ P(E) = \frac{\text{Número de resultados favorables en } E}{\text{Número total de resultados en el espacio muestral } \hat{S}} $$
+
+\textbf{1. Definición del Espacio Muestral y Totales}
+
+Tenemos un total de 6 computadoras:
+\begin{itemize}
+    \item Computadoras portátiles (L): 2
+    \item Computadoras de escritorio (D): 4
+\end{itemize}
+
+Se seleccionan 2 computadoras al azar para ser configuradas. El orden de selección no importa para la configuración del día (se selecciona un par). El número total de formas de elegir 2 computadoras de un total de 6 se calcula mediante la combinación de 6 tomados de 2 en 2:
+
+$$ |\hat{S}| = \binom{6}{2} = \frac{6!}{2!(6-2)!} = \frac{6 \times 5}{2 \times 1} = 15 $$
+
+Por lo tanto, el espacio muestral $\hat{S}$ tiene 15 resultados igualmente probables, tal como indica el enunciado.
+
+\vspace{0.3cm}
+
+\textbf{2. Solución del Inciso (a)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que las dos configuraciones seleccionadas sean computadoras portátiles?
+
+Para que ambas sean portátiles, debemos seleccionar 2 computadoras del grupo de portátiles (que tiene 2 disponibles) y 0 del grupo de escritorio.
+
+\begin{itemize}
+    \item Formas de elegir 2 portátiles de 2: $\binom{2}{2} = 1$
+    \item Formas de elegir 0 escritorios de 4: $\binom{4}{0} = 1$
+\end{itemize}
+
+El número de resultados favorables es $1 \times 1 = 1$.
+
+La probabilidad es:
+
+$$ P(\text{2 Portátiles}) = \frac{1}{15} \approx 0.0667 $$
+
+\vspace{0.3cm}
+
+\textbf{3. Solución del Inciso (b)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que ambas configuraciones seleccionadas sean computadoras de escritorio?
+
+Para que ambas sean de escritorio, debemos seleccionar 2 computadoras del grupo de escritorio (que tiene 4 disponibles) y 0 del grupo de portátiles.
+
+\begin{itemize}
+    \item Formas de elegir 2 escritorios de 4: $\binom{4}{2} = \frac{4 \times 3}{2 \times 1} = 6$
+    \item Formas de elegir 0 portátiles de 2: $\binom{2}{0} = 1$
+\end{itemize}
+
+El número de resultados favorables es $6 \times 1 = 6$.
+
+La probabilidad es:
+
+$$ P(\text{2 Escritorios}) = \frac{6}{15} = \frac{2}{5} = 0.40 $$
+
+\vspace{0.3cm}
+
+\textbf{4. Solución del Inciso (c)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que por lo menos una configuración seleccionada sea una computadora de escritorio?
+
+El evento \textit{al menos una de escritorio} es el complemento del evento \textit{ninguna de escritorio} (lo cual implica que \textit{ambas son portátiles}).
+
+Utilizando la regla del complemento:
+
+$$ P(\text{Al menos 1 Escritorio}) = 1 - P(\text{Ningún Escritorio}) $$
+
+Sabemos del inciso (a) que $P(\text{Ningún Escritorio}) = P(\text{2 Portátiles}) = \frac{1}{15}$.
+
+Por lo tanto:
+
+$$ P(\text{Al menos 1 Escritorio}) = 1 - \frac{1}{15} = \frac{14}{15} \approx 0.9333 $$
+
+\vspace{0.3cm}
+
+\textbf{5. Solución del Inciso (d)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que por lo menos una computadora de cada tipo sea elegida para configurarla?
+
+Esto significa que debemos seleccionar exactamente 1 computadora portátil y exactamente 1 computadora de escritorio.
+
+\begin{itemize}
+    \item Formas de elegir 1 portátil de 2: $\binom{2}{1} = 2$
+    \item Formas de elegir 1 escritorio de 4: $\binom{4}{1} = 4$
+\end{itemize}
+
+El número de resultados favorables es el producto de estas combinaciones:
+
+$$ \text{Resultados favorables} = 2 \times 4 = 8 $$
+
+La probabilidad es:
+
+$$ P(\text{1 de cada tipo}) = \frac{8}{15} \approx 0.5333 $$
+
+\vspace{0.5cm}
+
+\textbf{Resumen de Resultados}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Inciso} & \textbf{Evento} & \textbf{Probabilidad} \\
+\hline
+a & Ambas portátiles & $1/15 \approx 0.067$ \\
+\hline
+b & Ambas escritorio & $6/15 = 0.400$ \\
+\hline
+c & Al menos una escritorio & $14/15 \approx 0.933$ \\
+\hline
+d & Una de cada tipo & $8/15 \approx 0.533$ \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+
+\subsection{Técnicas de conteo}
+
+\textbf{La regla de producto para pares ordenados}
+
+La primera regla de conteo se aplica a cualquier situación en la cual un conjunto (evento) se compone de pares de objetos ordenados y se desea contar el número de pares. Por par ordenado, se quiere decir que, si $O_1$ y $O_2$ son objetos, entonces el par $(O_1, O_2)$ es diferente del par $(O_2, O_1)$.
+
+\textbf{Proposición}
+
+Si el primer elemento u objeto de un par ordenado puede ser seleccionado de $n_1$ maneras y por cada una de estas $n_1$ maneras el segundo elemento del par puede ser seleccionado de $n_2$ maneras, entonces el número de pares es $n_1n_2$.
+
+\textbf{Ejemplo 2.17:}
+
+El propietario de una casa que va a llevar a cabo una remodelación requiere los servicios tanto de un contratista de fontanería como de un contratista de electricidad. Si existen 12 contratistas de fontanería y 9 contratistas electricistas disponibles en el área, ¿de cuántas maneras pueden ser elegidos los contratistas? Sean $P_1, \dots, P_{12}$ los fontaneros y $Q_1, \dots, Q_9$ los electricistas, entonces se desea el número de pares de la forma $(P_i, Q_j)$. Con $n_1 = 12$ y $n_2 = 9$, la regla de producto da $N = (12)(9) = 108$ formas posibles de seleccionar los dos tipos de contratistas.
+
+\textbf{Ejemplo 2.18:}
+Una familia se acaba de cambiar a una nueva ciudad y requiere los servicios tanto de un obstetra como de un pediatra. Existen dos clínicas médicas fácilmente accesibles y cada una tiene dos obstetras y tres pediatras. La familia obtendrá los máximos beneficios del seguro de salud si se une a la clínica y selecciona ambos doctores de la clínica. ¿De cuántas maneras se puede hacer esto? Denote los obstetras por $O_1, O_2, O_3$ y $O_4$ y los pediatras por $P_1, \dots, P_6$. Entonces se desea el número de pares $(O_i, P_j)$ para los cuales $O_i$ y $P_j$ están asociados con la misma clínica. Como existen cuatro obstetras, $n_1 = 4$, y por cada uno existen tres opciones de pediatras, por lo tanto $n_2 = 3$. Aplicando la regla de producto se obtienen $N = n_1n_2 = 12$ posibles opciones.
+
+\subsubsection{Una regla de producto más general}
+
+\textbf{Una regla de producto más general}
+
+Si se lanza al aire un dado de seis lados cinco veces en sucesión en lugar de sólo dos veces, entonces cada posible resultado es un conjunto ordenado de cinco números tal como $(1, 3, 1, 2, 4)$ o $(6, 5, 2, 2, 2)$. Un conjunto ordenado de $k$ objetos recibirá el nombre de \textbf{k-tupla} (por tanto un par es un 2-tupla y un triple es un 3-tupla). Cada resultado del experimento del lanzamiento al aire del dado es entonces un 5-tupla.
+
+\textbf{Regla de producto para k-tuplas}
+
+Supóngase que un conjunto se compone de conjuntos ordenados de $k$ elementos ($k$-tuplas) y que existen $n_1$ posibles opciones para el primer elemento por cada opción del primer elemento, existen $n_2$ posibles opciones del segundo elemento; \dots; por cada posible opción de los primeros $k - 1$ elementos, existen $n_k$ opciones del elemento $k$-ésimo. Existen entonces $n_1 n_2 \dots n_k$ posibles $k$-tuplas.
+
+\fbox{
+\begin{minipage}{0.9\textwidth}
+\textbf{Matemáticamente:}
+$$ N = n_1 \cdot n_2 \cdot \dots \cdot n_k = \prod_{i=1}^{k} n_i $$
+\end{minipage}
+}
+
+\textbf{Ejemplo 2.19 (continuación del ejemplo 2.17):}
+Suponga que el trabajo de remodelación de la casa implica adquirir primero varios utensilios de cocina. Se adquirirán en la misma tienda y hay cinco tiendas en el área. Con las tiendas denotadas por $D_1, \dots, D_5$, existen $N = n_1 n_2 n_3 = (5)(12)(9) = 540$ 3-tuplas de la forma $(D_i, P_j, Q_k)$, así que existen 540 formas de elegir primero una tienda, luego un contratista de fontanería y finalmente un contratista electricista.
+
+\textbf{Ejemplo 2.20 (continuación del ejemplo 2.18):}
+Esta regla más general también puede ser ilustrada por un diagrama de árbol; simplemente se construye un diagrama más elaborado añadiendo una tercera generación de ramas que emanan de la punta de cada segunda generación, luego ramas de cuarta generación, y así sucesivamente, hasta que por último se agregan ramas de $k$-ésima generación. Para el caso de seleccionar un subconjunto ordenado de 3 elementos de un grupo de 7 (como los médicos del ejemplo 2.18), el número de permutaciones es:
+$$ P_{3,7} = (7)(6)(5) = 210 $$
+
+\subsubsection{Permutaciones y combinaciones}
+
+\textbf{Definición:}
+Un subconjunto ordenado se llama permutación. El número de permutaciones de tamaño $k$ que se puede formar con los $n$ individuos u objetos en un grupo será denotado por $P_{k,n}$. Un subconjunto no ordenado se llama combinación. Una forma de denotar el número de combinaciones es $C_{k,n}$, pero en su lugar se utilizará una notación que es bastante común en libros de probabilidad: $\binom{n}{k}$, que se lee 'de $n$ se eligen $k$'.
+\fbox{
+\begin{minipage}{0.9\textwidth}
+\textbf{Matemáticamente:}
+$$ P_{k,n} = n(n-1)(n-2)\dots(n-k+1) = \frac{n!}{(n-k)!} $$
+\end{minipage}
+}
+
+\textbf{Ejemplo 2.21:}
+Existen diez asistentes de profesor disponibles para calificar exámenes en un curso de cálculo en una gran universidad. El primer examen se compone de cuatro preguntas y el profesor desea seleccionar un asistente diferente para calificar cada pregunta (sólo un asistente por pregunta). ¿De cuántas maneras se pueden elegir los asistentes para calificar? En este caso $n = \text{tamaño del grupo} = 10$ y $k = \text{tamaño del subconjunto} = 4$. El número de permutaciones es:
+
+$$ P_{4,10} = \frac{10!}{(10 - 4)!} = \frac{10!}{6!} = 10(9)(8)(7) = 5040 $$
+
+
+
+\textbf{Proposición:}
+Un subconjunto no ordenado se llama combinación.  El número de combinaciones de tamaño $k$ que se pueden formar con $n$ objetos distintos es:
+$$ \binom{n}{k} = \frac{P_{k,n}}{k!} = \frac{n!}{k!(n-k)!} $$ 
+
+\textbf{Ejemplo 2.23:}
+El almacén de una universidad recibió 25 impresoras, de las cuales 10 son impresoras láser y 15 son modelos de inyección de tinta.  Si 6 de estas 25 se seleccionan al azar para que las revise un técnico particular, ¿cuál es la probabilidad de que exactamente 3 de las seleccionadas sean impresoras láser (de modo que las otras 3 sean de inyección de tinta)? 
+
+\textbf{Solución:}
+Sea $D_3 =$ {exactamente 3 de las 6 seleccionadas son impresoras de inyección de tinta}.  Suponiendo que cualquier conjunto de 6 impresoras es tan probable como cualquier otro, se tienen resultados igualmente probables, por lo tanto $P(D_3) = N(D_3)/N$, donde $N$ es el número de formas de elegir 6 impresoras de entre las 25 y $N(D_3)$ es el número de formas de elegir 3 impresoras láser y 3 de inyección de tinta. 
+
+Como el orden no importa, se tiene $N = \binom{25}{6}$. Para obtener $N(D_3)$, se eligen 3 de las 15 de inyección de tinta y 3 de las 10 láser:
+$$ N(D_3) = \binom{15}{3} \binom{10}{3} $$ 
+La probabilidad resultante es:
+$$ P(D_3) = \frac{\binom{15}{3} \binom{10}{3}}{\binom{25}{6}} = 0.3083 $$ 
+
+\textbf{Ejercicio 30}
+
+Un amigo mío va a ofrecer una fiesta. Sus existencias actuales de vino incluyen 8 botellas de zinfandel, 10 de merlot y 12 de cabernet (\textit{él sólo bebe vino tinto}), todos de diferentes fábricas vinícolas.
+
 \begin{enumerate}
-    \item El $68\%$ de los valores están dentro de $1\sigma$ de la media.
-    \item El $95\%$ de los valores están dentro de $2\sigma$ de la media.
-    \item El $99.7\%$ de los valores están dentro de $3\sigma$ de la media.
+    \item[\textbf{a.}] Si desea servir 3 botellas de zinfandel y el orden de servicio es importante, ¿cuántas formas existen de hacerlo?
+    \item[\textbf{b.}] Si 6 botellas de vino tienen que ser seleccionadas al azar de las 30 para servirse, ¿cuántas formas existen de hacerlo?
+    \item[\textbf{c.}] Si se seleccionan al azar 6 botellas, ¿cuántas formas existen de obtener dos botellas de cada variedad?
+    \item[\textbf{d.}] Si se seleccionan 6 botellas al azar, ¿cuál es la probabilidad de que el resultado sea dos botellas de cada variedad?
+    \item[\textbf{e.}] Si se eligen 6 botellas al azar, ¿cuál es la probabilidad de que todas ellas sean de la misma variedad?
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Solución:}
+
+Para resolver este problema, primero identificamos los datos proporcionados y las reglas de conteo aplicables (permutaciones y combinaciones).
+
+\textbf{Datos iniciales:}
+\begin{itemize}
+    \item Botellas de Zinfandel ($N_Z$): 8
+    \item Botellas de Merlot ($N_M$): 10
+    \item Botellas de Cabernet ($N_C$): 12
+    \item Total de botellas ($N$): $8 + 10 + 12 = 30$
+\end{itemize}
+
+Dado que todas las botellas son de diferentes fábricas vinícolas, consideramos que cada botella es un objeto distinto e identificable.
+
+\vspace{0.3cm}
+
+\textbf{Inciso a:} \textit{Servir 3 botellas de zinfandel con orden importante.}
+
+En este caso, estamos seleccionando un subconjunto de objetos donde el orden sí importa. Esto corresponde a una \textbf{permutación}. Seleccionamos $k=3$ botellas de un total de $n=8$ botellas de zinfandel disponibles.
+
+La fórmula para las permutaciones de $n$ elementos tomados de $k$ en $k$ es:
+$$ P(n, k) = \frac{n!}{(n-k)!} $$
+
+Sustituyendo los valores $n=8$ y $k=3$:
+$$ P(8, 3) = \frac{8!}{(8-3)!} = \frac{8!}{5!} = 8 \times 7 \times 6 $$
+
+Realizando la multiplicación:
+$$ 8 \times 7 = 56 $$
+$$ 56 \times 6 = 336 $$
+
+Por lo tanto, existen \textbf{336} formas diferentes de servir las 3 botellas de zinfandel si el orden importa.
+
+\vspace{0.3cm}
+
+\textbf{Inciso b:} \textit{Seleccionar 6 botellas al azar de las 30 (orden no importante).}
+
+Aquí seleccionamos un subconjunto de objetos donde el orden \textit{no} importa (simplemente se seleccionan para servirse). Esto corresponde a una \textbf{combinación}. Seleccionamos $k=6$ botellas de un total de $N=30$ botellas.
+
+La fórmula para las combinaciones de $N$ elementos tomados de $k$ en $k$ es:
+$$ \binom{N}{k} = \frac{N!}{k!(N-k)!} $$
+
+Sustituyendo los valores $N=30$ y $k=6$:
+$$ \binom{30}{6} = \frac{30!}{6!(30-6)!} = \frac{30!}{6!24!} $$
+
+Desarrollando el factorial:
+$$ \binom{30}{6} = \frac{30 \times 29 \times 28 \times 27 \times 26 \times 25}{6 \times 5 \times 4 \times 3 \times 2 \times 1} $$
+
+Simplificando la fracción:
+\begin{itemize}
+    \item $6 \times 5 = 30$, que cancela con el 30 del numerador.
+    \item $4 \times 3 \times 2 \times 1 = 24$.
+    \item $28 / 4 = 7$.
+    \item $27 / 3 = 9$.
+    \item $26 / 2 = 13$.
+    \item Queda $29 \times 7 \times 9 \times 13 \times 25$.
+\end{itemize}
+
+Calculando el producto:
+$$ 29 \times 7 = 203 $$
+$$ 203 \times 9 = 1827 $$
+$$ 1827 \times 13 = 23751 $$
+$$ 23751 \times 25 = 593,775 $$
+
+Por lo tanto, el número total de formas de seleccionar 6 botellas es \textbf{593,775}. Este valor representa el tamaño del espacio muestral para los incisos siguientes.
+
+\vspace{0.3cm}
+
+\textbf{Inciso c:} \textit{Seleccionar 6 botellas obteniendo dos de cada variedad.}
+
+Para que esto ocurra, debemos seleccionar simultáneamente:
+\begin{enumerate}
+    \item 2 botellas de Zinfandel de las 8 disponibles.
+    \item 2 botellas de Merlot de las 10 disponibles.
+    \item 2 botellas de Cabernet de las 12 disponibles.
+\end{enumerate}
+
+Como estas selecciones son independientes entre sí dentro del mismo evento compuesto, utilizamos la \textbf{regla del producto} de las combinaciones:
+
+\begin{itemize}
+    \item Formas de elegir Zinfandel: $\binom{8}{2} = \frac{8 \times 7}{2 \times 1} = 28$
+    \item Formas de elegir Merlot: $\binom{10}{2} = \frac{10 \times 9}{2 \times 1} = 45$
+    \item Formas de elegir Cabernet: $\binom{12}{2} = \frac{12 \times 11}{2 \times 1} = 66$
+\end{itemize}
+
+El número total de formas favorables es el producto de estas cantidades:
+$$ \text{Formas} = 28 \times 45 \times 66 $$
+
+Calculando:
+$$ 28 \times 45 = 1260 $$
+$$ 1260 \times 66 = 83,160 $$
+
+Existen \textbf{83,160} formas de obtener dos botellas de cada variedad.
+
+\vspace{0.3cm}
+
+\textbf{Inciso d:} \textit{Probabilidad de obtener dos botellas de cada variedad.}
+
+La probabilidad clásica se define como el cociente entre el número de casos favorables y el número de casos posibles (tamaño del espacio muestral).
+
+\begin{itemize}
+    \item Casos favorables (del inciso c): 83,160
+    \item Casos posibles (del inciso b): 593,775
+\end{itemize}
+
+$$ P(\text{2 de cada variedad}) = \frac{83,160}{593,775} $$
+
+Realizando la división:
+$$ P \approx 0.140053 $$
+
+La probabilidad es aproximadamente \textbf{0.1401} (o 14.01\%).
+
+\vspace{0.3cm}
+
+\textbf{Inciso e:} \textit{Probabilidad de que todas las 6 botellas sean de la misma variedad.}
+
+Para que las 6 botellas sean de la misma variedad, pueden ocurrir tres eventos mutuamente excluyentes:
+\begin{enumerate}
+    \item Todas son Zinfandel.
+    \item Todas son Merlot.
+    \item Todas son Cabernet.
+\end{enumerate}
+
+Calculamos las formas para cada caso usando combinaciones (orden no importa para la selección del grupo):
+
+\begin{itemize}
+    \item \textbf{Caso 1 (Todas Zinfandel):} Seleccionar 6 de 8.
+    $$ \binom{8}{6} = \binom{8}{2} = \frac{8 \times 7}{2} = 28 $$
+    
+    \item \textbf{Caso 2 (Todas Merlot):} Seleccionar 6 de 10.
+    $$ \binom{10}{6} = \binom{10}{4} = \frac{10 \times 9 \times 8 \times 7}{4 \times 3 \times 2 \times 1} = 10 \times 3 \times 7 = 210 $$
+    
+    \item \textbf{Caso 3 (Todas Cabernet):} Seleccionar 6 de 12.
+    $$ \binom{12}{6} = \frac{12 \times 11 \times 10 \times 9 \times 8 \times 7}{6 \times 5 \times 4 \times 3 \times 2 \times 1} = 924 $$
+\end{itemize}
+
+Sumamos las formas favorables de los tres casos:
+$$ \text{Total Favorable} = 28 + 210 + 924 = 1,162 $$
+
+Ahora calculamos la probabilidad dividiendo por el total de formas posibles (calculado en el inciso b):
+$$ P(\text{misma variedad}) = \frac{1,162}{593,775} $$
+
+Realizando la división:
+$$ P \approx 0.0019569 $$
+
+La probabilidad es aproximadamente \textbf{0.00196} (o 0.196\%).
+
+\vspace{0.5cm}
+
+\textbf{Resumen de Resultados:}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Inciso} & \textbf{Pregunta} & \textbf{Resultado} \\
+\hline
+a & Formas de servir 3 zinfandel (orden importa) & 336 \\
+\hline
+b & Formas de seleccionar 6 botellas cualesquiera & 593,775 \\
+\hline
+c & Formas de obtener 2 de cada variedad & 83,160 \\
+\hline
+d & Probabilidad de 2 de cada variedad & $\approx 0.1401$ \\
+\hline
+e & Probabilidad de todas de la misma variedad & $\approx 0.00196$ \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\textbf{Ejercicio 42}
+
+Tres parejas de casados compraron boletos para el teatro y están sentados en una fila compuesta de sólo seis asientos. Si ocupan sus asientos de un modo completamente al azar (orden aleatorio), se plantean las siguientes preguntas:
+
+\begin{enumerate}
+    \item ¿Cuál es la probabilidad de que Jim y Paula (esposo y esposa) se sienten en los dos asientos extremos del lado izquierdo?
+    \item ¿Cuál es la probabilidad de que Jim y Paula terminen sentándose uno junto al otro?
+    \item ¿Cuál es la probabilidad de que por lo menos dos de las esposas terminen sentándose al lado de su esposo?
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este problema de probabilidad clásica, primero debemos definir el espacio muestral y calcular el número total de resultados posibles. Luego, analizaremos cada inciso determinando el número de resultados favorables para cada evento específico.
+
+\subsection*{1. Definición del Espacio Muestral}
+
+Tenemos un total de 6 personas (3 parejas) que se van a sentar en 6 asientos disponibles en una fila. Dado que el orden en que se sientan importa y todas las personas son distintas, el número total de formas en que pueden ocupar los asientos corresponde a las permutaciones de 6 elementos.
+
+El espacio muestral $\hat{S}$ contiene todos los arreglos posibles de las 6 personas. El número total de resultados en $\hat{S}$ es:
+
+$$ |\hat{S}| = 6! = 6 \times 5 \times 4 \times 3 \times 2 \times 1 = 720 $$
+
+Por lo tanto, hay 720 resultados igualmente probables en el espacio muestral.
+
+\subsection*{2. Análisis del Inciso (a)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que Jim y Paula se sienten en los dos asientos extremos del lado izquierdo?
+
+Supongamos que los asientos están numerados del 1 al 6 de izquierda a derecha. Los \textit{dos asientos extremos del lado izquierdo} corresponden a las posiciones 1 y 2.
+
+Para que ocurra este evento, deben cumplirse las siguientes condiciones:
+\begin{itemize}
+    \item Jim y Paula deben ocupar los asientos 1 y 2.
+    \item Las otras 4 personas pueden ocupar los asientos restantes (3, 4, 5 y 6) en cualquier orden.
+\end{itemize}
+
+\textbf{Cálculo de resultados favorables:}
+\begin{enumerate}
+    \item \textbf{Arreglo de Jim y Paula:} Hay 2 personas (Jim y Paula) para 2 asientos específicos (1 y 2). El número de formas en que pueden sentarse es $2!$ (Jim-Paula o Paula-Jim).
+    $$ 2! = 2 \times 1 = 2 $$
+    \item \textbf{Arreglo de las demás personas:} Quedan 4 personas para los 4 asientos restantes. El número de formas en que pueden sentarse es $4!$.
+    $$ 4! = 4 \times 3 \times 2 \times 1 = 24 $$
+    \item \textbf{Total de resultados favorables:} Multiplicamos las posibilidades de ambos pasos (principio de multiplicación).
+    $$ N(\text{Favorables}) = 2! \times 4! = 2 \times 24 = 48 $$
+\end{enumerate}
+
+\textbf{Cálculo de la probabilidad:}
+La probabilidad $P(A)$ es el cociente entre los resultados favorables y el total de resultados en $\hat{S}$.
+
+$$ P(A) = \frac{48}{720} $$
+
+Simplificando la fracción (dividiendo numerator y denominador por 48):
+
+$$ P(A) = \frac{1}{15} \approx 0.0667 $$
+
+\subsection*{3. Análisis del Inciso (b)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que Jim y Paula terminen sentándose uno junto al otro?
+
+Para calcular esto, tratamos a Jim y Paula como una \textit{unidad única} o bloque, ya que deben estar adyacentes.
+
+\textbf{Cálculo de resultados favorables:}
+\begin{enumerate}
+    \item \textbf{Entidades a ordenar:} Si consideramos a (Jim-Paula) como una sola unidad, entonces tenemos esta unidad más las otras 4 personas individuales. Esto suma un total de 5 entidades para ordenar en la fila.
+    \item \textbf{Permutaciones de las entidades:} El número de formas de ordenar estas 5 entidades es $5!$.
+    $$ 5! = 120 $$
+    \item \textbf{Arreglo interno de la pareja:} Dentro de su unidad, Jim y Paula pueden sentarse de 2 formas (Jim a la izquierda de Paula, o Paula a la izquierda de Jim). Esto es $2!$.
+    $$ 2! = 2 $$
+    \item \textbf{Total de resultados favorables:}
+    $$ N(\text{Favorables}) = 5! \times 2! = 120 \times 2 = 240 $$
+\end{enumerate}
+
+\textbf{Cálculo de la probabilidad:}
+
+$$ P(B) = \frac{240}{720} $$
+
+Simplificando la fracción (dividiendo por 240):
+
+$$ P(B) = \frac{1}{3} \approx 0.3333 $$
+
+\subsection*{4. Análisis del Inciso (c)}
+
+\textit{Pregunta:} ¿Cuál es la probabilidad de que por lo menos dos de las esposas terminen sentándose al lado de su esposo?
+
+Denotemos las tres parejas como Pareja 1, Pareja 2 y Pareja 3.
+Sea $E_i$ el evento en el que la Pareja $i$ se sienta junta (donde $i = 1, 2, 3$).
+Queremos calcular la probabilidad de que \textit{al menos dos} parejas se sienten juntas. Esto incluye dos casos mutuamente excluyentes:
+\begin{enumerate}
+    \item Exactamente dos parejas se sientan juntas.
+    \item Exactamente tres parejas se sientan juntas.
+\end{enumerate}
+
+\textbf{Caso 1: Exactamente tres parejas juntas ($E_1 \cap E_2 \cap E_3$)}
+\begin{itemize}
+    \item Tratamos cada pareja como una unidad. Tenemos 3 unidades.
+    \item Formas de ordenar las 3 unidades: $3! = 6$.
+    \item Formas de ordenar internamente cada pareja: Cada pareja tiene $2!$ formas. Como hay 3 parejas, es $(2!)^3 = 2^3 = 8$.
+    \item Total de resultados para 3 parejas juntas:
+    $$ N(3 \text{ parejas}) = 3! \times (2!)^3 = 6 \times 8 = 48 $$
+\end{itemize}
+
+\textbf{Caso 2: Exactamente dos parejas juntas}
+Para contar esto, primero calculamos el número de arreglos donde \textit{al menos} dos parejas específicas están juntas, y luego ajustamos para no contar doble el caso de tres parejas.
+
+\begin{itemize}
+    \item \textbf{Elección de las parejas:} Hay $\binom{3}{2} = 3$ formas de elegir qué dos parejas se sientan juntas (P1 y P2, P1 y P3, o P2 y P3).
+    \item \textbf{Arreglo para 2 parejas específicas (digamos P1 y P2):}
+    \begin{itemize}
+        \item Tratamos a P1 y P2 como unidades. La Pareja 3 (P3) se separa en 2 individuos (Esposo 3 y Esposa 3).
+        \item Entidades totales: Unidad P1, Unidad P2, Esposo 3, Esposa 3. Total = 4 entidades.
+        \item Formas de ordenar las 4 entidades: $4! = 24$.
+        \item Arreglo interno de las unidades P1 y P2: $(2!)^2 = 4$.
+        \item Total de arreglos donde P1 y P2 están juntas (sin importar P3): $24 \times 4 = 96$.
+    \end{itemize}
+    \item \textbf{Ajuste por el caso de 3 parejas:}
+    El cálculo anterior (96) incluye los casos donde la tercera pareja (P3) también termina junta por casualidad. Sabemos que hay 48 casos donde las 3 parejas están juntas.
+    Para un par específico de parejas (ej. P1 y P2), el número de casos donde \textit{solo} ellas están juntas (y P3 no) es:
+    $$ 96 - 48 = 48 $$
+    \item \textbf{Total para exactamente dos parejas:}
+    Como hay 3 pares de parejas posibles, multiplicamos por 3:
+    $$ N(\text{Exactamente 2}) = 3 \times 48 = 144 $$
+\end{itemize}
+
+\textbf{Total de resultados favorables (Al menos 2):}
+Sumamos los casos de exactamente 2 y exactamente 3:
+
+$$ N(\text{Al menos 2}) = 144 + 48 = 192 $$
+
+\textbf{Cálculo de la probabilidad:}
+
+$$ P(C) = \frac{192}{720} $$
+
+Simplificando la fracción (dividiendo por 48):
+
+$$ P(C) = \frac{4}{15} \approx 0.2667 $$
+
+\subsection*{Resumen de Resultados}
+
+\begin{itemize}
+    \item \textbf{Inciso (a):} La probabilidad de que Jim y Paula ocupen los extremos izquierdos es \textbf{$1/15$}.
+    \item \textbf{Inciso (b):} La probabilidad de que Jim y Paula se sienten juntos es \textbf{$1/3$}.
+    \item \textbf{Inciso (c):} La probabilidad de que al menos dos esposas se sienten junto a su esposo es \textbf{$4/15$}.
+\end{itemize}
+
+
+\subsection{Probabilidad Condicional}
+
+\textbf{Probabilidad condicional}
+
+Para dos eventos cualesquiera $A$ y $B$ con $P(B) > 0$, la probabilidad condicional de $A$ dado que $B$ ha ocurrido está definida por:
+
+$$ P(A | B) = \frac{P(A \cap B)}{P(B)} $$
+
+\textbf{Ejemplo 2.24:}
+
+En una planta se ensamblan componentes complejos en dos líneas de ensamble diferentes, $A$ y $A'$. La línea $A$ utiliza equipo más viejo que $A'$, por lo que es un poco más lenta y menos confiable. Suponga que en un día dado la línea $A$ ensambla 8 componentes, de los cuales 2 han sido identificados como defectuosos ($B$) y 6 como no defectuosos ($B'$), mientras que $A'$ ha producido 1 componente defectuoso y 9 no defectuosos. Esta información se resume en la tabla adjunta.
+
+\begin{center}
+\begin{tabular}{lcc}
+& \textbf{Condición} & \\
+\textbf{Línea} & $B$ & $B'$ \\ \hline
+$A$ & 2 & 6 \\
+$A'$ & 1 & 9 \\ \hline
+\end{tabular}
+\end{center}
+
+$$ P(\text{componente de la línea } A \text{ seleccionado}) = P(A) = \frac{8}{18} = 0.44 $$
+
+No obstante, si el componente seleccionado resulta defectuoso, entonces el evento $B$ ha ocurrido, por lo que el componente debe haber sido 1 de los 3 de la columna $B$ de la tabla. Como estos 3 componentes son igualmente probables entre ellos mismos una vez que $B$ ha ocurrido,
+$$ P(A | B) = \frac{2}{3} = 0.67 $$
+
+\subsubsection{Regla de multiplicación para $P(A\cap B)$}
+
+
+\textbf{Ejemplo 2.27:}
+
+Cuatro individuos han respondido a una solicitud de un banco de sangre para donaciones de sangre. Ninguno de ellos ha donado antes, por lo que sus tipos de sangre son desconocidos. Suponga que sólo se desea el tipo $O^+$ y sólo uno de los cuatro tiene ese tipo. Si los donadores potenciales se seleccionan en orden aleatorio para determinar su tipo de sangre, ¿cuál es la probabilidad de que por los menos tres individuos tengan que ser examinados para determinar su tipo de sangre y obtener el tipo deseado?
+
+Haciendo la identificación $B = \{\text{primer tipo no } O^+\}$ y $A = \{\text{segundo tipo no } O^+\}$, $P(B) = 3/4$. Dado que el primer tipo no es $O^+$, dos de los tres individuos que quedan no son $O^+$, por lo tanto $P(A | B) = 2/3$. La regla de multiplicación ahora da:
+
+$$ P(\text{por lo menos tres individuos fueron examinados para determinar su tipo de sangre}) = P(A \cap B) $$
+$$ = P(A | B) \cdot P(B) = \left( \frac{2}{3} \right) \cdot \left( \frac{3}{4} \right) = 0.5 $$
+
+\textbf{Ejemplo 2.28:}
+Para el experimento de determinación de tipo de sangre del ejemplo 2.27,
+$$ P(\text{el tercer tipo es } O^+) = P(\text{el tercero es } | \text{ el primero no es } \cap \text{ el segundo no es}) $$
+$$ \cdot P(\text{el segundo no es } | \text{ el primero no es}) \cdot P(\text{el primero no es}) $$
+$$ = \left( \frac{1}{2} \right) \cdot \left( \frac{2}{3} \right) \cdot \left( \frac{3}{4} \right) = 0.25 $$
+
+
+\subsubsection{Teorema de Bayes}
+
+Sean $A_1, A_2, \dots, A_k$ un conjunto de eventos mutuamente excluyentes y exhaustivos con probabilidades previas $P(A_i)$ ($i = 1, \dots, k$). Entonces para cualquier otro evento $B$ para el cual $P(B) > 0$, la probabilidad posterior de $A_j$ dado que $B$ ha ocurrido es:
+
+$$ P(A_j | B) = \frac{P(A_j \cap B)}{P(B)} = \frac{P(B | A_j)P(A_j)}{\sum_{i=1}^{k} P(B | A_i) P(A_i)} \quad j = 1, \dots, k $$
+
+\textbf{Ejemplo 2.30:}
+
+Considere una enfermedad rara que afecta a solo el 0.1\% de la población, de modo que $P(A_1) = 0.001$ y $P(A_2) = 0.999$, donde $A_1$ representa tener la enfermedad y $A_2$ no tenerla. Suponga que una prueba de diagnóstico tiene una tasa de detección del 99\% ($P(B | A_1) = 0.99$, donde $B$ es un resultado positivo) y una tasa de falsos positivos del 2\% ($P(B | A_2) = 0.02$).
+
+La probabilidad de que un individuo realmente tenga la enfermedad dado que la prueba resultó positiva se calcula como:
+$$ P(A_1 | B) = \frac{P(A_1 \cap B)}{P(B)} = \frac{0.00099}{0.00099 + 0.01998} = \frac{0.00099}{0.02097} = 0.047 $$
+
+Esto indica que la mayoría de los resultados positivos de la prueba son a causa de errores y no de individuos enfermos. La probabilidad de tener la enfermedad se ha incrementado por un factor de multiplicación de 47 (desde la probabilidad previa de 0.001 hasta la probabilidad posterior de 0.047); pero para incrementar aún más la probabilidad posterior, se requiere una prueba de diagnóstico con tasas de error mucho más pequeñas. Si la enfermedad no fuera tan rara (p. ej., 25\% de incidencia en la población), entonces las tasas de error de la prueba actual proporcionaría buenos diagnósticos.
+
+\textbf{Ejercicio 45}
+
+La población de un país particular se compone de tres grupos étnicos. Cada individuo pertenece a uno de los cuatro grupos sanguíneos principales. La tabla de probabilidad conjunta anexa da la proporción de individuos en las diversas combinaciones de grupo étnico-grupo sanguíneo.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Grupo sanguíneo} & \textbf{O} & \textbf{A} & \textbf{B} & \textbf{AB} \\
+\hline
+Grupo étnico 1 & 0.082 & 0.106 & 0.008 & 0.004 \\
+\hline
+Grupo étnico 2 & 0.135 & 0.141 & 0.018 & 0.006 \\
+\hline
+Grupo étnico 3 & 0.215 & 0.200 & 0.065 & 0.020 \\
+\hline
+\end{tabular}
+\end{center}
+
+Suponga que se selecciona un individuo al azar de la población y que los eventos se definen como $A = \{\text{tipo A seleccionado}\}$, $B = \{\text{tipo B seleccionado}\}$ y $C = \{\text{grupo étnico 3 seleccionado}\}$.
+
+\begin{enumerate}
+    \item[\textbf{a.}] Calcule $P(A)$, $P(C)$ y $P(A \cap C)$.
+    \item[\textbf{b.}] Calcule tanto $P(A|C)$ y $P(C|A)$ y explique en contexto lo que cada una de estas probabilidades representa.
+    \item[\textbf{c.}] Si el individuo seleccionado no tiene sangre de tipo B, ¿cuál es la probabilidad de que él o ella pertenezca al grupo étnico 1?
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Solución:}
+
+Para resolver este ejercicio, primero debemos entender la estructura de la tabla de probabilidad conjunta. Cada celda de la tabla representa la probabilidad conjunta de que un individuo seleccionado al azar pertenezca a un grupo étnico específico \textbf{y} tenga un tipo de sangre específico.
+
+\subsection*{Paso 1: Verificación de la tabla de probabilidades}
+
+Primero, verifiquemos que la suma de todas las probabilidades en la tabla sea igual a 1:
+
+$$\sum_{\text{todas las celdas}} P = 0.082 + 0.106 + 0.008 + 0.004 + 0.135 + 0.141 + 0.018 + 0.006 + 0.215 + 0.200 + 0.065 + 0.020 = 1.000$$
+
+La suma es correcta, lo que confirma que tenemos una distribución de probabilidad válida.
+
+\subsection*{Inciso a: Cálculo de $P(A)$, $P(C)$ y $P(A \cap C)$}
+
+\textbf{Cálculo de $P(A)$ (probabilidad de tipo sanguíneo A):}
+
+Para obtener la probabilidad marginal de tener tipo sanguíneo A, sumamos todas las probabilidades en la columna correspondiente al tipo A (sumando sobre todos los grupos étnicos):
+
+$$P(A) = 0.106 + 0.141 + 0.200 = 0.447$$
+
+Esto significa que el 44.7\% de la población tiene tipo sanguíneo A.
+
+\textbf{Cálculo de $P(C)$ (probabilidad de grupo étnico 3):}
+
+Para obtener la probabilidad marginal de pertenecer al grupo étnico 3, sumamos todas las probabilidades en la fila correspondiente al grupo étnico 3 (sumando sobre todos los tipos sanguíneos):
+
+$$P(C) = 0.215 + 0.200 + 0.065 + 0.020 = 0.500$$
+
+Esto significa que el 50\% de la población pertenece al grupo étnico 3.
+
+\textbf{Cálculo de $P(A \cap C)$ (probabilidad de tipo A \textbf{y} grupo étnico 3):}
+
+Esta es la probabilidad conjunta que aparece directamente en la tabla, en la intersección de la columna A y la fila del grupo étnico 3:
+
+$$P(A \cap C) = 0.200$$
+
+Esto significa que el 20\% de la población tiene tipo sanguíneo A \textbf{y} pertenece al grupo étnico 3.
+
+\subsection*{Inciso b: Cálculo e interpretación de $P(A|C)$ y $P(C|A)$}
+
+\textbf{Cálculo de $P(A|C)$ (probabilidad condicional de tipo A dado grupo étnico 3):}
+
+Por la definición de probabilidad condicional:
+
+$$P(A|C) = \frac{P(A \cap C)}{P(C)} = \frac{0.200}{0.500} = 0.400$$
+
+\textbf{Interpretación de $P(A|C)$:}
+
+Esta probabilidad representa la proporción de individuos \textbf{dentro del grupo étnico 3} que tienen tipo sanguíneo A. Es decir, si sabemos que una persona pertenece al grupo étnico 3, hay un 40\% de probabilidad de que tenga tipo sanguíneo A.
+
+\textbf{Cálculo de $P(C|A)$ (probabilidad condicional de grupo étnico 3 dado tipo A):}
+
+Nuevamente, por la definición de probabilidad condicional:
+
+$$P(C|A) = \frac{P(A \cap C)}{P(A)} = \frac{0.200}{0.447} \approx 0.4474$$
+
+\textbf{Interpretación de $P(C|A)$:}
+
+Esta probabilidad representa la proporción de individuos \textbf{dentro de la población con tipo sanguíneo A} que pertenecen al grupo étnico 3. Es decir, si sabemos que una persona tiene tipo sanguíneo A, hay aproximadamente un 44.74\% de probabilidad de que pertenezca al grupo étnico 3.
+
+\textbf{Diferencia clave entre las dos probabilidades condicionales:}
+
+Es importante notar que $P(A|C) \neq P(C|A)$:
+\begin{itemize}
+    \item $P(A|C) = 0.400$ se refiere a la probabilidad de tener tipo A \textit{dentro del grupo étnico 3}
+    \item $P(C|A) \approx 0.4474$ se refiere a la probabilidad de pertenecer al grupo étnico 3 \textit{dentro del grupo de tipo sanguíneo A}
+\end{itemize}
+
+Estas son preguntas diferentes que condicionan sobre poblaciones diferentes, por lo que dan resultados diferentes.
+
+\subsection*{Inciso c: Probabilidad de grupo étnico 1 dado que no es tipo B}
+
+Primero, definamos el evento complementario de B:
+$$B' = \{\text{el individuo NO tiene tipo sanguíneo B}\}$$
+
+Necesitamos calcular $P(\text{Grupo étnico 1} | B')$.
+
+\textbf{Paso 1: Calcular $P(B')$}
+
+$$P(B') = 1 - P(B)$$
+
+Primero calculamos $P(B)$ sumando la columna del tipo B:
+$$P(B) = 0.008 + 0.018 + 0.065 = 0.091$$
+
+Por lo tanto:
+$$P(B') = 1 - 0.091 = 0.909$$
+
+\textbf{Paso 2: Calcular $P(\text{Grupo étnico 1} \cap B')$}
+
+El evento "Grupo étnico 1 y no tipo B" incluye todas las combinaciones del grupo étnico 1 excepto aquellas con tipo B. Sumamos las probabilidades de la fila del grupo étnico 1, excluyendo la columna B:
+
+$$P(\text{Grupo étnico 1} \cap B') = 0.082 + 0.106 + 0.004 = 0.192$$
+
+\textbf{Paso 3: Calcular la probabilidad condicional}
+
+$$P(\text{Grupo étnico 1} | B') = \frac{P(\text{Grupo étnico 1} \cap B')}{P(B')} = \frac{0.192}{0.909} \approx 0.2112$$
+
+\textbf{Interpretación:}
+
+Si sabemos que un individuo seleccionado no tiene tipo sanguíneo B, hay aproximadamente un 21.12\% de probabilidad de que pertenezca al grupo étnico 1.
+
+\subsection*{Resumen de Resultados}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Inciso} & \textbf{Probabilidad} & \textbf{Valor} \\
+\hline
+a & $P(A)$ & 0.447 \\
+\hline
+a & $P(C)$ & 0.500 \\
+\hline
+a & $P(A \cap C)$ & 0.200 \\
+\hline
+b & $P(A|C)$ & 0.400 \\
+\hline
+b & $P(C|A)$ & 0.4474 \\
+\hline
+c & $P(\text{Grupo 1} | B')$ & 0.2112 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Conclusiones}
+
+Este ejercicio ilustra varios conceptos importantes de probabilidad:
+
+\begin{enumerate}
+    \item \textbf{Probabilidades marginales:} Se obtienen sumando sobre una dimensión de la tabla conjunta ($P(A)$ y $P(C)$).
+    
+    \item \textbf{Probabilidades conjuntas:} Son los valores directos en las celdas de la tabla ($P(A \cap C)$).
+    
+    \item \textbf{Probabilidades condicionales:} Requieren dividir la probabilidad conjunta entre la probabilidad del evento condicionante. Es crucial identificar correctamente cuál es el evento condicionante.
+    
+    \item \textbf{Asimetría de la condicionalidad:} $P(A|C) \neq P(C|A)$ en general, ya que condicionan sobre poblaciones diferentes.
+    
+    \item \textbf{Eventos complementarios:} Para calcular probabilidades condicionales con eventos complementarios (como $B'$), primero debemos calcular la probabilidad del complemento.
 \end{enumerate}
 
 
+\textbf{Ejercicio 60}
+
+El 70\% de las aeronaves ligeras que desaparecen en vuelo en cierto país son posteriormente localizadas. De las aeronaves que son localizadas, 60\% cuentan con un localizador de emergencia, mientras que 90\% de las aeronaves no localizadas no cuentan con dicho localizador. Suponga que una aeronave ligera ha desaparecido.
+
+\begin{enumerate}
+    \item[\textbf{a.}] Si tiene un localizador de emergencia, ¿cuál es la probabilidad de que no sea localizada?
+    \item[\textbf{b.}] Si no tiene un localizador de emergencia, ¿cuál es la probabilidad de que sea localizada?
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este problema, utilizaremos el \textit{Teorema de Bayes} y la \textit{Ley de Probabilidad Total}. Primero, definamos los eventos relevantes y las probabilidades proporcionadas en el enunciado.
+
+\subsection*{1. Definición de Eventos}
+
+Definamos los siguientes eventos relacionados con la aeronave desaparecida:
+\begin{itemize}
+    \item $L$: El evento de que la aeronave sea \textbf{localizada}.
+    \item $L'$: El evento de que la aeronave \textbf{no sea localizada} (complemento de $L$).
+    \item $E$: El evento de que la aeronave \textbf{tiene un localizador de emergencia}.
+    \item $E'$: El evento de que la aeronave \textbf{no tiene un localizador de emergencia} (complemento de $E$).
+\end{itemize}
+
+\subsection*{2. Probabilidades Dadas}
+
+Extraemos la información numérica del enunciado:
+\begin{itemize}
+    \item La probabilidad de que una aeronave desaparecida sea localizada es del 70\%:
+    $$ P(L) = 0.70 $$
+    \item Por lo tanto, la probabilidad de que no sea localizada es:
+    $$ P(L') = 1 - P(L) = 1 - 0.70 = 0.30 $$
+    \item De las aeronaves localizadas, el 60\% tiene localizador:
+    $$ P(E | L) = 0.60 $$
+    \item De las aeronaves \textit{no} localizadas, el 90\% \textit{no} tiene localizador:
+    $$ P(E' | L') = 0.90 $$
+\end{itemize}
+
+De estas probabilidades, podemos deducir las complementarias condicionales que necesitaremos para los cálculos:
+\begin{itemize}
+    \item Probabilidad de que una aeronave localizada \textit{no} tenga localizador:
+    $$ P(E' | L) = 1 - P(E | L) = 1 - 0.60 = 0.40 $$
+    \item Probabilidad de que una aeronave no localizada \textit{sí} tenga localizador:
+    $$ P(E | L') = 1 - P(E' | L') = 1 - 0.90 = 0.10 $$
+\end{itemize}
+
+\subsection*{3. Solución del Inciso (a)}
+
+\textbf{Pregunta:} Si tiene un localizador de emergencia, ¿cuál es la probabilidad de que no sea localizada?
+
+Matemáticamente, buscamos calcular la probabilidad condicional $P(L' | E)$.
+
+Utilizamos el \textbf{Teorema de Bayes}:
+$$ P(L' | E) = \frac{P(E | L') \cdot P(L')}{P(E)} $$
+
+Primero, necesitamos calcular el denominador $P(E)$, la probabilidad total de que una aeronave tenga un localizador. Usamos la \textbf{Ley de Probabilidad Total}:
+$$ P(E) = P(E | L) \cdot P(L) + P(E | L') \cdot P(L') $$
+
+Sustituimos los valores conocidos:
+\begin{align*}
+    P(E) &= (0.60)(0.70) + (0.10)(0.30) \\
+    &= 0.42 + 0.03 \\
+    &= 0.45
+\end{align*}
+
+Ahora calculamos la probabilidad condicional solicitada:
+\begin{align*}
+    P(L' | E) &= \frac{(0.10)(0.30)}{0.45} \\
+    &= \frac{0.03}{0.45} \\
+    &= \frac{3}{45} \\
+    &= \frac{1}{15} \\
+    &\approx 0.0667
+\end{align*}
+
+\textbf{Respuesta (a):} La probabilidad de que la aeronave no sea localizada dado que tiene un localizador de emergencia es aproximadamente \textbf{0.0667} (o 6.67\%).
+
+\vspace{0.5cm}
+
+\subsection*{4. Solución del Inciso (b)}
+
+\textbf{Pregunta:} Si no tiene un localizador de emergencia, ¿cuál es la probabilidad de que sea localizada?
+
+Matemáticamente, buscamos calcular la probabilidad condicional $P(L | E')$.
+
+Nuevamente, utilizamos el \textbf{Teorema de Bayes}:
+$$ P(L | E') = \frac{P(E' | L) \cdot P(L)}{P(E')} $$
+
+Primero, calculamos el denominador $P(E')$, la probabilidad total de que una aeronave \textit{no} tenga un localizador. Sabemos que $P(E') = 1 - P(E)$, o podemos calcularlo directamente con la ley de probabilidad total:
+\begin{align*}
+    P(E') &= P(E' | L) \cdot P(L) + P(E' | L') \cdot P(L') \\
+    &= (0.40)(0.70) + (0.90)(0.30) \\
+    &= 0.28 + 0.27 \\
+    &= 0.55
+\end{align*}
+(Note que $0.45 + 0.55 = 1.00$, lo cual verifica nuestros cálculos).
+
+Ahora calculamos la probabilidad condicional solicitada:
+\begin{align*}
+    P(L | E') &= \frac{(0.40)(0.70)}{0.55} \\
+    &= \frac{0.28}{0.55} \\
+    &= \frac{28}{55} \\
+    &\approx 0.5091
+\end{align*}
+
+\textbf{Respuesta (b):} La probabilidad de que la aeronave sea localizada dado que no tiene un localizador de emergencia es aproximadamente \textbf{0.5091} (o 50.91\%).
+
+\vspace{0.5cm}
+
+\textbf{Resumen de Resultados}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Inciso} & \textbf{Probabilidad Solicitada} & \textbf{Valor} \\
+\hline
+a & $P(L' | E)$ & $1/15 \approx 0.0667$ \\
+\hline
+b & $P(L | E')$ & $28/55 \approx 0.5091$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Interpretación}
+
+Este ejercicio ilustra cómo la información sobre una característica específica (la presencia de un localizador de emergencia) actualiza nuestras creencias sobre el resultado de un evento (si la aeronave será localizada o no).
+
+\begin{itemize}
+    \item En el inciso \textbf{a}, aunque tener un localizador generalmente ayuda, existe una pequeña probabilidad (6.67\%) de que aun teniéndolo, la aeronave no sea localizada. Esto podría deberse a fallas en el dispositivo o dificultades en la búsqueda.
+    \item En el inciso \textbf{b}, vemos que incluso \textit{sin} un localizador, la probabilidad de ser localizado es aproximadamente del 51\%. Esto refleja la alta tasa base de localización (70\%) mencionada en el problema inicial, lo que sugiere que los métodos de búsqueda tradicionales son bastante efectivos incluso sin tecnología de localización de emergencia.
+\end{itemize}
+
+
+
+\subsection{Independencia}
+
+\textbf{Definición:}
+Los eventos $A$ y $B$ son independientes si $P(A | B) = P(A)$ y son dependientes de lo contrario.
+
+
+\textbf{Ejemplo 2.32:}
+
+Sean $A$ y $B$ dos eventos excluyentes cualesquiera con $P(A) > 0$. Por ejemplo, para un automóvil seleccionado al azar, sea $A =$ {el carro es de cuatro cilindros} y $B =$ {el carro es de seis cilindros}. Como los eventos son mutuamente excluyentes, si $B$ ocurre, entonces $A$ no puede haber ocurrido, así que $P(A | B) = 0 \neq P(A)$. El mensaje aquí es que si dos eventos son mutuamente excluyentes, no pueden ser independientes. Cuando $A$ y $B$ son mutuamente excluyentes, la información de que $A$ ocurrió dice algo sobre $B$ (no puede haber ocurrido), así que se impide la independencia.
+
+\textbf{Proposición:}
+$A$ y $B$ son independientes si y sólo si
+$$ P(A \cap B) = P(A) \cdot P(B) $$
+
+\textbf{Ejemplo 2.33}
+
+Se sabe que 30\% de las lavadoras de cierta compañía requieren servicio mientras se encuentran dentro de garantía, en tanto que sólo 10\% de sus secadoras necesitan dicho servicio. Si alguien adquiere tanto una lavadora como una secadora fabricadas por esta compañía, ¿cuál es la probabilidad de que ambas máquinas requieran servicio de garantía?
+
+Sea $A$ el evento en que la lavadora necesita servicio mientras se encuentra dentro de garantía y defina $B$ de forma análoga para la secadora. Entonces $P(A) = 0.30$ y $P(B) = 0.10$. Suponiendo que las dos máquinas funcionan independientemente una de otra, la probabilidad deseada es:
+$$ P(A \cap B) = P(A) \cdot P(B) = (0.30)(0.10) = 0.03 $$
+
+Es fácil demostrar que $A$ y $B$ son independientes si y sólo si $A'$ y $B$ son independientes, $A$ y $B'$ son independientes y $A'$ y $B'$ son independientes. Por lo tanto, en el ejemplo 2.33, la probabilidad de que ninguna máquina necesite servicio es:
+$$ P(A' \cap B') = P(A') \cdot P(B') = (0.70)(0.90) = 0.63 $$
+
+\subsubsection{Independencia de más de dos eventos}
+
+\textbf{Definición:}
+Los eventos $A_1, \dots, A_n$ son mutuamente independientes si por cada $k$ ($k = 2, 3, \dots, n$) y cada subconjunto de índices $i_1, i_2, \dots, i_k$:
+
+$$ P(A_{i_1} \cap A_{i_2} \cap \dots \cap A_{i_k}) = P(A_{i_1}) \cdot P(A_{i_2}) \cdot \dots \cdot P(A_{i_k}) $$
+
+\textbf{Ejercicio 71}
+
+Una compañía de exploración petrolera en la actualidad tiene dos proyectos activos, uno en Asia y el otro en Europa. Sea $A$ el evento en que el proyecto asiático tiene éxito y $B$ el evento en que el proyecto europeo tiene éxito. Suponga que $A$ y $B$ son eventos independientes con $P(A) = 0.4$ y $P(B) = 0.7$.
+
+a. Si el proyecto asiático no tiene éxito, ¿cuál es la probabilidad de que el europeo también fracase? Explique su razonamiento.
+
+b. ¿Cuál es la probabilidad de que por lo menos uno de los dos proyectos tenga éxito?
+
+c. Dado que por lo menos uno de los dos proyectos tiene éxito, ¿cuál es la probabilidad de que sólo el proyecto asiático tenga éxito?
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este ejercicio, utilizaremos las propiedades fundamentales de la probabilidad, específicamente aquellas relacionadas con la independencia de eventos, la unión de eventos y la probabilidad condicional.
+
+\textbf{Datos Proporcionados:}
+\begin{itemize}
+    \item Evento $A$: El proyecto asiático tiene éxito.
+    \item Evento $B$: El proyecto europeo tiene éxito.
+    \item Probabilidad de éxito en Asia: $P(A) = 0.4$.
+    \item Probabilidad de éxito en Europa: $P(B) = 0.7$.
+    \item Condición clave: Los eventos $A$ y $B$ son \textit{independientes}.
+\end{itemize}
+
+De las probabilidades de éxito, podemos deducir las probabilidades de fracaso (complementos):
+\begin{itemize}
+    \item Probabilidad de fracaso en Asia: $P(A') = 1 - P(A) = 1 - 0.4 = 0.6$.
+    \item Probabilidad de fracaso en Europa: $P(B') = 1 - P(B) = 1 - 0.7 = 0.3$.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Inciso a: Probabilidad de fracaso europeo dado fracaso asiático}
+
+Se nos pide calcular la probabilidad de que el proyecto europeo fracase ($B'$), dado que el proyecto asiático no tiene éxito ($A'$). Matemáticamente, buscamos $P(B' | A')$.
+
+\textit{Razonamiento basado en la independencia:}
+Una propiedad fundamental de los eventos independientes es que si $A$ y $B$ son independientes, entonces sus complementos también son independientes. Es decir, $A'$ y $B'$ son independientes.
+
+La definición de probabilidad condicional es:
+$$ P(B' | A') = \frac{P(B' \cap A')}{P(A')} $$
+
+Sin embargo, debido a la independencia entre $A'$ y $B'$, sabemos que:
+$$ P(B' \cap A') = P(B') \cdot P(A') $$
+
+Sustituyendo esto en la fórmula condicional:
+$$ P(B' | A') = \frac{P(B') \cdot P(A')}{P(A')} = P(B') $$
+
+Esto tiene sentido intuitivamente: si los proyectos son independientes, el resultado del proyecto asiático no proporciona información sobre el resultado del proyecto europeo. Por lo tanto, la probabilidad de que el proyecto europeo fracase permanece igual que su probabilidad marginal de fracaso.
+
+\textbf{Cálculo:}
+$$ P(B' | A') = P(B') = 0.3 $$
+
+\textbf{Respuesta (a):} La probabilidad es \textbf{0.3}.
+
+\vspace{0.3cm}
+
+\textbf{Inciso b: Probabilidad de que por lo menos uno tenga éxito}
+
+Se nos pide calcular la probabilidad de la unión de los eventos $A$ y $B$, es decir, $P(A \cup B)$. Esto representa la probabilidad de que ocurra $A$, o $B$, o ambos.
+
+Utilizamos la \textit{Regla de la Adición} para probabilidades:
+$$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$
+
+Dado que $A$ y $B$ son independientes, la probabilidad de su intersección es el producto de sus probabilidades individuales:
+$$ P(A \cap B) = P(A) \cdot P(B) $$
+
+\textbf{Cálculo paso a paso:}
+1. Calculamos la intersección:
+$$ P(A \cap B) = 0.4 \cdot 0.7 = 0.28 $$
+
+2. Aplicamos la regla de la adición:
+$$ P(A \cup B) = 0.4 + 0.7 - 0.28 $$
+$$ P(A \cup B) = 1.1 - 0.28 $$
+$$ P(A \cup B) = 0.82 $$
+
+\textit{Método alternativo (usando complementos):}
+La probabilidad de que \textit{por lo menos uno} tenga éxito es el complemento de que \textit{ninguno} tenga éxito.
+$$ P(A \cup B) = 1 - P(\text{ninguno tiene éxito}) $$
+$$ P(A \cup B) = 1 - P(A' \cap B') $$
+Debido a la independencia:
+$$ P(A' \cap B') = P(A') \cdot P(B') = 0.6 \cdot 0.3 = 0.18 $$
+$$ P(A \cup B) = 1 - 0.18 = 0.82 $$
+
+\textbf{Respuesta (b):} La probabilidad es \textbf{0.82}.
+
+\vspace{0.3cm}
+
+\textbf{Inciso c: Probabilidad condicional de éxito solo asiático}
+
+Se nos pide calcular la probabilidad de que \textit{sólo} el proyecto asiático tenga éxito, dado que \textit{por lo menos uno} de los dos proyectos tiene éxito.
+
+Definamos los eventos claramente:
+\begin{itemize}
+    \item Evento condicional (denominador): $E = A \cup B$ (por lo menos uno tiene éxito). Ya calculamos $P(E) = 0.82$.
+    \item Evento de interés (numerador): $F =$ \textit{Sólo} el proyecto asiático tiene éxito. Esto significa que $A$ ocurre y $B$ no ocurre. Es decir, $F = A \cap B'$.
+\end{itemize}
+
+La probabilidad condicional se define como:
+$$ P(F | E) = \frac{P(F \cap E)}{P(E)} $$
+
+Observemos la relación entre $F$ y $E$. El evento \textit{Sólo A} ($A \cap B'$) es un subconjunto del evento \textit{Al menos uno} ($A \cup B$). Por lo tanto, la intersección $(A \cap B') \cap (A \cup B)$ es simplemente $(A \cap B')$.
+
+Entonces la fórmula se simplifica a:
+$$ P(A \cap B' | A \cup B) = \frac{P(A \cap B')}{P(A \cup B)} $$
+
+\textbf{Cálculo del numerador $P(A \cap B')$:}
+Debido a la independencia entre $A$ y $B$, $A$ también es independiente de $B'$.
+$$ P(A \cap B') = P(A) \cdot P(B') $$
+$$ P(A \cap B') = 0.4 \cdot 0.3 = 0.12 $$
+
+\textbf{Cálculo final de la condicional:}
+$$ P(A \cap B' | A \cup B) = \frac{0.12}{0.82} $$
+
+Simplificando la fracción:
+$$ \frac{12}{82} = \frac{6}{41} $$
+
+Convertido a decimal:
+$$ \frac{6}{41} \approx 0.1463 $$
+
+\textbf{Respuesta (c):} La probabilidad es \textbf{6/41} o aproximadamente \textbf{0.1463}.
+
+\vspace{0.5cm}
+
+\textbf{Resumen de Resultados}
+
+\begin{itemize}
+    \item \textbf{Inciso a:} $P(B' | A') = 0.3$. Esto se debe a la independencia de los eventos.
+    \item \textbf{Inciso b:} $P(A \cup B) = 0.82$. Calculado usando la regla de la adición y la propiedad de independencia.
+    \item \textbf{Inciso c:} $P(\text{Sólo } A | \text{Al menos uno}) \approx 0.1463$. Calculado usando la definición de probabilidad condicional.
+\end{itemize}
+
+
+\textbf{Ejercicio 76}
+
+La probabilidad de que un calificador se equivoque al marcar cualquier pregunta particular de un examen de opciones múltiples es de 0.1. Si existen diez preguntas y éstas se marcan en forma independiente, ¿cuál es la probabilidad de que no se cometan errores? ¿Que por lo menos se cometa un error? Si existen $n$ preguntas y la probabilidad de un error de marcado es $p$ en lugar de 0.1, dé expresiones para estas dos probabilidades.
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este problema, identificaremos primero la distribución de probabilidad adecuada modelando el número de errores cometidos por el calificador.
+
+\subsection*{1. Identificación del Modelo de Probabilidad}
+
+Definamos la variable aleatoria $X$ como el \textit{número de errores} cometidos al calificar el examen. Analicemos las condiciones del experimento para determinar la distribución de $X$:
+
+\begin{itemize}
+    \item \textbf{Número fijo de ensayos:} Hay un número determinado de preguntas, $n = 10$.
+    \item \textbf{Independencia:} El enunciado especifica que las preguntas \textit{se marcan en forma independiente}.
+    \item \textbf{Probabilidad constante:} La probabilidad de error en cualquier pregunta particular es constante, $p = 0.1$.
+    \item \textbf{Dos resultados posibles:} Para cada pregunta, el calificador puede cometer un error (\textit{éxito} en el contexto de contar errores) o no cometerlo (\textit{fracaso}).
+\end{itemize}
+
+Dado que se cumplen estas condiciones, la variable aleatoria $X$ sigue una \textbf{distribución binomial} con parámetros $n$ y $p$. Denotamos esto como $X \sim \text{Bin}(n, p)$.
+
+La función masa de probabilidad para una variable binomial está dada por:
+$$ P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} $$
+donde $k$ es el número de éxitos (en este caso, errores), $n$ es el número total de ensayos (preguntas), y $p$ es la probabilidad de éxito (error) en un solo ensayo.
+
+\subsection*{2. Solución para el Caso Específico ($n=10, p=0.1$)}
+
+\textbf{a) Probabilidad de que no se cometan errores}
+
+Esto corresponde a calcular $P(X = 0)$. Sustituyendo los valores $n=10$ y $p=0.1$ en la fórmula binomial:
+$$ P(X = 0) = \binom{10}{0} (0.1)^0 (1 - 0.1)^{10-0} $$
+
+Sabemos que $\binom{10}{0} = 1$ y $(0.1)^0 = 1$. Por lo tanto:
+$$ P(X = 0) = 1 \cdot 1 \cdot (0.9)^{10} $$
+$$ P(X = 0) = 0.9^{10} \approx 0.3487 $$
+
+La probabilidad de que no se cometan errores es aproximadamente \textbf{0.3487}.
+
+\textbf{b) Probabilidad de que por lo menos se cometa un error}
+
+Esto corresponde a calcular $P(X \ge 1)$. Calcular esto directamente implicaría sumar las probabilidades para $X=1, 2, ..., 10$. Sin embargo, es mucho más eficiente utilizar la \textbf{regla del complemento}. El evento \textit{al menos un error} es el complemento del evento \textit{ningún error}.
+
+$$ P(X \ge 1) = 1 - P(X = 0) $$
+
+Utilizando el resultado calculado en el inciso anterior:
+$$ P(X \ge 1) = 1 - 0.3487 $$
+$$ P(X \ge 1) = 0.6513 $$
+
+La probabilidad de que se cometa al menos un error es aproximadamente \textbf{0.6513}.
+
+\subsection*{3. Solución General para $n$ Preguntas y Probabilidad $p$}
+
+Ahora generalizamos los resultados anteriores para un examen con $n$ preguntas donde la probabilidad de error en cada una es $p$.
+
+\textbf{a) Expresión para la probabilidad de ningún error}
+
+Queremos $P(X = 0)$ en términos de $n$ y $p$:
+$$ P(X = 0) = \binom{n}{0} p^0 (1-p)^{n-0} $$
+$$ P(X = 0) = 1 \cdot 1 \cdot (1-p)^n $$
+$$ P(X = 0) = (1-p)^n $$
+
+\textbf{b) Expresión para la probabilidad de al menos un error}
+
+Queremos $P(X \ge 1)$ en términos de $n$ y $p$. Nuevamente usamos la regla del complemento:
+$$ P(X \ge 1) = 1 - P(X = 0) $$
+Sustituyendo la expresión general para $P(X=0)$:
+$$ P(X \ge 1) = 1 - (1-p)^n $$
+
+\subsection*{Resumen de Resultados}
+
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Pregunta} & \textbf{Caso Específico} & \textbf{Caso General} \\
+ & $(n=10, p=0.1)$ & $(n, p)$ \\
+\hline
+Sin errores & 0.3487 & $(1-p)^n$ \\
+\hline
+Al menos un error & 0.6513 & $1 - (1-p)^n$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection*{Interpretación}
+
+Este ejercicio ilustra una propiedad fundamental de la probabilidad en sistemas independientes: a medida que aumenta el número de componentes o eventos independientes ($n$), la probabilidad de que ocurra \textit{al menos un} evento adverso (en este caso, un error) aumenta significativamente, incluso si la probabilidad individual ($p$) es pequeña.
+
+En el caso específico del calificador, aunque solo tiene un 10\% de probabilidad de equivocarse en una pregunta individual, existe más de un 65\% de probabilidad de que cometa al menos un error en un examen de 10 preguntas. Esto destaca la importancia de considerar la acumulación de riesgos en procesos compuestos por múltiples etapas independientes.
+
+
+\textbf{Ejercicio 77}
+
+La costura de un avión requiere 25 remaches. La costura tendrá que ser retrabajada si alguno de los remaches está defectuoso. Suponga que los remaches están defectuosos independientemente uno de otro, cada uno con la misma probabilidad.
+
+a. Si 20\% de todas las costuras tienen que ser retrabajadas, ¿cuál es la probabilidad de que un remache esté defectuoso?
+
+b. ¿Qué tan pequeña deberá ser la probabilidad de un remache defectuoso para garantizar que sólo 10\% de las costuras tienen que ser retrabajadas?
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este problema, definiremos los eventos y probabilidades relevantes, utilizaremos las propiedades de la independencia de eventos y aplicaremos la regla del complemento para facilitar los cálculos.
+
+\textbf{1. Definición de Variables y Eventos}
+
+Sea $n = 25$ el número de remaches requeridos para una costura.
+Sea $p$ la probabilidad de que un remache individual esté defectuoso. Esta es la cantidad que deseamos encontrar en los incisos (a) y (b).
+Sea $q = 1 - p$ la probabilidad de que un remache individual \textit{no} esté defectuoso (es decir, esté bueno).
+
+Definimos el evento $R$ como el evento en el que una costura necesita ser retrabajada.
+Según el enunciado, una costura necesita retrabajarse \textit{si alguno de los remaches está defectuoso}.
+Dado que los remaches son independientes, la probabilidad de que \textit{ninguno} de los 25 remaches esté defectuoso es la probabilidad de que los 25 estén buenos simultáneamente.
+
+La probabilidad de que una costura \textit{no} necesite retrabajarse (es decir, que todos los remaches estén buenos) es:
+$$ P(\text{ninguno defectuoso}) = q^{25} = (1 - p)^{25} $$
+
+Por lo tanto, la probabilidad de que una costura \textit{sí} necesite retrabajarse (al menos uno defectuoso) es el complemento:
+$$ P(R) = 1 - P(\text{ninguno defectuoso}) = 1 - (1 - p)^{25} $$
+
+\vspace{0.3cm}
+
+\textbf{2. Solución del Inciso (a)}
+
+\textit{Datos:} Se nos informa que el 20\% de todas las costuras tienen que ser retrabajadas.
+Esto significa que $P(R) = 0.20$.
+
+\textit{Objetivo:} Encontrar la probabilidad $p$ de que un remache esté defectuoso.
+
+\textit{Procedimiento:}
+Igualamos la expresión de probabilidad derivada anteriormente al valor dado:
+$$ 1 - (1 - p)^{25} = 0.20 $$
+
+Despejamos el término con la potencia:
+$$ (1 - p)^{25} = 1 - 0.20 $$
+$$ (1 - p)^{25} = 0.80 $$
+
+Para despejar $p$, elevamos ambos lados a la potencia $1/25$ (o 0.04):
+$$ 1 - p = (0.80)^{1/25} $$
+$$ 1 - p = (0.80)^{0.04} $$
+
+Calculamos el valor numérico:
+$$ (0.80)^{0.04} \approx 0.991087 $$
+
+Despejamos $p$:
+$$ p = 1 - 0.991087 $$
+$$ p \approx 0.008913 $$
+
+\textit{Resultado:} La probabilidad de que un remache esté defectuoso es aproximadamente \textbf{0.0089} (o 0.89\%).
+
+\vspace{0.3cm}
+
+\textbf{3. Solución del Inciso (b)}
+
+\textit{Datos:} Se desea garantizar que sólo el 10\% de las costuras tengan que ser retrabajadas.
+Esto significa que queremos que $P(R) = 0.10$.
+
+\textit{Objetivo:} Encontrar qué tan pequeña debe ser la probabilidad $p$ del remache defectuoso para cumplir esta condición.
+
+\textit{Procedimiento:}
+Planteamos la ecuación con el nuevo valor de probabilidad para la costura:
+$$ 1 - (1 - p)^{25} = 0.10 $$
+
+Despejamos el término con la potencia:
+$$ (1 - p)^{25} = 1 - 0.10 $$
+$$ (1 - p)^{25} = 0.90 $$
+
+Elevamos ambos lados a la potencia $1/25$:
+$$ 1 - p = (0.90)^{1/25} $$
+$$ 1 - p = (0.90)^{0.04} $$
+
+Calculamos el valor numérico:
+$$ (0.90)^{0.04} \approx 0.995794 $$
+
+Despejamos $p$:
+$$ p = 1 - 0.995794 $$
+$$ p \approx 0.004206 $$
+
+\textit{Resultado:} La probabilidad de que un remache esté defectuoso debe ser como máximo aproximadamente \textbf{0.0042} (o 0.42\%) para garantizar que sólo el 10\% de las costuras requieran retrabajo.
+
+\vspace{0.3cm}
+
+\textbf{4. Interpretación y Conclusión}
+
+Este ejercicio ilustra la sensibilidad de los sistemas compuestos por múltiples componentes independientes.
+
+\begin{itemize}
+    \item En el inciso (a), vemos que incluso con una probabilidad muy baja de falla individual ($p \approx 0.009$), la probabilidad de falla del sistema completo (la costura) se eleva significativamente (al 20\%) debido a la acumulación de riesgos a través de los 25 remaches.
+    \item En el inciso (b), para reducir la probabilidad de falla del sistema a la mitad (del 20\% al 10\%), la calidad de los componentes individuales debe mejorar drásticamente, reduciendo la probabilidad de falla individual de aproximadamente 0.0089 a 0.0042 (más de la mitad).
+\end{itemize}
+
+Esto resalta un principio importante en la ingeniería de confiabilidad: mejorar la confiabilidad de un sistema que depende de muchos componentes en serie (donde falla uno, falla todo) requiere mejoras sustanciales en la confiabilidad de cada componente individual.
+
+\textbf{Respuestas Finales:}
+\begin{itemize}
+    \item \textbf{Inciso a:} $p \approx 0.0089$
+    \item \textbf{Inciso b:} $p \approx 0.0042$
+\end{itemize}
+
+\textbf{Ejercicio 78}
+
+Una caldera tiene cinco válvulas de alivio idénticas. La probabilidad de que cualquier válvula particular se abra en un momento de demanda es de 0.95. Suponiendo que operan independientemente, calcule P(por lo menos una válvula se abre) y P(por lo menos una válvula no se abre).
+
+\vspace{0.5cm}
+
+\textbf{Solución}
+
+Para resolver este ejercicio, definiremos los eventos relevantes y utilizaremos las propiedades de la probabilidad para eventos independientes y complementarios.
+
+\textbf{1. Definición de Eventos y Probabilidades}
+
+Sean $A_i$ los eventos definidos para cada una de las cinco válvulas de alivio, donde $i = 1, 2, 3, 4, 5$.
+
+\begin{itemize}
+    \item Sea $A_i$ el evento de que la válvula $i$-ésima \textit{se abre} en un momento de demanda.
+    \item Sea $A_i'$ el evento complementario, es decir, que la válvula $i$-ésima \textit{no se abre}.
+\end{itemize}
+
+Según el enunciado, tenemos la siguiente información:
+\begin{itemize}
+    \item La probabilidad de que una válvula particular se abra es constante: $P(A_i) = 0.95$ para todo $i$.
+    \item Por lo tanto, la probabilidad de que una válvula particular \textit{no} se abre es: $P(A_i') = 1 - P(A_i) = 1 - 0.95 = 0.05$.
+    \item Las válvulas operan \textit{independientemente}. Esto implica que la ocurrencia de un evento en una válvula no afecta la probabilidad de ocurrencia en las otras válvulas. Matemáticamente, la probabilidad de la intersección de eventos es el producto de sus probabilidades individuales.
+\end{itemize}
+
+\textbf{2. Cálculo de P(por lo menos una válvula se abre)}
+
+El evento \textit{por lo menos una válvula se abre} es el complemento del evento \textit{ninguna válvula se abre}. Es decir, si definimos $E$ como el evento de que al menos una válvula se abre, entonces $E'$ es el evento de que ninguna válvula se abre.
+
+La probabilidad de que \textit{ninguna} válvula se abre significa que la válvula 1 no se abre, \textit{y} la válvula 2 no se abre, \textit{y} así sucesivamente hasta la válvula 5.
+
+$$ P(\text{ninguna se abre}) = P(A_1' \cap A_2' \cap A_3' \cap A_4' \cap A_5') $$
+
+Debido a la independencia de las válvulas, podemos multiplicar las probabilidades individuales:
+
+$$ P(\text{ninguna se abre}) = P(A_1') \cdot P(A_2') \cdot P(A_3') \cdot P(A_4') \cdot P(A_5') $$
+
+Sustituyendo los valores conocidos ($P(A_i') = 0.05$):
+
+$$ P(\text{ninguna se abre}) = (0.05)^5 $$
+
+Calculamos el valor:
+
+$$ (0.05)^5 = 0.0000003125 $$
+
+Ahora, utilizamos la regla del complemento para encontrar la probabilidad de que \textit{por lo menos una} se abra:
+
+$$ P(\text{por lo menos una se abre}) = 1 - P(\text{ninguna se abre}) $$
+$$ P(\text{por lo menos una se abre}) = 1 - 0.0000003125 $$
+$$ P(\text{por lo menos una se abre}) = 0.9999996875 $$
+
+Dado que la probabilidad de que una válvula se abra es muy alta (0.95), es extremadamente probable que al menos una se abra cuando hay cinco válvulas.
+
+\textbf{3. Cálculo de P(por lo menos una válvula no se abre)}
+
+De manera análoga al inciso anterior, el evento \textit{por lo menos una válvula no se abre} es el complemento del evento \textit{todas las válvulas se abren}.
+
+La probabilidad de que \textit{todas} las válvulas se abren significa que la válvula 1 se abre, \textit{y} la válvula 2 se abre, ..., \textit{y} la válvula 5 se abre.
+
+$$ P(\text{todas se abren}) = P(A_1 \cap A_2 \cap A_3 \cap A_4 \cap A_5) $$
+
+Nuevamente, aprovechando la independencia:
+
+$$ P(\text{todas se abren}) = P(A_1) \cdot P(A_2) \cdot P(A_3) \cdot P(A_4) \cdot P(A_5) $$
+
+Sustituyendo los valores conocidos ($P(A_i) = 0.95$):
+
+$$ P(\text{todas se abren}) = (0.95)^5 $$
+
+Calculamos el valor:
+
+$$ (0.95)^5 \approx 0.7737809375 $$
+
+Ahora, utilizamos la regla del complemento para encontrar la probabilidad de que \textit{por lo menos una no se abra}:
+
+$$ P(\text{por lo menos una no se abre}) = 1 - P(\text{todas se abren}) $$
+$$ P(\text{por lo menos una no se abre}) = 1 - 0.7737809375 $$
+$$ P(\text{por lo menos una no se abre}) \approx 0.2262190625 $$
+
+\textbf{Resumen de Resultados}
+
+\begin{itemize}
+    \item La probabilidad de que por lo menos una válvula se abra es aproximadamente \textbf{0.9999997}.
+    \item La probabilidad de que por lo menos una válvula no se abra es aproximadamente \textbf{0.2262}.
+\end{itemize}
+
+\textbf{Interpretación}
+
+Estos resultados ilustran la redundancia en los sistemas de seguridad. Aunque una sola válvula tiene una probabilidad significativa de falla (0.05 de no abrirse), tener cinco válvulas independientes reduce drásticamente la probabilidad de que \textit{ninguna} funcione (casi cero). Sin embargo, la probabilidad de que \textit{alguna} falla ocurra (al menos una no se abra) sigue siendo considerable (alrededor del 22.6\%), lo cual es importante para el mantenimiento y la planificación de reparaciones.
 
 \bibliographystyle{plainurl}
 \bibliography{bibliografia} 

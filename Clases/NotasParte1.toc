@@ -1,91 +1,18 @@
 \babel@toc {spanish}{}\relax 
-\contentsline {section}{\numberline {1}Espacios Muestrales y Eventos}{3}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Experimentos y el Espacio Muestral}{3}{subsection.1.1}%
-\contentsline {subsubsection}{\numberline {1.1.1}Definición de Espacio Muestral}{3}{subsubsection.1.1.1}%
-\contentsline {subsubsection}{\numberline {1.1.2}Ejemplos de Espacios Muestrales}{3}{subsubsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.2}Eventos}{3}{subsection.1.2}%
-\contentsline {subsubsection}{\numberline {1.2.1}Tipos de Eventos}{3}{subsubsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.3}Relaciones de la Teoría de Conjuntos}{3}{subsection.1.3}%
-\contentsline {subsubsection}{\numberline {1.3.1}Complemento, Unión e Intersección}{3}{subsubsection.1.3.1}%
-\contentsline {subsubsection}{\numberline {1.3.2}Eventos Mutuamente Excluyentes}{3}{subsubsection.1.3.2}%
-\contentsline {section}{\numberline {2}Probabilidad y sus Axiomas}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Los Axiomas de Probabilidad}{3}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}Primer y Segundo Axioma}{4}{subsubsection.2.1.1}%
-\contentsline {subsubsection}{\numberline {2.1.2}Tercer Axioma}{4}{subsubsection.2.1.2}%
-\contentsline {subsection}{\numberline {2.2}Interpretaciones de la Probabilidad}{4}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Interpretación Frecuentista}{4}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Interpretación Subjetiva}{4}{subsubsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.3}Propiedades Derivadas y Resultados Igualmente Probables}{4}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Regla del Complemento y de la Adición}{4}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Resultados Igualmente Probables}{4}{subsubsection.2.3.2}%
-\contentsline {section}{\numberline {3}Probabilidad Condicional}{4}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Definición de Probabilidad Condicional}{4}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}La Regla de Multiplicación}{5}{subsubsection.3.1.1}%
-\contentsline {section}{\numberline {4}Independencia de Eventos}{5}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Definición Formal de Independencia}{5}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}La Regla de Multiplicación para Eventos Independientes}{5}{subsubsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.2}Independencia Mutua de $n$ Eventos}{5}{subsubsection.4.1.2}%
-\contentsline {section}{\numberline {5}Teorema de Bayes}{5}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Ley de Probabilidad Total}{5}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Formulación del Teorema de Bayes}{5}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}Interpretación de Probabilidades Previas y Posteriores}{5}{subsubsection.5.2.1}%
-\contentsline {section}{\numberline {6}Técnicas de Conteo}{6}{section.6}%
-\contentsline {subsection}{\numberline {6.1}La Regla del Producto}{6}{subsection.6.1}%
-\contentsline {subsubsection}{\numberline {6.1.1}Regla para Pares Ordenados}{6}{subsubsection.6.1.1}%
-\contentsline {subsubsection}{\numberline {6.1.2}Regla Generalizada ($k$-tuplas)}{6}{subsubsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.2}Permutaciones}{6}{subsection.6.2}%
-\contentsline {subsubsection}{\numberline {6.2.1}Definición y Notación}{6}{subsubsection.6.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.2}Formulación Matemática}{6}{subsubsection.6.2.2}%
-\contentsline {subsection}{\numberline {6.3}Combinaciones}{6}{subsection.6.3}%
-\contentsline {subsubsection}{\numberline {6.3.1}Definición y Notación}{6}{subsubsection.6.3.1}%
-\contentsline {subsubsection}{\numberline {6.3.2}Formulación Matemática}{6}{subsubsection.6.3.2}%
-\contentsline {subsubsection}{\numberline {6.3.3}Propiedades de los Coeficientes Binomiales}{7}{subsubsection.6.3.3}%
-\contentsline {section}{\numberline {7}Variables Aleatorias}{7}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Definición de Variable Aleatoria}{7}{subsection.7.1}%
-\contentsline {subsubsection}{\numberline {7.1.1}Clasificación de Variables Aleatorias}{7}{subsubsection.7.1.1}%
-\contentsline {section}{\numberline {8}Distribuciones de Probabilidad y Funciones de Densidad}{7}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Caso Discreto: Función Masa de Probabilidad (fmp)}{7}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Caso Continuo: Función de Densidad de Probabilidad (fdp)}{7}{subsection.8.2}%
-\contentsline {section}{\numberline {9}Función de Distribución Acumulativa (CDF)}{8}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Definición Matemática}{8}{subsection.9.1}%
-\contentsline {subsubsection}{\numberline {9.1.1}Para Variables Discretas}{8}{subsubsection.9.1.1}%
-\contentsline {subsubsection}{\numberline {9.1.2}Para Variables Continuas}{8}{subsubsection.9.1.2}%
-\contentsline {subsection}{\numberline {9.2}Cálculo de Probabilidades de Intervalo}{8}{subsection.9.2}%
-\contentsline {section}{\numberline {10}Valores Esperados y Varianza}{8}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Valor Esperado (Media de la Población)}{8}{subsection.10.1}%
-\contentsline {subsubsection}{\numberline {10.1.1}Formulación Matemática}{8}{subsubsection.10.1.1}%
-\contentsline {subsubsection}{\numberline {10.1.2}Reglas del Valor Esperado}{8}{subsubsection.10.1.2}%
-\contentsline {subsection}{\numberline {10.2}Varianza y Desviación Estándar}{8}{subsection.10.2}%
-\contentsline {subsubsection}{\numberline {10.2.1}Definición}{8}{subsubsection.10.2.1}%
-\contentsline {subsubsection}{\numberline {10.2.2}Fórmula Abreviada}{8}{subsubsection.10.2.2}%
-\contentsline {subsubsection}{\numberline {10.2.3}Reglas de la Varianza}{8}{subsubsection.10.2.3}%
-\contentsline {section}{\numberline {11}La Distribución de Probabilidad Binomial}{8}{section.11}%
-\contentsline {subsection}{\numberline {11.1}El Experimento Binomial}{9}{subsection.11.1}%
-\contentsline {subsubsection}{\numberline {11.1.1}Variable Aleatoria de Bernoulli}{9}{subsubsection.11.1.1}%
-\contentsline {subsection}{\numberline {11.2}La Variable Aleatoria Binomial}{9}{subsection.11.2}%
-\contentsline {subsubsection}{\numberline {11.2.1}Definición}{9}{subsubsection.11.2.1}%
-\contentsline {subsection}{\numberline {11.3}Función Masa de Probabilidad (fmp)}{9}{subsection.11.3}%
-\contentsline {subsubsection}{\numberline {11.3.1}Derivación Matemática}{9}{subsubsection.11.3.1}%
-\contentsline {subsubsection}{\numberline {11.3.2}Ejemplo: Preferencia de Bebidas}{9}{subsubsection.11.3.2}%
-\contentsline {subsection}{\numberline {11.4}Función de Distribución Acumulativa (CDF)}{9}{subsection.11.4}%
-\contentsline {subsubsection}{\numberline {11.4.1}Definición de $B(x; n, p)$}{9}{subsubsection.11.4.1}%
-\contentsline {subsubsection}{\numberline {11.4.2}Cálculo de Intervalos}{10}{subsubsection.11.4.2}%
-\contentsline {subsection}{\numberline {11.5}Media y Varianza de la Distribución Binomial}{10}{subsection.11.5}%
-\contentsline {subsubsection}{\numberline {11.5.1}Valor Esperado}{10}{subsubsection.11.5.1}%
-\contentsline {subsubsection}{\numberline {11.5.2}Varianza y Desviación Estándar}{10}{subsubsection.11.5.2}%
-\contentsline {subsection}{\numberline {11.6}Aproximación por Población Finita}{10}{subsection.11.6}%
-\contentsline {subsubsection}{\numberline {11.6.1}Regla Empírica}{10}{subsubsection.11.6.1}%
-\contentsline {section}{\numberline {12}Distribución de Probabilidad de Poisson}{10}{section.12}%
-\contentsline {subsection}{\numberline {12.1}Definición y Parámetros}{10}{subsection.12.1}%
-\contentsline {subsubsection}{\numberline {12.1.1}La Distribución de Poisson como Límite}{10}{subsubsection.12.1.1}%
-\contentsline {subsubsection}{\numberline {12.1.2}Procesos de Poisson}{10}{subsubsection.12.1.2}%
-\contentsline {section}{\numberline {13}Variables Aleatorias Continuas}{10}{section.13}%
-\contentsline {subsection}{\numberline {13.1}Funciones de Densidad de Probabilidad (fdp)}{11}{subsection.13.1}%
-\contentsline {section}{\numberline {14}Percentiles de una Distribución Continua}{11}{section.14}%
-\contentsline {subsection}{\numberline {14.1}Definición Matemática}{11}{subsection.14.1}%
-\contentsline {subsubsection}{\numberline {14.1.1}La Mediana}{11}{subsubsection.14.1.1}%
-\contentsline {section}{\numberline {15}La Distribución Normal}{11}{section.15}%
-\contentsline {subsection}{\numberline {15.1}Función de Densidad Normal}{11}{subsection.15.1}%
-\contentsline {subsection}{\numberline {15.2}Distribución Normal Estándar}{11}{subsection.15.2}%
-\contentsline {subsubsection}{\numberline {15.2.1}Estandarización}{11}{subsubsection.15.2.1}%
-\contentsline {subsection}{\numberline {15.3}La Regla Empírica}{11}{subsection.15.3}%
+\contentsline {section}{\numberline {1}Pobabilidad}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Espacios muestrales y eventos}{2}{subsection.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.1}El espacio muestral de un experimento}{2}{subsubsection.1.1.1}%
+\contentsline {subsubsection}{\numberline {1.1.2}Eventos}{2}{subsubsection.1.1.2}%
+\contentsline {subsubsection}{\numberline {1.1.3}Algunas relaciones de la teoría de conjuntos}{3}{subsubsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.2}Axiomas,interpretacionesy propiedades de probabilidad}{5}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Interpretación de la probabilidad}{6}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Determinación de probabilidades sistemáticamente}{6}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}Resultados igualmente probables}{6}{subsubsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.3}Técnicas de conteo}{10}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}Una regla de producto más general}{11}{subsubsection.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.3.2}Permutaciones y combinaciones}{11}{subsubsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.4}Probabilidad Condicional}{18}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Regla de multiplicación para $P(A\cap B)$}{18}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Teorema de Bayes}{19}{subsubsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.5}Independencia}{24}{subsection.1.5}%
+\contentsline {subsubsection}{\numberline {1.5.1}Independencia de más de dos eventos}{25}{subsubsection.1.5.1}%
