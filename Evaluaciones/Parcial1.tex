@@ -1,0 +1,414 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Parcial 1}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+
+\begin{document}
+
+
+\section{Problema 1: Encuentro aleatorio}
+Un evento astronómico raro ocurrirá en una ventana de observación específica de una hora. Dos observadores intentan registrarlo simultáneamente. El primero puede observar durante $10$ minutos desde que inicia la observación. El segundo puede observar $20$ minutos bajo las mismas condiciones. Suponga que sus tiempos de inicio de observación son independientes y uniformes.
+\begin{enumerate}[a.]
+	\item $(10\%)$ Sean  $T_1$ y $T_2$ los tiempos de inicio de los observadores $1$ y $2$ respectivamente. Escriba las funciones de distribución de probabilidad para $T_1$ y $T_2$ y su función de densidad conjunta.
+	\item $(5\%)$ Haga una representación gráfica de $(t_1,t_2)$ para la que los observadores pueden estar observando simultáneamente.
+	\item $(15\%)$ ¿Cuál es la probabilidad de que ambos observadores esten observando simultáneamente en algún instante?
+\end{enumerate}
+
+\subsection{Solución}
+\begin{enumerate}[a.]
+\item Bajo la interpretación indicada, cada observador puede iniciar en cualquier instante de la hora de observación, incluso si parte de su intervalo queda fuera de la ventana. Por tanto:
+$$T_1 \sim \mathrm{Unif}(0,60), \qquad T_2 \sim \mathrm{Unif}(0,60),$$
+e independientes.
+
+Las densidades marginales son
+$$
+f_{T_1}(t_1)=
+\begin{cases}
+\frac{1}{60}, & 0\le t_1\le 60,\\
+0, & \text{en otro caso},
+\end{cases}
+\qquad
+f_{T_2}(t_2)=
+\begin{cases}
+\frac{1}{60}, & 0\le t_2\le 60,\\
+0, & \text{en otro caso}.
+\end{cases}
+$$
+
+y las funciones de distribución acumulada son
+$$
+F_{T_1}(t_1)=
+\begin{cases}
+0, & t_1<0,\\
+\frac{t_1}{60}, & 0\le t_1\le 60,\\
+1, & t_1>60,
+\end{cases}
+\qquad
+F_{T_2}(t_2)=
+\begin{cases}
+0, & t_2<0,\\
+\frac{t_2}{60}, & 0\le t_2\le 60,\\
+1, & t_2>60.
+\end{cases}
+$$
+
+La densidad conjunta, por independencia, es uniforme sobre el cuadrado $[0,60]\times[0,60]$:
+$$
+f_{T_1,T_2}(t_1,t_2)=f_{T_1}(t_1)f_{T_2}(t_2)=
+\begin{cases}
+\frac{1}{3600}, & (t_1,t_2)\in[0,60]\times[0,60],\\
+0, & \text{en otro caso}.
+\end{cases}
+$$
+
+\item El observador 1 observa en el intervalo $[T_1,\,T_1+10]$ y el observador 2 en $[T_2,\,T_2+20]$ (minutos).
+Hay simultaneidad en algún instante si y sólo si los intervalos se traslapan, es decir,
+$$[T_1,T_1+10]\cap[T_2,T_2+20]\neq\varnothing.$$
+Esto equivale a exigir simultáneamente
+$$T_1 \le T_2+20 \qquad \text{y} \qquad T_2 \le T_1+10,$$
+o, de manera equivalente,
+$$T_2 \ge T_1-10, \qquad T_2 \le T_1+20,$$
+junto con el soporte $0\le T_1\le 60$, $0\le T_2\le 60$.
+
+Gráficamente, en el plano $(t_1,t_2)$, la región de simultaneidad es la intersección del cuadrado $[0,60]\times[0,60]$ con la franja delimitada por las rectas $t_2=t_1-10$ y $t_2=t_1+20$:
+
+\begin{center}
+\shorthandoff{<>}
+\begin{tikzpicture}[scale=0.09]
+  % axes
+  \draw[->] (-3,0) -- (67,0) node[below right] {$t_1$ (min)};
+  \draw[->] (0,-3) -- (0,67) node[above left] {$t_2$ (min)};
+
+  % support square
+  \draw[thick] (0,0) rectangle (60,60);
+
+  % boundary lines of the band
+  \draw[blue, thick] (10,0) -- (60,50)
+    node[pos=0.92, below right, fill=white, inner sep=1pt] {$t_2=t_1-10$};
+  \draw[red, thick] (0,20) -- (40,60)
+    node[pos=0.78, above left, fill=white, inner sep=1pt] {$t_2=t_1+20$};
+
+  % feasible region: (0,0)-(10,0)-(60,50)-(60,60)-(40,60)-(0,20)
+  \fill[gray!25] (0,0) -- (10,0) -- (60,50) -- (60,60) -- (40,60) -- (0,20) -- cycle;
+
+  % vertices
+  \foreach \x/\y in {0/0,10/0,60/50,60/60,40/60,0/20}{
+    \fill (\x,\y) circle (1.15);
+  }
+
+  % vertex labels (offset to avoid overlap)
+  \node[below left]  at (0,0)   {$(0,0)$};
+  \node[below]       at (10,0)  {$(10,0)$};
+  \node[right]       at (60,50) {$(60,50)$};
+  \node[above right] at (60,60) {$(60,60)$};
+  \node[above]       at (40,60) {$(40,60)$};
+  \node[left]        at (0,20)  {$(0,20)$};
+
+  % region label
+  \node[fill=white, inner sep=1.2pt] at (26,31) {Región de simultaneidad};
+\end{tikzpicture}
+\shorthandon{<>}
+\end{center}
+
+\item Como $(T_1,T_2)$ es uniforme sobre el cuadrado $[0,60]\times[0,60]$, la probabilidad buscada es el área de la región sombreada dividida entre $60\cdot 60$.
+
+Para un $t_1$ fijo, los valores admisibles de $t_2$ satisfacen:
+$$\max\{0,t_1-10\}\le t_2 \le \min\{60,t_1+20\}.$$
+Luego la ``altura'' de la región (en dirección $t_2$) es
+$$h(t_1)=\min\{60,t_1+20\}-\max\{0,t_1-10\}.$$
+
+Partimos según los puntos donde cambian los recortes: $t_1=10$ (cuando $t_1-10$ cruza $0$) y $t_1=40$ (cuando $t_1+20$ cruza $60$).
+
+\begin{itemize}
+\item Si $0\le t_1\le 10$:
+$$h(t_1)=(t_1+20)-0=t_1+20.$$
+\item Si $10\le t_1\le 40$:
+$$h(t_1)=(t_1+20)-(t_1-10)=30.$$
+\item Si $40\le t_1\le 60$:
+$$h(t_1)=60-(t_1-10)=70-t_1.$$
+\end{itemize}
+
+El área de simultaneidad es entonces
+$$
+A=\int_0^{10}(t_1+20)\,dt_1+\int_{10}^{40}30\,dt_1+\int_{40}^{60}(70-t_1)\,dt_1.
+$$
+Calculamos cada término:
+$$
+\int_0^{10}(t_1+20)\,dt_1=\left[\frac{t_1^2}{2}+20t_1\right]_0^{10}=50+200=250,
+$$
+$$
+\int_{10}^{40}30\,dt_1=30(30)=900,
+$$
+$$
+\int_{40}^{60}(70-t_1)\,dt_1=\left[70t_1-\frac{t_1^2}{2}\right]_{40}^{60}=(4200-1800)-(2800-800)=400.
+$$
+Por tanto,
+$$A=250+900+400=1550.$$
+
+El área total del cuadrado es $60\cdot 60=3600$, y como la densidad conjunta es constante en dicho cuadrado, se sigue que
+$$
+P(\text{simultaneidad})=\frac{A}{3600}=\frac{1550}{3600}=\frac{31}{72}\approx 0.431.
+$$
+
+\textit{Interpretación:} si ambos inician en un instante aleatorio de la hora (sin exigir que su sesión completa quede dentro), la probabilidad de que sus intervalos de observación se traslapen en algún instante es $31/72$, un valor menor que $1/2$ porque ahora es posible que alguno empiece muy cerca del final de la hora, reduciendo la oportunidad de coincidencia.
+\end{enumerate}
+
+\section{Problema 2: Estructura galáctica}
+En un modelo simplificado del disco de una galaxia, la distribución vertical de estrellas respecto al plano galáctico se describe mediante la siguiente función de distribución de probabilidad:
+
+$$f_Z(z) = \frac{1}{2h}e^{-|z|/h}$$
+
+con $z\in\mathbb{R}$ y $h>0$ es la escala de altura del disco.
+
+Suponga que la distancia radial efectiva $R$ de una estrella al centro galáctico depende de su altura $Z$ según la relación
+
+$$R=R_0 + \alpha Z^2$$
+
+donde $R_0>0$ y $\alpha >0$ son constantes.
+
+\begin{enumerate}[a.]
+	\item $(15\%)$ Determine la función de distribución de probabilidad de $R$, $g(R)$.
+	\item $(10\%)$ Verifique explícitamente que la función de densidad de probabilidad obtenida está correctamente normalizada.
+	\item Calcule los valores esperados $E[Z]$ y $E[R]$
+	
+	\textit{Ayuda:} $$\int_{0}^{\infty}u^ne^{-u}du=n!,\quad n\in\mathbb{N}$$
+\end{enumerate}
+
+\subsection{Solución}
+
+\begin{enumerate}[a.]
+\item Dado
+$$
+f_Z(z)=\frac{1}{2h}e^{-|z|/h},\qquad z\in\mathbb{R},
+$$
+y la transformación
+$$
+R=R_0+\alpha Z^2,\qquad R_0>0,\ \alpha>0,
+$$
+se tiene que el soporte de $R$ es $R\in[R_0,\infty)$.
+
+Para $r<R_0$, claramente $P(R\le r)=0$. Para $r\ge R_0$,
+$$
+P(R\le r)=P(R_0+\alpha Z^2\le r)=P\!\left(Z^2\le \frac{r-R_0}{\alpha}\right)
+= P\!\left(|Z|\le \sqrt{\frac{r-R_0}{\alpha}}\right).
+$$
+Sea
+$$
+a(r)=\sqrt{\frac{r-R_0}{\alpha}}\ge 0.
+$$
+Entonces
+$$
+F_R(r)=P(-a(r)\le Z\le a(r))=\int_{-a(r)}^{a(r)}\frac{1}{2h}e^{-|z|/h}\,dz
+=2\int_{0}^{a(r)}\frac{1}{2h}e^{-z/h}\,dz
+=\int_{0}^{a(r)}\frac{1}{h}e^{-z/h}\,dz.
+$$
+Así,
+$$
+F_R(r)=\left[-e^{-z/h}\right]_{0}^{a(r)}=1-e^{-a(r)/h}
+=1-\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right),\qquad r\ge R_0.
+$$
+Derivando obtenemos la densidad $g(r)=f_R(r)=F_R'(r)$ para $r>R_0$:
+$$
+g(r)=\frac{d}{dr}\left(1-\exp\!\left[-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right]\right)
+=\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right)\cdot
+\frac{1}{h}\cdot \frac{d}{dr}\left(\sqrt{\frac{r-R_0}{\alpha}}\right).
+$$
+Como
+$$
+\frac{d}{dr}\left(\sqrt{\frac{r-R_0}{\alpha}}\right)=\frac{1}{2\sqrt{\alpha(r-R_0)}},
+$$
+se sigue que
+$$
+g(r)=
+\begin{cases}
+\dfrac{1}{2h\sqrt{\alpha(r-R_0)}}\exp\!\left(-\dfrac{1}{h}\sqrt{\dfrac{r-R_0}{\alpha}}\right), & r\ge R_0,\\[4mm]
+0, & r<R_0.
+\end{cases}
+$$
+\textit{Observación:} la singularidad integrable $1/\sqrt{r-R_0}$ en $r=R_0$ es esperable por tratarse de la imagen de una transformación cuadrática $Z^2$.
+
+\item Verificamos la normalización:
+$$
+\int_{-\infty}^{\infty} g(r)\,dr=\int_{R_0}^{\infty}\frac{1}{2h\sqrt{\alpha(r-R_0)}}
+\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right)\,dr.
+$$
+Hacemos el cambio
+$$
+u=\sqrt{\frac{r-R_0}{\alpha}}\quad\Longrightarrow\quad r=R_0+\alpha u^2,\ \ dr=2\alpha u\,du,
+$$
+y además $\sqrt{\alpha(r-R_0)}=\sqrt{\alpha\cdot \alpha u^2}=\alpha u$ (para $u\ge 0$). Entonces
+$$
+\int_{R_0}^{\infty} g(r)\,dr
+=\int_{0}^{\infty}\frac{1}{2h(\alpha u)}e^{-u/h}\,(2\alpha u)\,du
+=\int_0^\infty \frac{1}{h}e^{-u/h}\,du
+=\left[-e^{-u/h}\right]_{0}^{\infty}=1.
+$$
+Por tanto, $g(r)$ está correctamente normalizada.
+
+\item Primero,
+$$
+E[Z]=\int_{-\infty}^{\infty} z\,\frac{1}{2h}e^{-|z|/h}\,dz=0,
+$$
+porque la densidad es par y la función $z$ es impar (distribución simétrica alrededor de $0$).
+
+Para $E[R]$, usamos $R=R_0+\alpha Z^2$:
+$$
+E[R]=E[R_0+\alpha Z^2]=R_0+\alpha E[Z^2].
+$$
+Calculamos $E[Z^2]$:
+$$
+E[Z^2]=\int_{-\infty}^{\infty} z^2\,\frac{1}{2h}e^{-|z|/h}\,dz
+=2\int_{0}^{\infty} z^2\,\frac{1}{2h}e^{-z/h}\,dz
+=\int_0^\infty \frac{1}{h}z^2 e^{-z/h}\,dz.
+$$
+Con el cambio $u=z/h$ (i.e. $z=hu$, $dz=h\,du$),
+$$
+E[Z^2]=\int_0^\infty \frac{1}{h}(h^2u^2)e^{-u}(h\,du)
+=h^2\int_0^\infty u^2 e^{-u}\,du.
+$$
+Usando la ayuda $\int_0^\infty u^n e^{-u}\,du=n!$ con $n=2$:
+$$
+\int_0^\infty u^2 e^{-u}\,du=2!=2,
+$$
+por tanto
+$$
+E[Z^2]=2h^2
+\quad\Longrightarrow\quad
+E[R]=R_0+\alpha(2h^2)=R_0+2\alpha h^2.
+$$
+
+\textit{Interpretación:} el disco es simétrico respecto al plano ($E[Z]=0$), pero la relación cuadrática $R=R_0+\alpha Z^2$ hace que, en promedio, la distancia radial efectiva aumente en $2\alpha h^2$ respecto a $R_0$, controlado por el espesor vertical (vía $h$) y el acoplamiento $\alpha$.
+\end{enumerate}
+
+\section{Problema 3: Detección de exoplanetas y actualización bayesiana}
+En un programa de búsqueda de exoplanetas, se estima que el $15\%$ de las estrellas observadas albergan un planeta detectable mediante técnicas actuales, mientras que el resto no presenta señales planetarias. Considere que mediante el método de velocidad radial, se detecta correctamente un planeta con probabilidad de $0.9$ y se produce una detección falsa con probabilidad $0.05$ cuando no hay planeta.
+
+\begin{enumerate}[a.]
+	\item $(10\%)$ Si una estrella es clasificada como \textit{con planeta} por este método, ¿cuál es la probabilidad de que en realidad no tenga planeta?
+	\item Para confirmar la detección, se utiliza un segundo método independiente (por ejemplo, tránsitos), con las mismas características estadísticas. Si este otro método también indica la presencia de un planeta, ¿Cuál es la probabilidad de que la detección sea falsa?
+	\item Muestre que bajo independencia condicional de los métodos, dado el estado real del sistema (con o sin planeta), el resultado de aplicar los métodos secuenciales es equivalente a considerarlos simultáneamente.
+\end{enumerate}
+
+\subsection{Solución}
+\begin{enumerate}[a.]
+\item Sea $P$ el evento ``la estrella tiene planeta detectable'' y $\bar P$ su complemento. Sea $D_1$ el evento ``el método 1 clasifica como con planeta''.
+
+Datos:
+$$P(P)=0.15,\qquad P(\bar P)=0.85,$$
+$$P(D_1\mid P)=0.9,\qquad P(D_1\mid \bar P)=0.05.$$
+
+Se pide $P(\bar P\mid D_1)$. Por Bayes:
+$$
+P(\bar P\mid D_1)=\frac{P(D_1\mid \bar P)P(\bar P)}{P(D_1)}.
+$$
+y por probabilidad total,
+$$
+P(D_1)=P(D_1\mid P)P(P)+P(D_1\mid \bar P)P(\bar P)
+=0.9(0.15)+0.05(0.85)=0.135+0.0425=0.1775.
+$$
+Entonces
+$$
+P(\bar P\mid D_1)=\frac{0.05(0.85)}{0.1775}=\frac{0.0425}{0.1775}
+=\frac{85}{355}=\frac{17}{71}\approx 0.2394.
+$$
+
+\textit{Interpretación:} aun con una eficiencia alta ($0.9$) el porcentaje de falsos positivos a posteriori no es despreciable porque la prevalencia de planetas ($15\%$) es relativamente baja.
+
+\item Ahora se aplica un segundo método independiente con las mismas características. Sea $D_2$ el evento ``el método 2 clasifica como con planeta''. Se asume independencia condicional dado el estado real:
+$$
+P(D_1\cap D_2\mid P)=P(D_1\mid P)P(D_2\mid P),\qquad
+P(D_1\cap D_2\mid \bar P)=P(D_1\mid \bar P)P(D_2\mid \bar P).
+$$
+Como tiene las mismas características:
+$$P(D_2\mid P)=0.9,\qquad P(D_2\mid \bar P)=0.05.$$
+
+Se pide $P(\bar P\mid D_1\cap D_2)$. Por Bayes:
+$$
+P(\bar P\mid D_1\cap D_2)=\frac{P(D_1\cap D_2\mid \bar P)P(\bar P)}{P(D_1\cap D_2)}.
+$$
+Calculamos:
+$$
+P(D_1\cap D_2\mid P)=0.9\cdot 0.9=0.81,
+\qquad
+P(D_1\cap D_2\mid \bar P)=0.05\cdot 0.05=0.0025.
+$$
+Luego,
+$$
+P(D_1\cap D_2)=0.81(0.15)+0.0025(0.85)=0.1215+0.002125=0.123625.
+$$
+Por tanto,
+$$
+P(\bar P\mid D_1\cap D_2)=\frac{0.0025(0.85)}{0.123625}
+=\frac{0.002125}{0.123625}
+=\frac{17}{989}\approx 0.01719.
+$$
+
+\textit{Interpretación:} exigir confirmación por dos métodos reduce drásticamente la probabilidad de falso positivo (de $\approx 0.239$ a $\approx 0.017$), porque la probabilidad de doble falso positivo bajo $\bar P$ es $0.05^2$.
+
+\item (Equivalencia secuencial vs simultánea bajo independencia condicional)
+
+\textbf{Enfoque simultáneo.} Considerar los resultados conjuntos $(D_1,D_2)$ conduce a la posterior:
+$$
+P(P\mid D_1\cap D_2)=\frac{P(D_1\cap D_2\mid P)P(P)}{P(D_1\cap D_2\mid P)P(P)+P(D_1\cap D_2\mid \bar P)P(\bar P)}.
+$$
+Bajo independencia condicional,
+$$
+P(D_1\cap D_2\mid P)=P(D_1\mid P)P(D_2\mid P),\qquad
+P(D_1\cap D_2\mid \bar P)=P(D_1\mid \bar P)P(D_2\mid \bar P).
+$$
+
+\textbf{Enfoque secuencial.} Primero se actualiza con $D_1$:
+$$
+P(P\mid D_1)=\frac{P(D_1\mid P)P(P)}{P(D_1\mid P)P(P)+P(D_1\mid \bar P)P(\bar P)}.
+$$
+Luego, usando Bayes otra vez al incorporar $D_2$:
+$$
+P(P\mid D_1\cap D_2)=\frac{P(D_2\mid P, D_1)\,P(P\mid D_1)}{P(D_2\mid P, D_1)\,P(P\mid D_1)+P(D_2\mid \bar P, D_1)\,P(\bar P\mid D_1)}.
+$$
+La independencia condicional dado el estado real implica
+$$
+P(D_2\mid P, D_1)=P(D_2\mid P),\qquad P(D_2\mid \bar P, D_1)=P(D_2\mid \bar P).
+$$
+Sustituyendo y reemplazando $P(P\mid D_1)$ y $P(\bar P\mid D_1)$ por sus expresiones de Bayes, se obtiene (mostrando el paso clave de simplificación):
+$$
+P(P\mid D_1\cap D_2)
+=\frac{P(D_2\mid P)\,\frac{P(D_1\mid P)P(P)}{P(D_1)}}{P(D_2\mid P)\,\frac{P(D_1\mid P)P(P)}{P(D_1)}+P(D_2\mid \bar P)\,\frac{P(D_1\mid \bar P)P(\bar P)}{P(D_1)}}
+=\frac{P(D_2\mid P)P(D_1\mid P)P(P)}{P(D_2\mid P)P(D_1\mid P)P(P)+P(D_2\mid \bar P)P(D_1\mid \bar P)P(\bar P)}.
+$$
+Finalmente, por conmutatividad del producto,
+$$
+P(P\mid D_1\cap D_2)
+=\frac{P(D_1\mid P)P(D_2\mid P)P(P)}{P(D_1\mid P)P(D_2\mid P)P(P)+P(D_1\mid \bar P)P(D_2\mid \bar P)P(\bar P)},
+$$
+que coincide exactamente con la expresión del caso simultáneo usando
+$$P(D_1\cap D_2\mid P)=P(D_1\mid P)P(D_2\mid P),\qquad
+P(D_1\cap D_2\mid \bar P)=P(D_1\mid \bar P)P(D_2\mid \bar P).$$
+
+\textit{Interpretación:} si los métodos son independientes una vez fijado el ``estado real'' (con planeta o sin planeta), entonces aplicar Bayes en dos pasos (secuencial) o en un solo paso con la evidencia conjunta (simultáneo) produce la misma posterior.
+\end{enumerate}
+
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}
