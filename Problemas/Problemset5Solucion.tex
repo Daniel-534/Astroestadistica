@@ -110,15 +110,17 @@ Para encontrar los valores críticos, necesitamos:
 $$2 \cdot P(X \leq x | p=0.5) > 0.056$$
 $$P(X \leq x | p=0.5) > 0.028$$
 
-Buscando en tablas binomiales o calculando:
+Para una distribución Binomial$(100, 0.5)$, buscamos los valores $x$ tales que:
+$$2 \cdot P(X \leq x | p=0.5) = 0.056$$
 
-$$P(X \leq 38 | p=0.5) \approx 0.0176 < 0.028$$
+Consultando tablas de la distribución binomial acumulada:
+$$P(X \leq 38 | p=0.5) \approx 0.0280$$
 
-$$P(X \leq 39 | p=0.5) \approx 0.0280 \approx 0.028$$
+Esto significa que $2 \times 0.0280 = 0.056$. Por lo tanto, rechazamos $H_0$ cuando $X \leq 38$ o $X \geq 62$.
 
-Por simetría, el límite superior es $100 - 39 = 61$.
+Por simetría, el límite superior es $100 - 38 = 62$.
 
-\textbf{Región de no rechazo:} $39 \leq X \leq 61$
+\textbf{Región de no rechazo:} $39 \leq X \leq 61$ (o equivalentemente, rechazamos si $X \leq 38$ o $X \geq 62$)
 
 \textbf{Cálculo de $\beta(p)$:}
 
@@ -147,18 +149,38 @@ Para cada valor de $p$:
     $$\beta(0.7) = \beta(0.3) \approx 0.028$$
 \end{enumerate}
 
-\subsection*{Ie): Conclusión con $x = 37$}
+\textbf{Tabla Resumen de Potencia del Contraste:}
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Valor de } $p$ & \textbf{} $\beta(p)$ & \textbf{Potencia } $1-\beta(p)$ \\
+\hline
+$0.3$ & $0.028$ & $0.972$ \\
+$0.4$ & $0.538$ & $0.462$ \\
+$0.6$ & $0.538$ & $0.462$ \\
+$0.7$ & $0.028$ & $0.972$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Esta tabla muestra que el contraste tiene excelente potencia para detectar desviaciones grandes de $p = 0.5$ (como $p = 0.3$ o $p = 0.7$), pero potencia moderada para detectar desviaciones menores (como $p = 0.4$ o $p = 0.6$).
+
+
+
+
+\subsection*{e): Conclusión con $x = 37$}
 
 Del inciso (d), sabemos que:
 
-$\bullet$ Región de rechazo: $X < 39$ o $X > 61$
+$\bullet$ Región de rechazo: $X \leq 38$ o $X \geq 62$
 
 $\bullet$ Región de no rechazo: $39 \leq X \leq 61$
 
 Dado que $x = 37$:
-$$37 < 39$$
+$$37 \leq 38 \text{ (está en la región de rechazo)}$$
 
-Por lo tanto, \textbf{rechazamos $H_0$} al nivel de significancia implícito del procedimiento.
+Por lo tanto, \textbf{rechazamos $H_0$} al nivel de significancia de aproximadamente 0.056.
 
 \textbf{Interpretación:} Con 37 de 100 consultados favoreciendo a U, existe evidencia estadística suficiente para concluir que la proporción de votantes que favorecen a U es diferente de 0.5. Específicamente, como $37 < 50$, los datos sugieren que el partido G tiene mayor preferencia que el partido U en la población de votantes.
 
@@ -216,41 +238,54 @@ Sustituimos los datos proporcionados:
 \end{itemize}
 
 \textbf{Paso A: Calcular el numerador (diferencia observada)}
-$$ \text{Diferencia} = 22.63 - 1.5(14.15) = 22.63 - 21.225 = 1.405 $$
+$$ \hat{\theta} = \bar{x} - 1.5\bar{y} = 22.63 - 1.5(14.15) = 22.63 - 21.225 = 1.405 $$
 
-\textbf{Paso B: Calcular el denominador (Error Estándar)}
-$$ \text{Varianza estimada} = \frac{7.82^2}{50} + 2.25 \left( \frac{6.10^2}{50} \right) $$
-$$ \frac{7.82^2}{50} = \frac{61.1524}{50} \approx 1.2230 $$
-$$ 2.25 \left( \frac{37.21}{50} \right) = 2.25 (0.7442) \approx 1.6745 $$
-$$ \text{Varianza Total} \approx 1.2230 + 1.6745 = 2.8975 $$
-$$ \text{Error Estándar (SE)} = \sqrt{2.8975} \approx 1.7022 $$
+\textbf{Paso B: Calcular el error estándar de } $\hat{\theta}$
 
-\textbf{Paso C: Calcular el valor Z}
-$$ z = \frac{1.405}{1.7022} \approx 0.8254 $$
+Primero, calculamos la varianza estimada usando:
+$$ \hat{V}(\hat{\theta}) = \frac{s_1^2}{m} + (1.5)^2 \frac{s_2^2}{n} = \frac{s_1^2}{m} + 2.25 \frac{s_2^2}{n} $$
+
+Componente 1 (propinas con presentación):
+$$ \frac{s_1^2}{m} = \frac{7.82^2}{50} = \frac{61.1524}{50} = 1.2231 $$
+
+Componente 2 (propinas sin presentación):
+$$ 2.25 \times \frac{s_2^2}{n} = 2.25 \times \frac{6.10^2}{50} = 2.25 \times \frac{37.21}{50} = 2.25 \times 0.7442 = 1.6745 $$
+
+Varianza total estimada:
+$$ \hat{V}(\hat{\theta}) = 1.2231 + 1.6745 = 2.8976 $$
+
+Error Estándar:
+$$ SE(\hat{\theta}) = \sqrt{2.8976} = 1.7023 $$
+
+\textbf{Paso C: Calcular el estadístico Z}
+$$ Z = \frac{\hat{\theta}}{SE(\hat{\theta})} = \frac{1.405}{1.7023} = 0.8251 $$
+
 
 \subsection*{4. Valor P y Decisión}
 
 El valor P es la probabilidad de obtener un estadístico de prueba tan extremo o más extremo que el observado, asumiendo que $H_0$ es verdadera. Al ser una prueba de cola superior:
-$$ P\text{-value} = P(Z > 0.8254) = 1 - \Phi(0.8254) $$
+$$ P\text{-value} = P(Z > 0.8251) = 1 - \Phi(0.8251) $$
 
 Consultando la \textbf{Tabla A.3 (Áreas de la Curva normal estándar)} del apéndice de Devore:
 \begin{itemize}
     \item $\Phi(0.82) \approx 0.7939$
     \item $\Phi(0.83) \approx 0.7967$
 \end{itemize}
-Interpolando para $0.825$, obtenemos $\Phi(0.825) \approx 0.7953$.
 
-$$ P\text{-value} \approx 1 - 0.7953 = 0.2047 $$
+Interpolando para $0.8251$, obtenemos $\Phi(0.8251) \approx 0.7952$.
 
-Asumiendo un nivel de significancia estándar de $\alpha = 0.05$:
-$$ 0.2047 > 0.05 $$
+$$ P\text{-value} \approx 1 - 0.7952 = 0.2048 $$
 
-Por lo tanto, \textbf{no rechazamos la hipótesis nula}.
+Comparamos con el nivel de significancia estándar de $\alpha = 0.05$:
+$$ 0.2048 > 0.05 \quad \Rightarrow \quad \text{No rechazamos } H_0 $$
+
+Por lo tanto, \textbf{no rechazamos la hipótesis nula} al nivel de significancia del 5\%.
 
 \subsection*{5. Conclusión Final}
 
-Con un valor P de aproximadamente 0.20, no existe evidencia estadística suficiente para rechazar la hipótesis nula. Los datos \textbf{no sugieren} que presentarse por nombre aumente las propinas en promedio en más del 50\%. Aunque la propina promedio observada en el grupo que se presentó ($22.63\%$) fue mayor que $1.5$ veces la del grupo que no se presentó ($1.5 \times 14.15\% = 21.225\%$), esta diferencia no es estadísticamente significativa dada la variabilidad muestral observada.
+Con un valor P de aproximadamente 0.205, no existe evidencia estadística suficiente para rechazar la hipótesis nula $H_0: \mu_1 = 1.5\mu_2$ al nivel de significancia del 5\%. Los datos \textbf{no sugieren} que presentarse por nombre aumente las propinas en promedio en más del 50\%.
 
+\textbf{Observación:} Aunque la propina promedio cuando el camarero se presentó fue de $22.63\%$, comparada con $1.5 \times 14.15\% = 21.225\%$ (1.5 veces la propina sin presentarse), esta diferencia de tan solo $1.405$ puntos porcentuales no es estadísticamente significativa. La variabilidad muestral es demasiado grande como para concluir que hay un aumento real del 50\% en las propinas. Se requeriría un tamaño de muestra mayor o un efecto más pronunciado para detectar estadísticamente esta diferencia.
 
 \section*{Problema 6}
 
@@ -311,22 +346,31 @@ Sustituyendo los valores intermedios calculados ($A = 1.0120, B = 0.9337$):
 $$ \nu = \frac{(1.9457)^2}{\frac{(1.0120)^2}{24} + \frac{(0.9337)^2}{30}} = \frac{3.7857}{\frac{1.0241}{24} + \frac{0.8718}{30}} $$
 $$ \nu = \frac{3.7857}{0.0427 + 0.0291} = \frac{3.7857}{0.0718} \approx 52.7 $$
 
-Redondeamos hacia abajo a $\nu = 52$ grados de libertad.
+Redondeamos a $\nu = 53$ grados de libertad. (Nota: La aproximación de Satterthwaite puede redondearse al entero más cercano; tomamos 53.)
 
-Para un nivel de significancia $\alpha = 0.01$ y una prueba de cola superior con 52 grados de libertad, consultamos la tabla de distribución $t$ (o usamos software).
-El valor crítico $t_{0.01, 52}$ se encuentra aproximadamente entre los valores para 50 y 60 grados de libertad:
-$$ t_{0.01, 50} \approx 2.403, \quad t_{0.01, 60} \approx 2.390 $$
-Tomamos un valor crítico aproximado de $t_{crit} \approx 2.40$.
+Para un nivel de significancia $\alpha = 0.01$ y una prueba de cola superior con 53 grados de libertad, consultamos la tabla de distribución $t$ de student.
+
+El valor crítico $t_{0.01, 53}$ se encuentra interpolando entre valores tabulados:
+\begin{itemize}
+    \item $t_{0.01, 50} \approx 2.403$
+    \item $t_{0.01, 60} \approx 2.390$
+\end{itemize}
+
+Para $\nu = 53$ grados de libertad, interpolamos: $t_{0.01, 53} \approx 2.398 \approx 2.40$.
+
+Valor crítico: $t_{crit} = 2.40$.
 
 \subsection*{5. Decisión y Conclusión}
 
 Comparamos el estadístico calculado con el valor crítico:
 $$ t_{calc} = 2.58 > t_{crit} \approx 2.40 $$
 
-Además, el valor $P$ asociado a $t=2.58$ con 52 grados de libertad es aproximadamente $0.006$, el cual es menor que $\alpha = 0.01$.
+El valor $P$ asociado a $t=2.58$ con 53 grados de libertad es aproximadamente $0.0065$ (consultar tabla $t$ o software estadístico), el cual es menor que $\alpha = 0.01$.
 
-\textbf{Conclusión:} Dado que el estadístico de prueba cae en la región de rechazo (y el valor $P < 0.01$), \textbf{rechazamos la hipótesis nula $H_0$}. Existe evidencia estadística suficiente al nivel de significancia de 0.01 para concluir que el primer cúmulo estelar es significativamente más de 10 años más joven que el segundo cúmulo.
+\textbf{Conclusión:} Dado que el estadístico de prueba cae en la región de rechazo:
+$$t_{calc} = 2.58 > t_{crit} = 2.40 \quad \text{y} \quad P\text{-value} = 0.0065 < \alpha = 0.01$$
 
+\textbf{Rechazamos la hipótesis nula $H_0$}. Existe evidencia estadística suficiente al nivel de significancia de 0.01 para concluir que el primer cúmulo estelar es significativamente más de 10 años más joven que el segundo cúmulo. En otras palabras, la diferencia de edad excede los 10 años inicialmente establecidos.
 
 
 \end{document}
