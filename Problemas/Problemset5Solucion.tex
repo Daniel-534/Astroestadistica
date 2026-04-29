@@ -171,4 +171,176 @@ Por lo tanto, \textbf{rechazamos $H_0$} al nivel de significancia implícito del
     \item Capítulo 8, Sección 8.4: Valores P
 \end{itemize}
 
+
+\section*{Enunciado del Problema 4}
+
+\textbf{4. Más propina.} Los camareros de los restaurantes han empleado diversas estrategias para aumentar las propinas. Un artículo publicado el 5 de septiembre de 2005 (New Yorker) reportó que ``en un estudio, una camarera recibió un 50 \% más de propinas cuando se presentó por su nombre que cuando no lo hizo''. Considere los siguientes datos (ficticios) sobre la cantidad de propina como porcentaje de la factura:
+
+\begin{itemize}
+    \item \textbf{Presentándose:} $m = 50$, $\bar{x} = 22.63$, $s_1 = 7.82$
+    \item \textbf{Sin presentarse:} $n = 50$, $\bar{y} = 14.15$, $s_2 = 6.10$
+\end{itemize}
+
+¿Estos datos sugieren que presentarse por su nombre aumenta las propinas en promedio en más del 50\%? Establezca y pruebe las hipótesis relevantes. [Sugerencia: considere el parámetro $\theta = \mu_1 - 1.5\mu_2$.]
+
+\newpage
+
+\section*{Solución Detallada}
+
+Para resolver este problema, utilizaremos la teoría de inferencia estadística para dos muestras independientes con tamaños grandes, tal como se detalla en el \textbf{Capítulo 9 (Inferencias basadas en dos muestras)} del texto de Jay L. Devore. Específicamente, adaptaremos la prueba de diferencia de medias para una combinación lineal de medias.
+
+\subsection*{1. Planteamiento de las Hipótesis}
+
+El problema nos pide evaluar si la propina promedio cuando el camarero se presenta ($\mu_1$) es más del 50\% mayor que la propina promedio cuando no se presenta ($\mu_2$). Matemáticamente, esto se expresa como $\mu_1 > 1.5\mu_2$.
+
+Siguiendo la sugerencia, definimos el parámetro de interés $\theta$ como la diferencia entre la media del grupo 1 y 1.5 veces la media del grupo 2:
+$$ \theta = \mu_1 - 1.5\mu_2 $$
+
+Las hipótesis nula y alternativa son:
+\begin{align*}
+    H_0: \theta &= 0 \quad (\text{es decir, } \mu_1 = 1.5\mu_2) \\
+    H_a: \theta &> 0 \quad (\text{es decir, } \mu_1 > 1.5\mu_2)
+\end{align*}
+Esta es una prueba de \textbf{cola superior}.
+
+\subsection*{2. Estadístico de Prueba}
+
+Dado que los tamaños de muestra son grandes ($m=50$ y $n=50$), podemos utilizar la aproximación normal (estadístico $Z$) basándonos en el Teorema del Límite Central, tal como se discute en la \textbf{Sección 9.1} de Devore sobre inferencias de muestras grandes.
+
+Necesitamos un estimador para $\theta$. El estimador insesgado natural es:
+$$ \hat{\theta} = \bar{X} - 1.5\bar{Y} $$
+
+Para calcular el estadístico de prueba estandarizado, necesitamos la varianza de este estimador. Utilizando las propiedades de la varianza para combinaciones lineales de variables aleatorias independientes (donde $V(aX + bY) = a^2V(X) + b^2V(Y)$):
+$$ V(\hat{\theta}) = V(\bar{X} - 1.5\bar{Y}) = 1^2 \cdot V(\bar{X}) + (-1.5)^2 \cdot V(\bar{Y}) $$
+
+Sustituyendo las varianzas muestrales estimadas ($S^2/n$):
+$$ \hat{V}(\hat{\theta}) = \frac{s_1^2}{m} + 2.25 \frac{s_2^2}{n} $$
+
+El estadístico de prueba $Z$ bajo $H_0$ (donde $\theta = 0$) es:
+$$ Z = \frac{(\bar{x} - 1.5\bar{y}) - 0}{\sqrt{\frac{s_1^2}{m} + 2.25 \frac{s_2^2}{n}}} $$
+
+\subsection*{3. Cálculos Numéricos}
+
+Sustituimos los datos proporcionados:
+\begin{itemize}
+    \item Grupo 1 (Presentándose): $m = 50, \bar{x} = 22.63, s_1 = 7.82$
+    \item Grupo 2 (Sin presentarse): $n = 50, \bar{y} = 14.15, s_2 = 6.10$
+\end{itemize}
+
+\textbf{Paso A: Calcular el numerador (diferencia observada)}
+$$ \text{Diferencia} = 22.63 - 1.5(14.15) = 22.63 - 21.225 = 1.405 $$
+
+\textbf{Paso B: Calcular el denominador (Error Estándar)}
+$$ \text{Varianza estimada} = \frac{7.82^2}{50} + 2.25 \left( \frac{6.10^2}{50} \right) $$
+$$ \frac{7.82^2}{50} = \frac{61.1524}{50} \approx 1.2230 $$
+$$ 2.25 \left( \frac{37.21}{50} \right) = 2.25 (0.7442) \approx 1.6745 $$
+$$ \text{Varianza Total} \approx 1.2230 + 1.6745 = 2.8975 $$
+$$ \text{Error Estándar (SE)} = \sqrt{2.8975} \approx 1.7022 $$
+
+\textbf{Paso C: Calcular el valor Z}
+$$ z = \frac{1.405}{1.7022} \approx 0.8254 $$
+
+\subsection*{4. Valor P y Decisión}
+
+El valor P es la probabilidad de obtener un estadístico de prueba tan extremo o más extremo que el observado, asumiendo que $H_0$ es verdadera. Al ser una prueba de cola superior:
+$$ P\text{-value} = P(Z > 0.8254) = 1 - \Phi(0.8254) $$
+
+Consultando la \textbf{Tabla A.3 (Áreas de la Curva normal estándar)} del apéndice de Devore:
+\begin{itemize}
+    \item $\Phi(0.82) \approx 0.7939$
+    \item $\Phi(0.83) \approx 0.7967$
+\end{itemize}
+Interpolando para $0.825$, obtenemos $\Phi(0.825) \approx 0.7953$.
+
+$$ P\text{-value} \approx 1 - 0.7953 = 0.2047 $$
+
+Asumiendo un nivel de significancia estándar de $\alpha = 0.05$:
+$$ 0.2047 > 0.05 $$
+
+Por lo tanto, \textbf{no rechazamos la hipótesis nula}.
+
+\subsection*{5. Conclusión Final}
+
+Con un valor P de aproximadamente 0.20, no existe evidencia estadística suficiente para rechazar la hipótesis nula. Los datos \textbf{no sugieren} que presentarse por nombre aumente las propinas en promedio en más del 50\%. Aunque la propina promedio observada en el grupo que se presentó ($22.63\%$) fue mayor que $1.5$ veces la del grupo que no se presentó ($1.5 \times 14.15\% = 21.225\%$), esta diferencia no es estadísticamente significativa dada la variabilidad muestral observada.
+
+
+\section*{Enunciado del Problema 6}
+
+\textbf{Cúmulos jóvenes.} Suponga que $\mu_1$ y $\mu_2$ son las medias reales de las edades de dos cúmulos estelares jóvenes. Por años se ha considerado que el primer cúmulo es diez años más joven que el segundo. Sin embargo, un estudio reciente ha encontrado datos que pueden sugerir que el primero es aún más joven. Use un nivel de significancia de 0.01 para probar esto último, si se tienen los siguientes datos: $m = 25$, $\bar{x} = 115.7$, $s_1 = 5.03$, para el primer cúmulo y $n = 31$, $\bar{y} = 129.3$, y $s_2 = 5.38$ para el segundo.
+
+\newpage
+
+\section*{Solución}
+
+Para resolver este problema, utilizaremos los procedimientos de inferencia para dos muestras basados en la distribución $t$, específicamente la prueba $t$ para dos muestras con varianzas desiguales (aproximación de Welch-Satterthwaite), tal como se describe en la \textbf{Sección 9.2} del texto de referencia (Devore).
+
+\subsection*{1. Definición de Parámetros e Hipótesis}
+
+Sean:
+\begin{itemize}
+    \item $\mu_1$: la edad media real del primer cúmulo estelar.
+    \item $\mu_2$: la edad media real del segundo cúmulo estelar.
+\end{itemize}
+
+El problema establece que históricamente se consideraba que el primer cúmulo era 10 años más joven que el segundo, es decir, $\mu_2 - \mu_1 = 10$. El estudio reciente sugiere que el primer cúmulo es \textit{aún más joven}, lo que implica que la diferencia de edad es mayor a 10 años ($\mu_2 - \mu_1 > 10$).
+
+Por lo tanto, planteamos las hipótesis de la siguiente manera:
+\begin{align*}
+    H_0 &: \mu_2 - \mu_1 = 10 \\
+    H_a &: \mu_2 - \mu_1 > 10
+\end{align*}
+Esta es una prueba de cola superior.
+
+\subsection*{2. Estadístico de Prueba}
+
+Dado que las desviaciones estándar muestrales ($s_1 = 5.03$ y $s_2 = 5.38$) son similares pero no idénticas, y los tamaños de muestra son diferentes ($m=25, n=31$), utilizaremos el estadístico $t$ para dos muestras con varianzas no agrupadas. El estadístico de prueba se define como:
+
+$$ t = \frac{(\bar{y} - \bar{x}) - (\mu_2 - \mu_1)_0}{\sqrt{\frac{s_1^2}{m} + \frac{s_2^2}{n}}} $$
+
+Donde $(\mu_2 - \mu_1)_0 = 10$ es el valor de la diferencia bajo la hipótesis nula.
+
+\subsection*{3. Cálculos}
+
+Sustituimos los valores proporcionados en el enunciado:
+\begin{itemize}
+    \item Muestra 1 (Primer cúmulo): $m = 25, \bar{x} = 115.7, s_1 = 5.03$
+    \item Muestra 2 (Segundo cúmulo): $n = 31, \bar{y} = 129.3, s_2 = 5.38$
+\end{itemize}
+
+Primero calculamos el error estándar de la diferencia:
+$$ SE = \sqrt{\frac{s_1^2}{m} + \frac{s_2^2}{n}} = \sqrt{\frac{(5.03)^2}{25} + \frac{(5.38)^2}{31}} $$
+$$ SE = \sqrt{\frac{25.3009}{25} + \frac{28.9444}{31}} = \sqrt{1.0120 + 0.9337} = \sqrt{1.9457} \approx 1.3949 $$
+
+Ahora calculamos el valor del estadístico $t$:
+$$ t = \frac{(129.3 - 115.7) - 10}{1.3949} = \frac{13.6 - 10}{1.3949} = \frac{3.6}{1.3949} \approx 2.58 $$
+
+\subsection*{4. Grados de Libertad y Valor Crítico}
+
+Utilizamos la aproximación de Satterthwaite para los grados de libertad ($\nu$):
+$$ \nu = \frac{\left( \frac{s_1^2}{m} + \frac{s_2^2}{n} \right)^2}{\frac{(s_1^2/m)^2}{m-1} + \frac{(s_2^2/n)^2}{n-1}} $$
+
+Sustituyendo los valores intermedios calculados ($A = 1.0120, B = 0.9337$):
+$$ \nu = \frac{(1.9457)^2}{\frac{(1.0120)^2}{24} + \frac{(0.9337)^2}{30}} = \frac{3.7857}{\frac{1.0241}{24} + \frac{0.8718}{30}} $$
+$$ \nu = \frac{3.7857}{0.0427 + 0.0291} = \frac{3.7857}{0.0718} \approx 52.7 $$
+
+Redondeamos hacia abajo a $\nu = 52$ grados de libertad.
+
+Para un nivel de significancia $\alpha = 0.01$ y una prueba de cola superior con 52 grados de libertad, consultamos la tabla de distribución $t$ (o usamos software).
+El valor crítico $t_{0.01, 52}$ se encuentra aproximadamente entre los valores para 50 y 60 grados de libertad:
+$$ t_{0.01, 50} \approx 2.403, \quad t_{0.01, 60} \approx 2.390 $$
+Tomamos un valor crítico aproximado de $t_{crit} \approx 2.40$.
+
+\subsection*{5. Decisión y Conclusión}
+
+Comparamos el estadístico calculado con el valor crítico:
+$$ t_{calc} = 2.58 > t_{crit} \approx 2.40 $$
+
+Además, el valor $P$ asociado a $t=2.58$ con 52 grados de libertad es aproximadamente $0.006$, el cual es menor que $\alpha = 0.01$.
+
+\textbf{Conclusión:} Dado que el estadístico de prueba cae en la región de rechazo (y el valor $P < 0.01$), \textbf{rechazamos la hipótesis nula $H_0$}. Existe evidencia estadística suficiente al nivel de significancia de 0.01 para concluir que el primer cúmulo estelar es significativamente más de 10 años más joven que el segundo cúmulo.
+
+
+
+
+
 \end{document}
