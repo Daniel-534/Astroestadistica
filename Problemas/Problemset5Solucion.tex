@@ -9,6 +9,9 @@
 \usepackage{parskip}
 \usepackage{float}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\AtBeginEnvironment{tikzpicture}{\shorthandoff{<>}}
 
 \geometry{a4paper, margin=1in}
 
@@ -72,6 +75,34 @@ $$X \geq 63 \quad \text{o} \quad X \leq 37$$
 
 \textbf{Respuesta:} Los valores igual o más contradictorios son $X \in \{0, 1, 2, \ldots, 37\} \cup \{63, 64, \ldots, 100\}$.
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=0.12cm,y=0.9cm,>=Stealth]
+    % Baseline
+    \draw[->] (0,0) -- (101,0) node[right] {$X$};
+
+    % Regions
+    \fill[red!18] (0,0) rectangle (37,0.7);
+    \fill[blue!10] (37,0) rectangle (63,0.7);
+    \fill[red!18] (63,0) rectangle (100,0.7);
+
+    % Ticks and labels
+    \foreach \x/\lab in {0/0,20/20,37/37,50/50,63/63,80/80,100/100}
+        \draw (\x,0.08) -- (\x,-0.12) node[below] {\lab};
+
+    % Boundary markers
+    \draw[very thick,red!70!black] (37,0) -- (37,1.05);
+    \draw[very thick,red!70!black] (63,0) -- (63,1.05);
+    \draw[dashed] (50,0) -- (50,1.05);
+
+    % Annotations
+    \node[red!70!black,align=center] at (18.5,0.35) {$X\leq 37$};
+    \node[align=center] at (50,0.35) {$38\leq X\leq 62$};
+    \node[red!70!black,align=center] at (81.5,0.35) {$X\geq 63$};
+\end{tikzpicture}
+\caption{En una prueba bilateral, los valores igual o más contradictorios que $x=37$ son los que quedan al menos a 13 unidades de 50. Por ello, las regiones extremas son $X\leq 37$ y $X\geq 63$.}
+\end{figure}
+
 \subsection*{c): Distribución y P-value}
 
 \textbf{Distribución de Probabilidad y Justificación de la Aproximación Normal:}
@@ -109,6 +140,39 @@ $$P(Z \leq -2.6) = \Phi(-2.6) \approx 0.00466$$
 
 Por lo tanto:
 $$\text{P-value} = 2(0.00466) \approx 0.00932 \approx 0.009$$
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=0.16cm,y=40cm,>=Stealth]
+    % Axes
+    \draw[->] (20,0) -- (80,0) node[right] {$X$};
+    \draw[->] (20,0) -- (20,0.085) node[above] {probabilidad};
+
+    % Ticks
+    \foreach \x in {20,30,37,40,50,60,63,70,80}
+        \draw (\x,0) -- (\x,-0.0018) node[below] {\x};
+
+    % Stylized bell curve centered at 50
+    \draw[thick,blue!70!black,smooth,samples=100,domain=20:80]
+        plot (\x,{0.08*exp(-((\x-50)*(\x-50))/120)});
+
+    % Shade tails
+    \fill[red!20,domain=20:37,smooth,samples=60]
+        (20,0) -- plot (\x,{0.08*exp(-((\x-50)*(\x-50))/120)}) -- (37,0) -- cycle;
+    \fill[red!20,domain=63:80,smooth,samples=60]
+        (63,0) -- plot (\x,{0.08*exp(-((\x-50)*(\x-50))/120)}) -- (80,0) -- cycle;
+
+    % Observed/critical markers
+    \draw[dashed,red!70!black] (37,0) -- (37,{0.08*exp(-((37-50)*(37-50))/120)});
+    \draw[dashed,red!70!black] (63,0) -- (63,{0.08*exp(-((63-50)*(63-50))/120)});
+    \draw[dashed] (50,0) -- (50,0.08);
+
+    \node[red!70!black,align=center] at (29,0.028) {$P(X\leq 37)$};
+    \node[red!70!black,align=center] at (71,0.028) {$P(X\geq 63)$};
+    \node[below right] at (50,0.08) {$\mu=50$};
+\end{tikzpicture}
+\caption{Representación del P-value bilateral bajo $H_0$: el área en ambas colas corresponde a $P(X\leq 37)+P(X\geq 63)$.}
+\end{figure}
 
 
 \subsection*{d): Probabilidad de Error Tipo II}
@@ -191,6 +255,37 @@ $0.7$ & $0.008$ & $0.992$ \\
 
 Esta tabla muestra que el contraste tiene excelente potencia para detectar desviaciones grandes de $p = 0.5$ (como $p = 0.3$ o $p = 0.7$), pero potencia moderada para detectar desviaciones menores (como $p = 0.4$ o $p = 0.6$).
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=9cm,y=6cm,>=Stealth]
+    % Axes
+    \draw[->] (0.26,0) -- (0.74,0) node[right] {$p$};
+    \draw[->] (0.26,0) -- (0.26,1.08) node[above] {$\beta(p)$};
+
+    % Ticks
+    \foreach \x/\lab in {0.3/0.3,0.4/0.4,0.5/0.5,0.6/0.6,0.7/0.7}
+        \draw (\x,0) -- (\x,-0.02) node[below] {\lab};
+    \foreach \y/\lab in {0.0/0,0.2/0.2,0.4/0.4,0.6/0.6,0.8/0.8,1.0/1}
+        \draw (0.26,\y) -- (0.252,\y) node[left] {\lab};
+
+    % Symmetry line
+    \draw[dashed] (0.5,0) -- (0.5,1.05);
+    \node[above right] at (0.5,0.95) {simetría en $p=0.5$};
+
+    % Polyline and points
+    \draw[thick,blue!70!black] (0.3,0.008) -- (0.4,0.419) -- (0.6,0.419) -- (0.7,0.008);
+    \foreach \x/\y in {0.3/0.008,0.4/0.419,0.6/0.419,0.7/0.008}
+        \filldraw[blue!70!black] (\x,\y) circle (1.2pt);
+
+    % Labels
+    \node[above left,fill=white,inner sep=1pt] at (0.4,0.419) {$(0.4,0.419)$};
+    \node[above right,fill=white,inner sep=1pt] at (0.6,0.419) {$(0.6,0.419)$};
+    \node[above left,fill=white,inner sep=1pt] at (0.3,0.008) {$(0.3,0.008)$};
+    \node[above right,fill=white,inner sep=1pt] at (0.7,0.008) {$(0.7,0.008)$};
+\end{tikzpicture}
+\caption{Probabilidad de error tipo II para varios valores de $p$ usando la regla de decisión del inciso (d). El error tipo II es mayor cuando $p$ está más cerca de $0.5$.}
+\end{figure}
+
 
 
 \subsection*{e): Conclusión con $x = 37$}
@@ -198,10 +293,34 @@ Esta tabla muestra que el contraste tiene excelente potencia para detectar desvi
 Del inciso (d), sabemos que:
 
 $\bullet$ Región de rechazo: $X \leq 40$ o $X \geq 60$
+
 $\bullet$ Región de no rechazo: $41 \leq X \leq 59$
 
 Dado que $x = 37$:
 $$37 \leq 40 \text{ (está en la región de rechazo)}$$
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=0.14cm,y=0.9cm,>=Stealth]
+    \draw[->] (0,0) -- (101,0) node[right] {$X$};
+    \foreach \x/\lab in {0/0,20/20,37/37,40/40,50/50,60/60,80/80,100/100}
+        \draw (\x,0) -- (\x,-0.18) node[below] {\lab};
+
+    \fill[red!18] (0,0) rectangle (40,0.9);
+    \fill[green!18] (40,0) rectangle (60,0.9);
+    \fill[red!18] (60,0) rectangle (100,0.9);
+
+    \draw[thick] (40,0) -- (40,0.9);
+    \draw[thick] (60,0) -- (60,0.9);
+    \draw[very thick,blue!70!black] (37,0) -- (37,1.2);
+
+    \node at (20,0.45) {rechazo};
+    \node at (50,0.45) {no rechazo};
+    \node at (80,0.45) {rechazo};
+    \node[blue!70!black,above] at (37,1.2) {$x=37$};
+\end{tikzpicture}
+\caption{Región de decisión del inciso (d): como $x=37$ cae en la región de rechazo, se rechaza $H_0$.}
+\end{figure}
 
 
 Por lo tanto, \textbf{rechazamos $H_0$}. El valor P es aproximadamente 0.009, 
@@ -304,6 +423,37 @@ $$ P\text{-value} \approx 1 - 0.7952 = 0.2048 $$
 Comparamos con el nivel de significancia estándar de $\alpha = 0.05$:
 $$ 0.2048 > 0.05 \quad \Rightarrow \quad \text{No rechazamos } H_0 $$
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1.8cm,y=5cm,>=Stealth]
+    % Axes
+    \draw[->] (-3.2,0) -- (3.4,0) node[right] {$z$};
+    \draw[->] (-3.2,0) -- (-3.2,0.46) node[above] {densidad};
+
+    % Bell curve
+    \draw[thick,blue!70!black,smooth,samples=120,domain=-3.2:3.2]
+        plot (\x,{0.4*exp(-\x*\x/2)});
+
+    % Shade upper tail
+    \fill[red!20,domain=0.825:3.2,smooth,samples=80]
+        (0.825,0) -- plot (\x,{0.4*exp(-\x*\x/2)}) -- (3.2,0) -- cycle;
+
+    % Markers
+    \draw[dashed] (0,0) -- (0,0.4);
+    \draw[dashed,red!70!black] (0.825,0) -- (0.825,{0.4*exp(-0.825*0.825/2)});
+
+    % Ticks
+    \foreach \x/\lab in {-3/-3,-2/-2,-1/-1,0/0,2/2,3/3}
+        \draw (\x,0) -- (\x,-0.012) node[below] {\lab};
+    \draw (0.825,0) -- (0.825,-0.012) node[below left] {0.825};
+    \draw (1,0) -- (1,-0.012) node[below right] {1};
+
+    % Labels
+    \node[red!70!black] at (1.95,0.11) {$P(Z>0.8251)$};
+\end{tikzpicture}
+\caption{Representación gráfica del valor P para la prueba de cola superior del problema 4. El área sombreada corresponde a $P(Z>0.8251) \approx 0.205$.}
+\end{figure}
+
 Por lo tanto, \textbf{no rechazamos la hipótesis nula} al nivel de significancia del 5\%.
 
 \subsection*{5. Conclusión Final}
@@ -315,8 +465,6 @@ Con un valor P de aproximadamente 0.205, no existe evidencia estadística sufici
 \section*{Problema 6}
 
 \textbf{Cúmulos jóvenes.} Suponga que $\mu_1$ y $\mu_2$ son las medias reales de las edades de dos cúmulos estelares jóvenes. Por años se ha considerado que el primer cúmulo es diez años más joven que el segundo. Sin embargo, un estudio reciente ha encontrado datos que pueden sugerir que el primero es aún más joven. Use un nivel de significancia de 0.01 para probar esto último, si se tienen los siguientes datos: $m = 25$, $\bar{x} = 115.7$, $s_1 = 5.03$, para el primer cúmulo y $n = 31$, $\bar{y} = 129.3$, y $s_2 = 5.38$ para el segundo.
-
-\newpage
 
 \section*{Solución}
 
@@ -338,6 +486,27 @@ Por lo tanto, planteamos las hipótesis de la siguiente manera:
     H_a &: \mu_2 - \mu_1 > 10
 \end{align*}
 Esta es una prueba de cola superior.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1.2cm,y=3.6cm,>=Stealth]
+    % Axes
+    \draw[->] (-4,0) -- (4.2,0) node[right] {$d=\mu_2-\mu_1$};
+    \draw[->] (0,0) -- (0,1.15) node[above] {plausibilidad};
+
+    % Reference line at null value
+    \draw[dashed] (0,0) -- (0,1.02);
+    \node[below] at (0,0) {$10$};
+
+    % Alternative direction
+    \draw[very thick,blue!70!black,->] (0.35,0.62) -- (3.55,0.62);
+    \node[blue!70!black,align=center] at (2.2,0.78) {$H_a:\,\mu_2-\mu_1>10$\\cola superior};
+
+    % Null region marker
+    \node[align=center] at (-1.8,0.42) {$H_0:\,\mu_2-\mu_1=10$};
+\end{tikzpicture}
+\caption{Esquema de las hipótesis: la afirmación histórica fija la diferencia en $10$ años, mientras que la evidencia buscada apunta a valores mayores que $10$.}
+\end{figure}
 
 \subsection*{2. Estadístico de Prueba}
 
@@ -384,6 +553,39 @@ El valor crítico $t_{0.01, 53}$ se encuentra interpolando entre valores tabulad
 Para $\nu = 53$ grados de libertad, interpolamos: $t_{0.01, 53} \approx 2.398 \approx 2.40$.
 
 Valor crítico: $t_{crit} = 2.40$.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1.55cm,y=4.2cm,>=Stealth]
+    % Axes
+    \draw[->] (-3.4,0) -- (4.2,0) node[right] {$t$};
+    \draw[->] (-3.4,0) -- (-3.4,0.46) node[above] {densidad};
+
+    % t-like bell curve
+    \draw[thick,blue!70!black,smooth,samples=140,domain=-3.4:4]
+        plot (\x,{0.4/(1+0.22*\x*\x)^2});
+
+    % Rejection region
+    \fill[red!20,domain=2.4:4,smooth,samples=80]
+        (2.4,0) -- plot (\x,{0.4/(1+0.22*\x*\x)^2}) -- (4,0) -- cycle;
+
+    % Markers
+    \draw[dashed] (0,0) -- (0,0.4);
+    \draw[dashed,red!70!black] (2.4,0) -- (2.4,{0.4/(1+0.22*2.4*2.4)^2});
+    \draw[dashed,orange!80!black] (2.58,0) -- (2.58,{0.4/(1+0.22*2.58*2.58)^2});
+
+    % Ticks
+    \foreach \x/\lab in {-3/-3,-2/-2,-1/-1,0/0,1/1,2/2,3/3,4/4}
+        \draw (\x,0) -- (\x,-0.012) node[below] {\lab};
+    \draw (2.4,0) -- (2.4,-0.012) node[below=8pt] {$2.40$};
+    \draw (2.58,0) -- (2.58,-0.012) node[below right=12pt] {$2.58$};
+
+    % Labels
+    \node[red!70!black,align=center] at (3.16,0.11) {región de\\rechazo};
+    \node[orange!80!black,align=center] at (2.05,0.31) {$t_{calc}$};
+\end{tikzpicture}
+\caption{Prueba de cola superior para el problema 6. La región sombreada comienza en el valor crítico $t_{crit}\approx 2.40$, y el estadístico observado $t_{calc}\approx 2.58$ cae dentro de ella.}
+\end{figure}
 
 \subsection*{5. Decisión y Conclusión}
 
