@@ -8,6 +8,7 @@
 \usepackage{fancyhdr}
 \usepackage{parskip}
 \usepackage{float}
+\usepackage{hyperref}
 
 \geometry{a4paper, margin=1in}
 
@@ -73,99 +74,119 @@ $$X \geq 63 \quad \text{o} \quad X \leq 37$$
 
 \subsection*{c): Distribución y P-value}
 
-\textbf{Distribución de Probabilidad:}
+\textbf{Distribución de Probabilidad y Justificación de la Aproximación Normal:}
 
 Cuando $H_0: p = 0.5$ es verdadera, el estadístico $X$ sigue una \textbf{distribución binomial} con parámetros $n = 100$ y $p = 0.5$:
 $$X \sim \text{Binomial}(n=100, p=0.5)$$
 
-La función masa de probabilidad es:
-$$P(X = x) = \binom{100}{x}(0.5)^x(0.5)^{100-x} = \binom{100}{x}(0.5)^{100}$$
+Verificamos si podemos usar la aproximación normal. Los criterios son:
+$$np = 100(0.5) = 50 \geq 10 \quad \text{y} \quad n(1-p) = 100(0.5) = 50 \geq 10$$
 
-\textbf{Cálculo del P-value:}
+Ambas condiciones se satisfacen, por lo que podemos aproximar la distribución binomial con una \textbf{distribución normal}:
+$$X \sim N(\mu = np, \sigma^2 = np(1-p))$$
+$$X \sim N(\mu = 50, \sigma^2 = 25)$$
+
+Por lo tanto:
+$$\sigma = \sqrt{25} = 5$$
+
+\textbf{Cálculo del P-value usando la Aproximación Normal:}
 
 El P-value es la probabilidad de obtener un resultado igual o más extremo que el observado, asumiendo que $H_0$ es verdadera. Para una prueba de dos colas con $x = 37$:
 
-$$\text{P-value} = P(X \leq 37 | p=0.5) + P(X \geq 63 | p=0.5)$$
+$$\text{P-value} = P(X \leq 37) + P(X \geq 63)$$
 
-Por simetría de la distribución binomial con $p = 0.5$:
-$$P(X \leq 37) = P(X \geq 63)$$
+Estandarizamos usando el estadístico $Z$:
+$$Z = \frac{X - \mu}{\sigma} = \frac{37 - 50}{5} = \frac{-13}{5} = -2.6$$
+
+Para el otro extremo:
+$$Z = \frac{63 - 50}{5} = \frac{13}{5} = 2.6$$
+
+Por simetría de la distribución normal estándar:
+$$\text{P-value} = P(Z \leq -2.6) + P(Z \geq 2.6) = 2 \cdot P(Z \leq -2.6)$$
+
+Consultando la tabla de la distribución normal estándar:
+$$P(Z \leq -2.6) = \Phi(-2.6) \approx 0.00466$$
 
 Por lo tanto:
-$$\text{P-value} = 2 \cdot P(X \leq 37 | p=0.5)$$
+$$\text{P-value} = 2(0.00466) \approx 0.00932 \approx 0.009$$
 
-Usando la distribución binomial acumulada:
-$$\text{P-value} = 2 \cdot \sum_{x=0}^{37} \binom{100}{x}(0.5)^{100}\approx 0.012033$$
-
-Aquí se hizo el cálculo: %% https://www.wolframalpha.com/input?i=2+*+Sum%5BBinomial%5B100%2C+x%5D+*+%280.5%29%5E100%2C+%7Bx%2C+0%2C+37%7D%5D
 
 \subsection*{d): Probabilidad de Error Tipo II}
 
 La probabilidad de error tipo II, $\beta(p)$, depende del valor verdadero de $p$.
 
-\textbf{Determinación de la región de no rechazo:}
+\textbf{Determinación de la región de no rechazo usando Aproximación Normal:}
 
 Se rechaza $H_0$ si P-value $\leq 0.056$. Equivalentemente, no se rechaza si P-value $> 0.056$.
 
-Para encontrar los valores críticos, necesitamos:
-$$2 \cdot P(X \leq x | p=0.5) > 0.056$$
-$$P(X \leq x | p=0.5) > 0.028$$
+Para una prueba de dos colas con P-value $= 0.056$, cada cola tiene probabilidad $0.028$. Buscamos el valor crítico $z_{\alpha/2}$ tal que:
+$$P(Z \leq -z_{0.028}) = 0.028$$
 
-Para una distribución Binomial$(100, 0.5)$, buscamos los valores $x$ tales que:
-$$2 \cdot P(X \leq x | p=0.5) = 0.056$$
+Consultando la tabla normal estándar, encontramos que $z_{0.028} \approx 1.90$ (interpolando entre $z_{0.025} = 1.96$ y $z_{0.03} = 1.88$).
 
-Consultando tablas de la distribución binomial acumulada:
-$$P(X \leq 38 | p=0.5) \approx 0.0280$$
+Bajo $H_0$ con $p = 0.5$, $\mu = 50$ y $\sigma = 5$, los valores críticos en términos de $X$ son:
+$$X = \mu \pm z_{\alpha/2} \cdot \sigma = 50 \pm 1.90(5) = 50 \pm 9.5$$
 
-Esto significa que $2 \times 0.0280 = 0.056$. Por lo tanto, rechazamos $H_0$ cuando $X \leq 38$ o $X \geq 62$.
+Por lo tanto:
+$$X \leq 40.5 \quad \text{o} \quad X \geq 59.5$$
 
-Por simetría, el límite superior es $100 - 38 = 62$.
+Redondeando a números enteros:
+$$X \leq 40 \quad \text{o} \quad X \geq 60$$
 
-\textbf{Región de no rechazo:} $39 \leq X \leq 61$ (o equivalentemente, rechazamos si $X \leq 38$ o $X \geq 62$)
+\textbf{Región de no rechazo:} $41 \leq X \leq 59$ (o equivalentemente, rechazamos si $X \leq 40$ o $X \geq 60$)
 
-\textbf{Cálculo de $\beta(p)$:}
+\textbf{Cálculo de $\beta(p)$ usando Aproximación Normal:}
 
-La probabilidad de error tipo II es:
-$$\beta(p) = P(39 \leq X \leq 61 | p)$$
-
-Para cada valor de $p$:
+Para cada valor de $p$, aproximamos $X \sim N(\mu = np, \sigma = \sqrt{np(1-p)})$ y calculamos:
+$$\beta(p) = P(41 \leq X \leq 59 | p)$$
 
 \begin{enumerate}
     \item \textbf{Cuando $p = 0.4$:}
-    $$\beta(0.4) = P(39 \leq X \leq 61 | n=100, p=0.4)$$
-    $$X \sim \text{Binomial}(100, 0.4), \quad E(X) = 40, \quad \sigma_X = \sqrt{100(0.4)(0.6)} = 4.90$$
-    $$\beta(0.4) = \sum_{x=39}^{61} \binom{100}{x}(0.4)^x(0.6)^{100-x} \approx 0.538$$
+    $$X \sim N(\mu = 40, \sigma = \sqrt{100(0.4)(0.6)} = 4.90)$$
+    
+    Estandarizamos los límites:
+    $$Z_{\text{inf}} = \frac{41 - 40}{4.90} = \frac{1}{4.90} \approx 0.204$$
+    $$Z_{\text{sup}} = \frac{59 - 40}{4.90} = \frac{19}{4.90} \approx 3.878$$
+    
+    $$\beta(0.4) = P(0.204 \leq Z \leq 3.878) = \Phi(3.878) - \Phi(0.204)$$
+    $$\beta(0.4) \approx 0.9999 - 0.5808 \approx 0.419$$
     
     \item \textbf{Cuando $p = 0.3$:}
-    $$\beta(0.3) = P(39 \leq X \leq 61 | n=100, p=0.3)$$
-    $$X \sim \text{Binomial}(100, 0.3), \quad E(X) = 30, \quad \sigma_X = \sqrt{100(0.3)(0.7)} = 4.58$$
-    $$\beta(0.3) = \sum_{x=39}^{61} \binom{100}{x}(0.3)^x(0.7)^{100-x} \approx 0.028$$
+    $$X \sim N(\mu = 30, \sigma = \sqrt{100(0.3)(0.7)} = 4.58)$$
+    
+    Estandarizamos:
+    $$Z_{\text{inf}} = \frac{41 - 30}{4.58} = \frac{11}{4.58} \approx 2.402$$
+    $$Z_{\text{sup}} = \frac{59 - 30}{4.58} = \frac{29}{4.58} \approx 6.333$$
+    
+    $$\beta(0.3) = P(2.402 \leq Z \leq 6.333) = \Phi(6.333) - \Phi(2.402)$$
+    $$\beta(0.3) \approx 0.9999 - 0.9918 \approx 0.008$$
     
     \item \textbf{Cuando $p = 0.6$:}
-    Por simetría con $p = 0.4$:
-    $$\beta(0.6) = \beta(0.4) \approx 0.538$$
+    Por simetría con respecto a $p = 0.5$ (es decir, $0.6 = 0.5 + 0.1$ y $0.4 = 0.5 - 0.1$):
+    $$\beta(0.6) = \beta(0.4) \approx 0.419$$
     
     \item \textbf{Cuando $p = 0.7$:}
-    Por simetría con $p = 0.3$:
-    $$\beta(0.7) = \beta(0.3) \approx 0.028$$
+    Por simetría con respecto a $p = 0.5$:
+    $$\beta(0.7) = \beta(0.3) \approx 0.008$$
 \end{enumerate}
 
-\textbf{Tabla Resumen de Potencia del Contraste:}
+
+\textbf{Tabla Resumen de Potencia del Contraste (Aproximación Normal):}
 
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Valor de } $p$ & \textbf{} $\beta(p)$ & \textbf{Potencia } $1-\beta(p)$ \\
 \hline
-$0.3$ & $0.028$ & $0.972$ \\
-$0.4$ & $0.538$ & $0.462$ \\
-$0.6$ & $0.538$ & $0.462$ \\
-$0.7$ & $0.028$ & $0.972$ \\
+$0.3$ & $0.008$ & $0.992$ \\
+$0.4$ & $0.419$ & $0.581$ \\
+$0.6$ & $0.419$ & $0.581$ \\
+$0.7$ & $0.008$ & $0.992$ \\
 \hline
 \end{tabular}
 \end{center}
 
 Esta tabla muestra que el contraste tiene excelente potencia para detectar desviaciones grandes de $p = 0.5$ (como $p = 0.3$ o $p = 0.7$), pero potencia moderada para detectar desviaciones menores (como $p = 0.4$ o $p = 0.6$).
-
 
 
 
