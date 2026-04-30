@@ -113,6 +113,9 @@ $$\text{P-value} = 2(0.00466) \approx 0.00932 \approx 0.009$$
 
 \subsection*{d): Probabilidad de Error Tipo II}
 
+Nota: Aunque el P-value para $x=37$ es aproximadamente 0.009 (del inciso c), 
+ahora consideramos un nivel de significancia diferente de $\alpha = 0.056$ para este problema.
+
 La probabilidad de error tipo II, $\beta(p)$, depende del valor verdadero de $p$.
 
 \textbf{Determinación de la región de no rechazo usando Aproximación Normal:}
@@ -194,14 +197,15 @@ Esta tabla muestra que el contraste tiene excelente potencia para detectar desvi
 
 Del inciso (d), sabemos que:
 
-$\bullet$ Región de rechazo: $X \leq 38$ o $X \geq 62$
-
-$\bullet$ Región de no rechazo: $39 \leq X \leq 61$
+$\bullet$ Región de rechazo: $X \leq 40$ o $X \geq 60$
+$\bullet$ Región de no rechazo: $41 \leq X \leq 59$
 
 Dado que $x = 37$:
-$$37 \leq 38 \text{ (está en la región de rechazo)}$$
+$$37 \leq 40 \text{ (está en la región de rechazo)}$$
 
-Por lo tanto, \textbf{rechazamos $H_0$} al nivel de significancia de aproximadamente 0.056.
+
+Por lo tanto, \textbf{rechazamos $H_0$}. El valor P es aproximadamente 0.009, 
+que es menor que 0.056, lo que proporciona evidencia fuerte contra $H_0$.
 
 \textbf{Interpretación:} Con 37 de 100 consultados favoreciendo a U, existe evidencia estadística suficiente para concluir que la proporción de votantes que favorecen a U es diferente de 0.5. Específicamente, como $37 < 50$, los datos sugieren que el partido G tiene mayor preferencia que el partido U en la población de votantes.
 
