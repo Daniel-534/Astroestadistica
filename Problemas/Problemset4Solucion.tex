@@ -1,0 +1,435 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amsfonts, amssymb, mathrsfs}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\AtBeginEnvironment{tikzpicture}{\shorthandoff{<>}}
+
+\geometry{a4paper, margin=2cm}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Astroestadística }
+\chead{Problemset 4}
+
+
+\begin{document}
+\section{Problema 1}
+\subsection{Enunciado}
+
+\textbf{Consistencia de un estimador.} Un estimador $\hat{\theta}$ se dice que es \textbf{consistente} si para cualquier $\epsilon > 0$,
+
+$$P(|\hat{\theta} - \theta| \geq \epsilon) \to 0 \quad \text{cuando } n \to \infty.$$
+
+Es decir, $\hat{\theta}$ es consistente si, a medida que el tamaño de la muestra crece, es cada vez menos probable que $\hat{\theta}$ esté a una distancia mayor que $\epsilon$ del valor verdadero de $\theta$.
+
+Demuestre que $\overline{X}$ es un estimador consistente de $\mu$ cuando $\sigma^2 < \infty$ utilizando la desigualdad de Chebyshev. [Sugerencia: La desigualdad puede escribirse de la forma
+
+$$P(|Y - \mu_Y| \geq \epsilon) \leq \frac{\sigma_Y^2}{\epsilon^2}.$$
+
+Ahora identifique $Y$ con $\overline{X}$.]
+
+\subsection{Solución}
+
+Para demostrar que $\overline{X}$ es un estimador consistente de $\mu$, debemos probar que para cualquier $\epsilon > 0$:
+
+$$P(|\overline{X} - \mu| \geq \epsilon) \to 0 \quad \text{cuando } n \to \infty.$$
+
+\textbf{Paso 1: Identificar los parámetros de $\overline{X}$}
+
+Sabemos que para la media muestral $\overline{X}$:
+\begin{itemize}
+    \item Valor esperado: $E(\overline{X}) = \mu_{\overline{X}} = \mu$
+    \item Varianza: $Var(\overline{X}) = \sigma^2_{\overline{X}} = \frac{\sigma^2}{n}$
+\end{itemize}
+
+\textbf{Paso 2: Aplicar la desigualdad de Chebyshev}
+
+La desigualdad de Chebyshev establece que para cualquier variable aleatoria $Y$ con media $\mu_Y$ y varianza $\sigma^2_Y$:
+
+$$P(|Y - \mu_Y| \geq \epsilon) \leq \frac{\sigma^2_Y}{\epsilon^2}$$
+
+Identificando $Y = \overline{X}$, tenemos:
+
+$$P(|\overline{X} - \mu| \geq \epsilon) \leq \frac{\sigma^2_{\overline{X}}}{\epsilon^2} = \frac{\sigma^2/n}{\epsilon^2} = \frac{\sigma^2}{n\epsilon^2}$$
+
+\textbf{Paso 3: Tomar el límite cuando $n \to \infty$}
+
+Ahora consideramos el límite cuando el tamaño de muestra tiende a infinito:
+
+$$\lim_{n \to \infty} P(|\overline{X} - \mu| \geq \epsilon) \leq \lim_{n \to \infty} \frac{\sigma^2}{n\epsilon^2}$$
+
+Dado que $\sigma^2 < \infty$ (varianza finita) y $\epsilon > 0$ es constante:
+
+$$\lim_{n \to \infty} \frac{\sigma^2}{n\epsilon^2} = 0$$
+
+Por lo tanto:
+
+$$\lim_{n \to \infty} P(|\overline{X} - \mu| \geq \epsilon) = 0$$
+
+\textbf{Conclusión:}
+
+Hemos demostrado que $\overline{X}$ satisface la definición de consistencia. Es decir, $\overline{X}$ es un estimador consistente de $\mu$ cuando $\sigma^2 < \infty$.
+
+Esto tiene sentido intuitivo: a medida que aumentamos el tamaño de la muestra, la varianza de $\overline{X}$ disminuye ($\sigma^2/n$), haciendo que $\overline{X}$ se concentre cada vez más alrededor del verdadero valor $\mu$.
+
+\section{Problema 2}
+
+\textbf{Edades de cúmulos estelares.} La siguiente información muestra la edad (Gyr) de algunos cúmulos estelares masivos observados en La galaxia, calculados con modelos de evolución estelar.
+
+\begin{center}
+    \begin{tabular}{ccccccc}
+    9.7 & 7.7 & 7.4 & 9.7 & 7.8 & 11.8 & 8.2 \\
+    11.3 & 8.7 & 6.8 & 5.9 & 7.2 & 7.3 & 6.3 \\
+    9.0 & 7.9 & 6.3 & 7.6 & 10.7 & 6.5 & 7.0 \\
+    8.1 & 6.8 & 7.0 & 7.8 & 7.7 & 11.6 & \\
+    \end{tabular}
+\end{center}
+
+\subsection{Solución}
+
+Primero, ordenamos los datos de menor a mayor para facilitar los cálculos. El tamaño de la muestra es $n=27$.
+\begin{center}
+    5.9, 6.3, 6.3, 6.5, 6.8, 6.8, 7.0, 7.0, 7.2, 7.3, 7.4, 7.6, 7.7, 7.7, 7.8, 7.8, 7.9, 8.1, 8.2, 8.7, 9.0, 9.7, 9.7, 10.7, 11.3, 11.6, 11.8
+\end{center}
+
+\subsubsection*{a) Establezca un estimador para valor medio de la edad de todos los cúmulos estelares masivos en la galaxia y estime.}
+
+El estimador natural para la media poblacional $\mu$ es la media muestral $\bar{X}$.
+La estimación puntual se calcula como:
+$$ \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i $$
+Sumando todos los valores observados:
+$$ \sum x_i = 219.8 $$
+Por lo tanto:
+$$ \bar{x} = \frac{219.8}{27} \approx 8.14 \text{ Gyr} $$
+La edad promedio estimada de los cúmulos estelares masivos es de aproximadamente 8.14 Gyr.
+
+\subsubsection*{b) Hacer una estimación puntual del valor de edad que separa al 50\% de los cúmulos más jóvenes de la galaxia del 50\% de los cúmulos más viejos. Establezca el estimador que va a usar.}
+
+El valor que separa el 50\% inferior del 50\% superior es la mediana. El estimador es la mediana muestral $\tilde{X}$.
+Dado que $n=27$ es impar, la mediana es el valor que ocupa la posición central, es decir, la posición $(n+1)/2 = (27+1)/2 = 14$.
+Observando los datos ordenados, el valor en la posición 14 es 7.7.
+$$ \tilde{x} = 7.7 \text{ Gyr} $$
+
+\subsubsection*{c) Calcular e interpretar un estimado puntual de la desviación estándar $\sigma$ de toda la población. ¿Qué estimador va a usar?}
+
+El estimador insesgado para la desviación estándar poblacional $\sigma$ es la desviación estándar muestral $S$, definida como:
+$$ S = \sqrt{\frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2} $$
+Primero calculamos la suma de cuadrados de las desviaciones o usamos la fórmula computacional $S_{xx} = \sum x_i^2 - \frac{(\sum x_i)^2}{n}$.
+$$ \sum x_i^2 = 9.7^2 + 7.7^2 + \dots + 11.6^2 = 1860.94 $$
+$$ S_{xx} = 1860.94 - \frac{(219.8)^2}{27} = 1860.94 - 1789.335 \approx 71.605 $$
+Ahora calculamos la varianza muestral $s^2$:
+$$ s^2 = \frac{71.605}{27-1} = \frac{71.605}{26} \approx 2.754 $$
+Finalmente, la desviación estándar muestral $s$:
+$$ s = \sqrt{2.754} \approx 1.66 \text{ Gyr} $$
+\textbf{Interpretación:} En promedio, la edad de un cúmulo estelar masivo se desvía aproximadamente 1.66 Gyr de la edad media de la población.
+
+\subsubsection*{d) Hacer una estimación puntual de la proporción de todos los cúmulos cuya edad excede los 10 Gyr}
+
+El estimador para una proporción poblacional $p$ es la proporción muestral $\hat{P}$.
+Contamos el número de observaciones mayores a 10: $\{11.8, 11.3, 10.7, 11.6\}$. Hay 4 observaciones.
+$$ \hat{p} = \frac{4}{27} \approx 0.148 $$
+Se estima que aproximadamente el 14.8\% de los cúmulos tienen una edad mayor a 10 Gyr.
+
+\subsubsection*{e) Hacer una estimación puntual del coeficiente de variación $\sigma/\mu$ ¿Qué estimador va a usar?}
+
+El estimador natural para el coeficiente de variación poblacional es el coeficiente de variación muestral, dado por $S/\bar{X}$.
+Usando los valores calculados en los incisos anteriores:
+$$ \frac{s}{\bar{x}} = \frac{1.66}{8.14} \approx 0.204 $$
+El coeficiente de variación estimado es 0.204 (o 20.4\%), lo que indica que la desviación estándar es aproximadamente el 20\% del valor de la media.
+
+
+\section{Problema 3}
+
+\textbf{Enunciado:}
+
+¿Con o sin azúcar? De un número $n_1$ de hombres seleccionados aleatoriamente, $X_1$ toman tinto con azúcar, mientras de $n_2$ mujeres, $X_2$ toman tinto con azúcar. Sean $p_1$ y $p_2$ las probabilidades de que un hombre y una mujer, respectivamente, seleccionados aleatoriamente tomen tinto con azúcar.
+
+\begin{itemize}
+    \item[a)] Muestre que $(X_1/n_1) - (X_2/n_2)$ es un estimador no sesgado para $p_1 - p_2$.
+    \item[b)] ¿Cuál es el error estándar de este estimador?
+    \item[c)] ¿Cómo usaría los valores observados $x_1$ y $x_2$ para estimar el error estándar de su estimador?
+    \item[d)] Si $n_1 = n_2 = 200$, $x_1 = 127$ y $x_2 = 176$, use el estimador del literal (a) para obtener un estimado de $p_1 - p_2$.
+    \item[e)] Use los datos anteriores para estimar el error estándar del estimador.
+\end{itemize}
+
+\subsection{Solución}
+
+Este problema trata sobre la inferencia estadística para la diferencia entre dos proporciones de población. Los conceptos de estimadores puntuales, insesgamiento y error estándar se discuten en el Capítulo 6, mientras que la inferencia específica para dos muestras se aborda en el Capítulo 9, Sección 9.4 del libro de texto.
+
+\subsubsection*{a) Demostración de que el estimador es no sesgado}
+
+Para demostrar que un estimador es no sesgado, debemos probar que su valor esperado es igual al parámetro que se desea estimar. En este caso, el parámetro es la diferencia de proporciones poblacionales, $p_1 - p_2$.
+
+El estimador propuesto es la diferencia de las proporciones muestrales:
+$$ \hat{p}_1 - \hat{p}_2 = \frac{X_1}{n_1} - \frac{X_2}{n_2} $$
+
+Donde $X_1$ y $X_2$ son variables aleatorias binomiales con parámetros $(n_1, p_1)$ y $(n_2, p_2)$ respectivamente. Sabemos que el valor esperado de una variable binomial es $E[X] = np$. Por lo tanto:
+$$ E[X_1] = n_1 p_1 \quad \text{y} \quad E[X_2] = n_2 p_2 $$
+
+Aplicando la propiedad de linealidad del valor esperado ($E[aX + bY] = aE[X] + bE[Y]$), calculamos el valor esperado del estimador:
+
+$$ E\left[ \frac{X_1}{n_1} - \frac{X_2}{n_2} \right] = E\left[ \frac{X_1}{n_1} \right] - E\left[ \frac{X_2}{n_2} \right] $$
+$$ = \frac{1}{n_1} E[X_1] - \frac{1}{n_2} E[X_2] $$
+$$ = \frac{1}{n_1} (n_1 p_1) - \frac{1}{n_2} (n_2 p_2) $$
+$$ = p_1 - p_2 $$
+
+Dado que $E[\hat{p}_1 - \hat{p}_2] = p_1 - p_2$, hemos demostrado que $(X_1/n_1) - (X_2/n_2)$ es un estimador no sesgado para la diferencia de proporciones $p_1 - p_2$.
+
+\subsubsection*{b) Error estándar del estimador}
+
+El error estándar de un estimador es su desviación estándar. Para encontrarla, primero calculamos la varianza del estimador. Asumiendo que las muestras de hombres y mujeres son independientes, la varianza de la diferencia es la suma de las varianzas:
+
+$$ V\left( \frac{X_1}{n_1} - \frac{X_2}{n_2} \right) = V\left( \frac{X_1}{n_1} \right) + V\left( \frac{X_2}{n_2} \right) $$
+
+Usando la propiedad de la varianza $V(aX) = a^2 V(X)$ y sabiendo que la varianza de una variable binomial es $V(X) = np(1-p)$:
+
+$$ V\left( \frac{X_1}{n_1} \right) = \frac{1}{n_1^2} V(X_1) = \frac{1}{n_1^2} n_1 p_1 (1 - p_1) = \frac{p_1 (1 - p_1)}{n_1} $$
+$$ V\left( \frac{X_2}{n_2} \right) = \frac{1}{n_2^2} V(X_2) = \frac{1}{n_2^2} n_2 p_2 (1 - p_2) = \frac{p_2 (1 - p_2)}{n_2} $$
+
+Por lo tanto, la varianza del estimador es:
+$$ V(\hat{p}_1 - \hat{p}_2) = \frac{p_1 (1 - p_1)}{n_1} + \frac{p_2 (1 - p_2)}{n_2} $$
+
+El error estándar ($\sigma_{\hat{p}_1 - \hat{p}_2}$) es la raíz cuadrada de la varianza:
+$$ \sigma_{\hat{p}_1 - \hat{p}_2} = \sqrt{\frac{p_1 (1 - p_1)}{n_1} + \frac{p_2 (1 - p_2)}{n_2}} $$
+
+\subsubsection*{c) Estimación del error estándar con valores observados}
+
+En la práctica, los valores de $p_1$ y $p_2$ son desconocidos. Para estimar el error estándar, sustituimos las proporciones poblacionales $p_1$ y $p_2$ en la fórmula del inciso (b) con sus estimadores puntuales muestrales $\hat{p}_1 = x_1/n_1$ y $\hat{p}_2 = x_2/n_2$.
+
+El error estándar estimado ($\hat{\sigma}_{\hat{p}_1 - \hat{p}_2}$) es:
+$$ \hat{\sigma}_{\hat{p}_1 - \hat{p}_2} = \sqrt{\frac{\hat{p}_1 (1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2 (1 - \hat{p}_2)}{n_2}} $$
+donde $\hat{p}_1 = \frac{x_1}{n_1}$ y $\hat{p}_2 = \frac{x_2}{n_2}$.
+
+\subsubsection*{d) Estimación puntual de $p_1 - p_2$}
+
+Con los datos proporcionados:
+\begin{itemize}
+    \item $n_1 = 200, x_1 = 127$
+    \item $n_2 = 200, x_2 = 176$
+\end{itemize}
+
+Primero calculamos las proporciones muestrales:
+$$ \hat{p}_1 = \frac{127}{200} = 0.635 $$
+$$ \hat{p}_2 = \frac{176}{200} = 0.880 $$
+
+El estimado de la diferencia $p_1 - p_2$ es simplemente la diferencia de las proporciones muestrales:
+$$ \hat{p}_1 - \hat{p}_2 = 0.635 - 0.880 = -0.245 $$
+
+Esto sugiere que la proporción de mujeres que toman tinto con azúcar es 0.245 (o 24.5\%) mayor que la de los hombres en la población.
+
+\subsubsection*{e) Estimación del error estándar}
+
+Usamos la fórmula desarrollada en el inciso (c) y los valores calculados en el inciso (d):
+
+$$ \hat{\sigma}_{\hat{p}_1 - \hat{p}_2} = \sqrt{\frac{0.635 (1 - 0.635)}{200} + \frac{0.880 (1 - 0.880)}{200}} $$
+
+Calculamos cada término dentro de la raíz:
+1.  Para los hombres: $\frac{0.635 \times 0.365}{200} = \frac{0.231775}{200} \approx 0.0011589$
+2.  Para las mujeres: $\frac{0.880 \times 0.120}{200} = \frac{0.1056}{200} = 0.0005280$
+
+Sumamos los términos:
+$$ 0.0011589 + 0.0005280 = 0.0016869 $$
+
+Finalmente, tomamos la raíz cuadrada:
+$$ \hat{\sigma}_{\hat{p}_1 - \hat{p}_2} = \sqrt{0.0016869} \approx 0.04107 $$
+
+El error estándar estimado de la diferencia de proporciones es aproximadamente 0.0411.
+
+
+\section{Problema 4}
+
+\subsection{Enunciado}
+
+\textbf{4. Distribución de Weibull.}
+
+a) Consulte qué es la distribución de Weibull, escriba su pdf (función de densidad de probabilidad) y grafique.
+
+b) Sea $X$ una variable aleatoria con distribución de Weibull con parámetros $\alpha$ y $\beta$ de modo que:
+$$ E(X) = \beta\Gamma(1 + 1/\alpha) $$
+$$ V(X) = \beta^2\{\Gamma(1 + 2/\alpha) - (\Gamma(1 + 1/\alpha))^2\} $$
+
+Basándose en una muestra $X_1, ..., X_n$, utilice el método de los momentos para escribir las ecuaciones de los estimadores de $\alpha$ y $\beta$. Muestre que, una vez obtenido el estimado de $\alpha$, el estimado de $\beta$ puede obtenerse a partir de la función gamma y que el estimado de $\alpha$ se puede obtener de una ecuación que implica la función gamma.
+
+Ahora, sean $n = 20$, $\bar{x} = 28.0$ y $\sum x_i^2 = 16500$, estime los parámetros $\beta$ y $\alpha$. [Ayuda: $[\Gamma(1.2)]^2 /\Gamma(1.4) = 0.95$]
+
+\subsection{Solución}
+
+\textbf{a) Distribución de Weibull y su gráfica}
+
+De acuerdo con la \textbf{Sección 4.5 (Otras distribuciones continuas)} del libro de texto de Devore, la distribución de Weibull es una familia de distribuciones de probabilidad continua utilizada frecuentemente en análisis de confiabilidad y supervivencia.
+
+La función de densidad de probabilidad (pdf) para una variable aleatoria $X$ con distribución de Weibull con parámetros de forma $\alpha > 0$ y de escala $\beta > 0$ se define como:
+
+$$ f(x; \alpha, \beta) = \begin{cases} 
+\frac{\alpha}{\beta^\alpha} x^{\alpha-1} e^{-(x/\beta)^\alpha} & x \geq 0 \\
+0 & \text{en otro caso}
+\end{cases} $$
+
+\textit{Gráfica:} La forma de la gráfica depende del parámetro de forma $\alpha$.
+\begin{itemize}
+    \item Si $0 < \alpha < 1$, la función es decreciente y tiende a infinito cuando $x \to 0$.
+    \item Si $\alpha = 1$, la distribución se reduce a una distribución exponencial.
+    \item Si $\alpha > 1$, la función es unimodal (tiene forma de campana asimétrica), comenzando en 0, aumentando hasta un máximo y luego decayendo hacia 0.
+\end{itemize}
+
+\textbf{b) Estimación por el Método de los Momentos}
+
+De acuerdo con la \textbf{Sección 6.2 (Métodos de estimación puntual)}, el método de los momentos consiste en igualar los momentos de la población con los momentos muestrales correspondientes.
+
+Los momentos de la población dados son:
+1. Primer momento (Media): $E(X) = \beta\Gamma(1 + 1/\alpha)$
+2. Segundo momento central (Varianza): $V(X) = \beta^2\{\Gamma(1 + 2/\alpha) - (\Gamma(1 + 1/\alpha))^2\}$
+
+Para aplicar el método, necesitamos el segundo momento raw de la población, $E(X^2)$. Sabemos que $V(X) = E(X^2) - [E(X)]^2$, por lo tanto:
+$$ E(X^2) = V(X) + [E(X)]^2 $$
+Sustituyendo las expresiones dadas:
+$$ E(X^2) = \beta^2\{\Gamma(1 + 2/\alpha) - (\Gamma(1 + 1/\alpha))^2\} + [\beta\Gamma(1 + 1/\alpha)]^2 $$
+$$ E(X^2) = \beta^2\Gamma(1 + 2/\alpha) - \beta^2(\Gamma(1 + 1/\alpha))^2 + \beta^2(\Gamma(1 + 1/\alpha))^2 $$
+$$ E(X^2) = \beta^2\Gamma(1 + 2/\alpha) $$
+
+Ahora igualamos los momentos poblacionales a los muestrales:
+1. $E(X) = \bar{x} \implies \beta\Gamma(1 + 1/\alpha) = \bar{x}$  (Ecuación 1)
+2. $E(X^2) = \frac{1}{n}\sum x_i^2 \implies \beta^2\Gamma(1 + 2/\alpha) = \frac{1}{n}\sum x_i^2$ (Ecuación 2)
+
+Para encontrar una ecuación que implique solo la función gamma para estimar $\alpha$, dividimos el cuadrado de la Ecuación 1 entre la Ecuación 2:
+
+$$ \frac{[E(X)]^2}{E(X^2)} = \frac{[\beta\Gamma(1 + 1/\alpha)]^2}{\beta^2\Gamma(1 + 2/\alpha)} = \frac{[\Gamma(1 + 1/\alpha)]^2}{\Gamma(1 + 2/\alpha)} $$
+
+Sustituyendo los estimadores muestrales en el lado izquierdo:
+$$ \frac{(\bar{x})^2}{\frac{1}{n}\sum x_i^2} = \frac{[\Gamma(1 + 1/\alpha)]^2}{\Gamma(1 + 2/\alpha)} $$
+
+Esta es la ecuación que permite estimar $\alpha$. Una vez obtenido $\hat{\alpha}$, podemos despejar $\beta$ de la Ecuación 1:
+$$ \hat{\beta} = \frac{\bar{x}}{\Gamma(1 + 1/\hat{\alpha})} $$
+
+\textbf{Cálculo numérico:}
+
+Datos: $n = 20$, $\bar{x} = 28.0$, $\sum x_i^2 = 16500$.
+
+Calculamos el segundo momento muestral:
+$$ \frac{1}{n}\sum x_i^2 = \frac{16500}{20} = 825 $$
+
+Calculamos la razón del lado izquierdo de nuestra ecuación derivada:
+$$ \text{Razón} = \frac{(28.0)^2}{825} = \frac{784}{825} \approx 0.9503 $$
+
+Usando la ayuda proporcionada en el problema:
+$$ \frac{[\Gamma(1.2)]^2}{\Gamma(1.4)} = 0.95 $$
+
+Igualamos la estructura de la ecuación con el valor dado:
+$$ \frac{[\Gamma(1 + 1/\alpha)]^2}{\Gamma(1 + 2/\alpha)} \approx 0.95 $$
+Esto implica que:
+$$ 1 + 1/\alpha = 1.2 \implies 1/\alpha = 0.2 \implies \alpha = 5 $$
+
+Ahora estimamos $\beta$ usando $\hat{\alpha} = 5$ y la Ecuación 1:
+$$ \bar{x} = \hat{\beta} \Gamma(1 + 1/5) = \hat{\beta} \Gamma(1.2) $$
+$$ 28.0 = \hat{\beta} \Gamma(1.2) $$
+
+Consultando tablas de la función Gamma o usando una calculadora, $\Gamma(1.2) \approx 0.9182$.
+$$ \hat{\beta} = \frac{28.0}{0.9182} \approx 30.49 $$
+
+\textbf{Resultados finales:}
+$$ \hat{\alpha} = 5 $$
+$$ \hat{\beta} \approx 30.49 $$
+
+
+\section{Problema 5}
+
+\subsection{Enunciado}
+\textbf{Edades de estrellas.} Se calculan las edades de algunas estrellas dentro de cierto cúmulo de estrellas joven (en millones de años):
+\[ 392, 376, 401, 367, 389, 362, 409, 415, 358, 375. \]
+
+\textit{a)} Suponiendo que la edad de las estrellas en esta región sigue una distribución normal, calcule el promedio real y la desviación estándar usando el método de maximum likelihood.
+
+\textit{b)} Una vez más, suponiendo una distribución normal, calcule la edad por debajo de la cual se encuentra el 95\% de todas las estrellas de este cúmulo. [Sugerencia: ¿cuál es el percentil 95 en términos de $\mu$ o $\sigma$? Ahora use el principio de invarianza.]
+
+\textit{c)} Suponga que se decide medir la edad de las estrellas en otra región de este cúmulo. Sea $X$ dicha medida, use los datos dados para estimar la probabilidad de obtener un $X$ a lo sumo de 400 millones de años. [Sugerencia: $P(X \le 400) = \Phi((400 - \mu)/\sigma)$.]
+
+\subsection{Solución}
+
+Para resolver este problema, utilizaremos los conceptos de estimación de máxima verosimilitud (Maximum Likelihood Estimation, MLE) para una distribución normal, tal como se discute en el Capítulo 6 del libro Devore.
+
+Sean los datos observados $x_1, x_2, \dots, x_{10}$:
+\[ 392, 376, 401, 367, 389, 362, 409, 415, 358, 375 \]
+El tamaño de la muestra es $n = 10$.
+
+\subsubsection*{Inciso a)}
+Se asume que la variable aleatoria $X$ (edad de las estrellas) sigue una distribución normal $N(\mu, \sigma^2)$. Debemos encontrar los estimadores de máxima verosimilitud para la media $\mu$ y la desviación estándar $\sigma$.
+
+Según la Sección 6.2 del libro Devore, para una distribución normal, los estimadores de máxima verosimilitud son:
+\begin{itemize}
+    \item Para la media $\mu$: $\hat{\mu} = \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$
+    \item Para la varianza $\sigma^2$: $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2$
+\end{itemize}
+
+\textbf{Cálculo de $\hat{\mu}$:}
+\begin{align*}
+    \sum_{i=1}^{10} x_i &= 392 + 376 + 401 + 367 + 389 + 362 + 409 + 415 + 358 + 375 = 3844 \\
+    \hat{\mu} = \bar{x} &= \frac{3844}{10} = 384.4
+\end{align*}
+El estimado del promedio real es 384.4 millones de años.
+
+\textbf{Cálculo de $\hat{\sigma}$:}
+Primero calculamos la suma de los cuadrados de las desviaciones respecto a la media:
+\begin{align*}
+    \sum_{i=1}^{10} (x_i - \bar{x})^2 &= (392-384.4)^2 + (376-384.4)^2 + \dots + (375-384.4)^2 \\
+    &= (7.6)^2 + (-8.4)^2 + (16.6)^2 + (-17.4)^2 + (4.6)^2 + (-22.4)^2 + (24.6)^2 + (30.6)^2 + (-26.4)^2 + (-9.4)^2 \\
+    &= 57.76 + 70.56 + 275.56 + 302.76 + 21.16 + 501.76 + 605.16 + 936.36 + 696.96 + 88.36 \\
+    &= 3556.4
+\end{align*}
+Ahora, el estimado de la varianza es:
+\[ \hat{\sigma}^2 = \frac{3556.4}{10} = 355.64 \]
+Y el estimado de la desviación estándar es:
+\[ \hat{\sigma} = \sqrt{355.64} \approx 18.858 \]
+
+\subsubsection*{Inciso b)}
+Se pide calcular la edad por debajo de la cual se encuentra el 95\% de las estrellas. Esto corresponde al percentil 95 de la distribución, denotado como $\pi_{0.95}$.
+
+Para una distribución normal $N(\mu, \sigma^2)$, el percentil $p$-ésimo está dado por:
+\[ \pi_p = \mu + z_p \sigma \]
+donde $z_p$ es el percentil $p$-ésimo de la distribución normal estándar $N(0,1)$.
+
+Para $p = 0.95$, buscamos $z_{0.95}$ en la Tabla A.3 del apéndice. El valor que deja un área de 0.95 a su izquierda es aproximadamente $z_{0.95} = 1.645$.
+Por lo tanto, el percentil 95 en términos de los parámetros es:
+\[ \pi_{0.95} = \mu + 1.645\sigma \]
+
+El \textbf{principio de invarianza} (Sección 6.2, Proposición) establece que si $\hat{\theta}_1, \dots, \hat{\theta}_k$ son los estimadores de máxima verosimilitud de los parámetros $\theta_1, \dots, \theta_k$, entonces el estimado de máxima verosimilitud de cualquier función $h(\theta_1, \dots, \theta_k)$ es $h(\hat{\theta}_1, \dots, \hat{\theta}_k)$.
+
+Aplicando este principio, el estimado del percentil 95 es:
+\[ \hat{\pi}_{0.95} = \hat{\mu} + 1.645\hat{\sigma} \]
+Sustituyendo los valores calculados en el inciso a):
+\begin{align*}
+    \hat{\pi}_{0.95} &= 384.4 + 1.645(18.858) \\
+    &\approx 384.4 + 31.021 \\
+    &\approx 415.42
+\end{align*}
+La edad estimada por debajo de la cual se encuentra el 95\% de las estrellas es aproximadamente 415.42 millones de años.
+
+\subsubsection*{Inciso c)}
+Se desea estimar la probabilidad $P(X \le 400)$.
+Estandarizando la variable $X \sim N(\mu, \sigma^2)$, tenemos:
+\[ P(X \le 400) = P\left(\frac{X - \mu}{\sigma} \le \frac{400 - \mu}{\sigma}\right) = \Phi\left(\frac{400 - \mu}{\sigma}\right) \]
+donde $\Phi$ es la función de distribución acumulativa de la normal estándar.
+
+Nuevamente, por el principio de invarianza, estimamos esta probabilidad sustituyendo $\mu$ y $\sigma$ por sus estimadores de máxima verosimilitud $\hat{\mu}$ y $\hat{\sigma}$:
+\begin{align*}
+    \widehat{P(X \le 400)} &= \Phi\left(\frac{400 - \hat{\mu}}{\hat{\sigma}}\right) \\
+    &= \Phi\left(\frac{400 - 384.4}{18.858}\right) \\
+    &= \Phi\left(\frac{15.6}{18.858}\right) \\
+    &\approx \Phi(0.827)
+\end{align*}
+Interpolando en la Tabla A.3 (Áreas de la Curva normal estándar):
+\begin{itemize}
+    \item $\Phi(0.82) = 0.7939$
+    \item $\Phi(0.83) = 0.7967$
+\end{itemize}
+Para $z = 0.827$, el valor es aproximadamente $0.7939 + 0.7(0.7967 - 0.7939) \approx 0.7959$.
+
+Por lo tanto, la probabilidad estimada de obtener una edad de a lo sumo 400 millones de años es aproximadamente \textbf{0.796}.
+
+\end{document}
