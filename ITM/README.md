@@ -1,4 +1,4 @@
-```markdown
+
 # GUÍA DE TRABAJO DE CAMPO: ESTADÍSTICA INFERENCIAL EN EXCEL O RSTUDIO
 
 **TÍTULO DEL PROYECTO:** ____________________________________________  
@@ -167,4 +167,3 @@ linealidad, independencia, normalidad de residuos y homocedasticidad.
 - Revisa ortografía, coherencia en títulos y nomenclaturas estadísticas.
 - En el video, presenta de manera clara la justificación, metodología, análisis y conclusiones.
 - Todos los integrantes deben participar activamente en la exposición.
-```
