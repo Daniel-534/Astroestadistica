@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
-\usepackage{amsmath}
+\usepackage{amsmath, mathrsfs}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{geometry}
@@ -17,12 +17,117 @@
 
 \pagestyle{fancy}
 \fancyhf{}
+\setlength{\headheight}{14.5pt}
 \lhead{Astroestadística }
 \chead{Problem Set 5}
 \rhead{Problemas Pares}
 
 
 \begin{document}
+
+
+\section*{Problema 1}
+\textbf{Lanzamiento de moneda.} Hallar la probabilidad de obtener entre 40 y 60 caras inclusive en 100 lanzamientos de una moneda. Compare los resultados entre una aproximación y el valor real.
+
+Para ensayar la hipótesis de que una moneda está bien hecha, se toma la siguiente regla de decisión: (1) se acepta la hipótesis si el número de caras en una serie de 100 lanzamientos se encuentra entre 40 y 60, ambos inclusive; (2) de otro modo, se rechaza.
+\begin{enumerate}
+\item[a)] Hallar la probabilidad de rechazar la hipótesis, cuando en realidad es cierta.
+\item[b)] Interpretar gráficamente la regla de decisión y el resultado del apartado (a).
+\item[c)] ¿Qué conclusiones se sacarían si en la muestra de 100 lanzamientos se obtuviesen 53 caras? ¿60 caras?
+\item[d)] ¿Podrían ser erróneas las conclusiones de (c)? Explicar.
+\item[e)] ¿Cuál es la probabilidad de aceptar la hipótesis de que la moneda está bien hecha cuando la probabilidad real de cara es $p = 0.7$?
+\end{enumerate}
+
+\section*{Solución}
+Sea $X$ la variable aleatoria que representa el número de caras en $n=100$ lanzamientos. Bajo la hipótesis de que la moneda está "bien hecha" (es justa), $X$ sigue una distribución binomial con parámetros $n=100$ y $p=0.5$.
+$$ X \sim \text{Binomial}(100, 0.5) $$
+
+La regla de decisión es:
+\begin{itemize}
+    \item \textbf{Aceptar $H_0$ (moneda justa)} si $40 \le X \le 60$.
+    \item \textbf{Rechazar $H_0$} si $X < 40$ o $X > 60$.
+\end{itemize}
+
+\subsection*{a) Probabilidad de rechazar la hipótesis cuando es cierta}
+Esta probabilidad corresponde al error tipo I ($\alpha$). Debemos calcular $P(\text{Rechazar } H_0 | p=0.5)$.
+$$ P(\text{Rechazar } H_0) = P(X < 40) + P(X > 60) = 1 - P(40 \le X \le 60) $$
+
+\textbf{Valor Real (Distribución Binomial Exacta):}
+$$ P(40 \le X \le 60) = \sum_{k=40}^{60} \binom{100}{k} (0.5)^{100} \approx 0.9648 $$
+Por lo tanto, la probabilidad de rechazar es:
+$$ \alpha = 1 - 0.9648 = 0.0352 $$
+
+\textbf{Aproximación Normal:}
+Dado que $n$ es grande, aproximamos la binomial con una normal $N(\mu, \sigma^2)$.
+$$ \mu = np = 100(0.5) = 50 $$
+$$ \sigma = \sqrt{np(1-p)} = \sqrt{100(0.5)(0.5)} = 5 $$
+Usando la corrección por continuidad para el intervalo $[40, 60]$, calculamos $P(39.5 \le X \le 60.5)$.
+Estandarizamos los límites:
+$$ Z_1 = \frac{39.5 - 50}{5} = -2.1, \quad Z_2 = \frac{60.5 - 50}{5} = 2.1 $$
+$$ P(39.5 \le X \le 60.5) = P(-2.1 \le Z \le 2.1) = \Phi(2.1) - \Phi(-2.1) $$
+Consultando la tabla normal estándar: $\Phi(2.1) \approx 0.9821$ y $\Phi(-2.1) \approx 0.0179$.
+$$ P(40 \le X \le 60) \approx 0.9821 - 0.0179 = 0.9642 $$
+La probabilidad de rechazar (aproximada) es:
+$$ \alpha \approx 1 - 0.9642 = 0.0358 $$
+
+\textbf{Comparación:} El valor exacto es $0.0352$ y la aproximación es $0.0358$. La aproximación normal es muy precisa en este caso.
+
+\subsection*{b) Interpretación Gráfica}
+La gráfica representa la distribución normal aproximada centrada en $\mu=50$.
+\begin{itemize}
+    \item La región central entre $X=40$ y $X=60$ es la \textbf{región de aceptación} de $H_0$.
+    \item Las dos colas (a la izquierda de 40 y a la derecha de 60) son las \textbf{regiones de rechazo}.
+    \item El área sombreada en las colas representa la probabilidad $\alpha \approx 0.0358$ calculada en el inciso (a).
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=0.12cm,y=0.9cm,>=Stealth]
+% Baseline
+\draw[->] (0,0) -- (101,0) node[right] {$X$};
+% Regions
+\fill[red!18] (0,0) rectangle (40,0.7);
+\fill[blue!10] (40,0) rectangle (60,0.7);
+\fill[red!18] (60,0) rectangle (100,0.7);
+% Ticks and labels
+\foreach \x/\lab in {0/0,20/20,40/40,50/50,60/60,80/80,100/100}
+\draw (\x,0.08) -- (\x,-0.12) node[below] {\lab};
+% Boundary markers
+\draw[very thick,red!70!black] (40,0) -- (40,1.05);
+\draw[very thick,red!70!black] (60,0) -- (60,1.05);
+\draw[dashed] (50,0) -- (50,1.05);
+% Annotations
+\node[red!70!black,align=center] at (20,0.35) {Rechazo};
+\node[align=center] at (50,0.35) {Aceptación};
+\node[red!70!black,align=center] at (80,0.35) {Rechazo};
+\end{tikzpicture}
+\caption{Regla de decisión: Se acepta $H_0$ si el número de caras cae en la zona azul central $[40, 60]$. Se rechaza si cae en las zonas rojas.}
+\end{figure}
+
+\subsection*{c) Conclusiones para 53 y 60 caras}
+\begin{itemize}
+    \item Si se obtienen \textbf{53 caras}: Como $40 \le 53 \le 60$, el valor cae en la región de aceptación. \textbf{Conclusión:} No hay evidencia suficiente para rechazar que la moneda está bien hecha. Aceptamos $H_0$.
+    \item Si se obtienen \textbf{60 caras}: Como $40 \le 60 \le 60$ (el intervalo es inclusivo), el valor cae en el límite de la región de aceptación. \textbf{Conclusión:} Aceptamos $H_0$.
+\end{itemize}
+
+\subsection*{d) ¿Podrían ser erróneas las conclusiones?}
+Sí, es posible que las conclusiones sean erróneas. Esto se conoce como \textbf{Error Tipo II} ($\beta$).
+Aunque los datos observados (53 o 60 caras) son consistentes con una moneda justa, también podrían ocurrir (con menor probabilidad) si la moneda estuviera ligeramente cargada. Al aceptar $H_0$, corremos el riesgo de no detectar una desviación real de la justicia de la moneda.
+
+\subsection*{e) Probabilidad de aceptar $H_0$ si $p=0.7$}
+Aquí calculamos la probabilidad de cometer un Error Tipo II ($\beta$) para la alternativa específica $p=0.7$.
+La nueva distribución es $X' \sim \text{Binomial}(100, 0.7)$.
+Aceptamos $H_0$ si $40 \le X' \le 60$.
+Usamos la aproximación normal con los nuevos parámetros:
+$$ \mu' = 100(0.7) = 70 $$
+$$ \sigma' = \sqrt{100(0.7)(0.3)} = \sqrt{21} \approx 4.583 $$
+Calculamos $P(40 \le X' \le 60)$ con corrección por continuidad ($39.5$ a $60.5$):
+$$ Z_{inf} = \frac{39.5 - 70}{4.583} \approx -6.65 $$
+$$ Z_{sup} = \frac{60.5 - 70}{4.583} \approx -2.07 $$
+$$ \beta = P(-6.65 \le Z \le -2.07) = \Phi(-2.07) - \Phi(-6.65) $$
+Dado que $\Phi(-6.65) \approx 0$:
+$$ \beta \approx \Phi(-2.07) = 1 - \Phi(2.07) \approx 1 - 0.9808 = 0.0192 $$
+\textbf{Respuesta:} La probabilidad de aceptar incorrectamente que la moneda es justa cuando en realidad $p=0.7$ es aproximadamente \textbf{0.0192} (o 1.92\%).
 
 \section*{Problema 2}
 
@@ -73,7 +178,10 @@ Esto implica:
 $$X - 50 \geq 13 \quad \text{o} \quad X - 50 \leq -13$$
 $$X \geq 63 \quad \text{o} \quad X \leq 37$$
 
-\textbf{Respuesta:} Los valores igual o más contradictorios son $X \in \{0, 1, 2, \ldots, 37\} \cup \{63, 64, \ldots, 100\}$.
+\textbf{Respuesta:} Los valores igual o más contradictorios son:
+\[
+X \in \{0, 1, 2, \ldots, 37\} \cup \{63, 64, \ldots, 100\}.
+\]
 
 \begin{figure}[H]
 \centering
@@ -328,6 +436,90 @@ que es menor que 0.056, lo que proporciona evidencia fuerte contra $H_0$.
 
 \textbf{Interpretación:} Con 37 de 100 consultados favoreciendo a U, existe evidencia estadística suficiente para concluir que la proporción de votantes que favorecen a U es diferente de 0.5. Específicamente, como $37 < 50$, los datos sugieren que el partido G tiene mayor preferencia que el partido U en la población de votantes.
 
+
+
+\section*{Problema 3}
+\textbf{Consumo de alcohol.} Un estudio (hipotético) en la Universidad encontró que 51 estudiantes en una muestra de 462 se abstienen de consumir alcohol. ¿Estos resultados proporcionan suficiente evidencia para concluir que más del 10\% de la población se abstiene de consumir alcohol? Realice la prueba de hipótesis apropiada.
+
+\section*{Solución}
+Para resolver este problema, utilizaremos una prueba de hipótesis para una proporción poblacional, basándonos en la teoría presentada en el \textbf{Capítulo 8 (Pruebas de hipótesis basadas en una sola muestra)} y el \textbf{Capítulo 9} del texto de Devore.
+
+\subsection*{1. Planteamiento de las Hipótesis}
+El parámetro de interés es $p$, la proporción real de todos los estudiantes de la universidad que se abstienen de consumir alcohol.
+Queremos probar si esta proporción es mayor que 0.10 (10\%).
+\begin{align*}
+H_0: p &= 0.10 \\
+H_a: p &> 0.10
+\end{align*}
+Esta es una prueba de \textbf{cola superior}.
+
+\subsection*{2. Datos y Condiciones}
+De la muestra tenemos:
+\begin{itemize}
+    \item Tamaño de la muestra: $n = 462$
+    \item Número de éxitos (estudiantes que se abstienen): $x = 51$
+    \item Proporción muestral: $\hat{p} = \frac{x}{n} = \frac{51}{462} \approx 0.1104$
+\end{itemize}
+
+Verificamos las condiciones para usar la aproximación normal (prueba $z$ para una proporción):
+\begin{itemize}
+    \item $np_0 = 462(0.10) = 46.2 \geq 10$
+    \item $n(1-p_0) = 462(0.90) = 415.8 \geq 10$
+\end{itemize}
+Ambas condiciones se cumplen, por lo que la distribución muestral de $\hat{p}$ es aproximadamente normal bajo $H_0$.
+
+\subsection*{3. Estadístico de Prueba}
+El estadístico de prueba $z$ se calcula como:
+$$ z = \frac{\hat{p} - p_0}{\sqrt{\frac{p_0(1-p_0)}{n}}} $$
+Sustituyendo los valores:
+$$ z = \frac{0.1104 - 0.10}{\sqrt{\frac{0.10(1-0.10)}{462}}} = \frac{0.0104}{\sqrt{\frac{0.09}{462}}} $$
+$$ z = \frac{0.0104}{\sqrt{0.0001948}} \approx \frac{0.0104}{0.01396} \approx 0.745 $$
+
+\subsection*{4. Valor P y Decisión}
+El valor P es la probabilidad de obtener un estadístico de prueba tan extremo o más extremo que el observado, asumiendo que $H_0$ es verdadera. Al ser una prueba de cola superior:
+$$ P\text{-value} = P(Z > 0.745) = 1 - \Phi(0.745) $$
+Consultando la \textbf{Tabla A.3 (Áreas de la Curva normal estándar)} del apéndice de Devore:
+\begin{itemize}
+    \item $\Phi(0.74) \approx 0.7704$
+    \item $\Phi(0.75) \approx 0.7734$
+\end{itemize}
+Interpolando o tomando el valor más cercano, $\Phi(0.745) \approx 0.772$.
+$$ P\text{-value} \approx 1 - 0.772 = 0.228 $$
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1.8cm,y=5cm,>=Stealth]
+% Axes
+\draw[->] (-3.2,0) -- (3.4,0) node[right] {$z$};
+\draw[->] (-3.2,0) -- (-3.2,0.46) node[above] {densidad};
+% Bell curve
+\draw[thick,blue!70!black,smooth,samples=120,domain=-3.2:3.2]
+plot (\x,{0.4*exp(-\x*\x/2)});
+% Shade upper tail
+\fill[red!20,domain=0.745:3.2,smooth,samples=80]
+(0.745,0) -- plot (\x,{0.4*exp(-\x*\x/2)}) -- (3.2,0) -- cycle;
+% Markers
+\draw[dashed] (0,0) -- (0,0.4);
+\draw[dashed,red!70!black] (0.745,0) -- (0.745,{0.4*exp(-0.745*0.745/2)});
+% Ticks
+\foreach \x/\lab in {-3/-3,-2/-2,-1/-1,0/0,1/1,2/2,3/3}
+\draw (\x,0) -- (\x,-0.012) node[below] {\lab};
+\draw (0.745,0) -- (0.745,-0.012) node[below left] {0.745};
+% Labels
+\node[red!70!black] at (1.95,0.11) {$P(Z>0.745)$};
+\end{tikzpicture}
+\caption{Representación gráfica del valor P para la prueba de cola superior del problema 3. El área sombreada corresponde a $P(Z>0.745) \approx 0.228$.}
+\end{figure}
+
+Comparamos el valor P con un nivel de significancia estándar, por ejemplo $\alpha = 0.05$:
+$$ 0.228 > 0.05 \quad \Rightarrow \quad \text{No rechazamos } H_0 $$
+
+\subsection*{5. Conclusión Final}
+Con un valor P de aproximadamente 0.228, \textbf{no rechazamos la hipótesis nula} al nivel de significancia del 5\% (ni siquiera al 10\%).
+
+\textbf{Interpretación:} Los datos \textbf{no proporcionan evidencia estadística suficiente} para concluir que más del 10\% de la población estudiantil se abstiene de consumir alcohol. Aunque la proporción muestral observada (11.04\%) es ligeramente mayor que el 10\%, esta diferencia no es estadísticamente significativa y podría deberse simplemente a la variabilidad del muestreo.
+
+
 \section*{Problema 4}
 
 \textbf{Más propina.} Los camareros de los restaurantes han empleado diversas estrategias para aumentar las propinas. Un artículo publicado el 5 de septiembre de 2005 (New Yorker) reportó que ``en un estudio, una camarera recibió un 50 \% más de propinas cuando se presentó por su nombre que cuando no lo hizo''. Considere los siguientes datos (ficticios) sobre la cantidad de propina como porcentaje de la factura:
@@ -461,6 +653,88 @@ Por lo tanto, \textbf{no rechazamos la hipótesis nula} al nivel de significanci
 Con un valor P de aproximadamente 0.205, no existe evidencia estadística suficiente para rechazar la hipótesis nula $H_0: \mu_1 = 1.5\mu_2$ al nivel de significancia del 5\%. Los datos \textbf{no sugieren} que presentarse por nombre aumente las propinas en promedio en más del 50\%.
 
 \textbf{Observación:} Aunque la propina promedio cuando el camarero se presentó fue de $22.63\%$, comparada con $1.5 \times 14.15\% = 21.225\%$ (1.5 veces la propina sin presentarse), esta diferencia de tan solo $1.405$ puntos porcentuales no es estadísticamente significativa. La variabilidad muestral es demasiado grande como para concluir que hay un aumento real del 50\% en las propinas. Se requeriría un tamaño de muestra mayor o un efecto más pronunciado para detectar estadísticamente esta diferencia.
+
+
+\section*{Problema 5}
+\textbf{Plomo en la sangre.} El nivel de plomo en la sangre se determinó para una muestra de 152 varones con edades entre 20 y 30 años, que trabajan con residuos peligrosos y también para una muestra de 86 trabajadoras, lo que resultó en una media $\pm$ error estándar de $5.5 \pm 0.3$ para los hombres y $3.8 \pm 0.2$ para las mujeres ("Temporal Changes in Blood Lead Levels of Hazardous Waste Workers in New Jersey, 1984–1987," Environ. Monitoring and Assessment, 1993: 99–107). Calcule un estimado de la diferencia entre los niveles promedio reales de plomo en la sangre para trabajadores y trabajadoras de manera que brinde información sobre confiabilidad y precisión.
+
+\section*{Solución}
+Para resolver este problema, utilizaremos la teoría de inferencia estadística para dos muestras independientes con tamaños grandes, tal como se detalla en el \textbf{Capítulo 9 (Inferencias basadas en dos muestras)} del texto de Jay L. Devore. Específicamente, utilizaremos la construcción de un intervalo de confianza para la diferencia de medias.
+
+\subsection*{1. Identificación de Parámetros y Datos}
+El problema nos proporciona los siguientes datos resumidos para dos grupos independientes:
+
+\begin{itemize}
+    \item \textbf{Grupo 1 (Hombres):}
+    \begin{itemize}
+        \item Tamaño de muestra: $m = 152$
+        \item Media muestral: $\bar{x}_1 = 5.5$
+        \item Error estándar de la media: $SE_1 = \frac{s_1}{\sqrt{m}} = 0.3$
+    \end{itemize}
+    
+    \item \textbf{Grupo 2 (Mujeres):}
+    \begin{itemize}
+        \item Tamaño de muestra: $n = 86$
+        \item Media muestral: $\bar{x}_2 = 3.8$
+        \item Error estándar de la media: $SE_2 = \frac{s_2}{\sqrt{n}} = 0.2$
+    \end{itemize}
+\end{itemize}
+
+\subsection*{2. Estimación Puntual}
+El parámetro de interés es la diferencia entre las medias poblacionales reales, $\mu_1 - \mu_2$. La estimación puntual insesgada para esta diferencia es la diferencia entre las medias muestrales:
+$$ \hat{\theta} = \bar{x}_1 - \bar{x}_2 = 5.5 - 3.8 = 1.7 $$
+Esto sugiere que, en promedio, los hombres tienen un nivel de plomo en la sangre 1.7 unidades mayor que las mujeres.
+
+\subsection*{3. Intervalo de Confianza (Confiabilidad y Precisión)}
+Para brindar información sobre confiabilidad y precisión, calculamos un intervalo de confianza. Dado que los tamaños de muestra son grandes ($m=152, n=86$), podemos utilizar la distribución normal estándar ($Z$) para aproximar la distribución del estadístico de prueba (Teorema del Límite Central).
+
+El error estándar de la diferencia entre las dos medias independientes se calcula sumando las varianzas de los errores estándar individuales:
+$$ SE_{diff} = \sqrt{SE_1^2 + SE_2^2} $$
+Sustituyendo los valores dados:
+$$ SE_{diff} = \sqrt{(0.3)^2 + (0.2)^2} = \sqrt{0.09 + 0.04} = \sqrt{0.13} \approx 0.3606 $$
+
+Para un nivel de confianza del 95\% (el estándar habitual en inferencia estadística), el valor crítico $z_{\alpha/2}$ es 1.96. El margen de error ($E$) es:
+$$ E = 1.96 \times SE_{diff} = 1.96 \times 0.3606 \approx 0.7068 $$
+
+El intervalo de confianza del 95\% para $\mu_1 - \mu_2$ es:
+$$ (\bar{x}_1 - \bar{x}_2) \pm E $$
+$$ 1.7 \pm 0.7068 $$
+$$ [1.7 - 0.7068, \ 1.7 + 0.7068] $$
+$$ [0.9932, \ 2.4068] $$
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1.4cm,y=3.6cm,>=Stealth]
+% Axes
+\draw[->] (-0.5,0) -- (3.5,0) node[right] {Diferencia ($\mu_1 - \mu_2$)};
+\draw[->] (0,0) -- (0,1.1) node[above] {densidad};
+% Normal curve
+\draw[thick,blue!70!black,smooth,samples=120,domain=-1:4.5]
+plot (\x,{0.8*exp(-((\x-1.7)*(\x-1.7))/0.26)});
+% Confidence interval area
+\fill[blue!10,domain=0.993:2.407,smooth,samples=80]
+(0.993,0) -- plot (\x,{0.8*exp(-((\x-1.7)*(\x-1.7))/0.26)}) -- (2.407,0) -- cycle;
+% Markers
+\draw[dashed,blue!70!black] (1.7,0) -- (1.7,0.8);
+\draw[very thick] (0.993,0) -- (0.993,0.15);
+\draw[very thick] (2.407,0) -- (2.407,0.15);
+% Ticks
+\foreach \x/\lab in {0/0,1/1,2/2,3/3}
+\draw (\x,0) -- (\x,-0.05) node[below] {\lab};
+\draw (1.7,0) -- (1.7,-0.05) node[below] {$\bar{x}_1-\bar{x}_2$};
+\draw (0.993,0) -- (0.993,-0.05) node[below left] {0.99};
+\draw (2.407,0) -- (2.407,-0.05) node[below right] {2.41};
+% Labels
+\node[blue!70!black,align=center] at (1.7,0.9) {Intervalo de Confianza\\95\%};
+\end{tikzpicture}
+\caption{Representación gráfica del intervalo de confianza del 95\% para la diferencia de medias. El área sombreada representa la región de confianza.}
+\end{figure}
+
+\subsection*{4. Conclusión Final}
+Con un 95\% de confianza, estimamos que la verdadera diferencia en los niveles promedio de plomo en la sangre entre hombres y mujeres se encuentra entre \textbf{0.99 y 2.41}. 
+
+Dado que el intervalo no incluye el cero y es completamente positivo, esto proporciona evidencia estadística de que los trabajadores hombres tienen niveles de plomo en la sangre significativamente más altos que las trabajadoras mujeres en esta población.
+
 
 \section*{Problema 6}
 
