@@ -1,3 +1,4 @@
+```markdown
 # GUÍA DE TRABAJO DE CAMPO: ESTADÍSTICA INFERENCIAL EN EXCEL O RSTUDIO
 
 **TÍTULO DEL PROYECTO:** ____________________________________________  
@@ -86,7 +87,7 @@ Interprete los resultados.
 - **Pruebas pareadas:** `PRUEBA.T.N(rangoX1; rangoX2; 2; 1)`
 - **Diferencia de medias independientes:** `PRUEBA.T.N(rangoX1; rangoX2; 2; 2 o 3)`
 
-> Interprete el valor p: si **p < 0.05** se rechaza H₀.
+> Interprete el valor p: si $p < 0.05$ se rechaza $H_0$.
 
 ---
 
@@ -94,13 +95,13 @@ Interprete los resultados.
 
 - **Correlación de Pearson en Excel:** `=COEF.DE.CORREL(rango_x; rango_y)`
 - **En R:** `cor(x, y)`
-- **Regresión múltiple en Excel:** Datos → Análisis de datos → Regresión
+- **Regresión múltiple en Excel:** Datos -> Análisis de datos -> Regresión
 - **En R:**
 ```r
 modelo <- lm(Y ~ X1 + X2)
 ```
 
-Analice los coeficientes, el **R²** y los valores p.
+Analice los coeficientes, el $R^{2}$ y los valores p.
 
 ---
 
@@ -108,10 +109,10 @@ Analice los coeficientes, el **R²** y los valores p.
 
 Evalúe la significancia de los coeficientes:
 
-- H₀: β = 0
-- H₁: β ≠ 0
+- $H_0$: $\beta = 0$
+- $H_1$: $\beta \neq 0$
 
-Realice predicciones con valores hipotéticos de X1 y X2. Verifique supuestos:
+Realice predicciones con valores hipotéticos de $X_1$ y $X_2$. Verifique supuestos:
 linealidad, independencia, normalidad de residuos y homocedasticidad.
 
 ---
@@ -131,31 +132,31 @@ linealidad, independencia, normalidad de residuos y homocedasticidad.
 
 ### Ejemplo de Tabla de Datos
 
-| Sexo | Edad | Empleo | Estrato | Promedio créditos | Promedio Asignatura | N.º horas de estudio | Semestre |
-|------|------|--------|---------|-------------------|---------------------|----------------------|----------|
-| f    | 22   | sí     | 2       | 3.9               | 3.5                 | 1                    | 3        |
-| f    | 34   | no     | 4       | 3.7               | 3.0                 | 2                    | 4        |
-| m    | 21   | sí     | 3       | 4.1               | 3.7                 | 1                    | 3        |
-| f    | 24   | sí     | 3       | 4.2               | 3.2                 | 0                    | 5        |
-| f    | 23   | sí     | 3       | 3.9               | 3.5                 | 0                    | 6        |
+| Sexo | Edad | Empleo | Estrato | Promedio creditos | Promedio Asignatura | N. horas de estudio | Semestre |
+|------|------|--------|---------|-------------------|---------------------|---------------------|----------|
+| f    | 22   | si     | 2       | 3.9               | 3.5                 | 1                   | 3        |
+| f    | 34   | no     | 4       | 3.7               | 3.0                 | 2                   | 4        |
+| m    | 21   | si     | 3       | 4.1               | 3.7                 | 1                   | 3        |
+| f    | 24   | si     | 3       | 4.2               | 3.2                 | 0                   | 5        |
+| f    | 23   | si     | 3       | 3.9               | 3.5                 | 0                   | 6        |
 
 ### Ejemplo de Hipótesis
 
-- **H₀:** No existe relación entre horas de estudio y promedio asignatura.
-- **H₁:** Existe relación significativa entre horas de estudio y promedio asignatura.
+- $H_0$: No existe relación entre horas de estudio y promedio asignatura.
+- $H_1$: Existe relación significativa entre horas de estudio y promedio asignatura.
 
 ---
 
 ## Rúbrica de Evaluación (50 puntos)
 
-| Criterio                  | Descripción                                                                 | Puntaje |
-|---------------------------|-----------------------------------------------------------------------------|---------|
-| Organización de datos     | Base de datos clara, sin errores y bien etiquetada. Fuente justificada.     | 5       |
-| Análisis descriptivo      | Gráficos, medidas y resumen adecuados e interpretados.                      | 10      |
-| Pruebas de hipótesis      | Aplicación correcta, interpretación coherente.                              | 12      |
-| Regresión y correlación   | Cálculo, interpretación e inferencia del modelo.                            | 13      |
-| Presentación e informe    | Orden, ortografía, conclusiones fundamentadas.                              | 5       |
-| Creatividad y rigor       | Claridad, profundidad y originalidad en el trabajo.                         | 5       |
+| Criterio                | Descripción                                                              | Puntaje |
+|-------------------------|--------------------------------------------------------------------------|---------|
+| Organización de datos   | Base de datos clara, sin errores y bien etiquetada. Fuente justificada.  | 5       |
+| Análisis descriptivo    | Gráficos, medidas y resumen adecuados e interpretados.                   | 10      |
+| Pruebas de hipótesis    | Aplicación correcta, interpretación coherente.                           | 12      |
+| Regresión y correlación | Cálculo, interpretación e inferencia del modelo.                         | 13      |
+| Presentación e informe  | Orden, ortografía, conclusiones fundamentadas.                           | 5       |
+| Creatividad y rigor     | Claridad, profundidad y originalidad en el trabajo.                      | 5       |
 
 ---
 
@@ -166,3 +167,4 @@ linealidad, independencia, normalidad de residuos y homocedasticidad.
 - Revisa ortografía, coherencia en títulos y nomenclaturas estadísticas.
 - En el video, presenta de manera clara la justificación, metodología, análisis y conclusiones.
 - Todos los integrantes deben participar activamente en la exposición.
+```
