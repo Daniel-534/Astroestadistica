@@ -254,17 +254,18 @@ regionsouthwest    & -5627.17  & 1872.51 & -3.005 & 0.0038 \\
 Se evaluaron predicciones para tres perfiles:
 \begin{table}[H]
 \centering
-\caption{Predicción puntual e intervalo de predicción}
+\caption{Predicción puntual e intervalo de predicción (\texttt{predict(..., interval = "prediction")} en R)}
 \begin{tabular}{rrrrllrrr}
 \toprule
 \textbf{age} & \textbf{bmi} & \textbf{children} & \textbf{smoker} & \textbf{sex} & \textbf{region} & \textbf{fit} & \textbf{lwr} & \textbf{upr} \\
 \midrule
-25 & 24 & 0 & no  & female & northwest & 2.93    & -11509.87 & 11515.74 \\
+25 & 24 & 0 & no  & female & northwest & 2.93\(^*\)    & -11509.87\(^*\) & 11515.74 \\
 45 & 30 & 2 & yes & male   & southeast & 37078.18 & 25714.43  & 48441.93 \\
 60 & 33 & 3 & no  & female & northeast & 21023.48 & 9604.75   & 32442.21 \\
 \bottomrule
 \end{tabular}
 \end{table}
+\noindent{\footnotesize \(^*\) Valor transcrito del output del notebook. Su interpretación requiere cautela por la asimetría de \texttt{charges} y la ausencia de restricción de positividad en el modelo lineal.}
 
 \noindent \textbf{Nota de interpretación:} el primer perfil presenta una predicción puntual muy baja y un límite inferior negativo. Esto no implica un costo real negativo, sino una limitación conocida del modelo lineal gaussiano cuando la variable respuesta es estrictamente positiva y altamente asimétrica.
 
