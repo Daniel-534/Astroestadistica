@@ -17,4 +17,3 @@
 \contentsline {subsection}{\numberline {6.4}Diagnóstico de supuestos}{8}{subsection.6.4}%
 \contentsline {section}{\numberline {7}Inferencia y predicción}{8}{section.7}%
 \contentsline {section}{\numberline {8}Conclusiones}{9}{section.8}%
-\contentsline {section}{\numberline {9}Recomendación de otros datasets}{9}{section.9}%
