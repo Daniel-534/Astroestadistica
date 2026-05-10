@@ -266,7 +266,9 @@ Se evaluaron predicciones para tres perfiles:
 \end{tabular}
 \end{table}
 
-\noindent El intervalo de predicción es amplio porque incorpora variabilidad individual; por ello es más útil para planeación presupuestal que una sola estimación puntual.
+\noindent \textbf{Nota de interpretación:} el primer perfil presenta una predicción puntual muy baja y un límite inferior negativo. Esto no implica un costo real negativo, sino una limitación conocida del modelo lineal gaussiano cuando la variable respuesta es estrictamente positiva y altamente asimétrica.
+
+\noindent El intervalo de predicción es amplio porque incorpora variabilidad individual; por ello es más útil para planeación presupuestal que una sola estimación puntual. En una extensión metodológica, conviene evaluar modelos con transformación \(\log(\texttt{charges})\) o alternativas con restricción de positividad.
 
 \section{Conclusiones}
 \begin{enumerate}
