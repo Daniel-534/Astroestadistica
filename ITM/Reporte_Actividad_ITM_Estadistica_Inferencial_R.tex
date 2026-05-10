@@ -1,0 +1,286 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+
+\geometry{margin=2.5cm}
+\onehalfspacing
+
+\title{\textbf{Reporte de Estadística Inferencial en R}\\
+\large Costos y presupuestos en salud}
+\author{Daniel Soto Villada}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introducción}
+Este reporte presenta el análisis estadístico inferencial desarrollado en \texttt{R} a partir del dataset \textit{Medical Cost Personal Dataset} (\texttt{insurance.csv}), con el objetivo de estudiar factores asociados al costo anual del seguro médico (\texttt{charges}). El trabajo se organizó siguiendo la guía del curso: análisis descriptivo, pruebas de hipótesis, correlación, regresión lineal múltiple e inferencia/predicción.
+
+El conjunto original contiene 1338 observaciones. Como la actividad exige trabajar con 70 registros, se implementó un muestreo estratificado proporcional para conservar representatividad en variables cualitativas clave.
+
+\section{Descripción de datos y diseño muestral}
+\subsection{Dataset original}
+El dataset inicial incluye 7 variables:
+\begin{itemize}
+    \item Cuantitativas: \texttt{age}, \texttt{bmi}, \texttt{children}, \texttt{charges}.
+    \item Cualitativas: \texttt{sex}, \texttt{smoker}, \texttt{region}.
+\end{itemize}
+
+Resumen general reportado en el notebook:
+\begin{itemize}
+    \item \(n=1338\) observaciones.
+    \item \texttt{age}: min \(=18\), media \(\approx 39.21\), max \(=64\).
+    \item \texttt{bmi}: media \(\approx 30.66\).
+    \item \texttt{charges}: media \(\approx 13270\), mediana \(\approx 9382\), max \(\approx 63770\).
+\end{itemize}
+
+\subsection{Muestreo estratificado proporcional (70 casos)}
+Se estratificó por la combinación \texttt{smoker} \(\times\) \texttt{region}. Posteriormente, se ajustó el redondeo para obtener exactamente 70 observaciones.
+
+\begin{table}[H]
+\centering
+\caption{Asignación muestral proporcional por estrato}
+\begin{tabular}{llrrrr}
+\toprule
+\textbf{smoker} & \textbf{region} & \(\mathbf{N_{total}}\) & \(\mathbf{p}\) & \(\mathbf{n_{raw}}\) & \(\mathbf{n_{sample}}\) \\
+\midrule
+no  & northeast & 257 & 0.1921 & 13.45 & 13 \\
+no  & northwest & 267 & 0.1996 & 13.97 & 14 \\
+no  & southeast & 273 & 0.2040 & 14.28 & 14 \\
+no  & southwest & 267 & 0.1996 & 13.97 & 14 \\
+yes & northeast & 67  & 0.0501 & 3.51  & 4 \\
+yes & northwest & 58  & 0.0433 & 3.03  & 3 \\
+yes & southeast & 91  & 0.0680 & 4.76  & 5 \\
+yes & southwest & 58  & 0.0433 & 3.03  & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Verificación: \(\sum n_{sample}=70\).
+
+\subsection{Comparación de composición: original vs muestra}
+\begin{table}[H]
+\centering
+\caption{Proporción por hábito de fumar}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Grupo} & \textbf{Original} & \textbf{Muestra 70} \\
+\midrule
+No fumador & 0.7952 & 0.7857 \\
+Fumador    & 0.2048 & 0.2143 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Proporción por región}
+\begin{tabular}{lrr}
+\toprule
+\textbf{Región} & \textbf{Original} & \textbf{Muestra 70} \\
+\midrule
+northeast & 0.2422 & 0.2429 \\
+northwest & 0.2429 & 0.2429 \\
+southeast & 0.2720 & 0.2714 \\
+southwest & 0.2429 & 0.2429 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Las proporciones son muy similares, lo que respalda que la reducción a 70 casos conserva estructura poblacional en variables categóricas relevantes.
+
+\section{Variables para requisitos de la actividad}
+En la muestra final se trabajó con:
+\begin{itemize}
+    \item Cuantitativas continuas: \texttt{bmi}, \texttt{charges}.
+    \item Cuantitativa discreta: \texttt{children}.
+    \item Cualitativas nominales: \texttt{sex}, \texttt{smoker}.
+    \item Cualitativa ordinal derivada: \texttt{risk\_level} (Bajo, Medio, Alto).
+\end{itemize}
+Además se mantuvieron \texttt{age} y \texttt{region} para enriquecer el análisis.
+
+\section{Análisis descriptivo}
+\subsection{Estadísticos principales}
+\begin{table}[H]
+\centering
+\caption{Resumen descriptivo en la muestra de 70}
+\begin{tabular}{lrrrrrr}
+\toprule
+\textbf{Variable} & \textbf{Media} & \textbf{DE} & \textbf{Mediana} & \textbf{Mínimo} & \textbf{Máximo} \\
+\midrule
+age      & 40.31 & 13.47 & ---      & 18.00   & 64.00 \\
+bmi      & 31.39 & 4.78  & ---      & 20.23   & 41.33 \\
+children & 1.30  & 1.31  & ---      & 0       & 5 \\
+charges  & 14986.02 & 13819.74 & 10319.29 & 1121.87 & 60021.40 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Visualizaciones descriptivas}
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][5cm][c]{0.9\textwidth}{\centering Espacio reservado para histograma de \texttt{charges}.}}
+\caption{Distribución de costos anuales (\texttt{charges}).}
+\label{fig:hist_charges}
+\end{figure}
+% TODO: Insertar aquí el gráfico de histograma generado en el notebook.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][5cm][c]{0.9\textwidth}{\centering Espacio reservado para boxplot de \texttt{charges} por \texttt{smoker}.}}
+\caption{Comparación de costos entre fumadores y no fumadores.}
+\label{fig:box_smoker}
+\end{figure}
+% TODO: Insertar aquí el boxplot de charges por smoker.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][5cm][c]{0.9\textwidth}{\centering Espacio reservado para dispersión \texttt{age} vs \texttt{charges}.}}
+\caption{Relación entre edad y costo anual.}
+\label{fig:scatter_age_charges}
+\end{figure}
+% TODO: Insertar aquí el diagrama de dispersión con línea de tendencia.
+
+\subsection{Interpretación descriptiva}
+\begin{enumerate}
+    \item \texttt{charges} presenta asimetría positiva: pocos individuos concentran costos muy altos.
+    \item Los fumadores tienden a exhibir costos superiores a los no fumadores.
+    \item Se observa tendencia creciente entre edad y costo, especialmente en fumadores.
+\end{enumerate}
+
+\section{Pruebas de hipótesis (\(\alpha=0.05\))}
+\begin{table}[H]
+\centering
+\caption{Resultados inferenciales principales}
+\begin{tabular}{p{4cm}p{5cm}p{4cm}p{2cm}}
+\toprule
+\textbf{Prueba} & \textbf{Hipótesis nula} & \textbf{Resultado} & \textbf{Decisión} \\
+\midrule
+Shapiro--Wilk sobre \texttt{charges} & La distribución es normal & \(W=0.82673,\; p=1.322\times 10^{-7}\) & Rechazar \(H_0\) \\
+\addlinespace
+Chi-cuadrado (\texttt{sex} vs \texttt{smoker}) & Independencia entre variables & \(\chi^2=4.5372,\; gl=1,\; p=0.03317\) & Rechazar \(H_0\) \\
+\addlinespace
+t de Welch (\texttt{bmi} por \texttt{sex}) & Igualdad de medias de IMC & \(t=-0.16483,\; p=0.8696\) & No rechazar \(H_0\) \\
+\addlinespace
+Mann--Whitney (\texttt{charges} por \texttt{smoker}) & Igualdad de distribución/localización & \(W=11,\; p=9.492\times 10^{-9}\) & Rechazar \(H_0\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Síntesis:} los costos no siguen normalidad en la muestra, hay evidencia de asociación entre sexo y hábito de fumar, no hay evidencia de diferencia de IMC promedio por sexo, y sí hay una diferencia marcada de costos entre fumadores y no fumadores.
+
+\section{Correlación y regresión lineal múltiple}
+\subsection{Correlación de Pearson}
+\begin{table}[H]
+\centering
+\caption{Matriz de correlación (variables numéricas)}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Variable} & \textbf{age} & \textbf{bmi} & \textbf{children} & \textbf{charges} \\
+\midrule
+age      & 1.000 & -0.049 & 0.141 & 0.372 \\
+bmi      & -0.049 & 1.000 & -0.078 & 0.161 \\
+children & 0.141 & -0.078 & 1.000 & 0.016 \\
+charges  & 0.372 & 0.161 & 0.016 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Modelo de regresión}
+Se estimó:
+\[
+\texttt{charges} \sim \texttt{age}+\texttt{bmi}+\texttt{children}+\texttt{smoker}+\texttt{sex}+\texttt{region}.
+\]
+
+\begin{table}[H]
+\centering
+\caption{Coeficientes del modelo lineal múltiple}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Término} & \textbf{Estimación} & \textbf{Error estándar} & \textbf{t} & \textbf{p-valor} \\
+\midrule
+Intercept          & -12071.39 & 5275.43 & -2.288 & 0.0256 \\
+age                & 322.98    & 50.24   & 6.429  & \(2.2\times10^{-8}\) \\
+bmi                & 379.96    & 138.56  & 2.742  & 0.0080 \\
+children           & 392.52    & 508.57  & 0.772  & 0.4432 \\
+smokeryes          & 27743.07  & 1651.18 & 16.802 & \(<2\times10^{-16}\) \\
+sexmale            & -1582.95  & 1360.86 & -1.163 & 0.2493 \\
+regionnorthwest    & -5119.10  & 1916.69 & -2.671 & 0.0097 \\
+regionsoutheast    & -3728.34  & 1845.25 & -2.021 & 0.0477 \\
+regionsouthwest    & -5627.17  & 1872.51 & -3.005 & 0.0038 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Estadísticos globales del ajuste:
+\begin{itemize}
+    \item Error estándar residual: 5380 (61 g.l.).
+    \item \(R^2 = 0.866\), \(R^2\) ajustado \(=0.8485\).
+    \item Prueba F global: \(F(8,61)=49.29,\; p<2.2\times10^{-16}\).
+\end{itemize}
+
+\subsection{Lectura del modelo}
+\begin{itemize}
+    \item \texttt{smokeryes} es el predictor con mayor impacto: incrementa fuertemente el costo esperado.
+    \item \texttt{age} y \texttt{bmi} también aportan incrementos significativos en costos.
+    \item \texttt{children} y \texttt{sexmale} no resultaron significativos al \(5\%\) en este ajuste.
+    \item El modelo explica una proporción alta de variabilidad del costo (\(R^2\) elevado).
+\end{itemize}
+
+\subsection{Diagnóstico de supuestos}
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][6cm][c]{0.9\textwidth}{\centering Espacio reservado para los 4 gráficos diagnósticos de \texttt{plot(modelo)}.}}
+\caption{Diagnóstico de linealidad, homocedasticidad, normalidad de residuos e influencia.}
+\label{fig:diag_modelo}
+\end{figure}
+% TODO: Insertar aquí los cuatro gráficos de diagnóstico del modelo.
+
+\section{Inferencia y predicción}
+Se evaluaron predicciones para tres perfiles:
+\begin{table}[H]
+\centering
+\caption{Predicción puntual e intervalo de predicción}
+\begin{tabular}{rrrrllrrr}
+\toprule
+\textbf{age} & \textbf{bmi} & \textbf{children} & \textbf{smoker} & \textbf{sex} & \textbf{region} & \textbf{fit} & \textbf{lwr} & \textbf{upr} \\
+\midrule
+25 & 24 & 0 & no  & female & northwest & 2.93    & -11509.87 & 11515.74 \\
+45 & 30 & 2 & yes & male   & southeast & 37078.18 & 25714.43  & 48441.93 \\
+60 & 33 & 3 & no  & female & northeast & 21023.48 & 9604.75   & 32442.21 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent El intervalo de predicción es amplio porque incorpora variabilidad individual; por ello es más útil para planeación presupuestal que una sola estimación puntual.
+
+\section{Conclusiones}
+\begin{enumerate}
+    \item El muestreo estratificado proporcional permitió cumplir el requisito de 70 observaciones con buena representatividad de subgrupos.
+    \item El costo anual de salud muestra alta dispersión y asimetría positiva.
+    \item Ser fumador está fuertemente asociado a incrementos del costo médico, tanto descriptiva como inferencialmente.
+    \item El modelo lineal múltiple presentó buen ajuste global (\(R^2=0.866\)) y confirmó la relevancia de edad, IMC y tabaquismo.
+    \item El enfoque aplicado aporta evidencia cuantitativa para decisiones en costos y presupuestos de salud.
+\end{enumerate}
+
+\section{Recomendación de otros datasets}
+\begin{enumerate}
+    \item \textbf{Medical Expenditure Panel Survey (MEPS):} útil para inferencia sobre gasto y uso de servicios médicos.
+    \item \textbf{Hospital Cost Reports (CMS):} permite comparar costos y eficiencia financiera entre instituciones.
+\end{enumerate}
+
+\end{document}
