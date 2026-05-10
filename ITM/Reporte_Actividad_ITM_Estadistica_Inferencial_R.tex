@@ -254,7 +254,7 @@ regionsouthwest    & -5627.17  & 1872.51 & -3.005 & 0.0038 \\
 Se evaluaron predicciones para tres perfiles:
 \begin{table}[H]
 \centering
-\caption{Predicción puntual e intervalo de predicción (\texttt{predict(..., interval = "prediction")} en R)}
+\caption{Predicción puntual e intervalo de predicción (\texttt{predict(..., interval = "prediction")} en R). El caso marcado con \(^{\dagger}\) debe interpretarse como costo cercano a cero, no literal.}
 \begin{tabular}{rrrrllrrr}
 \toprule
 \textbf{age} & \textbf{bmi} & \textbf{children} & \textbf{smoker} & \textbf{sex} & \textbf{region} & \textbf{fit} & \textbf{lwr} & \textbf{upr} \\
@@ -265,7 +265,7 @@ Se evaluaron predicciones para tres perfiles:
 \bottomrule
 \end{tabular}
 \end{table}
-\noindent{\footnotesize \(^{\dagger}\) Valor transcrito del output del notebook. Su interpretación requiere cautela por la asimetría de \texttt{charges} y la ausencia de restricción de positividad en el modelo lineal. En la práctica, debe leerse como \emph{costo esperado muy bajo} (cercano a cero), no como un valor monetario literal utilizable para presupuestación puntual.}
+\noindent{\footnotesize \(^{\dagger}\) Valor transcrito del notebook. En modelos lineales con respuesta positiva y asimétrica, pueden aparecer predicciones no factibles; este caso se interpreta como costo esperado muy bajo (cercano a cero), no como monto literal.}
 
 \noindent \textbf{Nota de interpretación:} el primer perfil presenta una predicción puntual muy baja y un límite inferior negativo. Esto no implica un costo real negativo, sino una limitación conocida del modelo lineal gaussiano cuando la variable respuesta es estrictamente positiva y altamente asimétrica.
 
