@@ -1,0 +1,53 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, mathrsfs}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\AtBeginEnvironment{tikzpicture}{\shorthandoff{<>}}
+
+\geometry{a4paper, margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{14.5pt}
+\lhead{Astroestadística }
+\chead{Problem Set 6}
+\rhead{Problemas}
+
+
+\begin{document}
+
+
+\section*{Problema 1}
+    
+    \textbf{Generación de números aleatorios.} Utilice los métodos de inversión y/o de aceptación y rechazo para generar un conjunto de números aleatorios que sigan las siguientes distribuciones:
+    \begin{itemize}
+        \item Distribución de Weibull con $\alpha = 1.5$ y $\beta = 1$.
+        \item Distribución exponencial.
+        \item Distribución T con 10 grados de libertad.
+        \item $f_X(x) = 3x^2, \; 0 < x < 1$.
+    \end{itemize}
+    
+\section*{Problema 2}
+    \textbf{Integración de Monte Carlo.} Utilice el método de Monte Carlo para calcular las integrales de las siguientes funciones (elija los límites de integración):
+    \begin{itemize}
+        \item $x^2$
+        \item $e^x$
+        \item $x^4 e^{-x}$
+        \item $\frac{(e^{-x})}{(1 + (x - 1)^2)}$
+    \end{itemize}
+
+\section*{Problema 3}
+    \textbf{Desviación de la normal.} Utilice el método de Monte Carlo para estudiar la desviación de los datos respecto a la normal. Tome $\mu = 0$ y $\sigma^2 = 1$ y genere una muestra de 100 números con una distribución $N(\mu, \sigma^2)$. De esta muestra, calcule $\bar{x}_1$ y $s_1^2$. Ahora, haga $\mu = \bar{x}_1$ y $\sigma^2 = s_1^2$; genere una muestra de 100 números y calcule ahora $\bar{x}_2$ y $s_2^2$. Continúe de esta manera, generando secuencias $\{\bar{x}_k\}$ y $\{s_k^2\}$. Describa este proceso estocástico.
+
+
+
+\end{document}
