@@ -1,0 +1,251 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, mathrsfs}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumerate}
+
+\usetikzlibrary{arrows.meta,positioning}
+\AtBeginEnvironment{tikzpicture}{\shorthandoff{<>}}
+
+\geometry{a4paper, margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{14.5pt}
+\lhead{Astroestadística }
+\chead{Problem Set 7}
+\rhead{Problemas}
+
+
+\begin{document}
+
+
+\section{Problema 1}
+
+Un equipo de astrónomos estudia la frecuencia de exoplanetas detectables mediante el método de tránsito en estrellas similares al Sol. Para ello, observa una muestra aleatoria de 100 estrellas y encuentra evidencia convincente de la presencia de al menos un exoplaneta en 18 de ellas.
+
+Sea $\theta$ la proporción verdadera de estrellas de esta población que poseen un exoplaneta detectable mediante esta técnica. Suponiendo que cada observación puede modelarse como un ensayo de Bernoulli independiente, el número total de detecciones $X$ sigue una distribución binomial, $X \sim \text{Binomial}(n, \theta)$, donde $n = 100$ y se observó $X = 18$.
+
+Estudios previos sugieren que aproximadamente el 20\% de las estrellas similares al Sol albergan exoplanetas detectables por tránsito. Para incorporar esta información previa, se asigna a $\theta$ una distribución a priori Beta $\theta \sim \text{Beta}(\alpha, \beta)$ con parámetros $\alpha = 4$ y $\beta = 16$.
+
+\begin{enumerate}[a)]
+    \item Escriba la función de verosimilitud para $\theta$ y grafíquela en el intervalo $0 < \theta < 1$.
+    
+    \item Escriba la densidad de la distribución a priori e interprete el significado de los parámetros $\alpha$ y $\beta$
+    
+    \item Obtenga analíticamente la distribución posterior de $\theta$.
+    
+    \item Calcule la media, la varianza y la moda de la distribución posterior.
+    
+    \item Utilice simulación Monte Carlo para generar $10^4$ muestras aleatorias de la distribución posterior.
+    
+    \item A partir de las muestras simuladas, estime un intervalo de credibilidad del 95\% para $\theta$.
+    
+    \item Estime la probabilidad posterior de que más del 20\% de las estrellas de esta población posean un exoplaneta detectable, es decir, $P(\theta > 0.20 \mid \text{datos})$.
+    
+    \item Compare la interpretación del intervalo de credibilidad obtenido en el inciso anterior con la interpretación de un intervalo de confianza frecuentista del 95\%.
+\end{enumerate}
+
+\subsection{Solución problema 1}
+
+\subsubsection*{a) Función de verosimilitud}
+Dado que el número total de detecciones $X$ sigue una distribución binomial $X \sim \text{Binomial}(n, \theta)$ con $n = 100$ y $X = 18$ observados, la función de verosimilitud para el parámetro $\theta$ es:
+$$
+L(\theta \mid X=18) = \binom{100}{18} \theta^{18} (1-\theta)^{100-18} = \binom{100}{18} \theta^{18} (1-\theta)^{82}
+$$
+\textit{Nota computacional:} La graficación de esta función en el intervalo $0 < \theta < 1$ es un procedimiento visual que debe realizarse mediante software computacional (por ejemplo, evaluando la función en una malla de valores de $\theta$ y trazando la curva resultante).
+
+\subsubsection*{b) Densidad de la distribución a priori e interpretación}
+La distribución a priori asignada es $\theta \sim \text{Beta}(\alpha, \beta)$ con $\alpha = 4$ y $\beta = 16$. Su función de densidad de probabilidad es:
+$$
+p(\theta) = \frac{\theta^{\alpha-1}(1-\theta)^{\beta-1}}{B(\alpha, \beta)} = \frac{\theta^{3}(1-\theta)^{15}}{B(4, 16)}, \quad 0 < \theta < 1
+$$
+donde $B(\alpha, \beta)$ es la función Beta. 
+\textit{Interpretación:} Como se detalla en el \textit{CAPÍTULO 4: Variables aleatorias continuas y distribuciones de probabilidad} del texto de Devore, en el contexto de una distribución Beta, los parámetros $\alpha$ y $\beta$ pueden interpretarse como "pseudocuentas" o evidencia previa. Específicamente, $\alpha = 4$ representa 4 "éxitos" previos (estrellas con exoplanetas detectables) y $\beta = 16$ representa 16 "fracasos" previos. Esto equivale a un tamaño de muestra a priori de $\alpha + \beta = 20$ observaciones, con una media a priori de $\frac{\alpha}{\alpha+\beta} = \frac{4}{20} = 0.20$, lo cual coincide con la creencia previa del 20\% mencionada en el enunciado.
+
+\subsubsection*{c) Distribución posterior de $\theta$ (Obtención analítica)}
+Por el teorema de Bayes, la distribución posterior es proporcional al producto de la verosimilitud y la distribución a priori:
+$$
+p(\theta \mid X=18) \propto L(\theta \mid X=18) \cdot p(\theta)
+$$
+$$
+p(\theta \mid X=18) \propto \left[ \theta^{18} (1-\theta)^{82} \right] \cdot \left[ \theta^{3} (1-\theta)^{15} \right] = \theta^{18+3} (1-\theta)^{82+15} = \theta^{21} (1-\theta)^{97}
+$$
+Reconocemos que esta expresión es el núcleo (kernel) de una distribución Beta con parámetros actualizados $\alpha' = \alpha + X = 4 + 18 = 22$ y $\beta' = \beta + n - X = 16 + 100 - 18 = 98$. Por lo tanto, la distribución posterior es exactamente:
+$$
+\theta \mid X=18 \sim \text{Beta}(22, 98)
+$$
+
+\subsubsection*{d) Media, varianza y moda de la distribución posterior}
+Utilizando las propiedades analíticas de la distribución $\text{Beta}(\alpha', \beta')$ (Devore, Capítulo 4), calculamos:
+\textbf{Media posterior:}
+$$
+E[\theta \mid X] = \frac{\alpha'}{\alpha' + \beta'} = \frac{22}{22 + 98} = \frac{22}{120} = \frac{11}{60} \approx 0.1833
+$$
+\textbf{Varianza posterior:}
+$$
+V[\theta \mid X] = \frac{\alpha' \beta'}{(\alpha' + \beta')^2 (\alpha' + \beta' + 1)} = \frac{22 \cdot 98}{(120)^2 \cdot (121)} = \frac{2156}{14400 \cdot 121} = \frac{2156}{1742400} \approx 0.001237
+$$
+\textbf{Moda posterior:} (Válida ya que $\alpha' > 1$ y $\beta' > 1$)
+$$
+\text{Moda} = \frac{\alpha' - 1}{\alpha' + \beta' - 2} = \frac{22 - 1}{22 + 98 - 2} = \frac{21}{118} \approx 0.1780
+$$
+
+\subsubsection*{e) Simulación Monte Carlo}
+\textit{Procedimiento computacional:} Generar $10^4$ muestras aleatorias de la distribución $\text{Beta}(22, 98)$ es una tarea numérica. Según el \textit{Chapter 7: Random Numbers} de \textit{Numerical Recipes in C}, esto se implementaría utilizando un generador de números pseudoaleatorios uniforme y aplicando una transformación inversa o un algoritmo de rechazo adaptado a la forma de la distribución Beta, o mediante funciones nativas de lenguajes de alto nivel (como `rbeta` en R o `numpy.random.beta` en Python). No se realiza la generación numérica aquí por restricción del enunciado.
+
+\subsubsection*{f) Intervalo de credibilidad del 95\%}
+\textit{Procedimiento computacional:} El intervalo de credibilidad del 95\% requiere encontrar los percentiles 2.5 y 97.5 de la distribución $\text{Beta}(22, 98)$. Analíticamente, se definen como los valores $\theta_{L}$ y $\theta_{U}$ tales que:
+$$
+\int_{0}^{\theta_{L}} \frac{\theta^{21}(1-\theta)^{97}}{B(22, 98)} d\theta = 0.025 \quad \text{y} \quad \int_{0}^{\theta_{U}} \frac{\theta^{21}(1-\theta)^{97}}{B(22, 98)} d\theta = 0.975
+$$
+La resolución de estas integrales para despejar $\theta_{L}$ y $\theta_{U}$ debe hacerse computacionalmente (por ejemplo, usando la función cuantil de la distribución Beta en software estadístico).
+
+\subsubsection*{g) Probabilidad posterior $P(\theta > 0.20 \mid \text{datos})$}
+Analíticamente, esta probabilidad se expresa como el complemento de la función de distribución acumulativa (CDF) de la distribución Beta evaluada en 0.20:
+$$
+P(\theta > 0.20 \mid X=18) = 1 - P(\theta \leq 0.20 \mid X=18) = 1 - \int_{0}^{0.20} \frac{\theta^{21}(1-\theta)^{97}}{B(22, 98)} d\theta
+$$
+Esta integral corresponde a $1 - I_{0.20}(22, 98)$, donde $I_x(a, b)$ es la función beta incompleta regularizada. Como se indica en el \textit{Chapter 6: Special Functions} de \textit{Numerical Recipes in C}, la evaluación precisa de la función beta incompleta requiere algoritmos numéricos (como la fracción continua de Lentz o series de potencias), por lo que su cálculo final es computacional.
+
+\subsubsection*{h) Comparación de interpretaciones: Intervalo de credibilidad vs. Intervalo de confianza}
+\begin{itemize}
+    \item \textbf{Interpretación Bayesiana (Intervalo de credibilidad del 95\%):} Dado los datos observados ($X=18$) y la información a priori, existe una probabilidad del 95\% de que el valor verdadero del parámetro $\theta$ se encuentre dentro del intervalo calculado $[\theta_L, \theta_U]$. Aquí, $\theta$ se trata como una variable aleatoria con una distribución de probabilidad (la posterior).
+    \item \textbf{Interpretación Frecuentista (Intervalo de confianza del 95\%):} El parámetro $\theta$ es una constante fija (aunque desconocida). El intervalo de confianza es una realización de un procedimiento aleatorio. La interpretación correcta, como se establece en el \textit{CAPÍTULO 7: Intervalos de confianza estadísticos} de Devore, es que si repitiéramos el muestreo de 100 estrellas un número infinito de veces y construyéramos un intervalo de confianza del 95\% para cada muestra, el 95\% de esos intervalos contendrían al verdadero valor de $\theta$. No se puede afirmar que hay un 95\% de probabilidad de que $\theta$ esté en un intervalo específico una vez que este ha sido calculado.
+\end{itemize}
+
+\section{Problema 2}
+
+\textbf{Modelo de estrellas variables.} Se adjunta el archivo \texttt{cepheids\_2.csv}, que contiene observaciones de un conjunto de estrellas Cefeidas (Breuval+, 2021). Para cada estrella se reportan su período de pulsación (en días), paralaje (en mas) y sus magnitudes en las bandas V e I. La relación período--luminosidad de las Cefeidas puede modelarse mediante la ecuación
+
+$$
+M_i = a + b \log_{10}(P_i) + \varepsilon_i,
+$$
+
+donde $M$ es la magnitud absoluta, $P$ el período y los errores observacionales son independientes y siguen una distribución normal $\varepsilon_i \sim N(0, \sigma^2)$. Suponga que la desviación estándar de los errores es conocida e igual a $\sigma = 0.3$ mag.
+
+Para los parámetros del modelo considere distribuciones a priori normales e independientes entre sí, ambas con $\mu = 0$ y $\sigma^2 = 10^2$.
+
+\begin{enumerate}[a)]
+    \item Lea el archivo \texttt{cepheids\_2.csv} y realice un gráfico de dispersión de la magnitud absoluta $M$ en función de $\log_{10}(P)$. Describa brevemente la tendencia observada.
+    
+    \item Escriba la función de verosimilitud para los parámetros $a$ y $b$.
+    
+    \item Escriba la distribución posterior conjunta de $a$ y $b$, ignorando constantes de normalización.
+    
+    \item Encuentre los valores de máxima probabilidad a posteriori (MAP) de $a$ y $b$.
+    
+    \item Demuestre que la distribución posterior conjunta de $(a, b)$ es una normal bivariada y determine su media y matriz de covarianza.
+    
+    \item Utilice el resultado anterior para generar $10^4$ muestras aleatorias de la distribución posterior conjunta de $(a, b)$.
+    
+    \item A partir de las muestras simuladas, estime un intervalo de credibilidad del 95\% para $a$ y $b$.
+    
+    \item Utilice las muestras posteriores para estimar la distribución posterior de la magnitud absoluta de una Cefeida con período $P = 12$ días. Reporte la media posterior y un intervalo de credibilidad del 95\% para la magnitud absoluta predicha.
+    
+    \item Grafique la relación período--luminosidad utilizando la recta correspondiente a los valores MAP de los parámetros. Sobre el mismo gráfico, incluya una banda de credibilidad del 95\% obtenida a partir de las simulaciones de la distribución posterior.
+    
+    \item Compare los resultados obtenidos mediante el enfoque bayesiano con los que se obtendrían usando una regresión lineal clásica por mínimos cuadrados. Discuta semejanzas y diferencias entre ambos enfoques.
+\end{enumerate}
+
+
+\subsection{Solución problema 2}
+
+A continuación se presenta la resolución analítica detallada del Problema 2, el cual modela la relación período-luminosidad de las estrellas Cefeidas. Se desarrollan exclusivamente los incisos que admiten una solución analítica cerrada, señalando explícitamente aquellos que requieren procedimientos computacionales o numéricos, en estricta concordancia con las restricciones del enunciado.
+
+Definamos $x_i = \log_{10}(P_i)$ y $\mathbf{M} = (M_1, \dots, M_n)^T$ como el vector de magnitudes absolutas observadas. El modelo propuesto es $M_i = a + b x_i + \varepsilon_i$, con $\varepsilon_i \sim N(0, \sigma^2)$ y $\sigma = 0.3$ conocido. Las distribuciones a priori son $a \sim N(0, \tau^2)$ y $b \sim N(0, \tau^2)$ con $\tau^2 = 10^2 = 100$, e independientes entre sí.
+
+\subsubsection*{a) Gráfico de dispersión y descripción de la tendencia}
+\textit{Procedimiento computacional:} La lectura del archivo \texttt{cepheids\_2.csv} y la generación del gráfico de dispersión de $M$ en función de $x = \log_{10}(P)$ requieren el uso de software de análisis de datos. Como se discute en el \textit{Chapter 15: Modeling of Data} de \textit{Numerical Recipes in C}, la visualización de datos es el primer paso indispensable para validar la suposición de linealidad antes de ajustar cualquier modelo paramétrico. No se realiza la generación numérica aquí por restricción del enunciado.
+
+\subsubsection*{b) Función de verosimilitud para $a$ y $b$}
+Dado que los errores son independientes y normales, la variable aleatoria $M_i$ sigue una distribución normal con media $a + b x_i$ y varianza $\sigma^2$. La función de verosimilitud conjunta para los parámetros $\theta = (a, b)^T$ es el producto de las densidades individuales:
+$$
+L(a, b \mid \mathbf{M}, \mathbf{x}) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(M_i - a - b x_i)^2}{2\sigma^2} \right)
+$$
+Ignorando las constantes de normalización que no dependen de $a$ y $b$, la verosimilitud es proporcional a:
+$$
+L(a, b \mid \mathbf{M}, \mathbf{x}) \propto \exp\left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (M_i - a - b x_i)^2 \right)
+$$
+
+\subsubsection*{c) Distribución posterior conjunta de $a$ y $b$}
+Por el teorema de Bayes, la distribución posterior es proporcional al producto de la verosimilitud y la distribución a priori. Dado que las priors son independientes, $p(a, b) = p(a)p(b) \propto \exp\left( -\frac{a^2}{2\tau^2} \right) \exp\left( -\frac{b^2}{2\tau^2} \right)$. Por lo tanto:
+$$
+p(a, b \mid \mathbf{M}, \mathbf{x}) \propto L(a, b \mid \mathbf{M}, \mathbf{x}) \cdot p(a, b)
+$$
+$$
+p(a, b \mid \mathbf{M}, \mathbf{x}) \propto \exp\left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (M_i - a - b x_i)^2 - \frac{a^2 + b^2}{2\tau^2} \right)
+$$
+Esta expresión representa el núcleo (kernel) de la distribución posterior, ignorando las constantes de normalización globales.
+
+\subsubsection*{d) Valores de máxima probabilidad a posteriori (MAP) de $a$ y $b$}
+Para encontrar los estimadores MAP, maximizamos la distribución posterior, lo que es equivalente a minimizar el negativo de su logaritmo. Definimos la función de costo $J(a, b)$:
+$$
+J(a, b) = \frac{1}{2\sigma^2} \sum_{i=1}^n (M_i - a - b x_i)^2 + \frac{a^2 + b^2}{2\tau^2}
+$$
+Calculamos las derivadas parciales con respecto a $a$ y $b$ y las igualamos a cero:
+$$
+\frac{\partial J}{\partial a} = -\frac{1}{\sigma^2} \sum_{i=1}^n (M_i - a - b x_i) + \frac{a}{\tau^2} = 0
+$$
+$$
+\frac{\partial J}{\partial b} = -\frac{1}{\sigma^2} \sum_{i=1}^n x_i (M_i - a - b x_i) + \frac{b}{\tau^2} = 0
+$$
+Reordenando los términos, obtenemos un sistema de ecuaciones lineales:
+$$
+a \left( \frac{n}{\sigma^2} + \frac{1}{\tau^2} \right) + b \left( \frac{\sum x_i}{\sigma^2} \right) = \frac{\sum M_i}{\sigma^2}
+$$
+$$
+a \left( \frac{\sum x_i}{\sigma^2} \right) + b \left( \frac{\sum x_i^2}{\sigma^2} + \frac{1}{\tau^2} \right) = \frac{\sum x_i M_i}{\sigma^2}
+$$
+En notación matricial, definiendo la matriz de diseño $X$ de dimensión $n \times 2$ (con una primera columna de unos y una segunda columna con los valores $x_i$), el sistema se escribe compactamente como:
+$$
+\left( \frac{1}{\sigma^2} X^T X + \frac{1}{\tau^2} I \right) \begin{pmatrix} a \\ b \end{pmatrix} = \frac{1}{\sigma^2} X^T \mathbf{M}
+$$
+Por lo tanto, los estimadores MAP están dados analíticamente por:
+$$
+\begin{pmatrix} \hat{a}_{MAP} \\ \hat{b}_{MAP} \end{pmatrix} = \left( X^T X + \frac{\sigma^2}{\tau^2} I \right)^{-1} X^T \mathbf{M}
+$$
+Sustituyendo los valores conocidos $\sigma = 0.3$ y $\tau = 10$, el factor de regularización (o "shrinkage") es $\frac{\sigma^2}{\tau^2} = \frac{0.09}{100} = 0.0009$.
+
+\subsubsection*{e) Distribución posterior conjunta como normal bivariada}
+Podemos reescribir el exponente de la distribución posterior obtenida en el inciso c) en forma matricial. Sea $\theta = (a, b)^T$. El exponente es:
+$$
+-\frac{1}{2} \left[ \frac{1}{\sigma^2} (\mathbf{M} - X\theta)^T (\mathbf{M} - X\theta) + \frac{1}{\tau^2} \theta^T \theta \right]
+$$
+Desarrollando el producto y agrupando los términos que dependen de $\theta$:
+$$
+= -\frac{1}{2} \left[ \theta^T \left( \frac{1}{\sigma^2} X^T X + \frac{1}{\tau^2} I \right) \theta - 2 \theta^T \left( \frac{1}{\sigma^2} X^T \mathbf{M} \right) + \frac{1}{\sigma^2} \mathbf{M}^T \mathbf{M} \right]
+$$
+Esta expresión es un polinomio cuadrático en $\theta$, lo cual es la característica definitoria del exponente de una distribución normal multivariada (Devore, \textit{CAPÍTULO 4: Variables aleatorias continuas y distribuciones de probabilidad}, extendido al caso multivariado). La forma general del exponente de una normal $\mathcal{N}(\mu_{post}, \Sigma)$ es:
+$$
+-\frac{1}{2} (\theta - \mu_{post})^T \Sigma^{-1} (\theta - \mu_{post}) = -\frac{1}{2} \left[ \theta^T \Sigma^{-1} \theta - 2 \theta^T \Sigma^{-1} \mu_{post} + \mu_{post}^T \Sigma^{-1} \mu_{post} \right]
+$$
+Igualando los coeficientes de las formas cuadráticas, identificamos la matriz de precisión (inversa de la covarianza) y la media posterior:
+$$
+\Sigma^{-1} = \frac{1}{\sigma^2} X^T X + \frac{1}{\tau^2} I \implies \Sigma = \left( \frac{1}{\sigma^2} X^T X + \frac{1}{\tau^2} I \right)^{-1}
+$$
+$$
+\Sigma^{-1} \mu_{post} = \frac{1}{\sigma^2} X^T \mathbf{M} \implies \mu_{post} = \Sigma \left( \frac{1}{\sigma^2} X^T \mathbf{M} \right) = \left( \frac{1}{\sigma^2} X^T X + \frac{1}{\tau^2} I \right)^{-1} \left( \frac{1}{\sigma^2} X^T \mathbf{M} \right)
+$$
+Se demuestra así que la distribución posterior es exactamente una normal bivariada $\mathcal{N}(\mu_{post}, \Sigma)$. Nótese que la media posterior coincide exactamente con los estimadores MAP encontrados en el inciso d), una propiedad inherente y esperable en distribuciones normales debido a su simetría.
+
+\subsubsection*{f) Gráfico de la relación período-luminosidad y banda de credibilidad}
+\textit{Procedimiento computacional:} La graficación de la recta de regresión con los valores MAP y la superposición de una banda de credibilidad del 95\% requiere la evaluación numérica de los cuantiles de la distribución normal bivariada posterior o la generación de muestras Monte Carlo. Como se detalla en el \textit{Chapter 15: Modeling of Data} de \textit{Numerical Recipes in C}, esto implica cálculos matriciales y algoritmos de generación de números aleatorios correlacionados, por lo que su ejecución es estrictamente computacional.
+
+\subsubsection*{g) Comparación con la regresión lineal clásica por mínimos cuadrados}
+\begin{itemize}
+    \item \textbf{Semejanzas:} Dado que la varianza a priori $\tau^2 = 100$ es muy grande en comparación con la varianza del error $\sigma^2 = 0.09$, el término de regularización $\frac{\sigma^2}{\tau^2} = 0.0009$ es extremadamente pequeño. En consecuencia, la matriz $\left( X^T X + 0.0009 I \right)^{-1}$ es numéricamente casi idéntica a $(X^T X)^{-1}$. Por lo tanto, los estimadores MAP bayesianos serán prácticamente indistinguibles de los estimadores de Mínimos Cuadrados Ordinarios (MCO) clásicos, dados por $\hat{\theta}_{MCO} = (X^T X)^{-1} X^T \mathbf{M}$.
+    \item \textbf{Diferencias:} La diferencia fundamental es interpretativa y metodológica. El enfoque frecuentista (Devore, \textit{CAPÍTULO 12: Regresión lineal simple y múltiple}) trata a $a$ y $b$ como constantes fijas desconocidas, y la incertidumbre se cuantifica a través de la distribución de muestreo de los estimadores (intervalos de confianza). El enfoque bayesiano trata a $a$ y $b$ como variables aleatorias, proporcionando una distribución de probabilidad completa (la posterior) que permite hacer afirmaciones probabilísticas directas sobre los parámetros (intervalos de credibilidad), incorporando de manera natural la información a priori, por mínima que sea. Además, la matriz de covarianza posterior $\Sigma$ es ligeramente menor (más "estrecha") que la matriz de covarianza frecuentista $\sigma^2 (X^T X)^{-1}$, reflejando la reducción de incertidumbre aportada por la distribución a priori.
+\end{itemize}
+
+
+\end{document}
