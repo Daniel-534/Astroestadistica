@@ -1,0 +1,630 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Jackknife Bootstrap}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\Large Universidad de Antioquia\par}
+  \vspace{2cm}
+  {\huge\bfseries Astroestadística\par}
+  \vspace{0.4cm}
+  {\Large Practica Parcial 3 \par}
+  \vspace{2.5cm}
+  {\large Autor:\par}
+  \vspace{0.2cm}
+  {\large Daniel Soto Villada\par}
+  {\large Estudiante de Astronomía\par}
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{El Método Jackknife}
+
+\subsection{Introducción y Propósito}
+El método Jackknife es una técnica de remuestreo (\textit{resampling}) no paramétrica. Su objetivo principal es estimar el \textbf{sesgo} (\textit{bias}) y la \textbf{varianza} de un estimador estadístico sin necesidad de asumir una distribución de probabilidad específica para la población subyacente. 
+
+\textbf{Fundamental:} El Jackknife actúa como un ``microscopio estadístico'' que evalúa la estabilidad de un estimador al observar cómo cambia este cuando se elimina sistemáticamente una pequeña parte de los datos. Como por ejemplo: si calculamos la media de 100 galaxias, el Jackknife nos dice qué tanto cambiaría esa media si, hipotéticamente, perdiéramos la medición de una sola galaxia.
+
+\subsection{El Procedimiento ``Delete-1'' (Dejar uno fuera)}
+Dada una muestra original de tamaño $N$, denotada como $\{x_1, x_2, \dots, x_N\}$, y un estimador puntual del parámetro de interés $\hat{\theta}$ calculado con toda la muestra, el procedimiento estándar (conocido como \textit{delete-1} o \textit{leave-one-out}) consiste en:
+
+1. Generar $N$ submuestras, cada una de tamaño $N-1$, omitiendo exactamente una observación a la vez.
+
+2. Calcular el estimador para cada una de estas submuestras.
+
+Al estimador calculado omitiendo la $i$-ésima observación $x_i$ se le denota convencionalmente como $\hat{\theta}_{(i)}$. 
+Como por ejemplo: si $N=3$ y omitimos $x_2$, calculamos $\hat{\theta}_{(2)}$ usando solo $\{x_1, x_3\}$.
+
+Además, definiremos la media de todos estos estimadores parciales como:
+$$ \hat{\theta}_{(\cdot)} = \frac{1}{N} \sum_{i=1}^N \hat{\theta}_{(i)} $$
+
+\subsection{Los Pseudovalores}
+Los estimadores $\hat{\theta}_{(i)}$ no son independientes entre sí (comparten $N-2$ observaciones). Para aplicar teoremas límite estándar (como la Ley de los Grandes Números o el Teorema del Límite Central), el método Jackknife introduce una transformación lineal brillante para crear variables que se comporten \textit{aproximadamente} como independientes e idénticamente distribuidas. A estas se les llama \textbf{pseudovalores}.
+
+\textbf{Definición de Pseudovalor:} El $i$-ésimo pseudovalor, denotado como $\tilde{\theta}_i$, se define mediante la siguiente fórmula:
+$$ \tilde{\theta}_i = N\hat{\theta} - (N-1)\hat{\theta}_{(i)} $$
+Como por ejemplo: Si $N=10$, $\hat{\theta} = 5.0$ y al omitir el dato 3 obtenemos $\hat{\theta}_{(3)} = 4.8$, el pseudovalor sería $\tilde{\theta}_3 = 10(5.0) - 9(4.8) = 50 - 43.2 = 6.8$.
+
+\subsection{El Estimador Jackknife y la Corrección de Sesgo}
+El estimador final del método Jackknife, $\hat{\theta}_{jack}$, se define simplemente como la media aritmética de los $N$ pseudovalores:
+$$ \hat{\theta}_{jack} = \frac{1}{N} \sum_{i=1}^N \tilde{\theta}_i $$
+
+\textbf{Propiedad de Corrección de Sesgo:} Una de las propiedades más elegantes del Jackknife es que $\hat{\theta}_{jack}$ es matemáticamente idéntico al estimador original corregido por su sesgo estimado de primer orden. 
+El sesgo del estimador original se estima amplificando la diferencia entre la media de las estimaciones parciales y la estimación total:
+$$ \widehat{Bias}_{jack} = (N-1)(\hat{\theta}_{(\cdot)} - \hat{\theta}) $$
+
+Por lo tanto, el estimador corregido por sesgo ($\hat{\theta}_{bc}$) es:
+$$ \hat{\theta}_{bc} = \hat{\theta} - \widehat{Bias}_{jack} $$
+Sustituyendo la fórmula del sesgo y simplificando algebraicamente, obtenemos:
+$$ \hat{\theta}_{bc} = N\hat{\theta} - (N-1)\hat{\theta}_{(\cdot)} $$
+\textbf{Nota analítica:} Si expandes la definición de $\hat{\theta}_{jack}$ usando la fórmula de los pseudovalores, llegarás exactamente a esta misma expresión. Esto demuestra que el Jackknife \textit{es}, por definición, un estimador corregido por sesgo.
+
+\subsection{Estimación de la Varianza y el Error Estándar}
+Dado que los pseudovalores $\tilde{\theta}_i$ se comportan aproximadamente como variables independientes, podemos estimar la varianza del estimador original calculando la varianza muestral de estos pseudovalores, escalada adecuadamente por el tamaño de la muestra.
+
+\textbf{Fórmula de Varianza con Pseudovalores:}
+$$ \widehat{Var}_{jack}(\hat{\theta}) = \frac{1}{N(N-1)} \sum_{i=1}^N (\tilde{\theta}_i - \hat{\theta}_{jack})^2 $$
+El factor $\frac{1}{N}$ escala la varianza de la suma para obtener la varianza de la media (el estimador), y el factor $\frac{1}{N-1}$ es la corrección de Bessel estándar para la varianza muestral.
+
+\textbf{Fórmula de Varianza con estimadores \textit{leave-one-out}:} Para facilitar el cálculo computacional, se puede demostrar algebraicamente que la varianza también puede expresarse directamente en términos de los $\hat{\theta}_{(i)}$, sin calcular explícitamente los pseudovalores en la sumatoria:
+$$ \widehat{Var}_{jack}(\hat{\theta}) = \frac{N-1}{N} \sum_{i=1}^N (\hat{\theta}_{(i)} - \hat{\theta}_{(\cdot)})^2 $$
+El \textbf{Error Estándar de Jackknife} ($SE_{jack}$) es simplemente la raíz cuadrada de esta varianza estimada: $SE_{jack} = \sqrt{\widehat{Var}_{jack}(\hat{\theta})}$.
+
+\subsection{Limitaciones Críticas del Método}
+\textbf{La condición de suavidad}: El método Jackknife estándar asume matemáticamente que el estimador $\hat{\theta}$ es una función \textbf{suave} (diferenciable) de los datos muestrales. 
+
+Como por ejemplo: La media muestral es suave; si cambias un dato ligeramente, la media cambia ligeramente de forma predecible. Sin embargo, estadísticos como la \textbf{mediana} o el \textbf{máximo} son \textit{no suaves} (\textit{non-smooth}). Eliminar una observación puede causar un salto discontinuo o no cambiar el valor en absoluto. 
+
+\textit{Consecuencia analítica:} Cuando se aplica a estadísticos no suaves, se violan las condiciones de regularidad necesarias para que los pseudovalores se comporten como variables independientes. Esto hace que la estimación de la varianza mediante Jackknife sea inconsistente, inestable o directamente incorrecta. En tales casos, se deben usar métodos alternativos como el Bootstrap suavizado.
+
+\subsection{Resumen de Fórmulas}
+\begin{itemize}
+    \item $\hat{\theta}_{(i)}$: Estimador calculado con la muestra menos el dato $i$.
+    \item $\tilde{\theta}_i = N\hat{\theta} - (N-1)\hat{\theta}_{(i)}$: Pseudovalor.
+    \item $\hat{\theta}_{jack} = \frac{1}{N} \sum_{i=1}^N \tilde{\theta}_i$: Estimador Jackknife.
+    \item $\widehat{Bias}_{jack} = (N-1)(\hat{\theta}_{(\cdot)} - \hat{\theta})$: Sesgo estimado.
+    \item $\widehat{Var}_{jack}(\hat{\theta}) = \frac{N-1}{N} \sum_{i=1}^N (\hat{\theta}_{(i)} - \hat{\theta}_{(\cdot)})^2$: Varianza estimada.
+\end{itemize}
+
+
+\newpage
+
+\subsection{Quiz Jackknife}
+
+\subsubsection{Pregunta 1:} En el contexto del método Jackknife estándar (conocido como \textit{delete-1}), si se tiene una muestra original de tamaño $N$, ¿cuál es el tamaño de cada una de las $N$ submuestras generadas y cómo se denota convencionalmente el estimador calculado a partir de la $i$-ésima submuestra?
+
+\textbf{Solución}
+El tamaño de cada submuestra es $N-1$, ya que el procedimiento consiste en omitir exactamente una observación a la vez de la muestra original. El estimador del parámetro de interés, calculado a partir de la $i$-ésima submuestra (es decir, omitiendo la $i$-ésima observación $x_i$), se denota convencionalmente en la literatura como $\hat{\theta}_{(i)}$.
+
+\subsubsection{Pregunta 2:} Defina matemáticamente el $i$-ésimo ``pseudovalor'' (\textit{pseudo-value}), denotado como $\tilde{\theta}_i$, en función del estimador original $\hat{\theta}$ (calculado con toda la muestra), el tamaño de la muestra $N$ y el estimador \textit{leave-one-out} $\hat{\theta}_{(i)}$.
+
+\textbf{Solución}
+El pseudovalor se define mediante la siguiente transformación lineal:
+$$ \tilde{\theta}_i = N\hat{\theta} - (N-1)\hat{\theta}_{(i)} $$
+Esta estructura matemática es el núcleo del método Jackknife, diseñada específicamente para hacer que los pseudovalores $\tilde{\theta}_i$ se comporten aproximadamente como variables aleatorias independientes e idénticamente distribuidas, lo cual es necesario para aplicar teoremas límite estándar.
+
+\subsubsection{Pregunta 3:} ¿Cuál es la expresión matemática para el estimador Jackknife $\hat{\theta}_{jack}$ del parámetro de interés, utilizando el conjunto completo de pseudovalores $\tilde{\theta}_i$?
+
+\textbf{Solución}
+El estimador Jackknife se define como la media aritmética simple de los $N$ pseudovalores generados:
+$$ \hat{\theta}_{jack} = \frac{1}{N} \sum_{i=1}^N \tilde{\theta}_i $$
+
+\subsubsection{Pregunta 4:} Proporcione la fórmula matemática para estimar el sesgo (\textit{bias}) del estimador original $\hat{\theta}$ utilizando el método Jackknife. Utilice la notación $\hat{\theta}_{(\cdot)}$ para representar la media de los estimadores \textit{leave-one-out}.
+
+\textbf{Solución}
+La estimación del sesgo del estimador original se calcula amplificando la diferencia entre la media de las estimaciones parciales y la estimación total:
+$$ \widehat{Bias}_{jack} = (N-1)(\hat{\theta}_{(\cdot)} - \hat{\theta}) $$
+donde $\hat{\theta}_{(\cdot)} = \frac{1}{N} \sum_{i=1}^N \hat{\theta}_{(i)}$. Esta fórmula surge de una expansión de Taylor del estimador en función de los datos.
+
+\subsubsection{Pregunta 5:} A partir del estimador del sesgo, escriba la expresión matemática para el estimador Jackknife corregido por sesgo (\textit{bias-corrected}), denotado como $\hat{\theta}_{bc}$.
+
+\textbf{Solución}
+El estimador corregido por sesgo se obtiene restando el sesgo estimado al estimador original:
+$$ \hat{\theta}_{bc} = \hat{\theta} - \widehat{Bias}_{jack} $$
+Sustituyendo la fórmula del sesgo y simplificando, se obtiene:
+$$ \hat{\theta}_{bc} = N\hat{\theta} - (N-1)\hat{\theta}_{(\cdot)} $$
+Nótese que, matemáticamente, esta expresión es idéntica a la definición de $\hat{\theta}_{jack}$ dada en la Pregunta 3, lo que demuestra que el estimador Jackknife es intrínsecamente un estimador corregido por sesgo de primer orden.
+
+\subsubsection{Pregunta 6:} Escriba la fórmula matemática para la estimación de la varianza del estimador, $\widehat{Var}_{jack}(\hat{\theta})$, en términos de los pseudovalores $\tilde{\theta}_i$ y el estimador Jackknife $\hat{\theta}_{jack}$.
+
+\textbf{Solución}
+La varianza Jackknife se estima como la varianza muestral de los pseudovalores, escalada por un factor de $1/N$ para reflejar la varianza de la media:
+$$ \widehat{Var}_{jack}(\hat{\theta}) = \frac{1}{N(N-1)} \sum_{i=1}^N (\tilde{\theta}_i - \hat{\theta}_{jack})^2 $$
+El error estándar Jackknife se obtendría simplemente tomando la raíz cuadrada de esta expresión.
+
+\subsubsection{Pregunta 7:} Escriba la relación matemática equivalente para la varianza Jackknife, pero expresada directamente en términos de los estimadores \textit{leave-one-out} $\hat{\theta}_{(i)}$ y su media $\hat{\theta}_{(\cdot)}$, sin utilizar explícitamente los pseudovalores en la sumatoria.
+
+\textbf{Solución}
+Sustituyendo la definición de los pseudovalores ($\tilde{\theta}_i = N\hat{\theta} - (N-1)\hat{\theta}_{(i)}$) en la fórmula de la varianza de la Pregunta 6 y realizando la simplificación algebraica correspondiente, se obtiene la expresión computacionalmente más directa:
+$$ \widehat{Var}_{jack}(\hat{\theta}) = \frac{N-1}{N} \sum_{i=1}^N (\hat{\theta}_{(i)} - \hat{\theta}_{(\cdot)})^2 $$
+
+\subsubsection{Pregunta 8:} Según la teoría del remuestreo presentada en el texto, ¿cuál es una limitación matemática fundamental del método Jackknife estándar (\textit{delete-1}) al aplicarse a estadísticos no suaves (\textit{non-smooth}), como la mediana muestral?
+
+\textbf{Solución}
+El método Jackknife asume matemáticamente que el estimador es una función suave (diferenciable) de los datos muestrales (como lo es la media). Para estadísticos no suaves como la mediana, la eliminación de una sola observación no cambia el valor del estadístico de manera continua o predecible (la derivada no existe o es discontinua). Esto viola las suposiciones asintóticas bajo las cuales los pseudovalores se comportan como variables independientes, haciendo que la estimación de la varianza mediante la fórmula Jackknife sea inconsistente, inestable o directamente incorrecta para tales estadísticos.
+
+\subsubsection{Pregunta 9:} Considere una muestra pequeña de $N=3$ mediciones de flujo astronómico (en unidades arbitrarias): $X = \{1, 2, 3\}$. Un investigador desea estimar el parámetro poblacional $\theta = \mu^2$, donde $\mu$ es la media verdadera del flujo. Para ello, utiliza el estimador de plug-in $\hat{\theta} = \bar{x}^2$. 
+Calcule explícitamente los siguientes valores requeridos para estructurar el método Jackknife: el tamaño de la muestra $N$, el estimador original $\hat{\theta}$, los estimadores \textit{leave-one-out} $\hat{\theta}_{(i)}$, los pseudovalores $\tilde{\theta}_i$ y el estimador final de Jackknife $\hat{\theta}_{jack}$.
+
+\textbf{Solución}
+
+\textbf{1. Tamaño de la muestra y estimador original:}
+El tamaño de la muestra es $N = 3$. 
+La media muestral es $\bar{x} = \frac{1+2+3}{3} = 2$.
+El estimador original es $\hat{\theta} = \bar{x}^2 = 2^2 = 4$.
+
+\textbf{2. Estimadores \textit{leave-one-out} ($\hat{\theta}_{(i)}$):}
+Generamos las $N=3$ submuestras omitiendo una observación a la vez y recalculamos $\hat{\theta}$:
+\begin{itemize}
+    \item \textit{Omitiendo $x_1=1$:} La submuestra es $\{2, 3\}$. Su media es $\bar{x}_{(1)} = 2.5$. Por lo tanto, $\hat{\theta}_{(1)} = 2.5^2 = 6.25$.
+    \item \textit{Omitiendo $x_2=2$:} La submuestra es $\{1, 3\}$. Su media es $\bar{x}_{(2)} = 2.0$. Por lo tanto, $\hat{\theta}_{(2)} = 2.0^2 = 4.0$.
+    \item \textit{Omitiendo $x_3=3$:} La submuestra es $\{1, 2\}$. Su media es $\bar{x}_{(3)} = 1.5$. Por lo tanto, $\hat{\theta}_{(3)} = 1.5^2 = 2.25$.
+\end{itemize}
+
+\textbf{3. Pseudovalores ($\tilde{\theta}_i$):}
+Utilizamos la fórmula del pseudovalor $\tilde{\theta}_i = N\hat{\theta} - (N-1)\hat{\theta}_{(i)}$. En este caso, $\tilde{\theta}_i = 3(4) - 2\hat{\theta}_{(i)} = 12 - 2\hat{\theta}_{(i)}$:
+\begin{itemize}
+    \item $\tilde{\theta}_1 = 12 - 2(6.25) = 12 - 12.5 = -0.5$
+    \item $\tilde{\theta}_2 = 12 - 2(4.0) = 12 - 8.0 = 4.0$
+    \item $\tilde{\theta}_3 = 12 - 2(2.25) = 12 - 4.5 = 7.5$
+\end{itemize}
+
+\textbf{4. Estimador Jackknife ($\hat{\theta}_{jack}$):}
+El estimador Jackknife es la media aritmética de los pseudovalores:
+$$ \hat{\theta}_{jack} = \frac{1}{N} \sum_{i=1}^N \tilde{\theta}_i = \frac{-0.5 + 4.0 + 7.5}{3} = \frac{11}{3} \approx 3.667 $$
+Nótese cómo el Jackknife ha 'corregido' la estimación original ($\hat{\theta}=4$) hacia abajo, acercándola a un valor menos sesgado para $\mu^2$.
+
+\subsubsection{Pregunta 10:} Utilizando los resultados numéricos obtenidos en el Problema 9, calcule la estimación del sesgo de Jackknife ($\widehat{Bias}_{jack}$) y la estimación de la varianza de Jackknife ($\widehat{Var}_{jack}(\hat{\theta})$). Demuestre matemáticamente con estos datos que el estimador corregido por sesgo es idéntico a $\hat{\theta}_{jack}$, y calcule el error estándar de Jackknife ($SE_{jack}$).
+
+\textbf{Solución}
+
+\textbf{1. Estimación del sesgo ($\widehat{Bias}_{jack}$):}
+Primero calculamos la media de los estimadores \textit{leave-one-out}:
+$$ \hat{\theta}_{(\cdot)} = \frac{1}{3} (6.25 + 4.0 + 2.25) = \frac{12.5}{3} \approx 4.167 $$
+Ahora aplicamos la fórmula del sesgo:
+$$ \widehat{Bias}_{jack} = (N-1)(\hat{\theta}_{(\cdot)} - \hat{\theta}) = 2 \left( \frac{12.5}{3} - 4 \right) = 2 \left( \frac{12.5 - 12}{3} \right) = 2 \left( \frac{0.5}{3} \right) = \frac{1}{3} \approx 0.333 $$
+
+\textbf{2. Verificación del estimador corregido por sesgo:}
+El estimador corregido por sesgo se define como $\hat{\theta}_{bc} = \hat{\theta} - \widehat{Bias}_{jack}$:
+$$ \hat{\theta}_{bc} = 4 - \frac{1}{3} = \frac{12 - 1}{3} = \frac{11}{3} \approx 3.667 $$
+Esto demuestra matemáticamente, con datos concretos, que $\hat{\theta}_{bc} = \hat{\theta}_{jack}$, confirmando la propiedad teórica de que el estimador Jackknife es intrínsecamente un estimador corregido por sesgo de primer orden.
+
+\textbf{3. Estimación de la varianza ($\widehat{Var}_{jack}$) y Error Estándar ($SE_{jack}$):}
+Podemos calcular la varianza usando la fórmula de los pseudovalores:
+$$ \widehat{Var}_{jack}(\hat{\theta}) = \frac{1}{N(N-1)} \sum_{i=1}^N (\tilde{\theta}_i - \hat{\theta}_{jack})^2 $$
+Sustituyendo los valores $\tilde{\theta} = \{-0.5, 4.0, 7.5\}$ y $\hat{\theta}_{jack} = 11/3$:
+$$ \sum_{i=1}^3 (\tilde{\theta}_i - 11/3)^2 = \left(-0.5 - \frac{11}{3}\right)^2 + \left(4.0 - \frac{11}{3}\right)^2 + \left(7.5 - \frac{11}{3}\right)^2 $$
+$$ = \left(-\frac{25}{6}\right)^2 + \left(\frac{1}{6}\right)^2 + \left(\frac{23}{6}\right)^2 = \frac{625 + 1 + 529}{36} = \frac{1155}{36} = \frac{385}{12} \approx 32.083 $$
+
+Calculando la varianza final:
+$$ \widehat{Var}_{jack}(\hat{\theta}) = \frac{1}{3(2)} \left( \frac{1155}{36} \right) = \frac{1}{6} \left( \frac{385}{12} \right) = \frac{385}{72} \approx 5.347 $$
+
+
+Finalmente, el error estándar de Jackknife es la raíz cuadrada de la varianza estimada:
+$$ SE_{jack} = \sqrt{\widehat{Var}_{jack}(\hat{\theta})} = \sqrt{\frac{385}{72}} \approx 2.312 $$
+Este valor ($SE_{jack}$) es el que el astrónomo utilizaría para construir intervalos de confianza asintóticos o realizar pruebas de hipótesis sobre el parámetro $\theta = \mu^2$, basándose puramente en la variabilidad interna revelada por el remuestreo Jackknife.
+
+
+\newpage
+
+\section{El Método Bootstrap}
+
+\subsection{Notación Preliminar}
+Para seguir esta teoría sin perderse, mantenga clara esta distinción fundamental:
+\begin{itemize}
+    \item $\theta$: El verdadero parámetro poblacional (desconocido).
+    \item $\hat{\theta}$: El estimador calculado con la \textbf{muestra original} de tamaño $n$.
+    \item $\hat{\theta}^*_b$: El estimador calculado con la $b$-ésima \textbf{muestra bootstrap}.
+    \item $\bar{\theta}^*$: La media de todos los estimadores bootstrap.
+\end{itemize}
+
+\subsection{El Principio Fundamental: La Distribución Empírica}
+
+\textbf{El Principio de Plug-in y la FDE}: En la inferencia estadística clásica, a menudo necesitamos conocer la distribución poblacional verdadera $F(x)$ para calcular la varianza de un estimador. Como $F(x)$ es desconocida, el \textit{principio de plug-in} (o de sustitución) establece que la mejor aproximación no paramétrica que tenemos es la Función de Distribución Empírica (FDE), denotada como $\hat{F}_n(x)$. 
+
+\textit{Numerical Recipes} describe esto de forma brillante al decir que el conjunto de datos real, visto como una distribución de probabilidad compuesta por ``funciones delta'' (masas puntuales) en los valores medidos, es el mejor estimador de la distribución subyacente. Si observamos los tiempos de llegada de 4 fotones: $\{2, 4, 4, 7\}$ ms, la FDE $\hat{F}_n$ asume que la ``población verdadera'' consiste en un 25\% de probabilidad de sacar un 2, un 50\% de sacar un 4, y un 25\% de sacar un 7. El Bootstrap opera bajo la suposición de que $\hat{F}_n$ es un reflejo fiel de $F(x)$.
+
+\subsection{El Motor del Bootstrap: Remuestreo con Reemplazo}
+
+Una vez que aceptamos que $\hat{F}_n$ es nuestro ``universo de juguete'', generamos nuevas muestras (muestras bootstrap) extrayendo $n$ observaciones de forma independiente y \textit{con reemplazo} de la muestra original.
+
+\textbf{La Regla del 36.8\%}:
+Dado que cada extracción tiene una probabilidad de $1/n$ de elegir un dato específico $x_i$, la probabilidad de \textit{no} elegirlo en una sola extracción es $(1 - 1/n)$. Como hacemos $n$ extracciones independientes para formar una muestra bootstrap, la probabilidad de que $x_i$ no aparezca en toda la muestra bootstrap es:
+$$ P(x_i \notin \mathcal{X}^*) = \left(1 - \frac{1}{n}\right)^n $$
+Cuando $n$ es grande, este límite matemático converge a $e^{-1} \approx 0.368$. 
+
+\textit{Esto significa que, en promedio, el 36.8\% de los datos originales quedan fuera de cada muestra bootstrap}. Esta propiedad es crucial: garantiza que las muestras bootstrap sean ligeramente diferentes entre sí y a la muestra original, permitiendo que el método ``explore'' la variabilidad muestral.
+
+\subsection{Estimación de Incertidumbre: Error Estándar y Sesgo}
+
+Generamos $B$ muestras bootstrap y calculamos el estadístico para cada una, obteniendo $\hat{\theta}^*_1, \hat{\theta}^*_2, \dots, \hat{\theta}^*_B$.
+
+\textbf{Error Estándar y la Corrección de Bessel:}
+La dispersión de los $\hat{\theta}^*_b$ alrededor de su propia media $\bar{\theta}^*$ refleja la dispersión que tendría $\hat{\theta}$ alrededor del verdadero $\theta$. El error estándar bootstrap se estima como la desviación estándar muestral de las $B$ réplicas:
+$$ \widehat{SE}_{boot}(\hat{\theta}) = \sqrt{\frac{1}{B-1} \sum_{b=1}^B (\hat{\theta}^*_b - \bar{\theta}^*)^2} $$
+El uso de $B-1$ en el denominador (en lugar de $B$) es la corrección de Bessel. 
+
+\textit{Al tratar las $B$ réplicas como una muestra de un proceso estocástico, dividir por $B-1$ garantiza que la varianza muestral sea un estimador insesgado de la varianza de las réplicas, eliminando el sesgo negativo inherente al usar la media muestral $\bar{\theta}^*$ en el cálculo de la desviación.}
+
+\textbf{Estimación del Sesgo}
+El sesgo mide la tendencia sistemática del estimador. Se calcula comparando la media de las réplicas bootstrap con el estadístico original:
+$$ \widehat{Bias}_{boot}(\hat{\theta}) = \bar{\theta}^* - \hat{\theta} $$
+Un estimador corregido por sesgo se obtendría restando esta cantidad al original:
+$$ \hat{\theta}_{bc} = \hat{\theta} - \widehat{Bias}_{boot} = 2\hat{\theta} - \bar{\theta}^* $$
+
+\subsection{Intervalos de Confianza: El Método Percentil}
+
+¿Cómo construimos un intervalo de confianza sin asumir que los datos siguen una distribución Normal?
+
+\textbf{Construcción del Intervalo Percentil:}
+El método asume que los cuantiles de la distribución bootstrap son buenos aproximados de los cuantiles de la distribución muestral verdadera. Para un nivel de confianza $(1-\alpha)100\%$:
+
+1. Ordenamos las $B$ réplicas de menor a mayor: $\hat{\theta}^*_{(1)} \le \hat{\theta}^*_{(2)} \le \dots \le \hat{\theta}^*_{(B)}$.
+
+2. El límite inferior es el valor en la posición $(\alpha/2) \times B$.
+
+3. El límite superior es el valor en la posición $(1-\alpha/2) \times B$.
+
+\textit{Para un intervalo del 95\% ($\alpha=0.05$) con $B=1000$ réplicas, el límite inferior es el valor en la posición 25 (el percentil 2.5) y el límite superior es el valor en la posición 975 (el percentil 97.5). El intervalo es simplemente $[\hat{\theta}^*_{(25)}, \hat{\theta}^*_{(975)}]$.}
+
+\subsection{La Realidad Computacional: Elección de \texorpdfstring{$B$}{B}}
+
+El Bootstrap es un método de Monte Carlo, lo que significa que introduce su propio ``ruido'' o error de simulación.
+
+\textbf{El Error de Monte Carlo:}
+La precisión de las estimaciones bootstrap mejora a medida que aumenta $B$, disminuyendo el error de Monte Carlo proporcionalmente a $1/\sqrt{B}$. 
+
+\textit{Para cálculos rápidos y preliminares del error estándar, $B=100$ o $B=200$ es suficiente. Sin embargo, para construir intervalos de confianza (donde necesitamos estimar con precisión las colas de la distribución), MSMA recomienda $B \ge 1000$, e idealmente $B \ge 2000$ para estabilizar los resultados y evitar que los límites del intervalo ``salten'' al cambiar la semilla aleatoria.}
+
+\subsection{Limitaciones Críticas: ¿Cuándo falla el Bootstrap?}
+
+
+
+\textbf{La Condición de Suavidad (Smoothness):}
+Los teoremas que garantizan la consistencia del Bootstrap (es decir, que la distribución bootstrap converge a la verdadera distribución muestral a medida que $n \to \infty$) requieren que el estadístico $\hat{\theta}$ sea una función \textit{suave} (diferenciable) de la Función de Distribución Empírica.
+
+Ejemplo: \textit{La media muestral es suave; si cambias un dato ligeramente, la media cambia ligeramente de forma predecible. Pero la mediana o el máximo no lo son. Si tienes los datos $\{1, 2, 10\}$, la mediana es 2. Si el 10 cambia a 3, la mediana sigue siendo 2. La mediana da ``saltos'' discretos. Para estos estadísticos no suaves, las derivadas funcionales no existen. Al aplicar remuestreo, la distribución bootstrap del máximo o la mediana será discreta y no reflejará la verdadera variabilidad de las colas de la distribución poblacional, haciendo que la estimación de la varianza sea inconsistente.}
+
+\subsection{Variantes del Método: Paramétrico vs. No Paramétrico}
+
+Finalmente, es crucial distinguir dos variantes del método según la fuente de los datos simulados.
+
+\textbf{Bootstrap Paramétrico vs. No Paramétrico:}
+\begin{itemize}
+    \item \textbf{Bootstrap No Paramétrico (Estándar):} Muestrea directamente de los datos crudos (de la FDE $\hat{F}_n$). No asume ninguna forma distribucional. Es robusto pero puede ser inestable si $n$ es muy pequeño.
+    \item \textbf{Bootstrap Paramétrico:} Asume que los datos provienen de una familia paramétrica específica $F(x; \hat{\eta})$ (por ejemplo, una distribución Normal, de Poisson o Exponencial). Las muestras bootstrap se generan simulando números aleatorios a partir de esa distribución teórica con los parámetros estimados $\hat{\eta}$.
+\end{itemize}
+
+Ejemplo: \textit{Si sabemos por física que los conteos de fotones en un detector siguen una distribución de Poisson, usar el Bootstrap Paramétrico (muestrear de una Poisson con $\lambda = \bar{x}$) es mucho más eficiente y estable que usar el Bootstrap No Paramétrico, especialmente si solo tenemos 5 observaciones. Sin embargo, si asumimos una Normal y los datos en realidad tienen colas pesadas, el Bootstrap Paramétrico nos dará intervalos de confianza falsamente estrechos.}
+
+\newpage
+
+\subsection{Quiz Teórico: Bootstrap}
+
+\subsubsection{Pregunta 1:} ¿En qué consiste el ``principio de plug-in'' (\textit{plug-in principle}) dentro del marco teórico del método Bootstrap y cómo se relaciona con la Función de Distribución Empírica (FDE)?
+
+\textbf{Solución}
+Dado que la distribución poblacional verdadera $F$ es desconocida, el principio establece que podemos sustituirla por su mejor estimador no paramétrico disponible: la Función de Distribución Empírica $\hat{F}_n$. Matemáticamente, $\hat{F}_n$ es una distribución discreta que asigna probabilidad $1/n$ a cada una de las $n$ observaciones muestrales $\{x_1, x_2, \dots, x_n\}$. El Bootstrap opera bajo la suposición asintótica de que, si la muestra es representativa, la distribución muestral de un estadístico $\hat{\theta}$ calculada bajo $\hat{F}_n$ convergerá a la distribución muestral verdadera bajo $F$. Por lo tanto, el principio de plug-in permite 'conectar' el mundo observable (los datos) con el inferencial (la variabilidad del estimador) sin asumir una forma paramétrica específica para la población subyacente.
+
+\subsubsection{Pregunta 2:} Defina formalmente una muestra bootstrap $\mathcal{X}^* = (X_1^*, \dots, X_n^*)$ generada a partir de una muestra original de tamaño $n$. ¿Cuál es la probabilidad matemática de que una observación original $x_i$ no aparezca en una única muestra bootstrap cuando $n$ es grande?
+
+\textbf{Solución}
+Una muestra bootstrap se genera mediante muestreo aleatorio \textit{con reemplazo} de la muestra original. Cada elemento $X_j^*$ ($j=1,\dots,n$) se extrae independientemente de la distribución empírica $\hat{F}_n$, lo que implica que $P(X_j^* = x_i) = 1/n$ para todo $i$. La probabilidad de que una observación específica $x_i$ \textbf{no} sea seleccionada en una única extracción es $1 - 1/n$. Dado que las $n$ extracciones son independientes, la probabilidad de que $x_i$ no aparezca en toda la muestra bootstrap es:
+$$ P(x_i \notin \mathcal{X}^*) = \left(1 - \frac{1}{n}\right)^n $$
+Aplicando el límite asintótico cuando $n \to \infty$, esta probabilidad converge a $e^{-1} \approx 0.368$. Esto significa que, en promedio, aproximadamente el $36.8\%$ de las observaciones originales quedan fuera de cualquier muestra bootstrap dada, lo cual es una propiedad matemática fundamental que garantiza la variabilidad necesaria para estimar la distribución muestral.
+
+\subsubsection{Pregunta 3:} Escriba la expresión matemática para la estimación del error estándar bootstrap, $\widehat{SE}_{boot}(\hat{\theta})$, a partir de $B$ réplicas bootstrap $\hat{\theta}^*_1, \dots, \hat{\theta}^*_B$. Explique por qué el denominador utiliza $B-1$ en lugar de $B$.
+
+\textbf{Solución}
+El error estándar bootstrap se estima como la desviación estándar muestral de las $B$ réplicas del estadístico:
+$$ \widehat{SE}_{boot}(\hat{\theta}) = \sqrt{\frac{1}{B-1} \sum_{b=1}^B (\hat{\theta}^*_b - \bar{\theta}^*)^2} $$
+donde $\bar{\theta}^* = \frac{1}{B} \sum_{b=1}^B \hat{\theta}^*_b$ es la media de las réplicas bootstrap. El uso de $B-1$ en el denominador proviene de la corrección de Bessel, que garantiza que la varianza muestral sea un estimador insesgado de la varianza poblacional de las réplicas bootstrap. Dado que las réplicas $\hat{\theta}^*_b$ se tratan como una realización de un proceso estocástico (el remuestreo Monte Carlo), aplicar la corrección $B-1$ elimina el sesgo negativo inherente a estimar la varianza a partir de la media muestral calculada sobre el mismo conjunto de réplicas.
+
+\subsubsection{Pregunta 4:} Proporcione la fórmula matemática para la estimación del sesgo bootstrap (\textit{bootstrap bias}) de un estimador $\hat{\theta}$. ¿Qué indica un valor positivo o negativo de esta cantidad sobre la tendencia del estimador original?
+
+\textbf{Solución}
+La estimación del sesgo bootstrap se define como la diferencia entre la media de las réplicas bootstrap y el valor del estadístico calculado sobre la muestra original:
+$$ \widehat{Bias}_{boot}(\hat{\theta}) = \bar{\theta}^* - \hat{\theta} $$
+Esta expresión aproxima matemáticamente $E_{\hat{F}_n}[\hat{\theta}^*] - \hat{\theta}$. Si $\widehat{Bias}_{boot} > 0$, indica que, en promedio, las réplicas bootstrap tienden a sobreestimar el parámetro en comparación con el estimador original, sugiriendo un sesgo positivo. Si $\widehat{Bias}_{boot} < 0$, el estimador original tiende a subestimar el parámetro (sesgo negativo). Un estimador corregido por sesgo bootstrap se obtendría restando esta cantidad al original: $\hat{\theta}_{bc} = \hat{\theta} - \widehat{Bias}_{boot} = 2\hat{\theta} - \bar{\theta}^*$. Esta metodología es directamente análoga a la corrección lineal del Jackknife, pero el Bootstrap la estima directamente mediante simulación Monte Carlo en lugar de expansiones de Taylor.
+
+\subsubsection{Pregunta 5:} Describa el procedimiento matemático para construir un intervalo de confianza bootstrap del tipo percentil al nivel $(1-\alpha)100\%$. ¿Qué suposición asintótica fundamental subyace a la validez de este método?
+
+\textbf{Solución}
+Para construir un intervalo de confianza percentil bootstrap:
+
+1. Se ordenan las $B$ réplicas de menor a mayor: $\hat{\theta}^*_{(1)} \leq \hat{\theta}^*_{(2)} \leq \dots \leq \hat{\theta}^*_{(B)}$.
+
+2. Se calculan los índices correspondientes a los cuantiles muestrales: $L = \lfloor (\alpha/2) \cdot B \rfloor$ y $U = \lceil (1-\alpha/2) \cdot B \rceil$.
+
+3. El intervalo de confianza es $[\hat{\theta}^*_{(L)}, \hat{\theta}^*_{(U)}]$.
+
+La suposición fundamental es que la distribución muestral del estadístico estandarizado $(\hat{\theta} - \theta)/SE(\hat{\theta})$ es aproximadamente pivotal, es decir, su forma no depende fuertemente del parámetro desconocido $\theta$ ni de la distribución subyacente $F$. El método percentil asume que la distribución empírica de $\hat{\theta}^*$ bajo $\hat{F}_n$ es un reflejo fiel de la distribución de $\hat{\theta}$ bajo $F$, y que el sesgo y la asimetría son pequeños o simétricos. Cuando esta condición no se cumple (distribuciones altamente asimétricas o sesgo sustancial), MSMA recomienda métodos más robustos como el BCa o el bootstrap-t.
+
+\subsubsection{Pregunta 6:} ¿Por qué el método Bootstrap estándar puede fallar o producir estimaciones inconsistentes de la varianza cuando se aplica a estadísticos no suaves (\textit{non-smooth statistics}), como la mediana muestral o el máximo?
+
+\textbf{Solución}
+La consistencia teórica del Bootstrap requiere que el estadístico $\hat{\theta}$ sea una función suave (típicamente diferenciable en el sentido de Fréchet o Hadamard) de la función de distribución empírica. Para estadísticos no suaves como la mediana o el máximo, pequeñas variaciones en $\hat{F}_n$ inducidas por el remuestreo con reemplazo producen saltos discontinuos o cambios abruptos en el valor del estadístico. Matemáticamente, la derivada funcional no existe o es discontinua, lo que viola las condiciones de regularidad necesarias para que la distribución bootstrap converja a la distribución muestral verdadera. Como consecuencia, la varianza bootstrap estimada puede ser inestable, sesgada o converger a un valor incorrecto. El texto señala que en estos casos se requieren modificaciones (como el bootstrap suavizado o el uso de kernels) o se debe recurrir a métodos analíticos específicos para estadísticos de orden.
+
+\subsubsection{Pregunta 7:} ¿Cómo se determina teóricamente el número óptimo de réplicas bootstrap $B$ en la práctica? Proporcione la relación matemática entre $B$ y el error de Monte Carlo asociado a la estimación del error estándar.
+
+\textbf{Solución}
+El número de réplicas $B$ se elige mediante un equilibrio entre costo computacional y precisión estadística (error de Monte Carlo). La variabilidad introducida por el remuestreo finito disminuye proporcionalmente a $1/\sqrt{B}$. Para la estimación del error estándar bootstrap, la desviación estándar del estimador $\widehat{SE}_{boot}$ debida exclusivamente al Monte Carlo es aproximadamente:
+$$ \text{Error MC} \approx \frac{0.03}{\sqrt{B}} \times \widehat{SE}_{boot} $$
+Esto implica que con $B=100$, el error Monte Carlo es del $\approx 0.3\%$ del SE estimado, lo cual es suficiente para una estimación rápida. Para intervalos de confianza percentil, se requiere mayor precisión en las colas de la distribución, por lo que se recomienda $B \geq 1000$. Si se utilizan métodos avanzados como el BCa o bootstrap-t, que involucran estimaciones de aceleración o curvatura, se sugiere $B \geq 2000$ o más para estabilizar los cuantiles extremos. La regla práctica es aumentar $B$ hasta que las estimaciones de interés (SE, sesgo, límites del IC) se estabilicen dentro de un margen de tolerancia predefinido.
+
+\subsubsection{Pregunta 8:} Explique la diferencia conceptual y matemática entre el Bootstrap paramétrico y el Bootstrap no paramétrico (estándar) descrito en la sección. ¿En qué escenario astrofísico preferiría usar la versión paramétrica?
+
+\textbf{Solución}
+El Bootstrap no paramétrico (estándar) muestrea directamente de la distribución empírica $\hat{F}_n$, sin asumir ninguna forma funcional para la población subyacente. Matemáticamente, $X_j^* \sim \hat{F}_n$. En contraste, el Bootstrap paramétrico asume que los datos provienen de una familia paramétrica conocida $F(x; \hat{\eta})$, donde $\hat{\eta}$ son los parámetros estimados (ej. $\hat{\mu}, \hat{\sigma}$ para una normal). Las muestras bootstrap se generan muestreando de $F(x; \hat{\eta})$, no de los datos crudos. La versión paramétrica es preferible en contextos astrofísicos cuando: 
+
+1. el tamaño muestral $n$ es muy pequeño y la FDE es demasiado discreta o ruidosa;
+
+2. existe un modelo físico bien fundamentado que justifica una distribución paramétrica específica (ej. ley de Potencia para luminosidades, Poisson para conteos de fotones, o Gaussiana para errores instrumentales); o 
+
+3. se desea extrapolar más allá del rango observado de los datos, lo cual el bootstrap no paramétrico no permite. 
+
+Sin embargo, si el modelo paramétrico está mal especificado, el Bootstrap paramétrico puede producir inferencias severamente sesgadas, mientras que el no paramétrico es más robusto frente a desviaciones de la forma distribucional asumida.
+
+% Referencia bibliográfica: Las preguntas de aplicación y sus soluciones están estrictamente basadas en la metodología de remuestreo y las limitaciones teóricas presentadas en la Sección 3.6.2 (Bootstrap) del libro \textit{Modern Statistical Methods for Astronomy} (MSMA).
+
+\subsubsection{Pregunta 9:} Un astrónomo analiza una muestra de $N=4$ tiempos de llegada de fotones (en milisegundos) y calcula la media muestral como su estimador puntual, obteniendo $\hat{\theta} = \bar{x} = 5.0$ ms. Para evaluar la precisión de este estimador sin asumir una distribución paramétrica, decide aplicar el método Bootstrap no paramétrico. Genera $B=5$ muestras bootstrap (mediante muestreo con reemplazo a partir de la distribución empírica de sus datos) y calcula la media para cada una de estas réplicas, obteniendo los siguientes valores: $\hat{\theta}^* = \{4.0, 5.5, 6.0, 4.5, 5.0\}$. 
+Con base en estas $B=5$ réplicas, calcule explícitamente: 
+
+a. la media de las réplicas bootstrap ($\bar{\theta}^*$), 
+
+b. la estimación del sesgo bootstrap ($\widehat{Bias}_{boot}$), 
+
+c. el error estándar bootstrap ($\widehat{SE}_{boot}$),
+
+d. el estimador corregido por sesgo ($\hat{\theta}_{bc}$).
+
+\textbf{Solución}
+
+\textbf{(a) Media de las réplicas bootstrap ($\bar{\theta}^*$):}
+Es el promedio aritmético de los $B=5$ estadísticos calculados sobre las muestras bootstrap:
+$$ \bar{\theta}^* = \frac{1}{B} \sum_{b=1}^B \hat{\theta}^*_b = \frac{4.0 + 5.5 + 6.0 + 4.5 + 5.0}{5} = \frac{25.0}{5} = 5.0 \text{ ms} $$
+
+\textbf{(b) Estimación del sesgo bootstrap ($\widehat{Bias}_{boot}$):}
+El sesgo bootstrap se define como la diferencia entre la media de las réplicas y el estadístico original:
+$$ \widehat{Bias}_{boot} = \bar{\theta}^* - \hat{\theta} = 5.0 - 5.0 = 0.0 \text{ ms} $$
+Esto indica que, para esta realización particular del remuestreo Monte Carlo, el estimador de la media no presenta sesgo aparente respecto a la muestra original.
+
+\textbf{(c) Error estándar bootstrap ($\widehat{SE}_{boot}$):}
+Se calcula como la desviación estándar muestral de las $B$ réplicas, utilizando la corrección de Bessel ($B-1$) para obtener un estimador insesgado de la varianza de las réplicas:
+$$ \widehat{SE}_{boot} = \sqrt{\frac{1}{B-1} \sum_{b=1}^B (\hat{\theta}^*_b - \bar{\theta}^*)^2} $$
+Primero calculamos la suma de los cuadrados de las diferencias respecto a $\bar{\theta}^* = 5.0$:
+$$ \sum_{b=1}^5 (\hat{\theta}^*_b - 5.0)^2 = (-1.0)^2 + (0.5)^2 + (1.0)^2 + (-0.5)^2 + (0.0)^2 $$
+$$ = 1.0 + 0.25 + 1.0 + 0.25 + 0.0 = 2.5 $$
+Sustituyendo en la fórmula de la varianza y luego sacando la raíz cuadrada:
+$$ \widehat{Var}_{boot} = \frac{2.5}{5-1} = \frac{2.5}{4} = 0.625 $$
+$$ \widehat{SE}_{boot} = \sqrt{0.625} \approx 0.791 \text{ ms} $$
+
+\textbf{(d) Estimador corregido por sesgo ($\hat{\theta}_{bc}$):}
+Se obtiene restando el sesgo estimado al estadístico original:
+$$ \hat{\theta}_{bc} = \hat{\theta} - \widehat{Bias}_{boot} = 5.0 - 0.0 = 5.0 \text{ ms} $$
+
+\subsubsection{Pregunta 10:} Utilizando el mismo conjunto de $B=5$ réplicas bootstrap ordenadas de la Pregunta 9: $\hat{\theta}^*_{(1)}=4.0$, $\hat{\theta}^*_{(2)}=4.5$, $\hat{\theta}^*_{(3)}=5.0$, $\hat{\theta}^*_{(4)}=5.5$, $\hat{\theta}^*_{(5)}=6.0$.
+
+a. Construya el Intervalo de Confianza Bootstrap del tipo percentil al nivel del 60\%. 
+
+b. Suponga ahora que, en lugar de la media, el astrónomo hubiera querido usar el Bootstrap para estimar el error estándar del \textit{valor máximo} de la muestra de tiempos de llegada. Explique por qué, desde la perspectiva teórica del texto, el procedimiento Bootstrap estándar fallaría o produciría una estimación inconsistente para este nuevo estadístico.
+
+\textbf{Solución}
+
+\textbf{(a) Intervalo de Confianza Bootstrap Percentil (60\%):}
+Para un nivel de confianza del $(1-\alpha)100\% = 60\%$, tenemos que $\alpha = 0.40$. Los límites del intervalo se encuentran en los cuantiles muestrales de la distribución bootstrap ordenada.
+Calculamos los índices para los percentiles inferior y superior usando la definición basada en el tamaño de las réplicas $B=5$:
+\begin{itemize}
+    \item \textit{Límite inferior (Percentil $\alpha/2 = 0.20$):} 
+    $$ L = \lfloor (\alpha/2) \cdot B \rfloor = \lfloor 0.20 \cdot 5 \rfloor = \lfloor 1.0 \rfloor = 1 $$
+    El valor correspondiente es $\hat{\theta}^*_{(1)} = 4.0$.
+    
+    \item \textit{Límite superior (Percentil $1-\alpha/2 = 0.80$):} 
+    $$ U = \lceil (1-\alpha/2) \cdot B \rceil = \lceil 0.80 \cdot 5 \rceil = \lceil 4.0 \rceil = 4 $$
+    El valor correspondiente es $\hat{\theta}^*_{(4)} = 5.5$.
+\end{itemize}
+Por lo tanto, el intervalo de confianza bootstrap percentil al 60\% para la media de los tiempos de llegada es:
+$$ IC_{60\%} = [\hat{\theta}^*_{(1)}, \hat{\theta}^*_{(4)}] = [4.0, 5.5] \text{ ms} $$
+Este intervalo indica que, según la distribución empírica de las réplicas, hay un 60\% de probabilidad de que el verdadero parámetro poblacional se encuentre entre 4.0 y 5.5 ms.
+
+\textbf{(b) Limitación teórica del Bootstrap para estadísticos no suaves:}
+Si el estadístico de interés fuera el valor máximo de la muestra ($\hat{\theta} = \max(X_i)$), el método Bootstrap no paramétrico estándar fallaría en proporcionar una estimación consistente de su varianza o distribución muestral. 
+
+Matemáticamente, la validez asintótica del Bootstrap (es decir, que la distribución bootstrap converja a la verdadera distribución muestral) requiere que el estadístico sea una función \textit{suave} (típicamente diferenciable en el sentido de Fréchet o Hadamard) de la Función de Distribución Empírica (FDE). El estadístico de máximo es un estadístico \textit{no suave} (\textit{non-smooth statistic}); su derivada funcional respecto a la FDE es discontinua o no existe. 
+
+Como consecuencia directa de esta violación de las condiciones de regularidad:
+
+1. El máximo de una muestra bootstrap solo puede tomar valores que ya están presentes en la muestra original, y la probabilidad de que el máximo bootstrap sea igual al máximo original es $(1 - (1-1/N)^N) \approx 0.632$, lo que crea una distribución bootstrap degenerada y discreta que no refleja la verdadera variabilidad de las colas de la distribución poblacional.
+
+2. La varianza estimada por Bootstrap para el máximo subestimará severamente la varianza real o simplemente no convergerá al valor correcto a medida que $N$ crece. 
+
+Para estadísticos no suaves como el máximo, la mediana, o estadísticos que dependen de diferencias secuenciales, el texto advierte explícitamente que los teoremas que justifican el método se violan, siendo necesario recurrir a técnicas analíticas de valores extremos, bootstrap suavizado (\textit{smoothed bootstrap}), o métodos de submuestreo (\textit{m out of n bootstrap}).
+
+
+
+\section{La Prueba de Kolmogorov-Smirnov}
+
+El texto \textit{Numerical Recipes in C} (Press et al.) aborda la prueba de Kolmogorov-Smirnov (K-S) como una herramienta fundamental para la inferencia estadística no paramétrica. A diferencia de las pruebas que requieren la discretización de los datos, la prueba K-S opera directamente sobre las funciones de distribución acumulada (CDF), lo que la hace particularmente valiosa en el análisis de datos científicos y astronómicos donde la información de las colas de la distribución es crítica.
+
+\subsection{Fundamentos y Ventajas sobre el Test Chi-Cuadrado}
+
+En la Sección 14.3, \textit{Numerical Recipes} establece la superioridad conceptual de la prueba K-S sobre la prueba de bondad de ajuste Chi-cuadrado ($\chi^2$) en múltiples escenarios. La prueba $\chi^2$ requiere que los datos se agrupen en \textit{bins} (intervalos), lo que conlleva una pérdida inherente de información y hace que los resultados sean sensibles a la elección del tamaño y los límites de los intervalos. 
+
+Por el contrario, la prueba K-S no requiere agrupamiento (binning) y es sensible a las diferencias en la ubicación, la dispersión y la forma de las distribuciones. El libro enfatiza que la prueba K-S es la prueba de bondad de ajuste más potente cuando la distribución teórica es continua, ya que compara la función de distribución empírica (EDF) de los datos con la CDF teórica, o bien compara dos EDFs entre sí.
+
+\subsection{La Prueba Unidimensional (Sección 14.3)}
+
+El texto formaliza la estadística de prueba K-S para dos casos principales:
+
+\textbf{1. Prueba de una muestra (K-S 1-sample):} Compara la función de distribución acumulada empírica $S_N(x)$ de $N$ observaciones con una función de distribución teórica continua $P(x)$. La estadística de prueba $D$ se define como la máxima diferencia absoluta entre ambas funciones:
+$$ D = \max_{-\infty < x < \infty} |S_N(x) - P(x)| $$
+
+\textbf{2. Prueba de dos muestras (K-S 2-sample):} Compara las distribuciones empíricas de dos conjuntos de datos, $S_{N_1}(x)$ y $S_{N_2}(x)$, para determinar si provienen de la misma distribución subyacente. La estadística es:
+$$ D = \max_{-\infty < x < \infty} |S_{N_1}(x) - S_{N_2}(x)| $$
+
+\textit{Numerical Recipes} provee las subrutinas \texttt{ksone} (para una muestra) y \texttt{kstwo} (para dos muestras), las cuales calculan $D$ y devuelven el valor-p (nivel de significancia) asociado.
+
+\subsection{Cálculo de la Significancia y la Función $Q_{KS}$}
+
+Para determinar si el valor de $D$ observado es estadísticamente significativo, el libro utiliza la distribución asintótica de Kolmogorov-Smirnov. La probabilidad de obtener un valor de $D$ mayor que el observado bajo la hipótesis nula se calcula mediante la función $Q_{KS}(\lambda)$:
+$$ Q_{KS}(\lambda) = 2 \sum_{j=1}^{\infty} (-1)^{j-1} e^{-2j^2\lambda^2} $$
+
+El argumento $\lambda$ no es simplemente $D$, sino que incorpora un ajuste por el tamaño efectivo de la muestra $N_e$. Para la prueba de una muestra, $\lambda$ se calcula como:
+$$ \lambda = \left( \sqrt{N_e} + 0.12 + \frac{0.11}{\sqrt{N_e}} \right) D $$
+Para la prueba de dos muestras, el tamaño efectivo se define en función de ambos tamaños muestrales:
+$$ N_e = \frac{N_1 N_2}{N_1 + N_2} $$
+El libro advierte que esta fórmula asintótica es altamente precisa para $N \geq 4$, pero para muestras muy pequeñas se requieren tablas exactas o simulaciones de Monte Carlo.
+
+\subsection{Extensión a Dos Dimensiones (Sección 14.7)}
+
+Una de las contribuciones algorítmicas más notables de \textit{Numerical Recipes} es la extensión de la prueba K-S a dos dimensiones (Sección 14.7). En 1D, la CDF está naturalmente ordenada. En 2D, no existe un ordenamiento natural total, lo que hace que la definición de la "máxima diferencia" entre dos superficies de distribución acumulada sea ambigua.
+
+El libro propone una solución práctica basada en la comparación de probabilidades condicionales en cuadrantes. Se evalúan las distribuciones en múltiples puntos de referencia, calculando la fracción de puntos que caen en cada uno de los cuatro cuadrantes definidos por un punto de referencia $(x, y)$. 
+
+Las subrutinas \texttt{ks2d1s} (datos vs. modelo) y \texttt{ks2d2s} (datos vs. datos) utilizan las funciones auxiliares \texttt{quadct} (que cuenta los puntos en los cuadrantes) y \texttt{quadvl} (que calcula la probabilidad teórica en los cuadrantes). La estadística de prueba 2D se construye maximizando la diferencia entre las fracciones de cuadrantes observadas y las esperadas, y su significancia se estima mediante aproximaciones analíticas o métodos de remuestreo, dado que la distribución nula en 2D no tiene una forma cerrada tan sencilla como en 1D.
+
+\subsubsection{Pregunta 1}
+De acuerdo con la Sección 14.3 de \textit{Numerical Recipes in C}, ¿cuál es la diferencia fundamental entre la prueba de Kolmogorov-Smirnov (K-S) y la prueba de bondad de ajuste Chi-cuadrado ($\chi^2$) respecto al tratamiento de los datos, y cómo se define matemáticamente el estadístico $D$ para el caso de una sola muestra?
+
+\textbf{Solución:}
+La diferencia fundamental radica en que la prueba K-S es aplicable a distribuciones \textit{sin agrupar} (unbinned), mientras que la prueba $\chi^2$ requiere que los datos se agrupen en intervalos o \textit{bins}, lo que conlleva una pérdida de información. La prueba K-S opera directamente sobre la función de distribución acumulada empírica. 
+
+Para una sola muestra de $N$ eventos ubicados en valores $x_i$, se construye un estimador insesgado $S_N(x)$ de la función de distribución acumulada (CDF), el cual representa la fracción de puntos de los datos que son menores o iguales a $x$. El estadístico K-S, denotado como $D$, se define como la máxima distancia absoluta entre esta CDF empírica $S_N(x)$ y la CDF teórica del modelo $P(x)$:
+$$ D = \max_{-\infty < x < \infty} |S_N(x) - P(x)| $$
+
+\subsubsection{Pregunta 2}
+Para determinar la significancia estadística (el valor $p$) del estadístico $D$ en el caso de una o dos muestras, \textit{Numerical Recipes} utiliza una aproximación asintótica. Escriba la expresión para la función $Q_{KS}(\lambda)$ y defina cómo se calcula el argumento $\lambda$ en función del tamaño de muestra efectivo $N_e$.
+
+\textbf{Solución:}
+La probabilidad de obtener un valor de $D$ mayor que el observado bajo la hipótesis nula se calcula mediante la función $Q_{KS}(\lambda)$, cuya serie convergente es:
+$$ Q_{KS}(\lambda) = 2 \sum_{j=1}^{\infty} (-1)^{j-1} e^{-2j^2\lambda^2} $$
+
+El argumento $\lambda$ no es simplemente $D$, sino que incorpora un ajuste por el tamaño efectivo de la muestra $N_e$, calculándose como:
+$$ \lambda = \left( \sqrt{N_e} + 0.12 + \frac{0.11}{\sqrt{N_e}} \right) D $$
+Para el caso de una muestra, $N_e = N$. Para el caso de dos muestras con tamaños $N_1$ y $N_2$, el tamaño efectivo se define como $N_e = \frac{N_1 N_2}{N_1 + N_2}$. Esta función es evaluada en la rutina \texttt{probks}.
+
+\subsubsection{Pregunta 3}
+A pesar de su utilidad, la Sección 14.3 advierte sobre una limitación inherente a todas las variedades de la prueba K-S. Describa este escenario específico en el que la prueba carece de capacidad discriminatoria y explique la razón matemática de esta falla.
+
+\textbf{Solución:}
+La prueba K-S carece de capacidad para discriminar distribuciones de probabilidad que poseen una 'muesca' (notch) estrecha dentro de la cual la probabilidad cae estrictamente a cero. 
+
+La razón de esta falla se debe a la naturaleza acumulativa de la prueba. Dado que el estadístico $D$ mide la diferencia máxima entre las funciones de distribución acumuladas, una discrepanza localizada en una región muy estrecha se 'diluye' al ser integrada. Por lo tanto, aunque la existencia de un solo punto de datos dentro de la muesca invalidaría la distribución teórica, la prueba K-S requeriría que cayeran muchos puntos de datos dentro de esa muesca estrecha antes de que la diferencia acumulada sea lo suficientemente grande como para señalar una discrepancia estadísticamente significativa.
+
+
+\subsubsection{Problema de Aplicación}
+Un astrofísico está investigando la dinámica de dos corrientes estelares (Stream A y Stream B) en el halo de la Vía Láctea. Para determinar si ambas corrientes son fragmentos de un mismo cúmulo globular destruido o si provienen de poblaciones estelares independientes, decide comparar sus velocidades radiales. 
+
+Debido a que las velocidades radiales son variables continuas y el tamaño de las muestras es pequeño, el astrofísico decide \textit{no} agrupar los datos en intervalos (bins) para evitar la pérdida de información y la dependencia arbitraria del tamaño del bin, lo que invalidaría una prueba $\chi^2$. En su lugar, opta por utilizar la prueba de Kolmogorov-Smirnov (K-S) de dos muestras, implementada en la rutina \texttt{kstwo} de \textit{Numerical Recipes in C} (Sección 14.3).
+
+Los datos de velocidades radiales (en unidades arbitrarias de km/s normalizados) ya ordenados de forma ascendente son:
+
+\textbf{Stream A ($N_1 = 4$):} 1.2, 2.5, 3.1, 4.8
+\textbf{Stream B ($N_2 = 5$):} 1.5, 2.1, 3.8, 4.2, 5.5
+
+Se requiere calcular el estadístico $D$, el parámetro $\lambda$, y la significancia $Q_{KS}(\lambda)$ para determinar si existe evidencia estadística para afirmar que las dos corrientes provienen de distribuciones de velocidad subyacentes diferentes.
+
+\textbf{Solución}
+
+\textbf{Cálculo del Estadístico $D$}
+
+De acuerdo con la teoría de la Sección 14.3 de \textit{Numerical Recipes}, para la prueba de dos muestras, el estadístico $D$ es la máxima diferencia absoluta entre las funciones de distribución acumulada empíricas (EDF) de ambos conjuntos de datos:
+$$ D = \max_{-\infty < x < \infty} |S_{N_1}(x) - S_{N_2}(x)| $$
+
+Para encontrar $D$, evaluamos las EDFs, $S_{N_1}(x)$ y $S_{N_2}(x)$, en cada punto de datos. La EDF en un punto $x$ es la fracción de puntos en la muestra que son menores o iguales a $x$.
+
+\begin{itemize}
+    \item $x < 1.2$: $S_4 = 0/4 = 0.00$, $S_5 = 0/5 = 0.00 \implies |0.00 - 0.00| = 0.00$
+    \item $1.2 \leq x < 1.5$: $S_4 = 1/4 = 0.25$, $S_5 = 0/5 = 0.00 \implies |0.25 - 0.00| = 0.25$
+    \item $1.5 \leq x < 2.1$: $S_4 = 1/4 = 0.25$, $S_5 = 1/5 = 0.20 \implies |0.25 - 0.20| = 0.05$
+    \item $2.1 \leq x < 2.5$: $S_4 = 1/4 = 0.25$, $S_5 = 2/5 = 0.40 \implies |0.25 - 0.40| = 0.15$
+    \item $2.5 \leq x < 3.1$: $S_4 = 2/4 = 0.50$, $S_5 = 2/5 = 0.40 \implies |0.50 - 0.40| = 0.10$
+    \item $3.1 \leq x < 3.8$: $S_4 = 3/4 = 0.75$, $S_5 = 2/5 = 0.40 \implies |0.75 - 0.40| = 0.35$
+    \item $3.8 \leq x < 4.2$: $S_4 = 3/4 = 0.75$, $S_5 = 3/5 = 0.60 \implies |0.75 - 0.60| = 0.15$
+    \item $4.2 \leq x < 4.8$: $S_4 = 3/4 = 0.75$, $S_5 = 4/5 = 0.80 \implies |0.75 - 0.80| = 0.05$
+    \item $4.8 \leq x < 5.5$: $S_4 = 4/4 = 1.00$, $S_5 = 4/5 = 0.80 \implies |1.00 - 0.80| = 0.20$
+    \item $x \geq 5.5$: $S_4 = 4/4 = 1.00$, $S_5 = 5/5 = 1.00 \implies |1.00 - 1.00| = 0.00$
+\end{itemize}
+
+La máxima diferencia absoluta ocurre en el intervalo $3.1 \leq x < 3.8$, por lo tanto:
+$$ D = 0.35 $$
+
+\textbf{Cálculo del Parámetro $\lambda$ y Tamaño Efectivo}
+
+Para evaluar la significancia de este $D$, la rutina \texttt{kstwo} de \textit{Numerical Recipes} no utiliza $D$ directamente, sino que calcula un tamaño efectivo de muestra $N_e$ para dos muestras y lo escala para obtener el argumento $\lambda$. 
+
+El tamaño efectivo se define como:
+$$ N_e = \frac{N_1 N_2}{N_1 + N_2} = \frac{4 \times 5}{4 + 5} = \frac{20}{9} \approx 2.2222 $$
+
+El argumento $\lambda$ se calcula mediante la fórmula asintótica con correcciones de orden superior provista en el libro (Ecuación 14.3.9):
+$$ \lambda = \left( \sqrt{N_e} + 0.12 + \frac{0.11}{\sqrt{N_e}} \right) D $$
+
+Sustituyendo los valores:
+$$ \sqrt{N_e} = \sqrt{2.2222} \approx 1.4907 $$
+$$ \lambda = \left( 1.4907 + 0.12 + \frac{0.11}{1.4907} \right) \times 0.35 $$
+$$ \lambda = (1.4907 + 0.12 + 0.0738) \times 0.35 $$
+$$ \lambda = 1.6845 \times 0.35 \approx 0.5896 $$
+
+\textbf{Evaluación de la Significancia $Q_{KS}$}
+
+El valor $p$ (la probabilidad de obtener un valor de $D$ igual o mayor bajo la hipótesis nula de que ambas muestras provienen de la misma distribución) se calcula mediante la rutina \texttt{probks}, la cual evalúa la serie rápida de la función $Q_{KS}(\lambda)$:
+$$ Q_{KS}(\lambda) = 2 \sum_{j=1}^{\infty} (-1)^{j-1} e^{-2j^2\lambda^2} $$
+
+Dado que $\lambda \approx 0.5896$, calculamos $\lambda^2 \approx 0.3476$ y el factor base $2\lambda^2 \approx 0.6952$. Evaluamos los primeros términos de la serie hasta que la convergencia sea evidente:
+
+Para $j=1$:
+$$ 2 \times (-1)^0 \times e^{-1^2 \times 0.6952} = 2 \times e^{-0.6952} \approx 2 \times 0.49896 = 0.99792 $$
+
+Para $j=2$:
+$$ 2 \times (-1)^1 \times e^{-2^2 \times 0.6952} = -2 \times e^{-2.7808} \approx -2 \times 0.06197 = -0.12394 $$
+
+Para $j=3$:
+$$ 2 \times (-1)^2 \times e^{-3^2 \times 0.6952} = 2 \times e^{-6.2568} \approx 2 \times 0.00192 = 0.00384 $$
+
+Para $j=4$:
+$$ 2 \times (-1)^3 \times e^{-4^2 \times 0.6952} = -2 \times e^{-11.1232} \approx -2 \times 0.00001 = -0.00002 $$
+
+Sumando los términos:
+$$ Q_{KS}(0.5896) \approx 0.99792 - 0.12394 + 0.00384 - 0.00002 = 0.8778 $$
+
+El valor $p$ resultante es aproximadamente $0.878$.
+
+\textbf{Conclusión Analítica}
+
+El resultado de la prueba K-S de dos muestras arroja un valor $p \approx 0.878$. Dado que este valor es extremadamente alto (muy superior a cualquier nivel de significancia estándar como $\alpha = 0.05$), no hay ninguna evidencia estadística para rechazar la hipótesis nula. 
+
+Desde la perspectiva de \textit{Numerical Recipes}, esto indica que las funciones de distribución acumulada empíricas de las velocidades radiales del Stream A y del Stream B son altamente consistentes entre sí. Físicamente, esto sugiere fuertemente que ambas corrientes estelares comparten la misma distribución de velocidades subyacente, apoyando la hipótesis de que podrían ser fragmentos de un mismo progenitor dinámico.
+
+Es crucial notar que, al utilizar la prueba K-S en lugar de $\chi^2$, el astrofísico evitó el sesgo introducido por la discretización. Como advierte la Sección 14.3, si los datos se hubieran agrupado en bins, la elección del ancho del bin podría haber ocultado o exagerado artificialmente las diferencias en las colas de la distribución, las cuales son críticas en la dinámica estelar. Además, la prueba es invariante bajo reparametrización; si el astrofísico hubiera decidido aplicar un logaritmo a las velocidades o cambiar las unidades, el estadístico $D$ y el valor $p$ habrían permanecido exactamente iguales, garantizando la robustez de la inferencia física.
+
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}
