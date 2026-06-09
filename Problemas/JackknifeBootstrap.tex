@@ -479,7 +479,7 @@ En la Sección 14.3, \textit{Numerical Recipes} establece la superioridad concep
 
 Por el contrario, la prueba K-S no requiere agrupamiento (binning) y es sensible a las diferencias en la ubicación, la dispersión y la forma de las distribuciones. El libro enfatiza que la prueba K-S es la prueba de bondad de ajuste más potente cuando la distribución teórica es continua, ya que compara la función de distribución empírica (EDF) de los datos con la CDF teórica, o bien compara dos EDFs entre sí.
 
-\subsection{La Prueba Unidimensional (Sección 14.3)}
+\subsection{La Prueba Unidimensional}
 
 El texto formaliza la estadística de prueba K-S para dos casos principales:
 
@@ -502,16 +502,9 @@ Para la prueba de dos muestras, el tamaño efectivo se define en función de amb
 $$ N_e = \frac{N_1 N_2}{N_1 + N_2} $$
 El libro advierte que esta fórmula asintótica es altamente precisa para $N \geq 4$, pero para muestras muy pequeñas se requieren tablas exactas o simulaciones de Monte Carlo.
 
-\subsection{Extensión a Dos Dimensiones (Sección 14.7)}
-
-Una de las contribuciones algorítmicas más notables de \textit{Numerical Recipes} es la extensión de la prueba K-S a dos dimensiones (Sección 14.7). En 1D, la CDF está naturalmente ordenada. En 2D, no existe un ordenamiento natural total, lo que hace que la definición de la "máxima diferencia" entre dos superficies de distribución acumulada sea ambigua.
-
-El libro propone una solución práctica basada en la comparación de probabilidades condicionales en cuadrantes. Se evalúan las distribuciones en múltiples puntos de referencia, calculando la fracción de puntos que caen en cada uno de los cuatro cuadrantes definidos por un punto de referencia $(x, y)$. 
-
-Las subrutinas \texttt{ks2d1s} (datos vs. modelo) y \texttt{ks2d2s} (datos vs. datos) utilizan las funciones auxiliares \texttt{quadct} (que cuenta los puntos en los cuadrantes) y \texttt{quadvl} (que calcula la probabilidad teórica en los cuadrantes). La estadística de prueba 2D se construye maximizando la diferencia entre las fracciones de cuadrantes observadas y las esperadas, y su significancia se estima mediante aproximaciones analíticas o métodos de remuestreo, dado que la distribución nula en 2D no tiene una forma cerrada tan sencilla como en 1D.
 
 \subsubsection{Pregunta 1}
-De acuerdo con la Sección 14.3 de \textit{Numerical Recipes in C}, ¿cuál es la diferencia fundamental entre la prueba de Kolmogorov-Smirnov (K-S) y la prueba de bondad de ajuste Chi-cuadrado ($\chi^2$) respecto al tratamiento de los datos, y cómo se define matemáticamente el estadístico $D$ para el caso de una sola muestra?
+¿cuál es la diferencia fundamental entre la prueba de Kolmogorov-Smirnov (K-S) y la prueba de bondad de ajuste Chi-cuadrado ($\chi^2$) respecto al tratamiento de los datos, y cómo se define matemáticamente el estadístico $D$ para el caso de una sola muestra?
 
 \textbf{Solución:}
 La diferencia fundamental radica en que la prueba K-S es aplicable a distribuciones \textit{sin agrupar} (unbinned), mientras que la prueba $\chi^2$ requiere que los datos se agrupen en intervalos o \textit{bins}, lo que conlleva una pérdida de información. La prueba K-S opera directamente sobre la función de distribución acumulada empírica. 

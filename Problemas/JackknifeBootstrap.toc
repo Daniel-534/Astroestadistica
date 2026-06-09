@@ -40,10 +40,9 @@
 \contentsline {subsubsection}{\numberline {2.9.10}Pregunta 10:}{12}{subsubsection.2.9.10}%
 \contentsline {section}{\numberline {3}La Prueba de Kolmogorov-Smirnov}{13}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Fundamentos y Ventajas sobre el Test Chi-Cuadrado}{13}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}La Prueba Unidimensional (Sección 14.3)}{13}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.2}La Prueba Unidimensional}{13}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Cálculo de la Significancia y la Función $Q_{KS}$}{13}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Extensión a Dos Dimensiones (Sección 14.7)}{14}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Pregunta 1}{14}{subsubsection.3.4.1}%
-\contentsline {subsubsection}{\numberline {3.4.2}Pregunta 2}{14}{subsubsection.3.4.2}%
-\contentsline {subsubsection}{\numberline {3.4.3}Pregunta 3}{14}{subsubsection.3.4.3}%
-\contentsline {subsubsection}{\numberline {3.4.4}Problema de Aplicación}{15}{subsubsection.3.4.4}%
+\contentsline {subsubsection}{\numberline {3.3.1}Pregunta 1}{14}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Pregunta 2}{14}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Pregunta 3}{14}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Problema de Aplicación}{14}{subsubsection.3.3.4}%
