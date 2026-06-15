@@ -84,6 +84,14 @@ El resultado obtenido fue:
 
 \begin{enumerate}[a)]
     \item Lea el archivo \texttt{mw\_cepheids.csv} y realice un gráfico de dispersión de la magnitud absoluta $M$ en función de $\log_{10}(P)$. Describa brevemente la tendencia observada.
+    
+\begin{lstlisting}
+plx_arcsec = df['plx'].values / 1000                         # paralaje [arcsec]
+x  = np.log10(df['Per'].values)                           # log10(P_i) [adim]
+y  = df['Vmag'].values + 5*np.log10(plx_arcsec) + 5        # M_i [mag]
+n  = len(x)
+sigma = 0.3                                                # desv. est. conocida
+\end{lstlisting}
 
     \begin{center}
         \includegraphics[width=0.82\textwidth]{dispersion.png}

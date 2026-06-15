@@ -72,9 +72,9 @@ for col in ['Per', 'plx', 'Vmag']:
     df[col] = pd.to_numeric(df[col], errors='coerce')  # texto -> NaN
 df.dropna(subset=['Per', 'plx', 'Vmag'], inplace=True) # elimina NaN
 
-plx_mas = df['plx'].values / 1000                         # paralaje [mas]
-x  = np.log10(df['Per'].values)                           # log10(P_i) [adim.]
-y  = df['Vmag'].values + 5*np.log10(plx_mas) - 10        # M_i [mag]
+plx_mas = df['plx'].values / 1000                         # paralaje [arcsec]
+x  = np.log10(df['Per'].values)                           # log10(P_i) [adim]
+y  = df['Vmag'].values + 5*np.log10(plx_mas) + 5        # M_i [mag]
 n  = len(x)
 sigma = 0.3                                                # desv. est. conocida
 \end{lstlisting}
