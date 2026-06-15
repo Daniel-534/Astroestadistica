@@ -1,7 +1,0 @@
-fig = plt.figure()
-camera = Camera(fig)
-for i, t in enumerate(ts):
-    plt.plot([0,xs[i]],[0,ys[i]], "k-",lw=2)
-    plt.plot(xs[i], ys[i], "ro")
-    camera.snap()
-plt.axis("equal");
