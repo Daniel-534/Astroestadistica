@@ -9,7 +9,7 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{parskip}
 \usepackage[most]{tcolorbox}
-\usepackage[hidelinks]{hyperref}
+\usepackage[colorlinks=true, linkcolor=green!45!black, citecolor=green!45!black, urlcolor=green!45!black]{hyperref}
 \usepackage{float}
 \usepackage{booktabs}
 \usepackage[hypcap=false]{caption}
@@ -45,8 +45,39 @@
 \renewcommand{\headrulewidth}{0.2pt} % linea horizontal
 
 
-\begin{document}
 
+\begin{document}
+\pagenumbering{gobble}
+
+\begin{titlepage}
+  \centering
+  \vspace*{0.6cm}
+
+  \includegraphics[width=0.24\textwidth]{logo-udea.png}\\[0.7cm]
+
+  {\Large \textbf{Universidad de Antioquia}}\\[0.25cm]
+  {\large Facultad de Ciencias Exactas y Naturales}\\[0.15cm]
+  {\large Instituto de Física}\\[0.15cm]
+  {\large Curso: Astroestadística}\\[1.0cm]
+
+  \rule{\linewidth}{1pt}\\[0.75cm]
+
+  {\LARGE \bfseries Solución del problema práctico\\[0.35cm]
+  Parcial 3 de Astroestadística}\\[0.85cm]
+
+  {\large \itshape Modelo estadístico bayesiano y comparación bootstrap\\[0.15cm]
+  para la relación período--luminosidad de estrellas Cefeidas}\\[0.75cm]
+
+  \rule{\linewidth}{1pt}\\[1.0cm]
+
+  {\large \textbf{Autor:} Daniel Soto Villada}\\[0.5cm]
+  {\large \textbf{Fecha:} \today}
+
+  \vfill
+  {\small Medellín, Colombia}\\[0.7cm]
+\end{titlepage}
+\clearpage
+\pagenumbering{arabic}
 
 \section{Problema}
 
@@ -526,6 +557,8 @@ for _ in range(B):
   \draw[arrow] (store) -- node[midway, right, font=\scriptsize]
     {al finalizar $B$ iteraciones} (compare);
 
+  \node[font=\scriptsize, text=black!65, align=center] at (5.2,-3.45)
+    {Selección predictiva entre modelo lineal y cuadrático mediante remuestreo};
 \end{tikzpicture}
 \captionof{figure}{Diagrama del algoritmo de comparación predictiva: el cálculo MAP del modelo cuadrático se realiza como estimación independiente, mientras que el remuestreo bootstrap toma pares observados, ajusta en paralelo los modelos lineal y cuadrático sobre cada réplica, guarda ambos MSEs y compara sus medianas al final.}
 \end{center}
@@ -539,6 +572,12 @@ El modelo cuadrático presenta una mediana de MSE menor, por lo que tiene
 mejor desempeño predictivo bajo este criterio.
 
 \end{enumerate}
+
+Los cálculos completos implementados en Python, incluyendo la lectura de datos,
+los estimadores MAP, las simulaciones posteriores, el bootstrap y las pruebas de
+comparación, se encuentran disponibles en el cuaderno de Google Colab citado en
+la bibliografía; al hacer clic sobre la referencia se abre directamente el enlace
+correspondiente \cite{colab_parcial3_solucion}.
 
 \bibliographystyle{plainurl}
 \bibliography{bibliography} 
