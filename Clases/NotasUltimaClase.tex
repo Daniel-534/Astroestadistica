@@ -1,0 +1,508 @@
+\documentclass[11pt]{article}
+
+% ============================================================
+% Paquetes
+% ============================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usetikzlibrary{babel}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+% ------------------------------------------------------------
+% Entorno para comentarios explicativos / observaciones
+% ------------------------------------------------------------
+\theoremstyle{remark}
+\newtheorem*{nota}{Nota}
+
+% ------------------------------------------------------------
+% Estilo para fragmentos de código Python
+% ------------------------------------------------------------
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{red!60!black},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  numbers=left,
+  numbersep=8pt,
+  numberstyle=\tiny\color{gray},
+  xleftmargin=15pt
+}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+% ============================================================
+\title{\textbf{Inferencia Bayesiana en Regresión Lineal Simple}\\[4pt]
+\large Verosimilitud, distribución previa y estimación MAP\\
+\normalsize (Continuación de la clase anterior)}
+\author{Apuntes de clase --- Estadística}
+\date{}
+% ============================================================
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+Estas notas retoman el análisis bayesiano del modelo de regresión lineal
+simple $y_i = a + bx_i + \varepsilon_i$. Se construye la función de
+verosimilitud, se especifica una distribución previa no informativa para los
+parámetros $(a,b)$, y se combinan ambas mediante el teorema de Bayes para
+obtener la densidad posterior. Finalmente se deduce el estimador de Máximo a
+Posteriori (MAP) resolviendo un sistema lineal $M\vec\theta=\vec Z$, y se
+muestra que la posterior completa de $(a,b)$ es, de hecho, una distribución
+normal bivariada.
+\end{abstract}
+
+\tableofcontents
+
+% =====================================================
+\section{Modelo y función de verosimilitud}
+% =====================================================
+
+\subsection{Especificación del modelo}
+
+Se considera el modelo de regresión lineal simple
+\begin{equation}
+y_i = a + bx_i + \varepsilon_i, \qquad i=1,\dots,n,
+\label{eq:modelo}
+\end{equation}
+donde $a$ (intercepto) y $b$ (pendiente) son los \textbf{parámetros} del
+modelo, y los errores se suponen independientes e idénticamente distribuidos:
+\begin{equation}
+\varepsilon_i \sim \mathcal{N}(0,\sigma^2), \qquad \sigma = 0.3 \ \ (\text{conocido}).
+\label{eq:error}
+\end{equation}
+
+\begin{nota}
+A diferencia de $a$ y $b$, que son desconocidos y sobre los cuales se hará
+toda la inferencia, $\sigma$ se trata aquí como una \emph{constante conocida},
+fijada en $0.3$. Por ello, en lo que sigue $\theta=(a,b)$ denota el vector de
+parámetros desconocidos del modelo.
+\end{nota}
+
+\subsection{Distribución de cada observación}
+
+Escribimos $M(a,b)$ para referirnos al modelo evaluado en $x_i$, es decir
+$M(a,b)\equiv a+bx_i$. Como $y_i$ es una traslación de $\varepsilon_i$
+(ecuación \eqref{eq:modelo}) y $\varepsilon_i\sim\mathcal N(0,\sigma^2)$, se
+sigue que
+\begin{equation}
+y_i \mid M(a,b) \ \sim\ \mathcal{N}\!\big(a+bx_i,\ \sigma^2\big).
+\label{eq:dist-yi}
+\end{equation}
+
+Por lo tanto, el \emph{núcleo} de la densidad de cada observación (es decir,
+la densidad sin su constante de normalización, que no depende de $a,b$) es
+\begin{equation}
+f(y_i\mid M(a,b)) \ \propto\ \exp\!\left(-\frac{\big(y_i-(a+bx_i)\big)^2}{2\sigma^2}\right).
+\label{eq:fyi}
+\end{equation}
+
+\subsection{Verosimilitud conjunta}
+
+Si las observaciones $y_1,\dots,y_n$ son condicionalmente independientes dado
+el modelo, la verosimilitud conjunta es el producto de las densidades
+individuales:
+\begin{equation}
+L(y\mid M(a,b)) = \prod_{i=1}^{n} f(y_i\mid M(a,b)).
+\label{eq:L-producto}
+\end{equation}
+
+Como el producto de exponenciales es la exponencial de la suma de los
+exponentes, sustituyendo \eqref{eq:fyi} en \eqref{eq:L-producto}:
+\begin{equation}
+L(y\mid M(a,b)) \ \propto\ \exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^{n}\big(y_i-(a+bx_i)\big)^2\right).
+\label{eq:L-final}
+\end{equation}
+
+% =====================================================
+\section{Distribución previa}
+% =====================================================
+
+\subsection{Prior no informativo para \texorpdfstring{$a$ y $b$}{a y b}}
+
+A cada parámetro se le asigna una distribución previa normal centrada en
+cero, con una desviación estándar grande, es decir, poco informativa, ya que
+asigna probabilidad apreciable a un rango muy amplio de valores:
+\begin{equation}
+a \sim \mathcal{N}(0,\sigma_a^2), \qquad b\sim\mathcal N(0,\sigma_b^2),
+\qquad \sigma_a=\sigma_b=10.
+\label{eq:prior-ab}
+\end{equation}
+
+Los núcleos de estas densidades son
+\begin{equation}
+g(a)\propto\exp\!\left(-\frac{a^2}{2\sigma_a^2}\right), \qquad
+g(b)\propto\exp\!\left(-\frac{b^2}{2\sigma_b^2}\right).
+\label{eq:g-ab}
+\end{equation}
+
+\subsection{Distribución previa conjunta}
+
+Suponiendo independencia a priori entre $a$ y $b$, la densidad previa
+conjunta es el producto de las marginales:
+\begin{equation}
+f(a,b) = g(a)\,g(b) \ \propto\ \exp\!\left(-\frac{a^2}{2\sigma_a^2}\right)
+\exp\!\left(-\frac{b^2}{2\sigma_b^2}\right).
+\label{eq:f-ab}
+\end{equation}
+
+Como $\sigma_a=\sigma_b=10$, se tiene $2\sigma_a^2=2\sigma_b^2=2\times10^2=200$,
+de modo que \eqref{eq:f-ab} se simplifica a
+\begin{equation}
+f(a,b)\ \propto\ \exp\!\left(-\frac{a^2+b^2}{200}\right).
+\label{eq:f-ab-final}
+\end{equation}
+
+% =====================================================
+\section{Distribución posterior}
+% =====================================================
+
+\subsection{Teorema de Bayes}
+
+La densidad posterior conjunta de $(a,b)$ dados los datos $y=(y_1,\dots,y_n)$
+es proporcional al producto de la verosimilitud \eqref{eq:L-final} y la
+previa \eqref{eq:f-ab-final}:
+\begin{equation}
+P(M(a,b)\mid y) \ \propto\ L(y\mid M(a,b))\cdot f(a,b).
+\label{eq:bayes}
+\end{equation}
+
+\subsection{Núcleo de la posterior}
+
+Sustituyendo \eqref{eq:L-final} y \eqref{eq:f-ab-final} en \eqref{eq:bayes}:
+\begin{equation}
+P(a,b\mid y)\ \propto\
+\exp\!\left(-\frac{1}{2\sigma^2}\sum_{i}(y_i-a-bx_i)^2\right)
+\cdot
+\exp\!\left(-\frac{a^2+b^2}{200}\right),
+\label{eq:posterior1}
+\end{equation}
+o, de forma equivalente, agrupando ambos factores en un solo exponente:
+\begin{equation}
+P(a,b\mid y)\ \propto\
+\exp\!\left(-\frac{1}{2\sigma^2}\sum_{i}(y_i-a-bx_i)^2 -\frac{a^2+b^2}{200}\right).
+\label{eq:posterior2}
+\end{equation}
+
+\subsection{Probabilidades posteriores}
+
+Una vez conocida (al menos como núcleo) la densidad posterior de un parámetro
+$\theta$, las probabilidades de interés se obtienen como áreas bajo dicha
+densidad. Por ejemplo, la probabilidad de que $\theta$ supere un valor de
+referencia $\theta_1$ es
+\begin{equation}
+P(\theta>\theta_1\mid x) = \int_{\theta_1}^{\infty} f(\theta\mid x)\,d\theta,
+\label{eq:prob-posterior}
+\end{equation}
+que corresponde gráficamente al área sombreada de la Figura~\ref{fig:posterior}.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+  % Curva de densidad completa
+  \draw[thick, blue!60!black, domain=-3.3:3.3, samples=120, smooth]
+    plot ({\x},{2.3*exp(-\x*\x/2)});
+  % Region sombreada bajo la curva, desde theta_1 hacia la derecha
+  \fill[blue!15] plot[domain=1.2:3.3, samples=60, smooth]
+    ({\x},{2.3*exp(-\x*\x/2)}) -- (3.3,0) -- (1.2,0) -- cycle;
+  % Redibuja la curva sobre la region sombreada
+  \draw[thick, blue!60!black, domain=1.2:3.3, samples=60, smooth]
+    plot ({\x},{2.3*exp(-\x*\x/2)});
+  % Eje horizontal
+  \draw[->] (-3.4,0) -- (3.6,0) node[right] {$\theta$};
+  % Lineas de referencia verticales
+  \draw[dashed] (0,0) -- (0,2.35);
+  \draw[dashed] (1.2,0) -- (1.2,{2.3*exp(-1.2*1.2/2)});
+  % Etiquetas sobre el eje
+  \node[below] at (0,-0.05) {$\bar\theta$};
+  \node[below] at (1.2,-0.05) {$\theta_1$};
+  % Etiqueta de la probabilidad
+  \node at (2.35,0.55) {$P(\theta>\theta_1\mid x)$};
+\end{tikzpicture}
+\caption{Densidad posterior de un parámetro $\theta$. El área sombreada a la
+derecha de $\theta_1$ representa $P(\theta>\theta_1\mid x)$, mientras que
+$\bar\theta$ indica la media (o moda) posterior.}
+\label{fig:posterior}
+\end{figure}
+
+% =====================================================
+\section{Estimación MAP}
+\label{sec:map}
+% =====================================================
+
+\subsection{Logaritmo de la posterior}
+
+Para encontrar el estimador de Máximo a Posteriori (MAP) conviene trabajar
+con el logaritmo de la posterior: el logaritmo es una función estrictamente
+creciente, por lo que no cambia la ubicación del máximo, y transforma el
+producto \eqref{eq:posterior1} en una suma, mucho más fácil de derivar.
+\begin{equation}
+\ell(\theta\mid y) = \ln(\text{Post}).
+\label{eq:loglik-def}
+\end{equation}
+
+Tomando el logaritmo del núcleo \eqref{eq:posterior2}:
+\begin{equation}
+\ell(\theta\mid y) = -\frac{1}{2\sigma^2}\sum_{i=1}^{n}(y_i-a-bx_i)^2
+- \frac{a^2+b^2}{200}.
+\label{eq:loglik}
+\end{equation}
+
+\subsection{Condiciones de primer orden}
+
+El estimador MAP $(\hat a,\hat b)$ es el punto donde $\ell(\theta\mid y)$
+alcanza su máximo, es decir, donde sus derivadas parciales se anulan.
+
+\paragraph{Derivada respecto de $a$.}
+\begin{equation}
+\frac{\partial \ell}{\partial a}
+= \frac{1}{\sigma^2}\sum_{i=1}^n (y_i-a-bx_i) - \frac{a}{100}.
+\label{eq:dl-da}
+\end{equation}
+Igualando a cero en $(\hat a,\hat b)$:
+\begin{equation}
+\frac{1}{\sigma^2}\sum_{i=1}^n (y_i-\hat a-\hat b x_i) - \frac{\hat a}{100} = 0.
+\label{eq:foc-a}
+\end{equation}
+
+\paragraph{Derivada respecto de $b$.}
+\begin{equation}
+\frac{\partial \ell}{\partial b}
+= \frac{1}{\sigma^2}\sum_{i=1}^n x_i(y_i-a-bx_i) - \frac{b}{100}.
+\label{eq:dl-db}
+\end{equation}
+Igualando a cero:
+\begin{equation}
+\frac{1}{\sigma^2}\sum_{i=1}^n x_i(y_i-\hat a-\hat b x_i) - \frac{\hat b}{100} = 0.
+\label{eq:foc-b}
+\end{equation}
+
+\begin{nota}
+El factor $1/100$ que aparece en \eqref{eq:foc-a} y \eqref{eq:foc-b} proviene
+de derivar el término de la previa, $-\dfrac{a^2+b^2}{200}$: como
+$\dfrac{\partial}{\partial a}\!\left(-\dfrac{a^2}{200}\right)=-\dfrac{2a}{200}
+=-\dfrac{a}{100}$ (y análogamente para $b$), el $2$ del numerador se cancela
+con el $2$ del denominador $200$, dejando $1/100$.
+\end{nota}
+
+\subsection{Sistema lineal y forma matricial}
+
+Las ecuaciones \eqref{eq:foc-a} y \eqref{eq:foc-b} son \textbf{lineales} en
+$\hat a$ y $\hat b$. Multiplicando ambas por $\sigma^2$, distribuyendo las
+sumatorias y agrupando los términos en $\hat a$ y $\hat b$ a la izquierda:
+
+De \eqref{eq:foc-a}:
+\begin{equation}
+\left(n+\frac{\sigma^2}{100}\right)\hat a + \left(\sum_{i}x_i\right)\hat b
+= \sum_i y_i.
+\label{eq:eq1}
+\end{equation}
+
+De \eqref{eq:foc-b}:
+\begin{equation}
+\left(\sum_i x_i\right)\hat a
++ \left(\sum_i x_i^2+\frac{\sigma^2}{100}\right)\hat b
+= \sum_i x_iy_i.
+\label{eq:eq2}
+\end{equation}
+
+Este sistema de dos ecuaciones lineales en $(\hat a,\hat b)$ se escribe en
+forma matricial $M\vec\theta=\vec Z$ como
+\begin{equation}
+\underbrace{\begin{bmatrix}
+n+\dfrac{\sigma^2}{100} & \displaystyle\sum_i x_i \\[10pt]
+\displaystyle\sum_i x_i & \displaystyle\sum_i x_i^2+\dfrac{\sigma^2}{100}
+\end{bmatrix}}_{M}
+\underbrace{\begin{bmatrix}\hat a \\ \hat b\end{bmatrix}}_{\vec\theta}
+=
+\underbrace{\begin{bmatrix}
+\displaystyle\sum_i y_i \\[6pt] \displaystyle\sum_i x_iy_i
+\end{bmatrix}}_{\vec Z}.
+\label{eq:sistema-matricial}
+\end{equation}
+
+\begin{nota}[Interpretación: regularización tipo \emph{ridge}]
+Si en \eqref{eq:sistema-matricial} se ignoraran los términos $\sigma^2/100$
+(lo que equivaldría a $\sigma_a,\sigma_b\to\infty$, es decir, una previa
+totalmente plana), la matriz $M$ se reduciría a la matriz normal $X^\top X$
+de mínimos cuadrados ordinarios, y $\vec Z$ sería $X^\top y$. Los términos
+$\sigma^2/100$ añaden una penalización a valores grandes de $a$ y $b$
+—exactamente el mecanismo de la regresión \emph{ridge}— con parámetro de
+regularización efectivo $\lambda=\sigma^2/100$.
+\end{nota}
+
+% =====================================================
+\section{Solución computacional del sistema}
+% =====================================================
+
+El sistema \eqref{eq:sistema-matricial} puede resolverse en Python de manera
+\textbf{numérica} (con \texttt{NumPy}) o \textbf{simbólica} (con
+\texttt{SymPy}).
+
+\subsection{Solución numérica con NumPy}
+
+\begin{lstlisting}
+import numpy as np
+
+sigma = 0.3
+
+# n, sum_x, sum_x2, sum_y, sum_xy: estadisticos calculados a partir de los datos
+M = np.array([
+    [n + sigma**2 / 100,        sum_x],
+    [sum_x,                     sum_x2 + sigma**2 / 100]
+])
+Z = np.array([sum_y, sum_xy])
+
+a_map, b_map = np.linalg.solve(M, Z)
+\end{lstlisting}
+
+
+\subsection{Solución simbólica con SymPy}
+
+\begin{lstlisting}
+import sympy as sp
+
+a, b = sp.symbols('a b')
+n, sigma = sp.symbols('n sigma', positive=True)
+sum_x, sum_x2, sum_y, sum_xy = sp.symbols('sum_x sum_x2 sum_y sum_xy')
+
+eq1 = sp.Eq((n + sigma**2/100) * a + sum_x * b, sum_y)
+eq2 = sp.Eq(sum_x * a + (sum_x2 + sigma**2/100) * b, sum_xy)
+
+solucion = sp.solve([eq1, eq2], [a, b])
+a_map_expr = solucion[a]
+b_map_expr = solucion[b]
+\end{lstlisting}
+
+\begin{nota}
+La ventaja de resolver el sistema simbólicamente es obtener $\hat a$ y
+$\hat b$ como expresiones en función de $n,\sigma,\sum x_i,\sum x_i^2,\sum y_i$
+y $\sum x_iy_i$. Esto permite, por ejemplo, verificar que en el límite
+$\sigma_a,\sigma_b\to\infty$ (previa "plana") se recupera el estimador de
+mínimos cuadrados ordinarios.
+\end{nota}
+
+% =====================================================
+\section{La posterior completa: conexión con la normal bivariada}
+% =====================================================
+
+Hasta ahora se obtuvo únicamente el punto $(\hat a,\hat b)$ que maximiza la
+posterior (su \emph{moda}, o MAP). Sin embargo, la expresión
+\eqref{eq:posterior2} permite caracterizar \textbf{toda} la distribución
+posterior de $(a,b)$, no solo su moda.
+
+\subsection{Forma general de la normal bivariada}
+
+La densidad normal bivariada tiene un núcleo de la forma (ver, por ejemplo,
+Devore, capítulo de distribuciones conjuntas continuas):
+\begin{equation}
+f(x,y)\ \propto\ \exp\!\left(-\frac12\Big(Ax^2+2Bxy+Cy^2-2Dx-2Ey+F\Big)\right).
+\label{eq:bivariada-general}
+\end{equation}
+
+\subsection{Identificación de los coeficientes}
+
+Expandiendo el cuadrado en \eqref{eq:posterior2}:
+\begin{equation}
+\sum_i(y_i-a-bx_i)^2 = \sum_i y_i^2 - 2a\sum_i y_i - 2b\sum_i x_iy_i
++ n\,a^2 + 2ab\sum_i x_i + b^2\sum_i x_i^2,
+\label{eq:expansion}
+\end{equation}
+y sustituyendo en \eqref{eq:posterior2}, agrupando los términos en $a^2$,
+$ab$, $b^2$, $a$, $b$ y las constantes, el exponente de la posterior toma la
+forma \eqref{eq:bivariada-general} con $(x,y)\to(a,b)$ y
+\begin{align}
+A &= \frac{n}{\sigma^2}+\frac{1}{100}, \label{eq:coefA}\\
+B &= \frac{\sum_i x_i}{\sigma^2}, \label{eq:coefB}\\
+C &= \frac{\sum_i x_i^2}{\sigma^2}+\frac{1}{100}, \label{eq:coefC}\\
+D &= \frac{\sum_i y_i}{\sigma^2}, \label{eq:coefD}\\
+E &= \frac{\sum_i x_iy_i}{\sigma^2}. \label{eq:coefE}
+\end{align}
+
+\begin{nota}
+Comparando \eqref{eq:coefA}--\eqref{eq:coefC} con la matriz $M$ de
+\eqref{eq:sistema-matricial}, se observa que
+\[
+M=\sigma^2\begin{bmatrix}A&B\\B&C\end{bmatrix},
+\]
+es decir, el sistema $M\vec\theta=\vec Z$ es simplemente el sistema
+$\begin{bmatrix}A&B\\B&C\end{bmatrix}\vec\theta=\begin{bmatrix}D\\E\end{bmatrix}$
+multiplicado por $\sigma^2$ en ambos lados (lo cual no altera la solución).
+\end{nota}
+
+\subsection{Matriz de precisión y matriz de covarianza posterior}
+
+En la forma \eqref{eq:bivariada-general}, la matriz de coeficientes
+cuadráticos es la \textbf{matriz de precisión} (la inversa de la matriz de
+covarianza) de la distribución:
+\begin{equation}
+\Sigma^{-1} = \begin{bmatrix} A & B \\ B & C\end{bmatrix}.
+\label{eq:precision}
+\end{equation}
+
+Invirtiendo esta matriz $2\times2$ se obtiene la \textbf{matriz de
+covarianza} de la posterior:
+\begin{equation}
+\Sigma = \frac{1}{AC-B^2}\begin{bmatrix} C & -B \\ -B & A\end{bmatrix},
+\label{eq:covarianza}
+\end{equation}
+con $A$, $B$ y $C$ dados por \eqref{eq:coefA}--\eqref{eq:coefC}.
+
+\begin{nota}[Resultado principal]
+Como tanto la verosimilitud \eqref{eq:L-final} como la previa
+\eqref{eq:f-ab-final} son gaussianas, la posterior también lo es: este es un
+caso de \textbf{previa conjugada normal-normal}.
+\begin{equation}
+(a,b)\mid y \ \sim\ \mathcal{N}_2\big((\hat a,\hat b),\ \Sigma\big),
+\label{eq:posterior-bivariada}
+\end{equation}
+donde $(\hat a,\hat b)$ es la solución de \eqref{eq:sistema-matricial} (para
+una distribución normal la media y la moda coinciden) y $\Sigma$ es la matriz
+\eqref{eq:covarianza}. Esto permite no solo dar una estimación puntual de
+$(a,b)$, sino también cuantificar la incertidumbre asociada a ellos
+(varianzas $\sigma_{\hat a}^2,\sigma_{\hat b}^2$ en la diagonal de $\Sigma$ y
+covarianza $\sigma_{\hat a\hat b}$ fuera de ella), y calcular probabilidades
+posteriores o regiones de credibilidad para los parámetros.
+\end{nota}
+
+% =====================================================
+\section{Resumen del procedimiento}
+% =====================================================
+
+\begin{enumerate}
+  \item Especificar el modelo $y_i=a+bx_i+\varepsilon_i$, con
+        $\varepsilon_i\sim\mathcal N(0,\sigma^2)$ y $\sigma=0.3$.
+  \item Construir la verosimilitud
+        $L(y\mid M(a,b))\propto
+        \exp\!\left[-\tfrac{1}{2\sigma^2}\sum_i(y_i-a-bx_i)^2\right]$.
+  \item Especificar la previa $a,b\sim\mathcal N(0,10^2)$ independientes, con
+        núcleo $f(a,b)\propto\exp\!\left[-\tfrac{a^2+b^2}{200}\right]$.
+  \item Multiplicar verosimilitud por previa para obtener el núcleo de la
+        posterior, dado en la ecuación \eqref{eq:posterior2}.
+  \item Tomar logaritmo y derivar respecto de $a$ y $b$ para hallar el MAP,
+        resolviendo el sistema lineal $M\vec\theta=\vec Z$ de
+        \eqref{eq:sistema-matricial}.
+  \item Reconocer que la posterior es normal bivariada, con matriz de precisión
+        \eqref{eq:precision} y matriz de covarianza \eqref{eq:covarianza}.
+  \item Usar la distribución posterior completa para describir la incertidumbre
+        de los parámetros y construir intervalos o regiones de credibilidad.
+\end{enumerate}
+
+\end{document}
