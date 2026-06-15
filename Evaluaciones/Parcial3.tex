@@ -15,6 +15,7 @@
 \usepackage[hypcap=false]{caption}
 \usepackage{mathrsfs}
 \usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,babel}
 \setlength{\emergencystretch}{3em}
 
 
@@ -49,7 +50,7 @@
 
 \section{Problema}
 
-\textbf{Modelo de estrellas variables.} Se adjunta el archivo \texttt{mw\_cepheids.csv}, que contiene observaciones de un conjunto de estrellas Cefeidas (Breuval+, 2021). Para cada estrella se reportan su período de pulsación (en días), paralaje (en mas) y sus magnitudes en las bandas V e I. La relación período--luminosidad de las Cefeidas puede modelarse mediante la ecuación
+\textbf{Modelo de estrellas variables.} Se adjunta el archivo \texttt{mw\_cepheids.csv}, que contiene observaciones de un conjunto de estrellas Cefeidas. Para cada estrella se reportan su período de pulsación (en días), paralaje (en mas) y sus magnitudes en las bandas V e I. La relación período--luminosidad de las Cefeidas puede modelarse mediante la ecuación siguiente:
 
 $$
 M_i = a + b \log_{10}(P_i) + \varepsilon_i,
@@ -85,6 +86,13 @@ El resultado obtenido fue:
 \begin{enumerate}[a)]
     \item Lea el archivo \texttt{mw\_cepheids.csv} y realice un gráfico de dispersión de la magnitud absoluta $M$ en función de $\log_{10}(P)$. Describa brevemente la tendencia observada.
     
+    
+
+La magnitud absoluta $M$ se relaciona con la magnitud aparente $m$ y el paralaje $\varpi$ (en arcosegundos) mediante la fórmula general del módulo de distancia \cite{astronomo_foro_cefeidas}:
+$$M = m + 5\log_{10}(\varpi) + 5$$
+Esta expresión se obtiene a partir de $m - M = 5\log_{10}(d) - 5$, sustituyendo la distancia $d = 1/\varpi$ (con $d$ en parsecs y $\varpi$ en arcosegundos).
+
+
 \begin{lstlisting}
 plx_arcsec = df['plx'].values / 1000                         # paralaje [arcsec]
 x  = np.log10(df['Per'].values)                           # log10(P_i) [adim]
@@ -97,12 +105,15 @@ sigma = 0.3                                                # desv. est. conocida
         \includegraphics[width=0.82\textwidth]{dispersion.png}
         \captionof{figure}{Gráfico de dispersión de la magnitud absoluta en la banda V ($M_V$) en función del logaritmo del período ($\log_{10}(P)$) para la muestra seleccionada del dataset.}
     \end{center}
+
+El gráfico de dispersión muestra una correlación negativa entre $M_V$ y $\log_{10}(P)$: a medida que aumenta el período, la magnitud absoluta disminuye (las cefeidas se vuelven más luminosas), de acuerdo con la relación período--luminosidad descrita para estas estrellas variables \cite{nasa_starchild_cepheids,wikipedia_period_luminosity}. Se observa dispersión considerable, particularmente para períodos intermedios ($0.8 \lesssim \log_{10}(P) \lesssim 1.2$), donde $M_V$ varía entre aproximadamente 11 y 15 mag.
+
     
     \item Escriba la función de verosimilitud para los parámetros $a$ y $b$.
     
     Como $y_i\mid M(a,b)\sim\mathcal{N}(a+bx_i,\,\sigma^2)$ de forma
 independiente para cada observación, la verosimilitud conjunta es
-$L(y\mid M(a,b))=\prod_i f(y_i\mid M(a,b))$. Descartando la constante
+$L(y\mid M(a,b))=\prod_i f(y_i\mid M(a,b))$ \cite{devore2008}. Descartando la constante
 de normalización:
 \begin{equation}
   L\!\left(y\mid M(a,b)\right)
@@ -117,7 +128,7 @@ de normalización:
     
     Por el teorema de Bayes, $P(M(a,b)\mid y)\propto
 L(y\mid M(a,b))\cdot f(a,b)$, con prior
-$f(a,b)\propto\exp\!\bigl(-\tfrac{a^2+b^2}{200}\bigr)$:
+$f(a,b)\propto\exp\!\bigl(-\tfrac{a^2+b^2}{200}\bigr)$ \cite{feigelson2012}:
 \begin{equation}
   P\!\left(M(a,b)\mid y\right)
   \;\propto\;
@@ -202,7 +213,7 @@ con coeficientes
 \end{align}
 
 La expresión~\eqref{eq:forma-cuad} es exactamente el núcleo de una
-distribución normal bivariada.  
+distribución normal bivariada \cite{devore2008}.  
 Por tanto:
 \begin{equation}
   (a,b)\mid y \;\sim\; \mathcal{N}_2\!\bigl((\hat{a},\hat{b}),\,\Sigma\bigr),
@@ -266,6 +277,12 @@ ci_a = np.percentile(a_s, [2.5, 97.5])   # IC 95% para a
 ci_b = np.percentile(b_s, [2.5, 97.5])   # IC 95% para b
 \end{lstlisting}
 
+Los intervalos de credibilidad del 95\% obtenidos fueron:
+\begin{equation}
+  a \in [6.6925,\,7.8155], \qquad
+  b \in [2.5270,\,3.7607].
+\end{equation}
+
     
     \item Utilice las muestras posteriores para estimar la distribución posterior de la magnitud absoluta de una Cefeida con período $P = 12$ días. Reporte la media posterior y un intervalo de credibilidad del 95\% para la magnitud absoluta predicha.
     
@@ -278,10 +295,20 @@ M_pred = a_s + b_s * x_new                    # distribucion predictiva posterio
 mu_pred, ci_pred = M_pred.mean(), np.percentile(M_pred, [2.5, 97.5])
 \end{lstlisting}
 
+Para $P=12$ días se tiene $x_{\text{new}}=\log_{10}(12)=1.0792$.
+Las primeras muestras de la distribución predictiva posterior fueron
+$10.6616,\,10.8020,\,10.6148,\,10.7918,\,10.6640$, usando un total de
+$10^4$ muestras. La media predictiva posterior y el intervalo de
+credibilidad del 95\% fueron:
+\begin{equation}
+  \mu_{\text{pred}} = 10.6468, \qquad
+  M_{\text{pred}} \in [10.4602,\,10.8350].
+\end{equation}
+
     
     \item Grafique la relación período--luminosidad utilizando la recta correspondiente a los valores MAP de los parámetros. Sobre el mismo gráfico, incluya una banda de credibilidad del 95\% obtenida a partir de las simulaciones de la distribución posterior.
     
-    Se evalúa cada muestra $(\tilde{a},\tilde{b})$ en una grilla de
+    Se evalúa cada muestra $(\tilde{a},\tilde{b})$ en un grid de
 $\log_{10}(P)$ y se toman los percentiles 2.5 y 97.5 columna a columna:
 
 \begin{lstlisting}
@@ -298,7 +325,7 @@ lo, hi = np.percentile(M_grid, [2.5, 97.5], axis=0)
     
     \item Compare los resultados obtenidos mediante el enfoque bayesiano con los que se obtendrían usando una regresión lineal clásica por mínimos cuadrados. Discuta semejanzas y diferencias entre ambos enfoques.
     
-    Para la regresión lineal clásica por mínimos cuadrados se usó:
+    Para la regresión lineal clásica por mínimos cuadrados, también llamada OLS por sus siglas en inglés (\textit{Ordinary Least Squares}), se usó \cite{devore2008}:
 \begin{lstlisting}
 X_mat = np.column_stack([np.ones(n), x])
 a_ols, b_ols = np.linalg.lstsq(X_mat, y, rcond=None)[0]
@@ -315,7 +342,7 @@ porque la prior normal usada es amplia y el término de regularización
 $\sigma^2/100=0.0009$ es pequeño. La diferencia principal es de
 interpretación: el enfoque bayesiano entrega una distribución posterior
 para $(a,b)$ y permite construir intervalos de credibilidad, mientras que
-OLS entrega estimadores puntuales e intervalos de confianza frecuentistas.
+OLS (mínimos cuadrados ordinarios) entrega estimadores puntuales e intervalos de confianza frecuentistas.
 Además, con las muestras posteriores la incertidumbre se propaga de forma
 directa a nuevas predicciones.
 \end{enumerate}
@@ -324,12 +351,195 @@ directa a nuevas predicciones.
 
 \begin{enumerate}[a)]
 	\item Obtenga intervalos de confianza bootstrap del $95\%$ para los parámetros $a$ y $b$. Compare estos resultados con los intervalos de credibilidad bayesianos.
+	
+	\begin{lstlisting}
+B = 2000  
+a_boot, b_boot = [], []
+for _ in range(B):
+    idx = np.random.choice(n, size=n, replace=True)
+    X_b = np.column_stack([np.ones(n), x[idx]])
+    y_b = y[idx]
+    theta_b = np.linalg.lstsq(X_b, y_b, rcond=None)[0]
+    a_boot.append(theta_b[0]); b_boot.append(theta_b[1])
+
+ci_a_boot = np.percentile(a_boot, [2.5, 97.5])
+ci_b_boot = np.percentile(b_boot, [2.5, 97.5])
+\end{lstlisting}
+
+
+
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={draw=black!65, rounded corners=2pt, align=center,
+              minimum width=3.15cm, minimum height=1.05cm,
+              fill=black!6, font=\small},
+  proc/.style={box, fill=black!12},
+  resultbox/.style={box, fill=black!20},
+  arrow/.style={->, thick, draw=black!70},
+  loop/.style={->, thick, dashed, draw=black!65}
+]
+  \node[box]  (data)    at (0,0)     {Datos observados\\ $(x_i,y_i)$};
+  \node[proc] (sample)  at (3.45,0)   {Muestra bootstrap\\ $n$ pares con reemplazo};
+  \node[proc] (fit)     at (7.8,0)   {Ajuste OLS\\ $(\hat a^*,\hat b^*)$};
+  \node[proc] (store)   at (7.8,-2)  {Guardar réplica\\ $a_{\mathrm{boot}}, b_{\mathrm{boot}}$};
+  \node[proc] (repeat)  at (3.9,-2)  {Repetir\\ hasta $B=2000$};
+  \node[resultbox]  (ci)      at (0,-2)    {Percentiles\\ $2.5\%$ y $97.5\%$};
+
+  \draw[arrow] (data) -- (sample);
+  \draw[arrow] (sample) -- (fit);
+  \draw[arrow] (fit) -- (store);
+  \draw[arrow] (store) -- (repeat);
+  \draw[arrow] (repeat) -- (ci);
+  \draw[loop] (repeat.north) to[out=90,in=-90] node[midway, right, font=\scriptsize] {siguiente réplica} (sample.south);
+
+  \node[font=\scriptsize, text=black!65, align=center] at (0,-3.05)
+    {Intervalos bootstrap del $95\%$ para $a$ y $b$};
+\end{tikzpicture}
+\captionof{figure}{Diagrama del algoritmo bootstrap no paramétrico: se remuestrean los pares observados con reemplazo, se ajusta el modelo lineal en cada réplica, se almacenan los estimadores y se obtienen los intervalos de confianza mediante percentiles.}
+\end{center}
+
+El resultado numérico para los intervalos bootstrap del 95\% fue:
+\begin{equation}
+  a \in [-7.4550,\,14.5516], \qquad
+  b \in [-3.1659,\,17.4093].
+\end{equation}
+Estos intervalos son mucho más amplios que los intervalos de credibilidad
+bayesianos del inciso~g), lo que indica mayor variabilidad bajo el
+remuestreo bootstrap de la muestra observada.
+
 	\item Genere $10^4$ conjuntos de datos sintéticos a partir del modelo posterior predictivo y compare la distribución de residuos simulados con la observada mediante una prueba de Kolmogorov-Smirnov.
+	
+	\begin{lstlisting}
+# Residuos observados usando estimadores MAP
+y_pred_map = a_map + b_map * x
+res_obs = y - y_pred_map
+
+# Residuos sinteticos (simulamos 10^4 conjuntos, tomamos uno representativo o aplanamos)
+# Para la prueba K-S, aplanamos las simulaciones para tener una gran muestra de referencia
+res_sim = np.random.normal(0, sigma, size=(10000, n)).flatten()
+
+# Prueba de Kolmogorov-Smirnov de dos muestras
+D_stat, p_value = stats.ks_2samp(res_obs, res_sim)
+\end{lstlisting}
+
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={draw=black!65, rounded corners=2pt, align=center,
+              minimum width=3.15cm, minimum height=1.05cm,
+              fill=black!6, font=\small},
+  proc/.style={box, fill=black!12},
+  resultbox/.style={box, fill=black!20},
+  arrow/.style={->, thick, draw=black!70},
+  branch/.style={->, thick, draw=black!65}
+]
+  \node[box]       (map)      at (0,0)      {Modelo MAP\\ $\hat y_i=\hat a+\hat b x_i$};
+  \node[proc]      (obs)      at (3.9,0)    {Residuos observados\\ $r_i=y_i-\hat y_i$};
+  \node[proc]      (synt)     at (0,-2.1)   {Generar datos sintéticos\\ $10^4$ conjuntos};
+  \node[proc]      (simres)   at (3.9,-2.1) {Residuos simulados\\ $r^*\sim N(0,\sigma^2)$};
+  \node[resultbox] (ks)       at (7.8,-1.05) {Prueba K--S\\ $D$ y $p$-valor};
+  \node[resultbox] (decision) at (7.8,-3.05) {Decisión\\ comparar distribuciones};
+
+  \draw[arrow] (map) -- (obs);
+  \draw[arrow] (map) -- (synt);
+  \draw[arrow] (synt) -- (simres);
+  \draw[branch] (obs.east) -- (ks.west);
+  \draw[branch] (simres.east) -- (ks.west);
+  \draw[arrow] (ks) -- (decision);
+
+  \node[font=\scriptsize, text=black!65, align=center] at (3.9,-4.05)
+    {Validación posterior predictiva mediante comparación de residuos};
+\end{tikzpicture}
+\captionof{figure}{Diagrama del algoritmo de validación posterior predictiva: se calculan los residuos observados con el modelo MAP, se generan residuos sintéticos bajo el supuesto normal con $\sigma=0.3$ y se comparan ambas distribuciones mediante la prueba de Kolmogorov--Smirnov.}
+\end{center}
+
+La comparación de distribuciones mediante la prueba de Kolmogorov--Smirnov se realizó como una prueba no paramétrica de dos muestras \cite{press1992}. El resultado fue:
+\begin{equation}
+  D = 0.7646, \qquad p\text{-valor}=6.70\times 10^{-11}.
+\end{equation}
+Como el $p$-valor es muy pequeño, se rechaza la hipótesis nula de que los
+residuos observados y los residuos simulados provienen de la misma
+distribución. Esto sugiere que el modelo lineal con errores normales de
+desviación estándar fija $\sigma=0.3$ no reproduce completamente la
+distribución empírica de los residuos.
+	
 	\item Considere un modelo alternativo
 	$$
 	M = a+b\log_{10}(P) + c[\log_{10}(P)]^2
 	$$
 	Obtenga los valores MAP de los parámetros y compare el poder predictivo de este modelo con el modelo lineal utilizando remuestreo bootstrap.
+	
+	\begin{lstlisting}
+# Estimadores MAP del modelo cuadratico
+x2 = x**2
+sum_x3 = (x**3).sum(); sum_x4 = (x**4).sum(); sum_x2y = (x2*y).sum()
+M_quad = np.array([
+    [n + sigma**2/100, sum_x,           sum_x2],
+    [sum_x,            sum_x2 + sigma**2/100, sum_x3],
+    [sum_x2,           sum_x3,          sum_x4 + sigma**2/100]
+])
+Z_quad = np.array([sum_y, sum_xy, sum_x2y])
+a_q, b_q, c_q = np.linalg.solve(M_quad, Z_quad)
+
+# Comparacion de poder predictivo Bootstrap (MSE)
+mse_lin, mse_quad = [], []
+for _ in range(B):
+    idx = np.random.choice(n, size=n, replace=True)
+    x_b, y_b = x[idx], y[idx]
+    
+    # MSE Lineal
+    X_b_lin = np.column_stack([np.ones(n), x_b])
+    theta_lin = np.linalg.lstsq(X_b_lin, y_b, rcond=None)[0]
+    mse_lin.append(np.mean((y_b - X_b_lin @ theta_lin)**2))
+    
+    # MSE Cuadratico
+    X_b_quad = np.column_stack([np.ones(n), x_b, x_b**2])
+    theta_quad = np.linalg.lstsq(X_b_quad, y_b, rcond=None)[0]
+    mse_quad.append(np.mean((y_b - X_b_quad @ theta_quad)**2))
+    \end{lstlisting}
+
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={draw=black!65, rounded corners=2pt, align=center,
+              minimum width=3.25cm, minimum height=1.05cm,
+              fill=black!6, font=\small},
+  proc/.style={box, fill=black!12},
+  resultbox/.style={box, fill=black!20},
+  arrow/.style={->, thick, draw=black!70},
+  loop/.style={->, thick, dashed, draw=black!65}
+]
+  \node[box]       (data)    at (0,0)       {Datos observados\\ $(x_i,y_i)$};
+  \node[proc]      (quadmap) at (0,-2.1)    {Modelo cuadrático\\ MAP $(\hat a,\hat b,\hat c)$};
+  \node[proc]      (sample)  at (3.9,0)     {Muestra bootstrap\\ pares con reemplazo};
+  \node[proc]      (linear)  at (6.9,1.15)  {Ajustar modelo lineal\\ calcular $\mathrm{MSE}_{\mathrm{lin}}^*$};
+  \node[proc]      (quad)    at (6.9,-1.15) {Ajustar modelo cuadrático\\ calcular $\mathrm{MSE}_{\mathrm{quad}}^*$};
+  \node[proc]      (store)   at (10.35,0)    {Guardar MSEs\\ de la réplica};
+  \node[resultbox] (compare) at (10.35,-2.45) {Comparar medianas\\ de MSE bootstrap};
+
+  \draw[arrow] (data) -- (sample);
+  \draw[arrow] (data) -- (quadmap);
+  \draw[arrow] (sample) -- (linear);
+  \draw[arrow] (sample) -- (quad);
+  \draw[arrow] (linear) -- (store);
+  \draw[arrow] (quad) -- (store);
+  \draw[loop] (store.north) to[out=90,in=90] node[midway, above, font=\scriptsize]
+    {repetir hasta completar $B$} (sample.north);
+  \draw[arrow] (store) -- node[midway, right, font=\scriptsize]
+    {al finalizar $B$ iteraciones} (compare);
+
+\end{tikzpicture}
+\captionof{figure}{Diagrama del algoritmo de comparación predictiva: el cálculo MAP del modelo cuadrático se realiza como estimación independiente, mientras que el remuestreo bootstrap toma pares observados, ajusta en paralelo los modelos lineal y cuadrático sobre cada réplica, guarda ambos MSEs y compara sus medianas al final.}
+\end{center}
+
+Usando el mismo esquema de remuestreo bootstrap para comparar el error cuadrático medio de ambos modelos \cite{press1992}, las medianas obtenidas fueron:
+\begin{equation}
+  \mathrm{MSE}_{\text{lineal}} = 32.7084, \qquad
+  \mathrm{MSE}_{\text{cuadrático}} = 30.1332.
+\end{equation}
+El modelo cuadrático presenta una mediana de MSE menor, por lo que tiene
+mejor desempeño predictivo bajo este criterio.
+
 \end{enumerate}
 
+\bibliographystyle{plainurl}
+\bibliography{bibliography} 
 \end{document}
