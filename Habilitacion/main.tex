@@ -1,0 +1,59 @@
+\documentclass[12pt,letterpaper]{report}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[margin=2cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+
+\title{Astroestadística}
+\author{Daniel Soto Villada\\Estudiante del pregrado de astronomía}
+\date{\today}
+
+\titleformat{\chapter}
+  {\normalfont\huge\bfseries}
+  {}
+  {0pt}
+  {}
+\titlespacing*{\chapter}{0pt}{0pt}{1cm}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\begin{titlepage}
+    \centering
+    {\Large Universidad de Antioquia\par}
+    \vspace{0.5cm}
+    {\large Facultad de Ciencias Exactas y Naturales\par}
+    \vspace{0.5cm}
+    {\large Instituto de Física\par}
+    \vfill
+    {\Huge\bfseries Astroestadística\par}
+    \vfill
+    {\large Daniel Soto Villada\par}
+    \vspace{0.3cm}
+    {\large Estudiante del pregrado de astronomía\par}
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+\input{Clases/Clase1}
+\input{Clases/Clase2}
+\input{Clases/Clase3}
+\input{Clases/Clase4}
+\input{Clases/Clase5}
+\input{Clases/Clase6}
+\input{Clases/Clase7}
+\input{Clases/Clase8}
+\input{Clases/Clase9}
+\input{Clases/Clase10}
+
+\end{document}
