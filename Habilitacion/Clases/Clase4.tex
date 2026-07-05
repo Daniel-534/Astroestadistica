@@ -2,10 +2,337 @@
 
 \section{Variables aleatorias}
 
+Una variable aleatoria (v.a.) es una regla o función que asocia un valor numérico a cada resultado de un experimento cuyo espacio muestral es $S$ (Devore, Capítulo 3, Sección 3.1). 
+
+Analíticamente, si denotamos un resultado individual del espacio muestral como $\omega$, una variable aleatoria $X$ es una función que mapea el espacio muestral al conjunto de los números reales:
+$$ X: S \rightarrow \mathbb{R} $$
+
+El valor observado de la variable aleatoria después de realizar el experimento se denomina valor realizado y se denota con la letra minúscula correspondiente (por ejemplo, $x$). Las variables aleatorias se clasifican fundamentalmente en dos tipos:
+\begin{itemize}
+    \item \textbf{Variables aleatorias discretas:} Sus posibles valores constituyen un conjunto finito o una secuencia infinita numerable (Devore, Sección 3.1).
+    \item \textbf{Variables aleatorias continuas:} Sus posibles valores comprenden un intervalo continuo en la línea de los números reales, y la probabilidad de que asuman un valor exacto es estrictamente cero (Devore, Sección 3.1 y Capítulo 4).
+\end{itemize}
+
+\subsection{Ejemplo 1: Variable Aleatoria Discreta en la Adquisición de Estrellas Guía}
+
+(\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Attitude Determination Systems}). 
+
+Un rastreador de estrellas (Star Tracker) a bordo de un satélite de observación terrestre toma una imagen del cielo nocturno para determinar la orientación de la nave. El catálogo interno del instrumento espera encontrar exactamente $N = 8$ estrellas guía brillantes dentro de su campo de visión (FOV) para esa coordenada de apuntamiento específica. Sin embargo, debido a la presencia de ruido cósmico, luz parásita (stray light) o la magnitud límite del sensor, no todas las estrellas esperadas son necesariamente identificadas por el algoritmo de extracción de centroides.
+
+Definimos el experimento como: \textit{Ejecutar un ciclo de adquisición de actitud con el rastreador de estrellas}.
+El espacio muestral $S$ está compuesto por todas las combinaciones posibles de estrellas identificadas y no identificadas (un total de $2^8 = 256$ resultados cualitativos distintos, como "se identificaron las estrellas 1, 3, 5, 7, 8", etc.).
+
+En lugar de trabajar con estos 256 resultados textuales, definimos la variable aleatoria discreta $X$ como:
+$$ X = \text{el número de estrellas guía exitosamente identificadas por el rastreador.} $$
+
+El conjunto de posibles valores para $X$ es finito y numerable:
+$$ D_X = \{0, 1, 2, 3, 4, 5, 6, 7, 8\} $$
+
+Esta variable aleatoria transforma un problema de reconocimiento de patrones complejos en un escalar discreto. El sistema de control de actitud (ADCS) utiliza el valor realizado $x$ para calcular un índice de confianza. Por ejemplo, si el evento observado es $x = 3$, el software de vuelo sabe que la solución de actitud tiene una alta incertidumbre y podría decidir rechazar la medición o cambiar a un modo de navegación inercial degradada. La naturaleza discreta de $X$ permite modelar su comportamiento utilizando una Función de Masa de Probabilidad (FMP), $p(x) = P(X = x)$, la cual asigna una probabilidad estrictamente positiva a cada uno de los 9 enteros posibles.
+
+\subsection{Ejemplo 2: Variable Aleatoria Continua en la Espectroscopia de Velocidad Radial}
+
+Principios de medición de precisión y espectroscopia de alta resolución (\textit{Astronomical Measurement}, Capítulo sobre \textit{Spectroscopy and Radial Velocity Measurements}).
+
+En la búsqueda de exoplanetas mediante el método de velocidad radial, un espectrógrafo de alta estabilidad (como HARPS o ESPRESSO) mide el desplazamiento Doppler de las líneas de absorción en el espectro de una estrella anfitriona. El instrumento descompone la luz y calcula el centroide de una línea espectral específica (por ejemplo, la línea H-alfa del Hidrógeno) para determinar la velocidad de la estrella a lo largo de la línea de visión.
+
+Definimos el experimento como: \textit{Medir la velocidad de la estrella en un instante (época) dado}.
+El espacio muestral $S$ consiste en todos los posibles desplazamientos físicos del centroide de la línea espectral en el detector CCD, los cuales están sujetos a ruido de fotones, ruido térmico del instrumento y 'jitter' astrofísico de la propia estrella.
+
+Definimos la variable aleatoria continua $Y$ como:
+$$ Y = \text{la velocidad radial exacta medida de la estrella (en metros por segundo, m/s).} $$
+
+A diferencia del ejemplo anterior, el conjunto de posibles valores para $Y$ no es numerable. La velocidad puede tomar cualquier valor dentro de un intervalo físico razonable, por ejemplo:
+$$ D_Y = [-5000.000\dots, 5000.000\dots] \subset \mathbb{R} $$
+
+Dado que $Y$ puede asumir infinitos valores no numerables dentro de un intervalo (incluyendo números irracionales), la probabilidad de que la medición sea un valor exacto y específico (por ejemplo, $Y = 12.3456789\dots$ m/s) es estrictamente cero: $P(Y = c) = 0$ para cualquier constante $c$ (Devore, Capítulo 4, Sección 4.1). 
+
+Por lo tanto, no podemos asignar probabilidades a puntos individuales mediante una función de masa. En su lugar, las probabilidades se asignan a \textit{intervalos} de valores (por ejemplo, la probabilidad de que la velocidad radial esté entre $-10.5$ y $-10.0$ m/s). Esto requiere el uso de una Función de Densidad de Probabilidad (FDP), $f(y)$, donde la probabilidad se calcula mediante integración:
+$$ P(a \le Y \le b) = \int_{a}^{b} f(y) \, dy $$
+
 \section{Funciones de densidad de probabilidad}
 
-\section{Densidad cumulativa de probabilidad}
+A diferencia de las variables discretas, donde podemos asignar probabilidades positivas a puntos exactos mediante una función de masa, en el caso continuo la probabilidad de que la variable asuma un valor exacto y específico es estrictamente cero: $P(X = c) = 0$ (Devore, Capítulo 4, Sección 4.1). 
 
-\section{Valores esperados}
+Para modelar estas variables, utilizamos la \textbf{Función de Densidad de Probabilidad (FDP)}, denotada como $f(x)$. De Una función $f(x)$ es una FDP legítima si y solo si satisface rigurosamente las siguientes tres condiciones (Devore, Sección 4.1):
+\begin{enumerate}
+    \item $f(x) \ge 0$ para todo $x$ (la densidad de probabilidad no puede ser negativa).
+    \item $\int_{-\infty}^{\infty} f(x) \, dx = 1$ (la probabilidad total en todo el espacio muestral continuo es la certeza absoluta).
+    \item $P(a \le X \le b) = \int_{a}^{b} f(x) \, dx$ (la probabilidad de que $X$ caiga en un intervalo específico es el área bajo la curva de densidad entre $a$ y $b$).
+\end{enumerate}
+
+La FDP no nos da la probabilidad en un punto, sino la 'densidad' de probabilidad.
+
+\subsection{Ejemplo 1: Tiempo de Permanencia de un Cometa en el Sistema Solar Interior}
+
+\textit{Practical Astronomy with your Calculator} (Duffett-Smith y Zwart, Sección 61 y 62). 
+
+Cuando un cometa de período largo entra al sistema solar interior, su velocidad varía drásticamente debido a la conservación del momento angular (es mucho más rápido en el perihelio que en el afelio). Definamos la variable aleatoria continua $X$ como el \textit{tiempo normalizado} que el cometa pasa dentro de la región de los planetas terrestres (digamos, $r < 3$ UA) durante un paso orbital, relativo a su tiempo máximo teórico. 
+
+Supongamos que, debido a la distribución de velocidades orbitales, la FDP de esta fracción de tiempo $X$ está modelada por una función cuadrática en el intervalo $[0, 1]$:
+$$
+f(x) = 
+\begin{cases} 
+k x(1 - x) & \text{para } 0 < x < 1 \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+\textbf{a) Determinación de la constante de normalización $k$:}
+Para que $f(x)$ sea una FDP legítima, el área total bajo la curva debe ser 1 (Devore, Sección 4.1).
+$$ \int_{-\infty}^{\infty} f(x) \, dx = \int_{0}^{1} k(x - x^2) \, dx = k \left[ \frac{x^2}{2} - \frac{x^3}{3} \right]_{0}^{1} = k \left( \frac{1}{2} - \frac{1}{3} \right) = k \left( \frac{1}{6} \right) = 1 $$
+Por lo tanto, la constante es $k = 6$. La FDP completa es $f(x) = 6x(1-x)$ para $0 < x < 1$.
+
+\textbf{b) Probabilidad de una permanencia prolongada:}
+Nos interesa calcular la probabilidad de que el cometa pase más del 50\% de su tiempo máximo en el sistema interior, es decir, $P(X > 0.5)$.
+$$ P(X > 0.5) = \int_{0.5}^{1} 6(x - x^2) \, dx = 6 \left[ \frac{x^2}{2} - \frac{x^3}{3} \right]_{0.5}^{1} $$
+$$ = 6 \left[ \left( \frac{1}{2} - \frac{1}{3} \right) - \left( \frac{0.25}{2} - \frac{0.125}{3} \right) \right] = 6 \left[ \frac{1}{6} - \left( \frac{1}{8} - \frac{1}{24} \right) \right] = 6 \left[ \frac{1}{6} - \frac{2}{24} \right] = 6 \left[ \frac{1}{6} - \frac{1}{12} \right] = 6 \left( \frac{1}{12} \right) = 0.5 $$
+
+\textbf{c) Obtención de la Función de Distribución Acumulativa (FDA):}
+La FDA, $F(x)$, es fundamental para calcular percentiles y generar variables aleatorias para simulaciones de Monte Carlo (Devore, Sección 4.2). Para $0 \le x \le 1$:
+$$ F(x) = \int_{-\infty}^{x} f(t) \, dt = \int_{0}^{x} 6(t - t^2) \, dt = 6 \left[ \frac{t^2}{2} - \frac{t^3}{3} \right]_{0}^{x} = 3x^2 - 2x^3 $$
+La FDA completa se define por tramos: $F(x) = 0$ si $x < 0$; $F(x) = 3x^2 - 2x^3$ si $0 \le x \le 1$; y $F(x) = 1$ si $x > 1$.
+
+\textbf{d) Cálculo del Valor Esperado (Media):}
+El tiempo normalizado esperado que un cometa de esta población pasa en el sistema interior es:
+$$ E[X] = \int_{-\infty}^{\infty} x f(x) \, dx = \int_{0}^{1} x [6x(1 - x)] \, dx = 6 \int_{0}^{1} (x^2 - x^3) \, dx $$
+$$ = 6 \left[ \frac{x^3}{3} - \frac{x^4}{4} \right]_{0}^{1} = 6 \left( \frac{1}{3} - \frac{1}{4} \right) = 6 \left( \frac{1}{12} \right) = 0.5 $$
+
+\subsection{Ejemplo 2: Error de Apuntamiento de la Antena de Alta Ganancia en una Sonda}
+
+\textit{Modern Spacecraft Guidance, Navigation, and Control} (Capítulo sobre \textit{Communication Subsystems and Link Budgets}). 
+
+Definamos la variable aleatoria continua $X$ como la magnitud del error de apuntamiento de la antena de alta ganancia (HGA) de una sonda en la deep space, medido en arcosegundos. Debido a los micro-vibraciones de las ruedas de reacción y los límites físicos del sensor estelar, el error está acotado entre 0 y 5 arcosegundos. La FDP del error está modelada por:
+$$
+f(x) = 
+\begin{cases} 
+k(25 - x^2) & \text{para } 0 \le x \le 5 \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+Este modelo refleja que los errores pequeños son mucho más probables (mayor densidad) que los errores grandes que se acercan al límite mecánico de 5 arcosegundos. Analicemos las propiedades de esta distribución:
+
+\textbf{a) Determinación de la constante $k$:}
+Aplicamos la condición de normalización (Devore, Sección 4.1):
+$$ \int_{0}^{5} k(25 - x^2) \, dx = k \left[ 25x - \frac{x^3}{3} \right]_{0}^{5} = k \left( 125 - \frac{125}{3} \right) = k \left( \frac{250}{3} \right) = 1 $$
+Despejando, obtenemos $k = \frac{3}{250} = 0.012$.
+
+\textbf{b) Probabilidad de Pérdida de Enlace (Loss of Signal):}
+El presupuesto de enlace de la misión dicta que si el error de apuntamiento supera los 3 arcosegundos, la ganancia de la antena cae por debajo del umbral requerido, provocando una pérdida temporal de datos (Loss of Signal, LoS). Calculamos $P(X > 3)$:
+$$ P(X > 3) = \int_{3}^{5} \frac{3}{250}(25 - x^2) \, dx = \frac{3}{250} \left[ 25x - \frac{x^3}{3} \right]_{3}^{5} $$
+$$ = \frac{3}{250} \left[ \left( 125 - \frac{125}{3} \right) - \left( 75 - \frac{27}{3} \right) \right] = \frac{3}{250} \left[ \frac{250}{3} - (75 - 9) \right] $$
+$$ = \frac{3}{250} \left[ \frac{250}{3} - 66 \right] = 1 - \frac{198}{250} = 1 - 0.792 = 0.208 $$
+Existe un 20.8\% de probabilidad de que, en un instante aleatorio, el error de apuntamiento sea lo suficientemente grande como para degradar o perder el enlace de telemetry.
+
+\textbf{c) Cálculo del Error de Apuntamiento Esperado (Media):}
+El valor esperado nos indica el sesgo o error promedio del sistema (Devore, Sección 4.2):
+$$ E[X] = \int_{0}^{5} x \left[ \frac{3}{250}(25 - x^2) \right] \, dx = \frac{3}{250} \int_{0}^{5} (25x - x^3) \, dx $$
+$$ = \frac{3}{250} \left[ \frac{25x^2}{2} - \frac{x^4}{4} \right]_{0}^{5} = \frac{3}{250} \left[ \frac{625}{2} - \frac{625}{4} \right] = \frac{3}{250} \left[ \frac{625}{4} \right] = \frac{1875}{1000} = 1.875 \text{ arcosegundos.} $$
+El error promedio del sistema es de 1.875 arcosegundos.
+
+\textbf{d) Probabilidad de operar dentro de la tolerancia de alta precisión:}
+Supongamos que ciertos modos de observación científica (como la espectroscopía de alta resolución con una rendija estrecha) requieren que el error de apuntamiento esté a menos de 1 arcosegundo de distancia del error promedio (es decir, en el intervalo $[E[X] - 1, E[X] + 1] = [0.875, 2.875]$). Calculamos esta probabilidad:
+$$ P(0.875 \le X \le 2.875) = \int_{0.875}^{2.875} \frac{3}{250}(25 - x^2) \, dx = \frac{3}{250} \left[ 25x - \frac{x^3}{3} \right]_{0.875}^{2.875} $$
+
+$$ P = \frac{3}{250} \left( \frac{98233 - 33257}{1536} \right) = \frac{3}{250} \left( \frac{64976}{1536} \right) = \frac{3}{250} \left( \frac{4061}{96} \right) = \frac{4061}{8000} = 0.507625 $$
+Existe aproximadamente un 50.76\% de probabilidad de que el error de apuntamiento caiga dentro de esta ventana de alta precisión de $\pm 1$ arcosegundo alrededor de la media.
+
+\section{Función de distribución acumulativa}
+
+La función de distribución acumulativa $F(x)$ de una variable aleatoria continua $X$ se define para cualquier número real $x$ como la probabilidad de que $X$ tome un valor menor o igual a $x$ (Devore, Capítulo 4, Sección 4.2):
+
+$$ F(x) = P(X \le x) = \int_{-\infty}^{x} f(t) \, dt $$
+
+Primero, es una función monótona no decreciente. Segundo, sus límites asintóticos son $\lim_{x \to -\infty} F(x) = 0$ y $\lim_{x \to \infty} F(x) = 1$. Tercero, la probabilidad de que la variable caiga en un intervalo específico $(a, b]$ se calcula de manera directa y elegante sin necesidad de reintegrar la FDP:
+
+$$ P(a < X \le b) = F(b) - F(a) $$
+
+Además, la FDA es la vía principal para definir y calcular percentiles, cuartiles y medianas. Si $X$ es continua y $F(x)$ es estrictamente creciente, la derivada de la FDA nos devuelve la FDP: $f(x) = \frac{d}{dx}F(x)$ (Devore, Sección 4.2).
+
+\subsection{Ejemplo 1: Perfil de Densidad de Polvo en un Disco Protoplanetario}
+
+(\textit{Planetary Geology}, Capítulo sobre \textit{Protoplanetary Disks and Planetesimal Formation}; \textit{Astronomical Measurement}, Sección sobre \textit{Radiative Transfer}).
+
+Considere un disco protoplanetario alrededor de una estrella joven. Definimos la variable aleatoria continua $X$ como la distancia radial normalizada (adimensional) de un grano de polvo respecto al radio exterior del disco, de modo que $X \in (0, 1)$. Debido a los procesos de arrastre aerodinámico y la dinámica orbital, la densidad de probabilidad de encontrar un grano de polvo de un tamaño específico a una distancia $x$ está modelada por la siguiente FDP:
+
+$$
+f(x) = 
+\begin{cases} 
+4x^3 & \text{para } 0 < x < 1 \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+Esta función indica que la probabilidad de encontrar polvo aumenta drásticamente hacia las regiones exteriores del disco modelado. 
+
+\textbf{a) Obtención de la Función de Distribución Acumulativa:}
+Para $0 \le x \le 1$, integramos la FDP desde el límite inferior del soporte hasta $x$:
+$$ F(x) = \int_{0}^{x} 4t^3 \, dt = \left[ t^4 \right]_{0}^{x} = x^4 $$
+La FDA completa se define por tramos: $F(x) = 0$ si $x \le 0$; $F(x) = x^4$ si $0 < x < 1$; y $F(x) = 1$ si $x \ge 1$.
+
+\textbf{b) Probabilidad de localización en la 'línea de hielo':}
+En la ciencia planetaria, la 'línea de hielo' es la distancia a la cual los compuestos volátiles como el agua se condensan en grano de hielo, un paso crítico para la formación de núcleos de gigantes gaseosos. Supongamos que esta región corresponde al intervalo normalizado $0.4 < X \le 0.6$. Usando la propiedad de la FDA (Devore, Sección 4.2):
+$$ P(0.4 < X \le 0.6) = F(0.6) - F(0.4) = (0.6)^4 - (0.4)^4 = 0.1296 - 0.0256 = 0.1040 $$
+Existe un 10.4\% de probabilidad de que un grano de polvo seleccionado al azar se encuentre en esta región crítica de condensación.
+
+\textbf{c) Cálculo de la Mediana Radial:}
+La mediana $m$ es el valor que divide la distribución de probabilidad en dos mitades iguales, es decir, el radio que encierra el 50\% de la masa de polvo total. Resolvemos $F(m) = 0.5$:
+$$ m^4 = 0.5 \implies m = (0.5)^{1/4} \approx 0.8409 $$
+La mediana radial es aproximadamente 0.84. Aunque el disco llega hasta $x=1$, la mitad de los granos de polvo están concentrados en el 84\% exterior del disco, confirmando la tendencia de acumulación de materia hacia las regiones frías y lejanas.
+
+\textbf{d) Determinación del Percentil 90:}
+Para calibrar un instrumento de observación que solo puede resolver estructuras más allá de cierto radio, necesitamos el percentil 90 ($P_{90}$). Resolvemos $F(x) = 0.90$:
+$$ x^4 = 0.90 \implies x = (0.90)^{0.25} \approx 0.9740 $$
+El 90\% de los granos de polvo se encuentran a una distancia normalizada menor o igual a 0.974.
+
+\subsection{Ejemplo 2: Error Radial en el Elipse de Aterrizaje de un Rover}
+
+Análisis de desempeño de navegación y los márgenes de error en las misiones a Marte (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Entry, Descent, and Landing Systems}).
+
+Cuando un rover es lanzado hacia la superficie marciana, el punto de impacto real rara vez coincide con el punto de referencia (target). Definimos la variable aleatoria continua $X$ como el error radial de aterrizaje, es decir, la distancia euclidiana (en kilómetros) desde el centro del elipse de aterrizaje designado hasta el punto de impacto real. 
+
+Debido a que los errores en los ejes ortogonales (Norte y Este) suelen modelarse como variables normales independientes con media cero y misma varianza, la distancia radial resultante $X$ sigue una \textbf{Distribución de Rayleigh} (mencionada en Devore, Ejercicios de la Sección 4.4). La FDP del error radial es:
+
+$$
+f(x) = 
+\begin{cases} 
+\frac{x}{\sigma^2} e^{-x^2 / (2\sigma^2)} & \text{para } x \ge 0 \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+donde $\sigma$ es el parámetro de escala que representa la dispersión característica del sistema de navegación. Desarrollaremos las propiedades de esta distribución utilizando su FDA.
+
+\textbf{a) Derivación de la FDA del Error Radial:}
+Para $x \ge 0$, calculamos la integral de la FDP. Utilizamos la sustitución $u = \frac{t^2}{2\sigma^2}$, de donde $du = \frac{t}{\sigma^2} dt$:
+$$ F(x) = \int_{0}^{x} \frac{t}{\sigma^2} e^{-t^2 / (2\sigma^2)} \, dt = \int_{0}^{x^2 / (2\sigma^2)} e^{-u} \, du $$
+$$ F(x) = \left[ -e^{-u} \right]_{0}^{x^2 / (2\sigma^2)} = 1 - e^{-x^2 / (2\sigma^2)} $$
+
+\textbf{b) Cálculo del CEP (Circular Error Probable):}
+En la literatura de GNC, el CEP es la métrica estándar de precisión. Se define como el radio del círculo centrado en el target que contiene el 50\% de las probabilidades de impacto. Es, por definición, la mediana de la distribución radial. Igualamos la FDA a 0.5:
+$$ 1 - e^{-m^2 / (2\sigma^2)} = 0.5 \implies e^{-m^2 / (2\sigma^2)} = 0.5 $$
+Aplicando el logaritmo natural:
+$$ -\frac{m^2}{2\sigma^2} = \ln(0.5) \implies m^2 = -2\sigma^2 \ln(0.5) = 2\sigma^2 \ln(2) $$
+$$ m = \sigma \sqrt{2 \ln 2} \approx 1.1774 \sigma $$
+El CEP es aproximadamente $1.18 \sigma$. Si el requisito de la misión dicta que el CEP no debe exceder los 5 km, el ingeniero de navegación sabe que debe diseñar el sistema para que $\sigma \le 5 / 1.1774 \approx 4.24$ km.
+
+\textbf{c) Probabilidad de caer fuera de la zona de seguridad de $3\sigma$:}
+Las zonas de seguridad para evitar terrenos peligrosos (como cráteres o pendientes pronunciadas) suelen definirse como un radio de $3\sigma$ desde el centro. La probabilidad de que el rover aterrice fuera de esta zona segura es el complemento de la FDA evaluada en $3\sigma$:
+$$ P(X > 3\sigma) = 1 - F(3\sigma) = 1 - \left( 1 - e^{-(3\sigma)^2 / (2\sigma^2)} \right) = e^{-9/2} = e^{-4.5} \approx 0.0111 $$
+Existe un 1.11\% de probabilidad de que el rover aterrice fuera de la zona de seguridad de $3\sigma$. En misiones de miles de millones de dólares, este número se evalúa rigurosamente contra la topografía del sitio de aterrizaje.
+
+\textbf{d) Probabilidad condicional de dispersión extrema:}
+Supongamos que los sensores de a bordo detectan anomalías en el viento durante el descenso, y se sabe con certeza que el rover ha aterrizado a más de $1\sigma$ del centro (es decir, ya está fuera de la zona de error nominal). Nos interesa calcular la probabilidad condicional de que el error sea aún mayor, superando los $2\sigma$. 
+
+Usando la definición de probabilidad condicional (Devore, Capítulo 2) y la función de supervivencia $S(x) = 1 - F(x)$:
+$$ P(X > 2\sigma \mid X > \sigma) = \frac{P(X > 2\sigma \cap X > \sigma)}{P(X > \sigma)} = \frac{P(X > 2\sigma)}{P(X > \sigma)} $$
+Evaluando los complementos de la FDA:
+$$ P(X > 2\sigma) = 1 - F(2\sigma) = e^{-4/2} = e^{-2} $$
+$$ P(X > \sigma) = 1 - F(\sigma) = e^{-1/2} = e^{-0.5} $$
+Sustituyendo:
+$$ P(X > 2\sigma \mid X > \sigma) = \frac{e^{-2}}{e^{-0.5}} = e^{-1.5} \approx 0.2231 $$
+Dado que el rover ya ha caído fuera de la zona de $1\sigma$, existe un 22.31\% de probabilidad de que su error radial supere los $2\sigma$. Este tipo de razonamiento condicional, facilitado por la estructura de la FDA, permite a los algoritmos de a bordo tomar decisiones en tiempo real sobre si desplegar paracaídas de respaldo o activar propulsores de desvío de último minuto.
+
+\section{Valor esperado}
+
+Frecuentemente, necesitamos resumir la distribución de una variable aleatoria mediante un único valor que represente su centro de gravedad o tendencia central. El valor esperado de una variable aleatoria $X$, denotado como $E(X)$ o $\mu$, es la media ponderada de sus posibles valores, donde los pesos son las probabilidades de ocurrencia (Devore, Capítulo 3, Sección 3.3 para variables discretas; Capítulo 4, Sección 4.2 para variables continuas).
+
+Para una variable aleatoria discreta con función de masa de probabilidad $p(x)$, el valor esperado se define como:
+$$ E(X) = \sum_{x \in D} x \cdot p(x) $$
+
+Para una variable aleatoria continua con función de densidad de probabilidad $f(x)$, la suma se reemplaza por una integral:
+$$ E(X) = \int_{-\infty}^{\infty} x \cdot f(x) \, dx $$
+
+Si $g(X)$ es cualquier función matemática de la variable aleatoria $X$, el valor esperado de $g(X)$ se calcula aplicando la misma estructura de ponderación (Devore, Sección 3.3 y Sección 4.2):
+$$ E[g(X)] = \sum_{x \in D} g(x) \cdot p(x) \quad \text{o} \quad E[g(X)] = \int_{-\infty}^{\infty} g(x) \cdot f(x) \, dx $$
 
 \section{Varianza}
+
+Mientras que el valor esperado nos indica dónde está centrada la distribución, la varianza cuantifica la dispersión o variabilidad de los valores alrededor de dicha media. La varianza de una variable aleatoria $X$, denotada como $V(X)$ o $\sigma^2$, se define como el valor esperado de la desviación al cuadrado con respecto a la media $\mu$ (Devore, Capítulo 3, Sección 3.3; Capítulo 4, Sección 4.2):
+
+$$ V(X) = E[(X - \mu)^2] $$
+
+Aplicando la definición de valor esperado para una función de una variable aleatoria, las fórmulas operativas son:
+$$ V(X) = \sum_{x \in D} (x - \mu)^2 \cdot p(x) \quad \text{o} \quad V(X) = \int_{-\infty}^{\infty} (x - \mu)^2 \cdot f(x) \, dx $$
+
+La desviación estándar, $\sigma_X = \sqrt{V(X)}$, se expresa en las mismas unidades que la variable original, lo que la hace más interpretable físicamente. 
+
+Para el cálculo práctico, la teoría proporciona una fórmula abreviada que evita integrar o sumar términos cuadráticos complejos. Expandiendo el binomio al cuadrado y utilizando las propiedades de linealidad del valor esperado, se demuestra que (Devore, Sección 3.3):
+$$ V(X) = E(X^2) - [E(X)]^2 $$
+
+\subsection{Ejemplo 1: Demostración de la Fórmula Abreviada de la Varianza}
+
+Partimos de la definición fundamental de la varianza como el valor esperado de la desviación al cuadrado:
+$$ V(X) = E[(X - \mu)^2] $$
+
+Expandimos el término cuadrático dentro de la esperanza matemática:
+$$ V(X) = E[X^2 - 2\mu X + \mu^2] $$
+
+Aplicamos la propiedad de linealidad del valor esperado, la cual establece que la esperanza de una suma es la suma de las esperanzas, y que las constantes pueden factorizarse fuera del operador $E$:
+$$ V(X) = E(X^2) - E(2\mu X) + E(\mu^2) $$
+$$ V(X) = E(X^2) - 2\mu E(X) + E(\mu^2) $$
+
+Dado que $\mu$ es una constante (el valor esperado de $X$), sabemos que $E(X) = \mu$. Además, el valor esperado de una constante es la constante misma, por lo que $E(\mu^2) = \mu^2$. Sustituimos estos valores en la ecuación:
+$$ V(X) = E(X^2) - 2\mu(\mu) + \mu^2 $$
+$$ V(X) = E(X^2) - 2\mu^2 + \mu^2 $$
+
+Simplificando los términos algebraicos, obtenemos el resultado deseado:
+$$ V(X) = E(X^2) - \mu^2 $$
+Y dado que $\mu = E(X)$, reescribimos la expresión final como:
+$$ V(X) = E(X^2) - [E(X)]^2 $$
+
+\subsection{Ejemplo 2: Propagación de Error en el Sistema de Magnitudes Fotométricas}
+
+En la astronomía observacional, la relación entre el flujo físico medido por un detector y la magnitud aparente reportada en los catálogos es altamente no lineal. Inspirados en los principios de fotometría y propagación de errores (\textit{Astronomical Measurement}, Capítulo sobre \textit{Photometry and Magnitudes}), analizaremos un problema complejo de transformación de variables aleatorias continuas.
+
+La magnitud aparente $m$ de una fuente astrofísica se define en función de su flujo medido $f$ mediante la ecuación:
+$$ m = -2.5 \log_{10}(f) + C $$
+donde $C$ es el punto cero fotométrico (una constante instrumental). 
+
+Supongamos que, debido a las características de ruido de un detector en el límite de sensibilidad o a la distribución estadística de una población de fuentes débiles, el flujo $f$ sigue una distribución exponencial con parámetro de tasa $\lambda > 0$. La función de densidad de probabilidad del flujo es:
+$$ g(f) = \lambda e^{-\lambda f}, \quad \text{para } f > 0 $$
+
+Nuestro objetivo es calcular el valor esperado $E(m)$ y la varianza $V(m)$ de la magnitud fotométrica.
+
+\textbf{Paso 1: Reformulación de la variable aleatoria}
+Para facilitar el cálculo integral, convertimos el logaritmo en base 10 a logaritmo natural utilizando la identidad $\log_{10}(f) = \frac{\ln(f)}{\ln(10)}$. Definimos la constante de escala $k = \frac{2.5}{\ln(10)} \approx 1.0857$. La magnitud se reescribe como:
+$$ m = -k \ln(f) + C $$
+
+\textbf{Paso 2: Cálculo del Valor Esperado $E(m)$}
+Aplicamos la definición de valor esperado para una función de una variable aleatoria continua (Devore, Sección 4.2):
+$$ E(m) = \int_{0}^{\infty} [-k \ln(f) + C] \lambda e^{-\lambda f} \, df $$
+
+Realizamos un cambio de variable: sea $x = \lambda f$, de donde $df = \frac{dx}{\lambda}$ y $\ln(f) = \ln(x/\lambda) = \ln(x) - \ln(\lambda)$. La integral se transforma en:
+$$ E(m) = \int_{0}^{\infty} [-k (\ln(x) - \ln(\lambda)) + C] e^{-x} \, dx $$
+$$ E(m) = \int_{0}^{\infty} [-k \ln(x) + k \ln(\lambda) + C] e^{-x} \, dx $$
+
+Separamos la integral en tres términos. Para resolverla, invocamos las derivadas de la función Gamma $\Gamma(z) = \int_{0}^{\infty} x^{z-1} e^{-x} \, dx$ evaluadas en $z=1$. Sabemos que $\int_{0}^{\infty} e^{-x} \, dx = 1$ y que la primera derivada $\Gamma'(1) = \int_{0}^{\infty} \ln(x) e^{-x} \, dx = -\gamma$, donde $\gamma \approx 0.5772$ es la constante de Euler-Mascheroni. Sustituyendo estos resultados:
+$$ E(m) = -k(-\gamma) + (k \ln(\lambda) + C)(1) $$
+$$ E(m) = k(\gamma + \ln(\lambda)) + C $$
+
+\textbf{Paso 3: Cálculo de la Varianza $V(m)$}
+Calcular $V(m)$ mediante $E(m^2) - [E(m)]^2$ sería algebraicamente tedioso. Es mucho más elegante utilizar la definición $V(m) = E[(m - E(m))^2]$. Primero, evaluamos la desviación de la magnitud respecto a su media:
+$$ m - E(m) = [-k \ln(x) + k \ln(\lambda) + C] - [k\gamma + k \ln(\lambda) + C] $$
+$$ m - E(m) = -k(\ln(x) + \gamma) $$
+
+Ahora, calculamos el valor esperado del cuadrado de esta desviación:
+$$ V(m) = \int_{0}^{\infty} [-k(\ln(x) + \gamma)]^2 e^{-x} \, dx = k^2 \int_{0}^{\infty} (\ln(x) + \gamma)^2 e^{-x} \, dx $$
+
+Expandimos el binomio al cuadrado dentro de la integral:
+$$ V(m) = k^2 \left[ \int_{0}^{\infty} (\ln(x))^2 e^{-x} \, dx + 2\gamma \int_{0}^{\infty} \ln(x) e^{-x} \, dx + \gamma^2 \int_{0}^{\infty} e^{-x} \, dx \right] $$
+
+Para la primera integral, requerimos la segunda derivada de la función Gamma en $z=1$, la cual es un resultado conocido en cálculo avanzado: $\Gamma''(1) = \int_{0}^{\infty} (\ln(x))^2 e^{-x} \, dx = \gamma^2 + \frac{\pi^2}{6}$. Sustituyendo las tres integrales conocidas:
+$$ V(m) = k^2 \left[ \left(\gamma^2 + \frac{\pi^2}{6}\right) + 2\gamma(-\gamma) + \gamma^2(1) \right] $$
+
+Al simplificar los términos dentro del corchete, observamos una cancelación exacta de las constantes de Euler-Mascheroni:
+$$ \gamma^2 + \frac{\pi^2}{6} - 2\gamma^2 + \gamma^2 = \frac{\pi^2}{6} $$
+
+Por lo tanto, la varianza de la magnitud fotométrica es:
+$$ V(m) = k^2 \frac{\pi^2}{6} $$
+
+Sustituyendo el valor de la constante $k = \frac{2.5}{\ln(10)}$, obtenemos el resultado final:
+$$ V(m) = \left( \frac{2.5}{\ln(10)} \right)^2 \frac{\pi^2}{6} \approx 1.939 $$
+
+\textbf{Conclusión:}
+La varianza de la magnitud $V(m)$ depende exclusivamente de constantes matemáticas puras ($\pi$ y el factor de escala logarítmico $2.5/\ln(10)$). Es completamente independiente del parámetro de escala del flujo $\lambda$ y del punto cero instrumental $C$. Esto demuestra que, bajo un modelo de flujo exponencial, la dispersión estadística en el sistema de magnitudes está intrínsecamente acotada por la geometría de la transformación logarítmica, un hecho crucial para calibrar los límites de detección y las incertidumbres sistemáticas en sondeos astronómicos de gran profundidad.

@@ -1,3 +1,199 @@
 \chapter{Clase 5}
 
-\section{Funciones de distribución discreta: Binomial}
+\section{Distribución de probabilidad binomial}
+
+En el modelado de fenómenos astronómicos y aeroespaciales, frecuentemente nos enfrentamos a experimentos que consisten en una secuencia de observaciones o ensayos repetidos, donde cada uno solo puede resultar en dos categorías mutuamente excluyentes: éxito o fracaso. Un experimento binomial satisface rigurosamente las siguientes cuatro condiciones (Devore, Capítulo 3, Sección 3.4):
+\begin{enumerate}
+    \item El experimento consta de un número fijo $n$ de ensayos.
+    \item Cada ensayo puede dar por resultado uno de dos posibles resultados: éxito (E) o fracaso (F).
+    \item La probabilidad de éxito, denotada por $p$, es constante de un ensayo a otro.
+    \item Los ensayos son independientes entre sí.
+\end{enumerate}
+
+Si definimos la variable aleatoria discreta $X$ como el número total de éxitos observados en los $n$ ensayos, decimos que $X$ sigue una distribución binomial con parámetros $n$ y $p$, denotado como $X \sim \text{Bin}(n, p)$. La función de masa de probabilidad (FMP) se deriva combinando la probabilidad de cualquier secuencia específica de éxitos y fracasos con el número de formas en que dicha secuencia puede ocurrir (combinaciones). La FMP está dada por:
+
+$$ b(x; n, p) = \binom{n}{x} p^x (1-p)^{n-x} \quad \text{para } x = 0, 1, 2, \dots, n $$
+
+Las características fundamentales de esta distribución, que resumen su tendencia central y dispersión, son su valor esperado y su varianza (Devore, Sección 3.4):
+$$ E(X) = np $$
+$$ V(X) = np(1-p) $$
+
+\subsection{Ejemplo 1: Demostración de la Moda de la Distribución Binomial}
+
+Para encontrar el valor de $x$ que maximiza $b(x; n, p)$, analizamos la razón entre probabilidades consecutivas. Esto nos indica cuándo la función está creciendo y cuándo empieza a decrecer. Calculamos la razón $R(x)$:
+
+$$ R(x) = \frac{b(x; n, p)}{b(x-1; n, p)} = \frac{\frac{n!}{x!(n-x)!} p^x (1-p)^{n-x}}{\frac{n!}{(x-1)!(n-x+1)!} p^{x-1} (1-p)^{n-x+1}} $$
+
+Al simplificar los factoriales y las potencias de $p$ y $(1-p)$, obtenemos:
+
+$$ R(x) = \frac{(x-1)!(n-x+1)!}{x!(n-x)!} \cdot \frac{p}{1-p} = \frac{n-x+1}{x} \cdot \frac{p}{1-p} $$
+
+La probabilidad $b(x; n, p)$ es mayor o igual que $b(x-1; n, p)$ siempre y cuando $R(x) \ge 1$. Establecemos la desigualdad:
+
+$$ \frac{n-x+1}{x} \cdot \frac{p}{1-p} \ge 1 $$
+
+Multiplicamos ambos lados por $x(1-p)$ (dado que $x > 0$ y $0 < p < 1$, el denominador es positivo y la desigualdad se mantiene):
+
+$$ (n-x+1)p \ge x(1-p) $$
+$$ np - xp + p \ge x - xp $$
+
+Sumamos $xp$ a ambos lados y reagrupamos los términos con $x$:
+
+$$ np + p \ge x $$
+$$ x \le (n+1)p $$
+
+Este resultado nos indica que la función de masa de probabilidad $b(x; n, p)$ es estrictamente creciente para todos los valores de $x$ que satisfacen $x \le (n+1)p$, y es estrictamente decreciente para $x > (n+1)p$. Por lo tanto, el valor máximo se alcanza en el mayor entero que cumple la condición de crecimiento, el cual es exactamente la parte entera de $(n+1)p$.
+
+$$ \text{Moda} = \lfloor (n+1)p \rfloor $$
+
+\subsection{Ejemplo 2: Demostración del $k$-ésimo momento factorial de la distribución binomial}
+
+Sea $X \sim \text{Bin}(n, p)$ una variable aleatoria binomial. Definimos el factorial descendente de orden $k$ como $X^{(k)} = X(X-1)(X-2)\cdots(X-k+1)$, con la convención de que $X^{(k)} = 0$ si $X < k$. 
+
+Para calcular $E[X^{(k)}]$, aplicamos la definición del valor esperado de una función de una variable aleatoria discreta (Devore, Capítulo 3, Sección 3.3):
+
+$$ E[X^{(k)}] = \sum_{x=0}^{n} x^{(k)} \cdot P(X = x) $$
+
+Sustituimos la función de masa de probabilidad binomial $P(X=x) = \binom{n}{x} p^x (1-p)^{n-x}$ y la expresión explícita del factorial descendente $x^{(k)} = \frac{x!}{(x-k)!}$:
+
+$$ E[X^{(k)}] = \sum_{x=0}^{n} \frac{x!}{(x-k)!} \binom{n}{x} p^x (1-p)^{n-x} $$
+
+Dado que $\frac{x!}{(x-k)!} = 0$ para todo $x < k$, los términos desde $x=0$ hasta $x=k-1$ son nulos. Por lo tanto, podemos ajustar el límite inferior de la sumatoria a $x=k$:
+
+$$ E[X^{(k)}] = \sum_{x=k}^{n} \frac{x!}{(x-k)!} \frac{n!}{x!(n-x)!} p^x (1-p)^{n-x} $$
+
+Cancelamos $x!$ en el numerador y denominador del coeficiente combinatorio:
+
+$$ E[X^{(k)}] = \sum_{x=k}^{n} \frac{n!}{(x-k)!(n-x)!} p^x (1-p)^{n-x} $$
+
+El objetivo analítico es factorizar la sumatoria para que adopte la forma de una expansión binomial completa. Para ello, multiplicamos y dividimos por $(n-k)!$ dentro de la sumatoria:
+
+$$ E[X^{(k)}] = \frac{n!}{(n-k)!} \sum_{x=k}^{n} \frac{(n-k)!}{(x-k)!(n-x)!} p^x (1-p)^{n-x} $$
+
+Reconocemos que el término fraccionario es exactamente el coeficiente binomial $\binom{n-k}{x-k}$. Además, extraemos el factor constante $\frac{n!}{(n-k)!} = n^{(k)}$ fuera de la sumatoria:
+
+$$ E[X^{(k)}] = n^{(k)} \sum_{x=k}^{n} \binom{n-k}{x-k} p^x (1-p)^{n-x} $$
+
+Realizamos un cambio de índice para simplificar la sumatoria. Sea $y = x - k$. Entonces $x = y + k$. Los límites de la sumatoria se transforman de la siguiente manera: cuando $x = k$, $y = 0$; cuando $x = n$, $y = n - k$. Sustituimos en la expresión:
+
+$$ E[X^{(k)}] = n^{(k)} \sum_{y=0}^{n-k} \binom{n-k}{y} p^{y+k} (1-p)^{n-(y+k)} $$
+
+Separamos las potencias de $p$ y reagrupamos los exponentes de $(1-p)$:
+
+$$ E[X^{(k)}] = n^{(k)} p^k \sum_{y=0}^{n-k} \binom{n-k}{y} p^y (1-p)^{(n-k)-y} $$
+
+La sumatoria restante es exactamente la expansión del Teorema del Binomio para el exponente $m = n-k$:
+
+$$ \sum_{y=0}^{n-k} \binom{n-k}{y} p^y (1-p)^{(n-k)-y} = (p + (1-p))^{n-k} = 1^{n-k} = 1 $$
+
+Al sustituir este resultado unitario en la expresión anterior, obtenemos directamente el teorema demostrado:
+
+$$ E[X^{(k)}] = n^{(k)} p^k = \frac{n!}{(n-k)!} p^k $$
+
+
+
+\subsection{Ejemplo 3: Momentos de Orden Superior en la Integración de Señales de Radar Planetario}
+
+En la astronomía de radar (como las observaciones realizadas por la Red del Espacio Profundo o el Goldstone Solar System Radar), se envían secuencias de pulsos electromagnéticos hacia un asteroide. Debido a la topografía irregular y la rotación del cuerpo, la coherencia de fase de la señal reflejada puede variar. 
+
+Modelaremos un escenario simplificado pero físicamente motivado: se transmiten $n$ pulsos. Cada pulso tiene una probabilidad $p$ de regresar con la fase coherente necesaria para la integración constructiva. Sea $X \sim \text{Bin}(n, p)$ el número de pulsos coherentes recibidos. Debido a las no linealidades en el receptor de correlación y a la física de la dispersión, la potencia de la señal integrada $Y$ es proporcional al cuadrado del número de pulsos coherentes, es decir, $Y = cX^2$, donde $c$ es una constante instrumental.
+
+Para caracterizar la estabilidad del radiómetro y calcular el índice de centelleo (scintillation index), necesitamos determinar el valor esperado $E(Y)$ y, de manera crucial, la varianza $V(Y)$. Calcular $V(Y)$ requiere hallar el cuarto momento ordinario de la distribución binomial, $E(X^4)$.
+
+\textbf{Paso 1: Cálculo de $E(Y)$}
+Sabemos que $E(X) = np$ y $V(X) = np(1-p)$. Utilizando la relación $V(X) = E(X^2) - [E(X)]^2$, despejamos el segundo momento:
+$$ E(X^2) = V(X) + [E(X)]^2 = np(1-p) + n^2p^2 $$
+Por lo tanto, el valor esperado de la potencia es:
+$$ E(Y) = cE(X^2) = c[np(1-p) + n^2p^2] $$
+
+\textbf{Paso 2: Estrategia para el cuarto momento usando Factoriales Descendentes}
+Calcular $E(X^4)$ directamente sumando $x^4 b(x; n, p)$ es algebraicamente tedioso. Es mucho más elegante utilizar los momentos factoriales. Definimos el factorial descendente como $X^{(k)} = X(X-1)\cdots(X-k+1)$. 
+Para una variable binomial, el valor esperado de su factorial descendente es notablemente simple (Devore, Sección 3.3 y ejercicios de la Sección 3.4):
+$$ E[X^{(k)}] = n^{(k)} p^k = \frac{n!}{(n-k)!} p^k $$
+
+Debemos expresar la potencia ordinaria $X^4$ en términos de factoriales descendentes. Mediante expansión algebraica (o usando los números de Stirling de segunda especie), obtenemos:
+$$ X^2 = X^{(2)} + X^{(1)} $$
+$$ X^3 = X^{(3)} + 3X^{(2)} + X^{(1)} $$
+$$ X^4 = X^{(4)} + 6X^{(3)} + 7X^{(2)} + X^{(1)} $$
+
+\textbf{Paso 3: Cálculo de $E(X^4)$}
+Aplicamos la linealidad del valor esperado y la fórmula del momento factorial:
+$$ E(X^4) = E[X^{(4)}] + 6E[X^{(3)}] + 7E[X^{(2)}] + E[X^{(1)}] $$
+$$ E(X^4) = n(n-1)(n-2)(n-3)p^4 + 6n(n-1)(n-2)p^3 + 7n(n-1)p^2 + np $$
+
+Para facilitar el cálculo de la varianza, expandimos esta expresión agrupando por potencias de $n$:
+$$ E(X^4) = n^4p^4 + 6n^3p^3(1-p) + n^2p^2(1-p)(11p-7) + np(1-p)(1-6p+6p^2) $$
+
+\textbf{Paso 4: Cálculo de la Varianza $V(Y)$}
+La varianza de la potencia integrada es $V(Y) = c^2 V(X^2) = c^2 [E(X^4) - (E(X^2))^2]$.
+Primero, elevamos al cuadrado el segundo momento que obtuvimos en el Paso 1:
+$$ (E(X^2))^2 = [n^2p^2 + np(1-p)]^2 = n^4p^4 + 2n^3p^3(1-p) + n^2p^2(1-p)^2 $$
+
+Ahora restamos $(E(X^2))^2$ de $E(X^4)$. Observamos que los términos de orden $n^4$ se cancelan exactamente. Para los términos de orden $n^3$:
+$$ 6n^3p^3(1-p) - 2n^3p^3(1-p) = 4n^3p^3(1-p) $$
+
+Para los términos de orden $n^2$, factorizamos $n^2p^2(1-p)$:
+$$ n^2p^2(1-p) [ (11p - 7) - (1-p) ] = n^2p^2(1-p) [ 12p - 8 ] = 4n^2p^2(1-p)(3p-2) $$
+
+El término de orden $n$ permanece intacto ya que no hay términos cuadráticos cruzados que lo afecten en $(E(X^2))^2$:
+$$ np(1-p)(1-6p+6p^2) $$
+
+Sumando todo y factorizando el término común $np(1-p)$, obtenemos la expresión final para la varianza de $X^2$:
+$$ V(X^2) = np(1-p) \left[ 4n^2p^2 + 4np(3p-2) + (1-6p+6p^2) \right] $$
+
+Finalmente, la varianza de la potencia de la señal de radar es:
+$$ V(Y) = c^2 np(1-p) \left[ 4n^2p^2 + 4np(3p-2) + (1-6p+6p^2) \right] $$
+
+\textbf{Conclusión:}
+La expresión entre corchetes revela cómo la varianza de la señal integrada escala con $n^2$ para un número grande de pulsos, dominada por el término $4n^2p^2$. En el diseño de sistemas de radar planetario (inspirado en los principios de \textit{Astronomical Measurement} y procesamiento de señales), conocer esta varianza exacta permite a los ingenieros dimensionar los tiempos de integración necesarios para que la relación señal-ruido de la potencia (que depende de $V(Y)$) supere los umbrales de detección de características superficiales en asteroides, evitando así sobreestimar la calidad de la imagen si se asumiera erróneamente una distribución gaussiana para $X^2$.
+
+
+\subsection{Ejemplo 4: Interferometría de Línea de Base Larga con Enjambre de Nanosatélites}
+
+Principios de síntesis de apertura y diseño de arreglos distribuidos (\textit{Astronomical Measurement}, Capítulo sobre \textit{Interferometry and Aperture Synthesis}).
+
+Una agencia espacial despliega una constelación de $n = 10$ nanosatélites idénticos en órbita lunar para formar un interferómetro de radio de línea de base larga. El objetivo científico es resolver la estructura fina de las emisiones de máseres en regiones de formación estelar. Para que el arreglo funcione y se pueda sintetizar una imagen, cada par de nanosatélites que logre establecer un enlace óptico de fase coherente genera una línea base interferométrica independiente. 
+
+El proceso de despliegue y establecimiento de enlaces es estocástico. Definimos la variable aleatoria $X$ como el número de nanosatélites que logran establecer el enlace con éxito. Dado que cada satélite opera de manera independiente y tiene la misma probabilidad $p$ de éxito, $X$ sigue una distribución binomial:
+$$ X \sim \text{Bin}(10, p) $$
+
+La métrica de rendimiento científico de la misión, denotada como $Y$, es el número total de líneas base interferométricas únicas que se pueden formar con los $X$ satélites operativos. Combinatorialmente, esto corresponde a elegir 2 satélites de los $X$ disponibles:
+$$ Y = \binom{X}{2} = \frac{X(X-1)}{2} $$
+
+
+\textbf{a) Expresión de $Y$ mediante factoriales descendentes}
+Para facilitar el cálculo de los momentos de $Y$, reescribimos la variable en términos del factorial descendente de orden 2, definido como $X^{(2)} = X(X-1)$:
+$$ Y = \frac{1}{2} X^{(2)} $$
+
+\textbf{b) Cálculo del número esperado de líneas base}
+Aplicamos la propiedad de linealidad del valor esperado y el teorema del $k$-ésimo momento factorial de la distribución binomial (Devore, Capítulo 3, Sección 3.3 y Sección 3.4), el cual establece que $E[X^{(k)}] = n^{(k)} p^k$. Para $k=2$ y $n=10$:
+$$ E(Y) = \frac{1}{2} E[X^{(2)}] = \frac{1}{2} n^{(2)} p^2 = \frac{1}{2} (10 \times 9) p^2 = 45 p^2 $$
+El rendimiento científico esperado escala cuadráticamente con la probabilidad de éxito individual de los nanosatélites.
+
+\textbf{c) Cálculo de la varianza del rendimiento científico}
+Determinar la varianza de $Y$ requiere calcular $V(Y) = V\left(\frac{1}{2} X^{(2)}\right) = \frac{1}{4} V(X^{(2)})$. 
+Para hallar $V(X^{(2)})$, necesitamos el segundo momento de $X^{(2)}$, es decir, $E[(X^{(2)})^2]$. En lugar de expandir tediosamente las potencias ordinarias $X^4$, utilizamos la propiedad de que el producto de factoriales descendentes puede expresarse como una combinación lineal de factoriales descendentes de mayor orden. 
+Específicamente, desarrollamos $[X(X-1)]^2 = X^2(X-1)^2$. Reescribiendo $X^2 = X^{(2)} + X^{(1)}$ y $(X-1)^2 = (X-1)(X-2) + (X-1) = X^{(2)}_{desplazado} + X^{(1)}_{desplazado}$, o más directamente, expandiendo y convirtiendo a factoriales descendentes:
+$$ [X(X-1)]^2 = X^4 - 2X^3 + X^2 $$
+Sustituyendo las potencias ordinarias por sus equivalentes en factoriales descendentes ($X^2 = X^{(2)} + X^{(1)}$, $X^3 = X^{(3)} + 3X^{(2)} + X^{(1)}$, $X^4 = X^{(4)} + 6X^{(3)} + 7X^{(2)} + X^{(1)}$):
+$$ [X(X-1)]^2 = X^{(4)} + 4X^{(3)} + 2X^{(2)} $$
+Aplicando el valor esperado a cada término usando $E[X^{(k)}] = n^{(k)} p^k$:
+$$ E[(X^{(2)})^2] = n^{(4)}p^4 + 4n^{(3)}p^3 + 2n^{(2)}p^2 $$
+Para $n=10$, los factoriales descendentes son $10^{(4)} = 5040$, $10^{(3)} = 720$, y $10^{(2)} = 90$. Sustituyendo:
+$$ E[(X^{(2)})^2] = 5040 p^4 + 2880 p^3 + 180 p^2 $$
+Ahora, calculamos la varianza de $X^{(2)}$ restando el cuadrado de su media, $(E[X^{(2)}])^2 = (90p^2)^2 = 8100p^4$:
+$$ V(X^{(2)}) = (5040 p^4 + 2880 p^3 + 180 p^2) - 8100 p^4 = 180 p^2 + 2880 p^3 - 3060 p^4 $$
+Finalmente, la varianza del número de líneas base es:
+$$ V(Y) = \frac{1}{4} V(X^{(2)}) = 45 p^2 + 720 p^3 - 765 p^4 $$
+Esta expresión cuantifica exactamente cómo la incertidumbre en el despliegue de los satélites se amplifica no linealmente en la degradación de la calidad de la imagen interferométrica.
+
+\textbf{d) Requisito de la misión y probabilidad mínima de despliegue}
+Los algoritmos de síntesis de apertura (\textit{Astronomical Measurement}, Sección sobre \textit{Image Reconstruction}) dictan que para lograr la relación señal-ruido requerida en el tiempo de integración asignado, el arreglo debe tener un valor esperado de al menos 30 líneas base independientes. 
+Planteamos la desigualdad:
+$$ E(Y) \ge 30 $$
+$$ 45 p^2 \ge 30 $$
+$$ p^2 \ge \frac{30}{45} = \frac{2}{3} $$
+$$ p \ge \sqrt{\frac{2}{3}} \approx 0.8165 $$
+
+\textbf{Conclusión}
+Para garantizar el éxito científico de la misión, la ingeniería de los nanosatélites debe asegurar que la probabilidad de establecer el enlace óptico sea de al menos un 81.65\%.

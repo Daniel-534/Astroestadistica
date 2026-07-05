@@ -2,8 +2,295 @@
 
 \section{Distribución de Poisson}
 
+En la modelación de fenómenos astronómicos, existe una clase fundamental de experimentos que no se basan en un número fijo de ensayos, sino en la ocurrencia de eventos a lo largo de un intervalo continuo de tiempo o de espacio. La distribución de Poisson es el modelo probabilístico por excelencia para el conteo de este tipo de eventos (Devore, Capítulo 3, Sección 3.6). 
+
+Sea $N(t)$ la variable aleatoria que representa el número de eventos ocurridos en el intervalo de tiempo $[0, t]$. Las condiciones estrictas que definen un proceso de Poisson homogéneo con tasa $\lambda > 0$ se expresan matemáticamente analizando un intervalo infinitesimal $(t, t + \Delta t]$, donde $\Delta t \to 0$:
+
+\textbf{1. Independencia de incrementos:}
+Los eventos que ocurren en intervalos de tiempo disjuntos (no traslapantes) son estadísticamente independientes. Para cualesquiera $0 \le t_1 < t_2 \le t_3 < t_4$:
+$$ P\Big(N(t_2) - N(t_1) = k_1 \;\cap\; N(t_4) - N(t_3) = k_2\Big) = P\Big(N(t_2) - N(t_1) = k_1\Big) \cdot P\Big(N(t_4) - N(t_3) = k_2\Big) $$
+
+\textbf{2. Probabilidad de exactamente un evento (proporcional a $\Delta t$):}
+La probabilidad de que ocurra exactamente un evento en el intervalo infinitesimal $(t, t + \Delta t]$ es proporcional a la duración del intervalo, donde $\lambda$ es la constante de proporcionalidad (tasa de ocurrencia):
+$$ P\Big(N(t + \Delta t) - N(t) = 1\Big) = \lambda \Delta t + o(\Delta t) $$
+donde $o(\Delta t)$ denota un término que tiende a cero más rápido que $\Delta t$ cuando $\Delta t \to 0$ (es decir, $\lim_{\Delta t \to 0} \frac{o(\Delta t)}{\Delta t} = 0$).
+
+\textbf{3. Probabilidad de cero eventos:}
+Dado que la suma de todas las probabilidades en el intervalo debe ser 1, la probabilidad de que no ocurra ningún evento es:
+$$ P\Big(N(t + \Delta t) - N(t) = 0\Big) = 1 - \lambda \Delta t + o(\Delta t) $$
+
+\textbf{4. Probabilidad de dos o más eventos (despreciable):}
+La probabilidad de que ocurran dos o más eventos simultáneamente en el intervalo infinitesimal es despreciable, lo que significa que es de un orden de magnitud superior a $\Delta t$:
+$$ P\Big(N(t + \Delta t) - N(t) \ge 2\Big) = o(\Delta t) $$
+$$ \lim_{\Delta t \to 0} \frac{P\Big(N(t + \Delta t) - N(t) \ge 2\Big)}{\Delta t} = 0 $$
+
+Si definimos la variable aleatoria discreta $X$ como el número de eventos que ocurren en un intervalo de longitud $t$, y $\lambda$ representa la tasa promedio de ocurrencia por unidad de intervalo, la función de masa de probabilidad está dada por:
+
+$$ p(x; \lambda t) = \frac{e^{-\lambda t} (\lambda t)^x}{x!} \quad \text{para } x = 0, 1, 2, \dots $$
+
+Las propiedades de esperanza y varianza son idénticas y coinciden con el parámetro de la distribución:
+$$ E(X) = V(X) = \lambda t $$
+
 \section{Distribuciones continuas}
+
+Mientras que las distribuciones discretas como la de Poisson modelan conteos enteros, la mayoría de las mediciones físicas en astronomía y navegación espacial (como el tiempo de llegada de un fotón, la posición angular de un astro, o el flujo de energía) son variables continuas. Una variable aleatoria continua $X$ toma valores en un intervalo de la recta real, y su comportamiento se describe mediante una función de densidad de probabilidad (FDP) $f(x)$ (Devore, Capítulo 4, Sección 4.1).
+
+Las propiedades fundamentales de $f(x)$ son:
+$$ f(x) \ge 0 \quad \text{para todo } x $$
+$$ \int_{-\infty}^{\infty} f(x) \, dx = 1 $$
+$$ P(a \le X \le b) = \int_{a}^{b} f(x) \, dx $$
+
+
+\subsection{Ejemplo 1: Demostración de la Propiedad de Reproductividad en Procesos de Poisson}
+
+\textbf{Teorema:} Sean $X$ y $Y$ dos variables aleatorias independientes tales que $X \sim \text{Poisson}(\lambda_1)$ y $Y \sim \text{Poisson}(\lambda_2)$. Entonces, la variable aleatoria $Z = X + Y$ sigue una distribución de Poisson con parámetro $\lambda_1 + \lambda_2$.
+
+\textbf{Demostración:}
+Dado que $X$ y $Y$ son variables aleatorias discretas e independientes, la función de masa de probabilidad de su suma $Z$ se obtiene mediante la convolución de sus respectivas distribuciones (Devore, Capítulo 5, Sección sobre Distribuciones de probabilidad conjunta). Para un valor entero no negativo $z$, la probabilidad de que $Z = z$ es:
+
+$$ P(Z = z) = \sum_{x=0}^{z} P(X = x) \cdot P(Y = z - x) $$
+
+Sustituimos la función de masa de probabilidad de Poisson para $X$ y $Y$:
+
+$$ P(Z = z) = \sum_{x=0}^{z} \left( \frac{e^{-\lambda_1} \lambda_1^x}{x!} \right) \left( \frac{e^{-\lambda_2} \lambda_2^{z-x}}{(z-x)!} \right) $$
+
+Extraemos las constantes exponenciales fuera de la sumatoria, ya que no dependen del índice de suma $x$:
+
+$$ P(Z = z) = e^{-(\lambda_1 + \lambda_2)} \sum_{x=0}^{z} \frac{\lambda_1^x \lambda_2^{z-x}}{x! (z-x)!} $$
+
+Para reconocer una expansión binomial en la sumatoria, multiplicamos y dividimos la expresión por $z!$:
+
+$$ P(Z = z) = \frac{e^{-(\lambda_1 + \lambda_2)}}{z!} \sum_{x=0}^{z} \frac{z!}{x! (z-x)!} \lambda_1^x \lambda_2^{z-x} $$
+
+El término fraccionario es exactamente el coeficiente binomial $\binom{z}{x}$. Reescribimos la sumatoria:
+
+$$ P(Z = z) = \frac{e^{-(\lambda_1 + \lambda_2)}}{z!} \sum_{x=0}^{z} \binom{z}{x} \lambda_1^x \lambda_2^{z-x} $$
+
+Aplicamos el Teorema del Binomio de Newton, el cual establece que $\sum_{x=0}^{z} \binom{z}{x} a^x b^{z-x} = (a + b)^z$. En nuestro caso, $a = \lambda_1$ y $b = \lambda_2$:
+
+$$ \sum_{x=0}^{z} \binom{z}{x} \lambda_1^x \lambda_2^{z-x} = (\lambda_1 + \lambda_2)^z $$
+
+Sustituimos este resultado de vuelta en la ecuación de $P(Z = z)$:
+
+$$ P(Z = z) = \frac{e^{-(\lambda_1 + \lambda_2)} (\lambda_1 + \lambda_2)^z}{z!} $$
+
+Esta expresión final es exactamente la función de masa de probabilidad de una distribución de Poisson evaluada en $z$, con parámetro $\lambda = \lambda_1 + \lambda_2$. Por lo tanto, queda demostrado que $Z \sim \text{Poisson}(\lambda_1 + \lambda_2)$.
+
+\subsection{Ejemplo 2: Del Conteo de Fotones al Tiempo de Espera y la Función Gamma}
+
+Consideremos un escenario de instrumentación astronómica de alta energía, inspirado en los principios de detectores de rayos X y tiempos de llegada (\textit{Astronomical Measurement}, Capítulo sobre \textit{Detectors and Instruments}).
+
+Un telescopio espacial observa una binaria de rayos X tenue. Los fotones llegan al detector siguiendo un proceso de Poisson con una tasa constante $\lambda$ (fotones por segundo). 
+
+\textbf{Paso 1: Derivación de la distribución continua del tiempo de llegada}
+Sea $X$ la variable aleatoria continua que representa el tiempo exacto (en segundos) transcurrido desde el inicio de la observación hasta la llegada del \textit{primer} fotón. Para encontrar la función de distribución acumulativa (FDA) de $X$, notamos que el evento $\{X > x\}$ es equivalente a que \textit{no llegue ningún fotón} en el intervalo de tiempo $[0, x]$. 
+
+Utilizando la distribución de Poisson con $t = x$ y evaluando en $x = 0$ eventos:
+$$ P(X > x) = P(N = 0) = \frac{e^{-\lambda x} (\lambda x)^0}{0!} = e^{-\lambda x} $$
+
+Por lo tanto, la FDA de $X$ es $F(x) = P(X \le x) = 1 - P(X > x) = 1 - e^{-\lambda x}$. 
+Derivando la FDA, obtenemos la función de densidad de probabilidad continua (la distribución Exponencial):
+$$ f(x) = \lambda e^{-\lambda x} \quad \text{para } x > 0 $$
+
+\textbf{Paso 2: Un problema de valor esperado no trivial}
+El sistema de rastreo del telescopio utiliza un algoritmo de bloqueo que introduce una penalización de ruido térmico en el procesador de señales. Esta penalización es inversamente proporcional a la raíz cuadrada del tiempo de llegada del primer fotón, modelada por la función $g(X) = \frac{1}{\sqrt{X}}$. 
+
+Para dimensionar los filtros de software, los ingenieros deben calcular el valor esperado de esta penalización, es decir, $E\left[\frac{1}{\sqrt{X}}\right]$. Este cálculo requiere evaluar una integral impropia que no tiene una solución elemental directa, pero que se resuelve elegantemente utilizando la función Gamma.
+
+Aplicamos la definición de valor esperado para variables continuas (Devore, Sección 4.2):
+$$ E\left[\frac{1}{\sqrt{X}}\right] = \int_{0}^{\infty} \frac{1}{\sqrt{x}} \lambda e^{-\lambda x} \, dx $$
+
+Para resolver esta integral, realizamos un cambio de variable. Sea $u = \lambda x$, de donde $x = \frac{u}{\lambda}$ y $dx = \frac{du}{\lambda}$. Sustituyendo en la integral:
+$$ E\left[\frac{1}{\sqrt{X}}\right] = \int_{0}^{\infty} \left(\frac{u}{\lambda}\right)^{-1/2} \lambda e^{-u} \frac{du}{\lambda} $$
+
+Simplificando los términos algebraicos y las constantes:
+$$ E\left[\frac{1}{\sqrt{X}}\right] = \int_{0}^{\infty} \sqrt{\lambda} u^{-1/2} e^{-u} \frac{du}{\lambda} \cdot \lambda = \sqrt{\lambda} \int_{0}^{\infty} u^{-1/2} e^{-u} \, du $$
+
+En este punto, reconocemos que la integral restante es exactamente la definición de la función Gamma, $\Gamma(z) = \int_{0}^{\infty} t^{z-1} e^{-t} \, dt$, evaluada en $z - 1 = -1/2$, lo que implica $z = 1/2$. 
+$$ \int_{0}^{\infty} u^{-1/2} e^{-u} \, du = \Gamma\left(\frac{1}{2}\right) $$
+
+$\Gamma(1/2) = \sqrt{\pi}$. Sustituyendo este valor, obtenemos el resultado final:
+$$ E\left[\frac{1}{\sqrt{X}}\right] = \sqrt{\pi \lambda} $$
+
+\textbf{Conclusión}
+En el contexto de la ingeniería espacial, conocer que esta penalización esperada escala con $\sqrt{\lambda}$ permite a los diseñadores predecir cómo aumentará el ruido procesado si la fuente astrofísica se vuelve más brillante (mayor $\lambda$), asegurando que los umbrales de descarte de datos se ajusten dinámicamente según la física fundamental del detector.
+
 
 \section{Percentiles}
 
+En el estudio de las variables aleatorias continuas, a menudo no basta con conocer la probabilidad de que una variable caiga en un intervalo; es fundamental poder identificar valores específicos que actúen como umbrales o puntos de corte que dividan la distribución en proporciones conocidas. Para cualquier número $p$ tal que $0 < p < 1$, el percentil $(100p)$ de una distribución continua con función de densidad $f(x)$ y función de distribución acumulativa $F(x)$ es el valor numérico $x_p$ que satisface la siguiente condición (Devore, Capítulo 4, Sección 4.2):
+
+$$ F(x_p) = \int_{-\infty}^{x_p} f(x) \, dx = p $$
+
+Geométricamente, $x_p$ es el valor sobre el eje horizontal tal que el área bajo la curva de densidad a la izquierda de $x_p$ es exactamente $p$. Esto significa que una fracción $p$ de la población o de la distribución de probabilidad cae por debajo de $x_p$, y una fracción $1-p$ cae por encima. 
+
+Algunos percentiles reciben nombres especiales debido a su utilidad para resumir la tendencia central y la dispersión de los datos. El percentil 50 ($p = 0.5$) se denomina \textit{mediana} de la distribución, el cual divide el área bajo la curva en dos mitades iguales. Los percentiles 25 y 75 ($p = 0.25$ y $p = 0.75$) se conocen como el \textit{primer} y \textit{tercer cuartil}, respectivamente, y son ampliamente utilizados para definir el rango intercuartílico, una medida robusta de variabilidad.
+
 \section{Distribución normal}
+
+Sin duda, la distribución de probabilidad más importante y ubicua en toda la estadística y en las ciencias físicas es la distribución normal. Como se detalla en \textit{Astronomical Measurement} (Apéndice sobre \textit{Error Analysis and Probability Distributions}), la mayoría de los errores de medición instrumentales y el ruido térmico en los detectores astrofísicos siguen este modelo, gracias al Teorema del Límite Central.
+
+Se dice que una variable aleatoria continua $X$ tiene una distribución normal con parámetros de media $\mu$ (donde $-\infty < \mu < \infty$) y desviación estándar $\sigma$ (donde $\sigma > 0$) si su función de densidad de probabilidad es (Devore, Capítulo 4, Sección 4.3):
+
+$$ f(x; \mu, \sigma) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2} \quad \text{para } -\infty < x < \infty $$
+
+La curva en forma de campana resultante es simétrica respecto a su media $\mu$, y la dispersión está gobernada por $\sigma$. El cálculo de áreas bajo esta curva (es decir, probabilidades) requiere integrar una función que no tiene una antiderivada elemental. Para resolver esto, se utiliza la \textit{distribución normal estándar}, que es el caso especial donde $\mu = 0$ y $\sigma = 1$. La variable aleatoria estándar se denota como $Z$, y su función de distribución acumulativa se denota tradicionalmente como $\Phi(z)$.
+
+La herramienta fundamental para calcular probabilidades de cualquier variable normal $X \sim N(\mu, \sigma^2)$ es el proceso de \textit{estandarización}. Si $X$ es normal, entonces la variable estandarizada $Z$ también es normal estándar:
+
+$$ Z = \frac{X - \mu}{\sigma} $$
+
+Esto permite utilizar las tablas de la distribución normal estándar (como la Tabla A.3 en el apéndice de Devore) para encontrar percentiles y probabilidades de cualquier fenómeno físico modelado por esta distribución, desde la dispersión de velocidades en un cúmulo estelar hasta los errores de apuntamiento de una nave espacial.
+
+\subsection{Ejemplo 1: Percentiles en la distribución de concentración de isótopos en un núcleo de meteorito}
+
+Principios de datación y análisis de choque en meteoritos expuestos en \textit{Planetary Geology} (Capítulo sobre \textit{Shock Metamorphism and Isotope Geochemistry}).
+
+Un laboratorio de geoquímica isotópica analiza el núcleo de una condrita carbonácea que sufrió un evento de impacto. Debido al gradiente de presión y temperatura generado por la onda de choque desde la costra de fusión hacia el interior, la concentración de un isótopo de corta vida (como el Al-26) no es uniforme, sino que aumenta a medida que se profundiza en la muestra. 
+
+Definimos la variable aleatoria continua $X$ como la \textit{profundidad fraccional normalizada} dentro del núcleo, donde $X \in (0, 1)$. Basado en el perfil de choque medido, la función de densidad de probabilidad de la concentración relativa del isótopo en función de la profundidad está modelada por:
+
+$$
+f(x) = 
+\begin{cases} 
+2x & \text{para } 0 < x < 1 \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+El equipo científico necesita determinar dos umbrales críticos para su protocolo de muestreo: la profundidad mediana (donde se alcanza la concentración isotópica promedio acumulada) y el percentil 90 (para descartar el 10\% superior de la muestra que podría estar excesivamente alterada por el calor del impacto).
+
+\textbf{Paso 1: Obtención de la Función de Distribución Acumulativa (FDA)}
+Para $0 < x < 1$, la FDA $F(x)$ se calcula integrando la FDP desde el límite inferior del soporte hasta $x$:
+$$ F(x) = \int_{0}^{x} 2t \, dt = \left[ t^2 \right]_{0}^{x} = x^2 $$
+
+\textbf{Paso 2: Cálculo de la Mediana (Percentil 50)}
+La mediana $m$ es el valor que satisface $F(m) = 0.5$. Planteamos la ecuación:
+$$ m^2 = 0.5 \implies m = \sqrt{0.5} \approx 0.7071 $$
+La profundidad mediana es aproximadamente 0.707. Esto indica que el 50\% de la probabilidad de concentración isotópica total se encuentra en el 70.7\% superior del núcleo, lo cual es consistente con una distribución que sesga la masa hacia las profundidades mayores.
+
+\textbf{Paso 3: Cálculo del Percentil 90}
+Para encontrar el percentil 90 ($x_{0.90}$), resolvemos la ecuación $F(x_{0.90}) = 0.90$:
+$$ x_{0.90}^2 = 0.90 \implies x_{0.90} = \sqrt{0.90} \approx 0.9487 $$
+El percentil 90 se encuentra en la profundidad fraccional 0.9487. 
+
+\textbf{Conclusión}
+Este resultado dicta que el 90\% de la distribución de concentración del isótopo ocurre en los primeros 94.87\% de la profundidad del núcleo. Los geoquímicos utilizarán este percentil para establecer el límite de corte físico al tallar la muestra, asegurando que el 10\% más profundo (que representa las colas de la distribución donde los efectos térmicos del impacto son no lineales y difíciles de modelar) sea descartado del análisis de datación principal.
+
+\subsection{Ejemplo 2: Distribución normal y percentiles en la navegación de una sonda interplanetaria}
+
+Presupuesto de combustible y maniobras de corrección de trayectoria (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Trajectory Correction Maneuvers}).
+
+Una sonda espacial en ruta a Marte debe ejecutar una Maniobra de Corrección de Trayectoria (TCM, por sus siglas en inglés). El sistema de propulsión está comandado para entregar un incremento de velocidad ($\Delta V$) exacto de 15.0 m/s. Sin embargo, debido a las fluctuaciones en la presión de la cámara de combustión, la eficiencia del propulsor y el ruido en los sensores de navegación, el $\Delta V$ realmente entregado es una variable aleatoria continua $X$ que sigue una distribución normal.
+
+Los ingenieros de vuelo han caracterizado el sistema y determinan que $X \sim N(\mu = 15.0 \text{ m/s}, \sigma = 0.4 \text{ m/s})$.
+
+El equipo de la misión debe resolver dos problemas críticos de diseño y operación:
+
+\textbf{Problema A: Probabilidad de exceder el límite de seguridad del tanque}
+Por restricciones estructurales del chasis de la sonda, la válvula de regulación no puede soportar un $\Delta V$ instantáneo superior a 16.0 m/s sin riesgo de fatiga catastrófica. ¿Cuál es la probabilidad de que la maniobra exceda este límite?
+
+Estandarizamos la variable $X$ para convertir el problema en uno de distribución normal estándar:
+$$ P(X > 16.0) = P\left(Z > \frac{16.0 - 15.0}{0.4}\right) = P(Z > 2.5) $$
+Utilizando la función de distribución acumulativa estándar $\Phi(z)$:
+$$ P(Z > 2.5) = 1 - \Phi(2.5) $$
+Consultando la tabla de la normal estándar (Devore, Tabla A.3), sabemos que $\Phi(2.5) \approx 0.9938$. Por lo tanto:
+$$ P(X > 16.0) = 1 - 0.9938 = 0.0062 $$
+Existe un riesgo del 0.62\% de que la maniobra supere el límite estructural. En el contexto de \textit{Modern Spacecraft GN$\&$C}, este valor es lo suficientemente bajo como para ser aceptable, pero se monitorea de cerca.
+
+\textbf{Problema B: Dimensionamiento del tanque de contingencia usando percentiles}
+Para garantizar que la sonda llegue a Marte incluso en el peor escenario de dispersión de combustible, el tanque de reserva debe dimensionarse para contener el $\Delta V$ que solo es superado en el 1\% de los casos. Es decir, los ingenieros necesitan calcular el \textit{percentil 99} de la distribución del $\Delta V$.
+
+Buscamos el valor $x_{0.99}$ tal que $P(X \le x_{0.99}) = 0.99$.
+Primero, encontramos el percentil 99 de la distribución normal estándar, $z_{0.99}$, tal que $\Phi(z_{0.99}) = 0.99$. Buscando en la tabla inversa de la normal estándar, el valor que deja un área de 0.99 a su izquierda es aproximadamente:
+$$ z_{0.99} \approx 2.326 $$
+
+Ahora, desacoplamos la ecuación de estandarización $Z = \frac{X - \mu}{\sigma}$ para despejar $X$:
+$$ x_{0.99} = \mu + z_{0.99} \cdot \sigma $$
+Sustituimos los parámetros de la misión:
+$$ x_{0.99} = 15.0 + (2.326)(0.4) = 15.0 + 0.9304 = 15.9304 \text{ m/s} $$
+
+\textbf{Conclusión:}
+El percentil 99 del $\Delta V$ es de 15.93 m/s. Esto significa que el 99\% de las veces, la maniobra requerirá 15.93 m/s o menos. Los ingenieros de sistemas utilizarán este valor exacto para dimensionar la capacidad de reserva del tanque de hidracina. Este ejercicio demuestra cómo la teoría de la distribución normal y el cálculo de percentiles (Devore, Sección 4.3) se traducen directamente en márgenes de seguridad físicos y decisiones de diseño de hardware en la exploración del sistema solar.
+
+
+\subsection{Ejemplo 3: Control de Calidad Óptica y Razón de Strehl en Telescopios Espaciales}
+
+Criterios de calidad de imagen y la aproximación de Marechal para la razón de Strehl (\textit{Astronomical Measurement}, Capítulo sobre \textit{Image Quality and the Point Spread Function}). 
+
+En el diseño de telescopios espaciales, la precisión de la superficie del espejo primario dicta la capacidad del instrumento para resolver detalles finos. Sea $X$ la variable aleatoria continua que representa el error de frente de onda RMS (Raíz del Cuadrado Medio), medido en nanómetros (nm). Debido a las fluctuaciones térmicas en órbita y a los errores de fabricación, este error sigue una distribución normal con una media de 12 nm y una desviación estándar de 4 nm. Es decir, $X \sim N(12, 4^2)$.
+
+La calidad de la imagen se cuantifica mediante la razón de Strehl $\mathcal{S}$, que relaciona la intensidad pico real con la de un sistema óptico perfecto. Debido a un desplazamiento sistemático conocido en el enfoque nominal del instrumento, el modelo de degradación para este telescopio específico está dado por la siguiente función exponencial:
+
+$$ \mathcal{S} = \exp\left( -\frac{(X - 10)^2}{25} \right) $$
+
+A continuación, resolvemos una secuencia de requerimientos de ingeniería para la misión:
+
+\textbf{a) Estandarización y probabilidad de cola (Límite de degradación severa)}
+El protocolo de seguridad dicta que si el error de frente de onda supera los 20 nm, el telescopio debe entrar en modo de recalibración automática. ¿Cuál es la probabilidad de que una observación aleatoria exceda este límite?
+
+Estandarizamos la variable $X$ restando la media y dividiendo por la desviación estándar para convertir el problema en uno de distribución normal estándar $Z \sim N(0, 1)$:
+
+$$ P(X > 20) = P\left(Z > \frac{20 - 12}{4}\right) = P(Z > 2) $$
+
+Utilizando la función de distribución acumulativa estándar $\Phi(z)$:
+
+$$ P(Z > 2) = 1 - \Phi(2) \approx 1 - 0.9772 = 0.0228 $$
+
+Existe un 2.28\% de probabilidad de que el sistema requiera recalibración por superar el límite de 20 nm.
+
+\textbf{b) Cálculo de percentiles (Umbral de bloqueo de actuadores)}
+Para prevenir daños mecánicos en los actuadores del espejo secundario, el sistema de control debe bloquear los ajustes cuando el error acumulado alcance el percentil 95 de la distribución esperada. Debemos encontrar el valor $x_{0.95}$ tal que $P(X \le x_{0.95}) = 0.95$.
+
+Primero, buscamos el percentil 95 de la normal estándar, $z_{0.95}$, tal que $\Phi(z_{0.95}) = 0.95$. Consultando las tablas normales, $z_{0.95} \approx 1.645$. 
+
+Despejamos $X$ de la ecuación de estandarización $Z = \frac{X - \mu}{\sigma}$:
+
+$$ x_{0.95} = \mu + z_{0.95} \cdot \sigma = 12 + (1.645)(4) = 12 + 6.58 = 18.58 \text{ nm} $$
+
+El sistema de control bloqueará los actuadores cuando el error alcance los 18.58 nm.
+
+\textbf{c) Probabilidad de un evento compuesto no lineal (Requerimiento científico)}
+El objetivo científico principal de la misión es imagear los criovolcanes en la superficie de Europa. Para lograr el contraste necesario, los algoritmos de procesamiento de imagen exigen que la razón de Strehl sea estrictamente mayor que $e^{-4}$. ¿Cuál es la probabilidad de que un fotograma aleatorio cumpla con este requerimiento científico?
+
+Planteamos la desigualdad basada en el modelo físico:
+
+$$ \mathcal{S} > e^{-4} \implies \exp\left( -\frac{(X - 10)^2}{25} \right) > e^{-4} $$
+
+Dado que la función exponencial es estrictamente creciente, podemos igualar los exponentes preservando el sentido de la desigualdad:
+
+$$ -\frac{(X - 10)^2}{25} > -4 $$
+
+Multiplicamos por $-25$ (lo que invierte la desigualdad):
+
+$$ (X - 10)^2 < 100 $$
+
+Para resolver esta inecuación cuadrática, aplicamos la raíz cuadrada en ambos lados, lo que genera un valor absoluto:
+
+$$ |X - 10| < 10 $$
+
+Esto se descompone en una doble desigualdad lineal:
+
+$$ -10 < X - 10 < 10 \implies 0 < X < 20 $$
+
+El requerimiento científico se traduce matemáticamente en que el error de frente de onda debe estar estrictamente entre 0 y 20 nm. Ahora, estandarizamos ambos límites de este intervalo para calcular la probabilidad utilizando la normal estándar:
+
+\begin{itemize}
+    \item Límite inferior: $Z_1 = \frac{0 - 12}{4} = -3$
+    \item Límite superior: $Z_2 = \frac{20 - 12}{4} = 2$
+\end{itemize}
+
+La probabilidad de cumplir con el requerimiento es el área bajo la curva normal estándar entre estos dos valores:
+
+$$ P(0 < X < 20) = P(-3 < Z < 2) = \Phi(2) - \Phi(-3) $$
+
+Para obtener una expresión matemática cerrada y manejable, aplicamos la propiedad de simetría de la distribución normal estándar, $\Phi(-z) = 1 - \Phi(z)$:
+
+$$ P(-3 < Z < 2) = \Phi(2) - (1 - \Phi(3)) = \Phi(2) + \Phi(3) - 1 $$
+
+Sustituyendo los valores de las tablas normales ($\Phi(2) \approx 0.9772$ y $\Phi(3) \approx 0.9987$):
+
+$$ P(0 < X < 20) \approx 0.9772 + 0.9987 - 1 = 0.9759 $$
+
+\textbf{Conclusión:}
+Existe un 97.59\% de probabilidad de que el telescopio entregue imágenes con la calidad suficiente para el estudio de Europa.
