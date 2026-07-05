@@ -2,8 +2,214 @@
 
 \section{Valores esperados en varias variables}
 
+Para calcular el valor esperado de una función $h(X,Y)$ que depende de dos variables aleatorias conjuntas, se debe ponderar la función por la probabilidad de ocurrencia de cada par de valores. De acuerdo con el texto guía, la definición formal varía dependiendo de si las variables son discretas o continuas (Devore, Capítulo 5, Sección 5.2).
+
+Para variables aleatorias conjuntamente discretas con función de masa de probabilidad conjunta $p(x,y)$:
+$$ E[h(X,Y)] = \sum_{x} \sum_{y} h(x,y) p(x,y) $$
+
+Para variables aleatorias conjuntamente continuas con función de densidad de probabilidad conjunta $f(x,y)$:
+$$ E[h(X,Y)] = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} h(x,y) f(x,y) \, dx \, dy $$
+
+Una propiedad fundamental derivada de esta definición es la linealidad del valor esperado. Si la función es una combinación lineal $h(X,Y) = aX + bY$, donde $a$ y $b$ son constantes, entonces:
+$$ E(aX + bY) = aE(X) + bE(Y) = a\mu_X + b\mu_Y $$
+
 \section{Funciones de correlación}
+
+En el estudio de la dependencia entre variables, el coeficiente de correlación es la medida por excelencia para cuantificar la fuerza y dirección de una relación lineal. El coeficiente de correlación de la población, denotado como $\rho$, estandariza la covarianza dividiéndola por el producto de las desviaciones estándar de las variables, acotando el resultado en el intervalo $[-1, 1]$ (Devore, Capítulo 5, Sección 5.2):
+
+$$ \rho_{X,Y} = \frac{Cov(X,Y)}{\sigma_X \sigma_Y} $$
+
+En la práctica observacional, la población es desconocida y se debe estimar a partir de una muestra de $n$ pares de observaciones $(x_1, y_1), \dots, (x_n, y_n)$. El coeficiente de correlación muestral $r$ actúa como la función de correlación empírica y se calcula mediante (Devore, Capítulo 12, Sección 12.5):
+
+$$ r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_i - \bar{x})^2 \sum_{i=1}^{n} (y_i - \bar{y})^2}} $$
+
+Un valor de $r$ cercano a $1$ o $-1$ indica una fuerte relación lineal, mientras que un valor cercano a $0$ sugiere la ausencia de una relación lineal, aunque no descarta la existencia de dependencias no lineales.
 
 \section{Covarianza}
 
+La covarianza es la medida fundamental de la asociación lineal entre dos variables aleatorias. Se define como el valor esperado del producto de las desviaciones de cada variable respecto a su respectiva media (Devore, Capítulo 5, Sección 5.2):
+
+$$ Cov(X,Y) = E[(X-\mu_X)(Y-\mu_Y)] $$
+
+Desarrollando esta expresión mediante la linealidad del valor esperado, se obtiene la fórmula de cálculo abreviada, la cual es computacionalmente más eficiente:
+
+$$ Cov(X,Y) = E(XY) - \mu_X \mu_Y $$
+
+Si $X$ y $Y$ son variables aleatorias estadísticamente independientes, entonces $E(XY) = E(X)E(Y)$, lo que implica que $Cov(X,Y) = 0$. En este caso, se dice que las variables no están correlacionadas. Es importante destacar que una covarianza nula no implica necesariamente independencia, salvo en familias de distribuciones específicas como la normal bivariante.
+
 \section{Combinación de variables aleatorias}
+
+Al formar combinaciones lineales de variables aleatorias, como $U = aX + bY$, es crucial determinar su varianza para cuantificar la incertidumbre propagada. La varianza de una combinación lineal depende de las varianzas individuales y de la covarianza entre las variables. La expresión general es (Devore, Capítulo 5, Sección 5.5):
+
+$$ V(aX + bY) = a^2V(X) + b^2V(Y) + 2abCov(X,Y) $$
+
+Esta fórmula demuestra que la varianza de la suma o resta de variables no es simplemente la suma de sus varianzas, a menos que exista una condición específica de independencia. 
+
+Si las variables aleatorias $X$ y $Y$ son independientes (o simplemente no correlacionadas), su covarianza es nula ($Cov(X,Y) = 0$). En este escenario, la varianza de la combinación lineal se simplifica a la suma ponderada de las varianzas individuales:
+
+$$ V(aX + bY) = a^2V(X) + b^2V(Y) $$
+
+Este principio es la base matemática para la propagación de errores instrumentales y la evaluación de la incertidumbre en observaciones astronómicas compuestas, donde múltiples fuentes de ruido independiente se combinan para formar el error total de una medición (\textit{Astronomical Measurement}, Apéndice A.6 y A.10).
+
+
+\subsection{Ejemplo 1: Propagación de Errores Correlacionados en Transformaciones de Observación Radar}
+
+En la determinación inicial de órbitas y el seguimiento satelital, los sensores ópticos o de radar proporcionan mediciones en el sistema topocéntrico (por ejemplo, Azimut, Elevación y Range). Para integrar estas observaciones en un filtro de estimación orbital, deben transformarse al sistema geocéntrico inercial. Según los principios de transformaciones de observación (Vallado, Capítulo 4, Sección 4.4), esta transformación es no lineal, pero para el análisis de incertidumbre se linealiza mediante la matriz Jacobiana. 
+
+Consideremos una estación de seguimiento terrestre que observa un satélite en órbita baja (LEO). El vector de observaciones $\vec{y} = [\rho, Az, El]^T$ contiene errores aleatorios. Debido a efectos no modelados de refracción troposférica, los errores en el Range ($X$) y en la Elevación ($Y$) no son independientes, sino que presentan una covarianza distinta de cero. 
+
+Definimos las variables aleatorias con media nula (errores):
+\begin{itemize}
+    \item $X$: Error en el Range (km), con $E[X] = 0$ y $V(X) = \sigma_X^2 = 0.04 \text{ km}^2$.
+    \item $Y$: Error en la Elevación (rad), con $E[Y] = 0$ y $V(Y) = \sigma_Y^2 = 10^{-4} \text{ rad}^2$.
+    \item La covarianza entre ambos errores, inducida por el gradiente de refracción, es $Cov(X,Y) = 0.001 \text{ km}\cdot\text{rad}$.
+\end{itemize}
+
+El error en la componente radial (hacia arriba, $U$) del vector de posición topocéntrica se aproxima mediante la combinación lineal de los errores de observación:
+$$ Z = \sin(El) X + \rho \cos(El) Y $$
+
+Supongamos que en la época de la observación, el satélite se encuentra a un Range $\rho = 800 \text{ km}$ y una Elevación $El = 30^\circ$ ($\pi/6 \text{ rad}$). Los coeficientes de la combinación lineal son:
+$$ a = \sin(30^\circ) = 0.5 $$
+$$ b = 800 \cos(30^\circ) = 800 \left(\frac{\sqrt{3}}{2}\right) = 400\sqrt{3} \approx 692.82 \text{ km} $$
+
+Para dimensionar correctamente el ruido del proceso en un filtro de Kalman de determinación de órbita (Vallado, Capítulo 10), necesitamos la varianza exacta de $Z$. Aplicando la regla de la varianza para combinaciones lineales de variables aleatorias correlacionadas (Devore, Capítulo 5, Sección 5.5):
+$$ V(Z) = a^2 V(X) + b^2 V(Y) + 2ab Cov(X,Y) $$
+
+Sustituyendo los valores numéricos:
+$$ V(Z) = (0.5)^2 (0.04) + (400\sqrt{3})^2 (10^{-4}) + 2(0.5)(400\sqrt{3})(0.001) $$
+$$ V(Z) = (0.25)(0.04) + (480000)(10^{-4}) + 0.4\sqrt{3} $$
+$$ V(Z) = 0.01 + 48 + 0.6928 = 48.7028 \text{ km}^2 $$
+
+La desviación estándar del error radial es $\sigma_Z = \sqrt{48.7028} \approx 6.98 \text{ km}$. 
+
+Si el ingeniero de dinámica de vuelo hubiera asumido erróneamente que los errores de Range y Elevación eran independientes ($Cov(X,Y) = 0$), la varianza calculada habría sido $48.01 \text{ km}^2$, subestimando la incertidumbre real. El término de covarianza ($0.6928 \text{ km}^2$) representa una contribución significativa que, al ser ignorada, degradaría la consistencia estadística del estimador orbital, generando elipses de error demasiado optimistas que no reflejan la física del medio de propagación de la señal.
+
+\subsection{Ejemplo 2: Incertidumbre Conjunta en Perturbaciones No Gravitacionales para Orbitografía de Precisión}
+
+En la orbitografía de precisión (POD) de satélites geoestacionarios o de navegación, las perturbaciones no gravitacionales, como el arrastre atmosférico (drag) y la presión de radiación solar (SRP), son las principales fuentes de error. Estas aceleraciones dependen de parámetros empíricos que el filtro de estimación ajusta en tiempo real. 
+
+Definimos dos variables aleatorias continuas que representan los factores de escala inciertos para estos modelos:
+\begin{itemize}
+    \item $X$: Factor de escala de la densidad atmosférica local.
+    \item $Y$: Factor de escala del coeficiente balístico efectivo (que agrupa área y coeficiente de arrastre).
+\end{itemize}
+
+Debido a que la actividad solar afecta simultáneamente la expansión de la atmósfera y las propiedades de degradación de los paneles solares del satélite, $X$ e $Y$ están estadísticamente correlacionados. Su función de densidad de probabilidad conjunta se modela como:
+$$
+f(x,y) = 
+\begin{cases} 
+\frac{2}{3}(2x + y) & \text{para } 0 < x < 1, \ 0 < y < 1 \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+Para diseñar la matriz de covarianza del ruido de proceso, debemos extraer rigurosamente los momentos de esta distribución conjunta.
+
+\textbf{a) Distribuciones marginales y valores esperados}
+La densidad marginal de $X$ se obtiene integrando respecto a $Y$:
+$$ f_X(x) = \int_{0}^{1} \frac{2}{3}(2x + y) \, dy = \frac{2}{3} \left[ 2xy + \frac{y^2}{2} \right]_{0}^{1} = \frac{4x + 1}{3} \quad \text{para } 0 < x < 1 $$
+El valor esperado de $X$ es:
+$$ E[X] = \int_{0}^{1} x \left( \frac{4x + 1}{3} \right) \, dx = \frac{1}{3} \left[ \frac{4x^3}{3} + \frac{x^2}{2} \right]_{0}^{1} = \frac{1}{3} \left( \frac{4}{3} + \frac{1}{2} \right) = \frac{11}{18} $$
+El segundo momento de $X$ es:
+$$ E[X^2] = \int_{0}^{1} x^2 \left( \frac{4x + 1}{3} \right) \, dx = \frac{1}{3} \left[ x^4 + \frac{x^3}{3} \right]_{0}^{1} = \frac{1}{3} \left( 1 + \frac{1}{3} \right) = \frac{4}{9} $$
+La varianza de $X$ resulta en:
+$$ V(X) = E[X^2] - (E[X])^2 = \frac{4}{9} - \left(\frac{11}{18}\right)^2 = \frac{144 - 121}{324} = \frac{23}{324} $$
+
+De manera similar, la densidad marginal de $Y$ es:
+$$ f_Y(y) = \int_{0}^{1} \frac{2}{3}(2x + y) \, dx = \frac{2}{3} \left[ x^2 + xy \right]_{0}^{1} = \frac{2}{3}(1 + y) $$
+Los momentos para $Y$ son:
+$$ E[Y] = \int_{0}^{1} y \frac{2}{3}(1 + y) \, dy = \frac{2}{3} \left[ \frac{y^2}{2} + \frac{y^3}{3} \right]_{0}^{1} = \frac{5}{9} = \frac{10}{18} $$
+$$ E[Y^2] = \int_{0}^{1} y^2 \frac{2}{3}(1 + y) \, dy = \frac{2}{3} \left[ \frac{y^3}{3} + \frac{y^4}{4} \right]_{0}^{1} = \frac{7}{18} $$
+$$ V(Y) = \frac{7}{18} - \left(\frac{5}{9}\right)^2 = \frac{63 - 50}{162} = \frac{13}{162} = \frac{26}{324} $$
+
+\textbf{b) Covarianza y Correlación}
+El momento cruzado $E[XY]$ se calcula mediante la integral doble sobre la región de soporte:
+$$ E[XY] = \int_{0}^{1} \int_{0}^{1} xy \frac{2}{3}(2x + y) \, dy \, dx = \frac{2}{3} \int_{0}^{1} \left( 2x^2 \int_{0}^{1} y \, dy + x \int_{0}^{1} y^2 \, dy \right) \, dx $$
+$$ E[XY] = \frac{2}{3} \int_{0}^{1} \left( x^2 + \frac{x}{3} \right) \, dx = \frac{2}{3} \left[ \frac{x^3}{3} + \frac{x^2}{6} \right]_{0}^{1} = \frac{2}{3} \left( \frac{1}{3} + \frac{1}{6} \right) = \frac{1}{3} = \frac{6}{18} $$
+La covarianza entre los factores de perturbación es:
+$$ Cov(X,Y) = E[XY] - E[X]E[Y] = \frac{1}{3} - \left(\frac{11}{18}\right)\left(\frac{10}{18}\right) = \frac{108}{324} - \frac{110}{324} = -\frac{2}{324} = -\frac{1}{162} $$
+El coeficiente de correlación es:
+$$ \rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{V(X)V(Y)}} = \frac{-2/324}{\sqrt{(23/324)(26/324)}} = \frac{-2}{\sqrt{598}} \approx -0.0817 $$
+Esta correlación negativa leve indica que, bajo este modelo, un sobreestimación empírica de la densidad atmosférica tiende a compensarse ligeramente con una subestimación del área efectiva de arrastre durante el proceso de ajuste del filtro.
+
+\textbf{c) Varianza de un estado combinado del filtro}
+El vector de estado augmentado del filtro de estimación incluye una corrección combinada para el modelo dinámico, definida como $W = 4X - 3Y$. Para asignar la matriz de covarianza correcta, necesitamos $V(W)$. Aplicando la propiedad de combinación lineal:
+$$ V(W) = 4^2 V(X) + (-3)^2 V(Y) + 2(4)(-3) Cov(X,Y) $$
+$$ V(W) = 16 \left(\frac{23}{324}\right) + 9 \left(\frac{26}{324}\right) - 24 \left(-\frac{2}{324}\right) $$
+$$ V(W) = \frac{368 + 234 + 48}{324} = \frac{650}{324} = \frac{325}{162} \approx 2.006 $$
+
+Este resultado demuestra cómo la estructura de correlación subyacente entre las perturbaciones físicas (Devore, Capítulo 5) altera directamente la varianza del estado dinámico. En la práctica de la astrodinámica operativa (Vallado, Capítulo 8), ignorar el término de covarianza $-24(-2/324)$ habría resultado en una varianza de $1.851$, subestimando la dispersión esperada y provocando que el filtro de navegación confiara excesivamente en su modelo dinámico, lo que eventualmente llevaría a la divergencia del estimador ante maniobras o cambios bruscos en el entorno espacial.
+
+
+
+\subsection{Ejemplo 3: Espectroscopia de Mezclas Minerales y el Índice de Diferenciación Redox}
+
+En la teledetección planetaria de alta resolución, como la realizada por espectrómetros orbitales (p. ej., CRISM en MRO o OMEGA en Mars Express), la superficie de un cuerpo se modela frecuentemente como una mezcla lineal de endmiembros mineralógicos. De acuerdo con los principios de desmezcla espectral y la interpretación de firmas de absorción (\textit{Planetary Geology}, Capítulo sobre \textit{Spectroscopy and Mineralogy}), la abundancia relativa de óxidos de hierro y el grado de polimerización de la sílice están físicamente acoplados durante los procesos de diferenciación magmática y alteración hidrotermal.
+
+Para un depósito volcánico específico en la región de Tharsis, definimos las variables aleatorias continuas normalizadas:
+\begin{itemize}
+    \item $X$: Fracción volumétrica efectiva de hematita espectralmente activa.
+    \item $Y$: Índice de polimerización de la red silicatada (relacionado con la proporción de piroxeno sobre olivino).
+\end{itemize}
+
+Debido a las restricciones físico-químicas del sistema magmático, ambas variables están confinadas al intervalo unitario $[0, 1]$, pero su distribución conjunta no es uniforme. Los datos de calibración in situ y los modelos de transferencia radiativa sugieren que la función de densidad de probabilidad conjunta que describe esta población geológica es:
+$$
+f(x,y) = c(1 + 2xy) \quad \text{para } 0 \le x \le 1, \ 0 \le y \le 1
+$$
+y $f(x,y) = 0$ en otro caso. El término $2xy$ modela el acoplamiento positivo entre la cristalización de óxidos y la evolución del fundido silicatado.
+
+A continuación, resolvemos una secuencia de requerimientos para cuantificar la incertidumbre mineralógica y validar un índice geoquímico compuesto.
+
+\textbf{a) Normalización y distribución marginal}
+Para que $f(x,y)$ sea una FDP válida, la integral doble sobre el soporte debe ser unitaria (Devore, Capítulo 5, Sección 5.1):
+$$ \int_{0}^{1} \int_{0}^{1} c(1 + 2xy) \, dy \, dx = 1 $$
+Resolvemos la integral interna respecto a $y$:
+$$ \int_{0}^{1} (1 + 2xy) \, dy = \left[ y + xy^2 \right]_{0}^{1} = 1 + x $$
+Integrando respecto a $x$:
+$$ c \int_{0}^{1} (1 + x) \, dx = c \left[ x + \frac{x^2}{2} \right]_{0}^{1} = c \left( 1 + \frac{1}{2} \right) = \frac{3c}{2} $$
+Igualando a 1, obtenemos la constante de normalización $c = \frac{2}{3}$. La FDP conjunta es $f(x,y) = \frac{2}{3}(1 + 2xy)$.
+
+La densidad marginal de $X$ se obtiene integrando la conjunta sobre todo el rango de $Y$ (Devore, Sección 5.1):
+$$ f_X(x) = \int_{0}^{1} \frac{2}{3}(1 + 2xy) \, dy = \frac{2}{3}(1 + x) \quad \text{para } 0 \le x \le 1 $$
+Por simetría de la expresión original respecto a $x$ y $y$, la marginal de $Y$ es idéntica:
+$$ f_Y(y) = \frac{2}{3}(1 + y) \quad \text{para } 0 \le y \le 1 $$
+
+\textbf{b) Momentos de primer y segundo orden, y varianzas individuales}
+Calculamos los valores esperados utilizando las marginales (Devore, Capítulo 5, Sección 5.2):
+$$ E[X] = \int_{0}^{1} x \cdot \frac{2}{3}(1 + x) \, dx = \frac{2}{3} \int_{0}^{1} (x + x^2) \, dx = \frac{2}{3} \left[ \frac{x^2}{2} + \frac{x^3}{3} \right]_{0}^{1} = \frac{2}{3} \left( \frac{1}{2} + \frac{1}{3} \right) = \frac{5}{9} $$
+$$ E[Y] = \frac{5}{9} \quad \text{(por simetría)} $$
+
+Para las varianzas, necesitamos los segundos momentos:
+$$ E[X^2] = \int_{0}^{1} x^2 \cdot \frac{2}{3}(1 + x) \, dx = \frac{2}{3} \int_{0}^{1} (x^2 + x^3) \, dx = \frac{2}{3} \left[ \frac{x^3}{3} + \frac{x^4}{4} \right]_{0}^{1} = \frac{2}{3} \left( \frac{1}{3} + \frac{1}{4} \right) = \frac{7}{18} $$
+$$ V(X) = E[X^2] - (E[X])^2 = \frac{7}{18} - \left(\frac{5}{9}\right)^2 = \frac{7}{18} - \frac{25}{81} = \frac{63 - 50}{162} = \frac{13}{162} $$
+$$ V(Y) = \frac{13}{162} \quad \text{(por simetría)} $$
+
+\textbf{c) Covarianza y coeficiente de correlación}
+El momento cruzado $E[XY]$ se calcula mediante la integral doble sobre la región de soporte (Devore, Sección 5.2):
+$$ E[XY] = \int_{0}^{1} \int_{0}^{1} xy \cdot \frac{2}{3}(1 + 2xy) \, dy \, dx = \frac{2}{3} \int_{0}^{1} x \left[ \frac{y^2}{2} + \frac{2xy^3}{3} \right]_{0}^{1} \, dx $$
+$$ E[XY] = \frac{2}{3} \int_{0}^{1} x \left( \frac{1}{2} + \frac{2x}{3} \right) \, dx = \frac{2}{3} \int_{0}^{1} \left( \frac{x}{2} + \frac{2x^2}{3} \right) \, dx $$
+$$ E[XY] = \frac{2}{3} \left[ \frac{x^2}{4} + \frac{2x^3}{9} \right]_{0}^{1} = \frac{2}{3} \left( \frac{1}{4} + \frac{2}{9} \right) = \frac{2}{3} \left( \frac{9 + 8}{36} \right) = \frac{17}{54} $$
+
+La covarianza es:
+$$ Cov(X,Y) = E[XY] - E[X]E[Y] = \frac{17}{54} - \left(\frac{5}{9}\right)\left(\frac{5}{9}\right) = \frac{17}{54} - \frac{25}{81} = \frac{51 - 50}{162} = \frac{1}{162} $$
+
+El coeficiente de correlación estandarizado (Devore, Sección 5.2) resulta:
+$$ \rho_{X,Y} = \frac{Cov(X,Y)}{\sqrt{V(X)V(Y)}} = \frac{1/162}{\sqrt{(13/162)(13/162)}} = \frac{1/162}{13/162} = \frac{1}{13} \approx 0.0769 $$
+Esta correlación positiva débil refleja físicamente que, aunque la hematita y la polimerización de sílice comparten tendencias magmáticas comunes, la variabilidad está dominada por procesos locales de alteración y mezcla física que desacoplan parcialmente sus abundancias a escala de píxel.
+
+\textbf{d) Varianza de un Índice Geoquímico Compuesto}
+Para discriminar unidades geológicas en mapas orbitales, el equipo científico define un Índice de Diferenciación Redox $Z$, el cual pondera negativamente la sílice polimerizada para resaltar zonas ricas en óxidos férricos:
+$$ Z = 5X - 2Y $$
+
+El valor esperado del índice se calcula por linealidad (Devore, Sección 5.2):
+$$ E[Z] = 5E[X] - 2E[Y] = 5\left(\frac{5}{9}\right) - 2\left(\frac{5}{9}\right) = \frac{25 - 10}{9} = \frac{15}{9} = \frac{5}{3} \approx 1.667 $$
+
+Para cuantificar la incertidumbre del índice, aplicamos rigurosamente la regla de varianza para combinaciones lineales de variables correlacionadas (Devore, Capítulo 5, Sección 5.5):
+$$ V(Z) = V(5X - 2Y) = 5^2 V(X) + (-2)^2 V(Y) + 2(5)(-2) Cov(X,Y) $$
+$$ V(Z) = 25\left(\frac{13}{162}\right) + 4\left(\frac{13}{162}\right) - 20\left(\frac{1}{162}\right) $$
+$$ V(Z) = \frac{325 + 52 - 20}{162} = \frac{357}{162} = \frac{119}{54} \approx 2.2037 $$
+
+La desviación estándar del índice es $\sigma_Z = \sqrt{119/54} \approx 1.484$.
+
+\textbf{Conclusión:}
+El cálculo analítico revela que la varianza del índice geoquímico $Z$ es significativamente mayor que la suma de las varianzas individuales escaladas. El término de covarianza $-20(1/162) \approx -0.123$ actúa como un factor de reducción de incertidumbre debido a la correlación positiva entre $X$ y $Y$. Si un algoritmo de procesamiento de imágenes planetarias hubiera asumido erróneamente independencia ($Cov(X,Y)=0$), la varianza calculada habría sido $377/162 \approx 2.327$, sobreestimando la dispersión real en un 5.6\%. Esta precisión estadística es crítica para calibrar los umbrales de clasificación en mapas de composición mineralógica (\textit{Planetary Geology}, Sección sobre \textit{Remote Sensing and Surface Composition}), permitiendo a los geólogos planetarios distinguir con confianza estadística entre unidades basálticas homogéneas y mezclas complejas alteradas por fluidos acuosos.

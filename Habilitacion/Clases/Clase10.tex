@@ -1,5 +1,268 @@
 \chapter{Clase 10}
 
-\section{Método de mínimos cuadrados}
+\section{Método de Mínimos Cuadrados}
 
-\section{Maximum likelihood}
+El método de mínimos cuadrados es el pilar fundamental de la estimación de parámetros y la ajuste de modelos en la ciencia de datos, la estadística y la astrodinámica. Su objetivo es encontrar la configuración de parámetros de un modelo matemático que minimice la discrepancia global entre los datos observados y los valores predichos por el modelo. 
+
+De acuerdo con el texto guía de estadística, el principio de mínimos cuadrados establece que un modelo proporciona un buen ajuste si las distancias verticales (desviaciones o residuos) de los puntos observados al modelo son pequeñas, y la medida de esta bondad de ajuste es la suma de los cuadrados de estas desviaciones (Devore, Capítulo 12). En el contexto de la determinación de órbitas y la navegación espacial, este método se utiliza para estimar el vector de estado de una nave o cuerpo celeste minimizando la diferencia entre las observaciones reales de los sensores y las observaciones computadas a partir de la dinámica orbital (Vallado, Capítulo 10).
+
+\subsection{Fundamento Matemático y Función de Costo}
+
+Sea un conjunto de $N$ observaciones independientes $\vec{y} = [y_1, y_2, \dots, y_N]^T$ obtenidas en ciertos instantes o condiciones representadas por el vector $\vec{x}$. Supongamos que existe un modelo teórico $f(x_i, \vec{\theta})$ que depende de un vector de $p$ parámetros desconocidos $\vec{\theta} = [\theta_1, \theta_2, \dots, \theta_p]^T$.
+
+El residuo $r_i$ para la $i$-ésima observación se define como la diferencia entre el valor medido y el valor predicho por el modelo:
+$$ r_i(\vec{\theta}) = y_i - f(x_i, \vec{\theta}) $$
+
+La función de costo (o función objetivo) $J(\vec{\theta})$, que representa el error cuadrático total, se construye sumando los cuadrados de todos los residuos:
+$$ J(\vec{\theta}) = \sum_{i=1}^{N} r_i^2 = \sum_{i=1}^{N} [y_i - f(x_i, \vec{\theta})]^2 $$
+
+La elección de elevar al cuadrado los residuos no es arbitraria; cumple tres funciones matemáticas cruciales:
+1. Evita que los errores positivos y negativos se cancelen entre sí.
+2. Penaliza fuertemente las desviaciones grandes, haciendo que el modelo sea sensible a los valores atípicos.
+3. Transforma el problema de optimización en uno diferenciable y, para modelos lineales en sus parámetros, garantiza que la función de costo sea una forma cuadrática convexa, lo que asegura la existencia de un mínimo global único (Devore, Capítulo 12).
+
+\subsection{Formulación Matricial y Ecuaciones Normales}
+
+Cuando el modelo es lineal con respecto a los parámetros, es decir, $f(x_i, \vec{\theta}) = \theta_0 + \theta_1 x_{i1} + \dots + \theta_p x_{ip}$, el sistema puede expresarse elegantemente mediante álgebra lineal. Definimos la matriz de diseño $H$ de tamaño $N \times (p+1)$, donde cada fila contiene las variables independientes de la $i$-ésima observación:
+
+$$ 
+H = \begin{bmatrix}
+1 & x_{11} & \dots & x_{1p} \\
+1 & x_{21} & \dots & x_{2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+1 & x_{N1} & \dots & x_{Np}
+\end{bmatrix} 
+$$
+
+El modelo completo se escribe como $\vec{y} = H\vec{\theta} + \vec{\epsilon}$, donde $\vec{\epsilon}$ es el vector de errores. La función de costo en notación matricial es:
+$$ J(\vec{\theta}) = (\vec{y} - H\vec{\theta})^T (\vec{y} - H\vec{\theta}) $$
+
+Para encontrar el estimador de mínimos cuadrados $\hat{\vec{\theta}}$, aplicamos el cálculo vectorial y igualamos el gradiente de $J$ con respecto a $\vec{\theta}$ al vector cero:
+$$ \frac{\partial J}{\partial \vec{\theta}} = -2 H^T (\vec{y} - H\vec{\theta}) = \vec{0} $$
+
+Al reorganizar los términos, obtenemos el sistema de ecuaciones normales:
+$$ H^T H \hat{\vec{\theta}} = H^T \vec{y} $$
+
+Si la matriz $H^T H$ es no singular (es decir, las columnas de $H$ son linealmente independientes), la solución única que minimiza la suma de cuadrados es:
+$$ \hat{\vec{\theta}} = (H^T H)^{-1} H^T \vec{y} $$
+
+\subsection{Extensión a Sistemas No Lineales: Determinación de Órbitas}
+
+En la astrodinámica y la navegación de naves espaciales, la relación entre el vector de estado $\vec{X}$ (posición y velocidad) y las observaciones $\vec{y}$ (como rango, azimut y elevación) es altamente no lineal debido a las ecuaciones de movimiento orbital y la geometría esférica de las mediciones (Vallado, Capítulo 10). No podemos aplicar directamente la fórmula cerrada $(H^T H)^{-1} H^T \vec{y}$.
+
+En su lugar, se utiliza un proceso iterativo de corrección diferencial (método de Gauss-Newton). Dado un estado nominal inicial $\vec{X}_{nom}$, linealizamos las observaciones computadas $\vec{y}_{comp} = f(\vec{X})$ mediante una serie de Taylor truncada de primer orden:
+$$ \vec{y}_{obs} - \vec{y}_{comp} \approx \frac{\partial f}{\partial \vec{X}} \Delta \vec{X} = H \Delta \vec{X} $$
+
+Aquí, $H$ es la matriz Jacobiana (o matriz de parciales), cuyos elementos son las derivadas parciales de cada observación con respecto a cada componente del vector de estado. El vector de residuos es $\Delta \vec{y} = \vec{y}_{obs} - \vec{y}_{comp}$.
+
+Para mejorar la estimación, incorporamos una matriz de ponderación $W$, que generalmente es la inversa de la matriz de covarianza de los errores de observación ($W = R^{-1}$). Esto permite dar más confianza a los sensores más precisos. La corrección al estado $\Delta \vec{X}$ se calcula resolviendo el sistema normal ponderado:
+$$ \Delta \vec{X} = (H^T W H)^{-1} H^T W \Delta \vec{y} $$
+
+El estado se actualiza iterativamente:
+$$ \vec{X}_{k+1} = \vec{X}_k + \Delta \vec{X} $$
+
+Es imperativo destacar que, debido a la no linealidad de la dinámica orbital, la función de costo puede tener múltiples mínimos locales. Por lo tanto, el estado inicial nominal $\vec{X}_0$ debe estar suficientemente cerca del mínimo global para garantizar que el algoritmo converja correctamente y no diverja o converja a una solución física incorrecta (Vallado, Capítulo 10).
+
+\subsection{Verificación Computacional}
+
+Para consolidar la comprensión de la formulación matricial, se presenta un script breve en Python que resuelve las ecuaciones normales para un ajuste lineal simple, verificando la inversión de la matriz $H^T H$.
+
+\begin{verbatim}
+import numpy as np
+
+# Datos observados (N=3)
+# Modelo: y = theta_0 + theta_1 * x
+H = np.array([[1, 1], 
+              [1, 2], 
+              [1, 3]])
+y = np.array([2.1, 3.9, 6.2])
+
+# Solucion de ecuaciones normales: theta = (H^T H)^-1 H^T y
+H_T_H_inv = np.linalg.inv(H.T @ H)
+theta_hat = H_T_H_inv @ H.T @ y
+
+print(f"Intercepto (theta_0): {theta_hat[0]:.4f}")
+print(f"Pendiente (theta_1): {theta_hat[1]:.4f}")
+\end{verbatim}
+
+Este código demuestra la implementación directa de la derivación matemática $\hat{\vec{\theta}} = (H^T H)^{-1} H^T \vec{y}$, proporcionando los parámetros que minimizan la suma de los cuadrados de los residuos para el conjunto de datos proporcionado.
+
+\section{Estimación de Máxima Verosimilitud}
+
+El método de máxima verosimilitud (MLE, por sus siglas en inglés) constituye uno de los pilares más robustos y elegantes de la inferencia estadística frecuencista. Según el texto guía, el principio fundamental de este método consiste en seleccionar aquellos valores de los parámetros desconocidos que maximicen la probabilidad conjunta de haber obtenido la muestra observada (Devore, Capítulo 6, Sección 6.2). En el contexto de la astrofísica observacional y la reducción de datos, como se detalla en \textit{Astronomical Measurement} (Apéndice A.11), el objetivo de la inferencia estadística estándar es maximizar la probabilidad de los datos dado el modelo, cantidad que se denomina exactamente Verosimilitud o \textit{Likelihood}.
+
+Sea $X_1, X_2, \dots, X_n$ una muestra aleatoria de una población cuya función de densidad (o masa) de probabilidad depende de un vector de $m$ parámetros desconocidos $\vec{\theta} = [\theta_1, \theta_2, \dots, \theta_m]^T$. Dado que las observaciones son independientes, la función de verosimilitud $L(\vec{\theta})$ se define como el producto de las probabilidades individuales, evaluada en los datos muestrales observados $x_1, \dots, x_n$:
+
+$$ L(\vec{\theta}) = \prod_{i=1}^{n} f(x_i; \vec{\theta}) $$
+
+Dado que maximizar un producto de $n$ términos es computacional y algebraicamente tedioso, y para evitar problemas de subdesbordamiento numérico (underflow) cuando $n$ es grande, se aplica el logaritmo natural. Como el logaritmo es una función monótona creciente, los valores de $\vec{\theta}$ que maximizan $L(\vec{\theta})$ también maximizan la función de log-verosimilitud $\ell(\vec{\theta})$:
+
+$$ \ell(\vec{\theta}) = \ln L(\vec{\theta}) = \sum_{i=1}^{n} \ln f(x_i; \vec{\theta}) $$
+
+Las estimaciones de máxima verosimilitud (EMV), denotadas como $\hat{\vec{\theta}}$, son aquellos valores que satisfacen el sistema de ecuaciones de primer orden (conocidas como ecuaciones de score), obtenidas al igualar el gradiente de la log-verosimilitud al vector cero:
+
+$$ \nabla_{\vec{\theta}} \ell(\vec{\theta}) = \vec{0} \implies \frac{\partial \ell(\vec{\theta})}{\partial \theta_j} = 0 \quad \text{para } j = 1, \dots, m $$
+
+\subsection{Equivalencia Formal con la Minimización de $\chi^2$}
+
+En la práctica astronómica, es común modelar los errores instrumentales como variables aleatorias normales. \textit{Astronomical Measurement} (Sección A.11) establece explícitamente que \textit{se puede demostrar que minimizar $\chi^2$ usualmente también maximiza la verosimilitud}. A continuación, se demuestra esta equivalencia fundamental para un modelo de datos general.
+
+Supongamos que tenemos un conjunto de $N$ observaciones $y_i$ (por ejemplo, flujos fotométricos o posiciones astrométricas) que dependen de un modelo teórico $M_i(\vec{\theta})$ (por ejemplo, una curva de tránsito exoplanetario o una órbita kepleriana). Los residuos están dominados por ruido gaussiano independiente con media cero y varianzas conocidas $\sigma_i^2$ (derivadas, por ejemplo, del ruido de disparo o \textit{shot noise}).
+
+La función de densidad para cada observación es:
+$$ f(y_i; \vec{\theta}) = \frac{1}{\sqrt{2\pi}\sigma_i} \exp\left( -\frac{[y_i - M_i(\vec{\theta})]^2}{2\sigma_i^2} \right) $$
+
+Construimos la log-verosimilitud:
+$$ \ell(\vec{\theta}) = \sum_{i=1}^{N} \left[ -\ln(\sqrt{2\pi}\sigma_i) - \frac{[y_i - M_i(\vec{\theta})]^2}{2\sigma_i^2} \right] $$
+
+Separamos los términos que no dependen de $\vec{\theta}$ y los agrupamos en una constante $C$:
+$$ \ell(\vec{\theta}) = C - \frac{1}{2} \sum_{i=1}^{N} \frac{[y_i - M_i(\vec{\theta})]^2}{\sigma_i^2} $$
+
+Reconocemos que la sumatoria es exactamente la definición estadística de la chi-cuadrada ($\chi^2$) para el modelo:
+$$ \chi^2(\vec{\theta}) = \sum_{i=1}^{N} \frac{[y_i - M_i(\vec{\theta})]^2}{\sigma_i^2} $$
+
+Por lo tanto, la relación analítica directa es:
+$$ \ell(\vec{\theta}) = C - \frac{1}{2} \chi^2(\vec{\theta}) $$
+
+Dado que $C$ es una constante independiente de los parámetros, maximizar $\ell(\vec{\theta})$ con respecto a $\vec{\theta}$ es matemáticamente idéntico a minimizar $\chi^2(\vec{\theta})$. Esta demostración justifica por qué los algoritmos de ajuste de curvas en astronomía (como el algoritmo de Levenberg-Marquardt mencionado en \textit{Modern Spacecraft Guidance, Navigation, and Control}) buscan minimizar $\chi^2$; están realizando implícitamente una estimación de máxima verosimilitud bajo la hipótesis de ruido gaussiano.
+
+\subsection{Propiedades Asintóticas y el Principio de Invarianza}
+
+El método de máxima verosimilitud goza de propiedades teóricas excepcionales cuando el tamaño de la muestra $n$ es grande. De acuerdo con Devore (Proposición en Sección 6.2), bajo condiciones generales de regularidad, el EMV $\hat{\theta}$ es aproximadamente insesgado y su varianza es casi tan pequeña como la que puede ser lograda por cualquier estimador. En términos formales, el EMV es asintóticamente el estimador insesgado de varianza mínima (eficiente), alcanzando el límite inferior de Cramér-Rao.
+
+Además, el método posee una propiedad algebraica sumamente útil para la inferencia de parámetros derivados, conocida como el \textbf{Principio de Invarianza} (Devore, Ejemplo 6.19). 
+
+\textbf{PROPOSICIÓN:} Sean $\hat{\theta}_1, \hat{\theta}_2, \dots, \hat{\theta}_m$ los estimadores de máxima verosimilitud de los parámetros $\theta_1, \theta_2, \dots, \theta_m$. Entonces, el estimador de máxima verosimilitud de cualquier función $h(\theta_1, \theta_2, \dots, \theta_m)$ es simplemente la función evaluada en los EMV originales:
+$$ \widehat{h(\theta)} = h(\hat{\theta}_1, \hat{\theta}_2, \dots, \hat{\theta}_m) $$
+
+\textbf{Aplicación en Astrofísica:}
+Supongamos que modelamos el espectro de una estrella para estimar la temperatura efectiva $T$ y el radio estelar $R$. El método de máxima verosimilitud nos proporciona directamente los estimadores $\hat{T}$ y $\hat{R}$. Si el objetivo científico posterior es calcular la luminosidad bolométrica de la estrella, la cual es una función no lineal de los parámetros originales dada por la ley de Stefan-Boltzmann $L = 4\pi \sigma_{SB} R^2 T^4$, no es necesario reconstruir la función de verosimilitud conjunta para $L$. Gracias al principio de invarianza, el EMV de la luminosidad es simplemente:
+$$ \hat{L} = 4\pi \sigma_{SB} \hat{R}^2 \hat{T}^4 $$
+
+Esta propiedad evita la necesidad de realizar transformaciones de variables aleatorias complejas (como el uso de Jacobianos para encontrar la distribución de $L$) antes de estimar el parámetro, simplificando drásticamente los pipelines de reducción de datos en misiones espaciales donde se deben derivar cientos de parámetros físicos a partir de un conjunto común de observaciones crudas.
+
+
+\subsection{Ejemplo 1: Estimación de Trayectoria en Descenso Planetario}
+
+Para materializar la teoría del método de mínimos cuadrados y observar su potencia en un contexto de ingeniería aeroespacial, abordaremos un problema clásico de determinación de estado durante la fase de descenso de una sonda espacial. De acuerdo con los principios de navegación y estimación de estados (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo 10; \textit{Fundamentals of Astrodynamics and Applications}, Vallado, Capítulo 10), el ordenador de a bordo (GNC) debe estimar la posición, velocidad y aceleración del vehículo utilizando una secuencia de mediciones de un altímetro de radar, las cuales están inevitablemente corruptas por ruido instrumental.
+
+Formulación del Problema y Matriz de Diseño
+
+Durante los últimos segundos del descenso, la trayectoria vertical $h(t)$ puede aproximarse localmente como un polinomio de segundo orden. Definimos el vector de parámetros desconocidos (el estado cinemático) como $\vec{\theta} = [\theta_0, \theta_1, \theta_2]^T$, donde:
+\begin{itemize}
+    \item $\theta_0$: Altitud inicial (m).
+    \item $\theta_1$: Velocidad vertical inicial (m/s).
+    \item $\theta_2$: Mitad de la aceleración vertical constante (m/s$^2$).
+\end{itemize}
+
+El modelo teórico para la $i$-ésima medición en el instante $t_i$ es $f(t_i, \vec{\theta}) = \theta_0 + \theta_1 t_i + \theta_2 t_i^2$. 
+El altímetro toma $N=4$ mediciones en los instantes $t = [0, 1, 2, 3]$ segundos. El vector de observaciones reales $\vec{y}$, que incluye el ruido del sensor, es:
+$$ \vec{y} = \begin{bmatrix} 1002 \\ 946 \\ 879 \\ 807 \end{bmatrix} \text{ m} $$
+
+Construimos la matriz de diseño $H$ de tamaño $4 \times 3$, donde cada fila evalúa las funciones base del modelo en el tiempo $t_i$:
+$$ H = \begin{bmatrix} 1 & t_1 & t_1^2 \\ 1 & t_2 & t_2^2 \\ 1 & t_3 & t_3^2 \\ 1 & t_4 & t_4^2 \end{bmatrix} = \begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 1 \\ 1 & 2 & 4 \\ 1 & 3 & 9 \end{bmatrix} $$
+
+Resolución de las Ecuaciones Normales
+
+El objetivo es encontrar el estimador $\hat{\vec{\theta}}$ que minimiza la función de costo $J(\vec{\theta}) = \sum_{i=1}^{4} [y_i - f(t_i, \vec{\theta})]^2$. Utilizando la formulación matricial derivada previamente, la solución óptima satisface el sistema de ecuaciones normales:
+$$ H^T H \hat{\vec{\theta}} = H^T \vec{y} $$
+
+Calculamos el producto $H^T H$:
+$$ H^T H = \begin{bmatrix} 1 & 1 & 1 & 1 \\ 0 & 1 & 2 & 3 \\ 0 & 1 & 4 & 9 \end{bmatrix} \begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 1 \\ 1 & 2 & 4 \\ 1 & 3 & 9 \end{bmatrix} = \begin{bmatrix} 4 & 6 & 14 \\ 6 & 14 & 36 \\ 14 & 36 & 98 \end{bmatrix} $$
+
+Calculamos el vector del lado derecho $H^T \vec{y}$:
+$$ H^T \vec{y} = \begin{bmatrix} 1 & 1 & 1 & 1 \\ 0 & 1 & 2 & 3 \\ 0 & 1 & 4 & 9 \end{bmatrix} \begin{bmatrix} 1002 \\ 946 \\ 879 \\ 807 \end{bmatrix} = \begin{bmatrix} 1002 + 946 + 879 + 807 \\ 0 + 946 + 1758 + 2421 \\ 0 + 946 + 3516 + 7263 \end{bmatrix} = \begin{bmatrix} 3634 \\ 5125 \\ 11725 \end{bmatrix} $$
+
+Ahora debemos resolver el sistema lineal $3 \times 3$:
+$$ \begin{bmatrix} 4 & 6 & 14 \\ 6 & 14 & 36 \\ 14 & 36 & 98 \end{bmatrix} \begin{bmatrix} \hat{\theta}_0 \\ \hat{\theta}_1 \\ \hat{\theta}_2 \end{bmatrix} = \begin{bmatrix} 3634 \\ 5125 \\ 11725 \end{bmatrix} $$
+
+Mediante eliminación gaussiana o inversión matricial directa, obtenemos la solución única para el estimador de mínimos cuadrados:
+$$ \hat{\vec{\theta}} = (H^T H)^{-1} H^T \vec{y} = \begin{bmatrix} 1002.3 \\ -53.2 \\ -4.0 \end{bmatrix} $$
+
+Análisis de Residuos y Función de Costo
+
+Una vez obtenido $\hat{\vec{\theta}}$, el siguiente paso riguroso es evaluar la bondad del ajuste calculando el vector de residuos $\vec{r} = \vec{y} - H\hat{\vec{\theta}}$. Primero, calculamos las observaciones computadas (el modelo evaluado en los parámetros estimados):
+$$ H\hat{\vec{\theta}} = \begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 1 \\ 1 & 2 & 4 \\ 1 & 3 & 9 \end{bmatrix} \begin{bmatrix} 1002.3 \\ -53.2 \\ -4.0 \end{bmatrix} = \begin{bmatrix} 1002.3 \\ 1002.3 - 53.2 - 4.0 \\ 1002.3 - 106.4 - 16.0 \\ 1002.3 - 159.6 - 36.0 \end{bmatrix} = \begin{bmatrix} 1002.3 \\ 945.1 \\ 879.9 \\ 806.7 \end{bmatrix} $$
+
+Restamos esto de las observaciones reales para obtener los residuos:
+$$ \vec{r} = \begin{bmatrix} 1002 \\ 946 \\ 879 \\ 807 \end{bmatrix} - \begin{bmatrix} 1002.3 \\ 945.1 \\ 879.9 \\ 806.7 \end{bmatrix} = \begin{bmatrix} -0.3 \\ 0.9 \\ -0.9 \\ 0.3 \end{bmatrix} \text{ m} $$
+
+Podemos verificar una propiedad fundamental del método: la suma de los residuos es estrictamente cero ($-0.3 + 0.9 - 0.9 + 0.3 = 0$), lo cual es una consecuencia directa de que el modelo incluye un término constante (la columna de unos en $H$). 
+
+Finalmente, evaluamos el valor mínimo de la función de costo $J(\hat{\vec{\theta}})$:
+$$ J(\hat{\vec{\theta}}) = \vec{r}^T \vec{r} = (-0.3)^2 + (0.9)^2 + (-0.9)^2 + (0.3)^2 = 0.09 + 0.81 + 0.81 + 0.09 = 1.80 \text{ m}^2 $$
+
+Interpretación en el Contexto de la Misión
+
+El vector $\hat{\vec{\theta}} = [1002.3, -53.2, -4.0]^T$ proporciona al sistema de guía la estimación óptima del estado de la nave en $t=0$. 
+\begin{itemize}
+    \item La altitud estimada es $1002.3$ m.
+    \item La velocidad de descenso es $53.2$ m/s (el signo negativo indica dirección hacia la superficie).
+    \item La aceleración vertical neta es $2 \times (-4.0) = -8.0$ m/s$^2$. Dado que la gravedad marciana es aproximadamente $3.7$ m/s$^2$ hacia abajo, una aceleración neta de $-8.0$ m/s$^2$ indica que los propulsores de descenso están generando un empuje significativo para frenar la sonda.
+\end{itemize}
+
+El valor de la función de costo $J = 1.80 \text{ m}^2$ cuantifica la energía del ruido del altímetro. En un filtro de corrección diferencial (\textit{Fundamentals of Astrodynamics and Applications}, Vallado, Sección 10.4), si este valor de $J$ excediera ciertos umbrales estadísticos (basados en la varianza esperada del sensor), el sistema de navegación detectaría una posible falla instrumental o una dinámica no modelada (como una ráfaga de viento severa), activando protocolos de contingencia. Este ejemplo demuestra cómo la abstracción matricial de los mínimos cuadrados se traduce directamente en algoritmos de estimación de estado vitales para la supervivencia de una misión espacial.
+
+
+\subsection{Ejemplo: Estimación de la Pendiente de la Función Inicial de Masas en un Cúmulo Estelar}
+
+Para ilustrar el poder y la complejidad matemática del método de Máxima Verosimilitud (MLE) en un contexto astrofísico de alto nivel, abordaremos la estimación de los parámetros de la Función Inicial de Masas (IMF, por sus siglas en inglés). En el estudio de poblaciones estelares y evolución galáctica (\textit{Astronomical Measurement}, Capítulo sobre \textit{Stellar Populations and Luminosity Functions}), la IMF describe la distribución de masas de las estrellas en el momento de su formación. 
+
+Para un cúmulo estelar joven, la IMF de Salpeter se modela como una ley de potencias truncada, ya que las estrellas tienen límites físicos de masa (no pueden ser infinitamente masivas ni tener masa cero). Definimos la variable aleatoria continua $M$ como la masa de una estrella individual, medida en masas solares ($M_\odot$). La función de densidad de probabilidad (FDP) para $M$, parametrizada por el índice espectral $\alpha$, es:
+
+$$
+f(m; \alpha) = 
+\begin{cases} 
+C(\alpha) m^{-\alpha} & \text{para } m_{min} \le m \le m_{max} \\
+0 & \text{en otro caso}
+\end{cases}
+$$
+
+donde $m_{min}$ y $m_{max}$ son los límites físicos de masa del cúmulo (por ejemplo, $0.1 M_\odot$ y $100 M_\odot$), y $C(\alpha)$ es la constante de normalización.
+
+\textbf{Paso 1: Normalización de la Función de Densidad}
+Para que $f(m; \alpha)$ sea una FDP legítima, su integral sobre el soporte debe ser la unidad (Devore, Capítulo 4, Sección 4.1):
+$$ \int_{m_{min}}^{m_{max}} C(\alpha) m^{-\alpha} \, dm = 1 $$
+Asumiendo $\alpha \neq 1$, resolvemos la integral:
+$$ C(\alpha) \left[ \frac{m^{1-\alpha}}{1-\alpha} \right]_{m_{min}}^{m_{max}} = C(\alpha) \frac{m_{max}^{1-\alpha} - m_{min}^{1-\alpha}}{1-\alpha} = 1 $$
+Despejando la constante de normalización:
+$$ C(\alpha) = \frac{1-\alpha}{m_{max}^{1-\alpha} - m_{min}^{1-\alpha}} $$
+
+\textbf{Paso 2: Construcción de la Función de Verosimilitud}
+Supongamos que, mediante espectroscopia de alta resolución y modelos de evolución estelar, hemos determinado las masas de una muestra aleatoria de $N$ estrellas independientes en el cúmulo: $m_1, m_2, \dots, m_N$. Dado que las observaciones son independientes, la función de verosimilitud conjunta $L(\alpha)$ es el producto de las densidades individuales evaluadas en los datos observados (Devore, Capítulo 6, Sección 6.2):
+$$ L(\alpha) = \prod_{i=1}^{N} f(m_i; \alpha) = \prod_{i=1}^{N} \left( C(\alpha) m_i^{-\alpha} \right) = [C(\alpha)]^N \prod_{i=1}^{N} m_i^{-\alpha} $$
+
+\textbf{Paso 3: La Log-Verosimilitud}
+Maximizar el producto directo es computacionalmente inestable y algebraicamente difícil. Aplicamos el logaritmo natural para obtener la log-verosimilitud $\ell(\alpha)$, la cual preserva los puntos de máximo por ser una función monótona creciente:
+$$ \ell(\alpha) = \ln L(\alpha) = N \ln[C(\alpha)] - \alpha \sum_{i=1}^{N} \ln m_i $$
+Sustituyendo la expresión explícita de $C(\alpha)$:
+$$ \ell(\alpha) = N \ln(1-\alpha) - N \ln\left(m_{max}^{1-\alpha} - m_{min}^{1-\alpha}\right) - \alpha \sum_{i=1}^{N} \ln m_i $$
+
+\textbf{Paso 4: Maximización y la Ecuación de Puntuación (Score)}
+Para encontrar el estimador de máxima verosimilitud $\hat{\alpha}$, derivamos $\ell(\alpha)$ con respecto a $\alpha$ e igualamos a cero. Este proceso requiere aplicar la regla de la cadena en el término logarítmico complejo. 
+La derivada del primer término es $\frac{-N}{1-\alpha} = \frac{N}{\alpha - 1}$.
+Para el segundo término, notamos que la derivada de $m^{1-\alpha}$ respecto a $\alpha$ es $-m^{1-\alpha} \ln m$. Por lo tanto:
+$$ \frac{d}{d\alpha} \ln\left(m_{max}^{1-\alpha} - m_{min}^{1-\alpha}\right) = \frac{-m_{max}^{1-\alpha} \ln m_{max} + m_{min}^{1-\alpha} \ln m_{min}}{m_{max}^{1-\alpha} - m_{min}^{1-\alpha}} $$
+La derivada del tercer término es simplemente $-\sum_{i=1}^{N} \ln m_i$.
+
+Ensamblando todo e igualando a cero, obtenemos la \textit{ecuación de puntuación} o \textit{score equation}:
+$$ \frac{N}{\alpha - 1} + N \frac{m_{max}^{1-\alpha} \ln m_{max} - m_{min}^{1-\alpha} \ln m_{min}}{m_{max}^{1-\alpha} - m_{min}^{1-\alpha}} - \sum_{i=1}^{N} \ln m_i = 0 $$
+
+Dividiendo toda la ecuación por $N$ y reorganizando, llegamos a la forma final de la ecuación de verosimilitud:
+$$ \frac{1}{\alpha - 1} + \frac{m_{max}^{1-\alpha} \ln m_{max} - m_{min}^{1-\alpha} \ln m_{min}}{m_{max}^{1-\alpha} - m_{min}^{1-\alpha}} = \frac{1}{N} \sum_{i=1}^{N} \ln m_i $$
+
+\textbf{Paso 5: Interpretación Matemática y Resolución Numérica}
+Esta ecuación es trascendental respecto a $\alpha$. Al igual que ocurre con la estimación de máxima verosimilitud para la distribución de Weibull o Gamma (Devore, Capítulo 6, Sección 6.2), no existe una solución algebraica cerrada para $\hat{\alpha}$. El lado derecho de la ecuación es simplemente la media aritmética de los logaritmos de las masas observadas, un estadístico suficiente para este modelo. El lado izquierdo es una función no lineal compleja de $\alpha$ que depende de los límites físicos del cúmulo.
+
+En la práctica astrofísica, esta ecuación se resuelve mediante algoritmos de búsqueda de raíces unidimensionales, como el método de Newton-Raphson o la secante, utilizando el valor clásico de Salpeter ($\alpha \approx 2.35$) como estimador inicial. La ventaja fundamental del MLE sobre el método de momentos en este escenario es que el estimador $\hat{\alpha}$ es asintóticamente eficiente (alcanza el límite inferior de Cramér-Rao) y es invariante ante reparametrizaciones, garantizando la mejor precisión estadística posible dada la muestra de estrellas.
+
+\textbf{Paso 6: Aplicación del Principio de Invarianza}
+Supongamos que el objetivo científico final no es solo conocer la pendiente $\alpha$, sino determinar la fracción de estrellas en el cúmulo que son candidatas a explotar como supernovas de colapso de núcleo, es decir, estrellas con masa $m > 8 M_\odot$. 
+
+Definimos el parámetro de interés como la probabilidad teórica de que una estrella supere este umbral:
+$$ \theta = P(M > 8) = \int_{8}^{m_{max}} f(m; \alpha) \, dm = \frac{m_{max}^{1-\alpha} - 8^{1-\alpha}}{m_{max}^{1-\alpha} - m_{min}^{1-\alpha}} $$
+
+Dado que $\theta$ es una función de $\alpha$, es decir, $\theta = h(\alpha)$, no necesitamos derivar una nueva función de verosimilitud ni realizar transformaciones de variables aleatorias complejas. Gracias al \textbf{Principio de Invarianza} de los estimadores de máxima verosimilitud (Devore, Proposición en Sección 6.2), el estimador de máxima verosimilitud de $\theta$ es simplemente la función evaluada en el estimador de máxima verosimilitud de $\alpha$:
+$$ \hat{\theta} = h(\hat{\alpha}) = \frac{m_{max}^{1-\hat{\alpha}} - 8^{1-\hat{\alpha}}}{m_{max}^{1-\hat{\alpha}} - m_{min}^{1-\hat{\alpha}}} $$
+
+Este resultado demuestra la elegancia y utilidad del marco de máxima verosimilitud en la astrofísica moderna. Permite a los investigadores extraer el parámetro fundamental de la población ($\hat{\alpha}$) mediante optimización numérica de la log-verosimilitud, y luego propagar instantáneamente esa estimación a cualquier cantidad física derivada (como la fracción de supernovas, la masa total del cúmulo, o la tasa de formación de enanas blancas) simplemente sustituyendo $\hat{\alpha}$ en las ecuaciones teóricas correspondientes, preservando todas las propiedades de optimalidad estadística.

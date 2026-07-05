@@ -1,11 +1,217 @@
 \chapter{Clase 9}
 
-\section{Teorema central del límite}
+\section{Muestras}
+
+En la inferencia estadística, el objetivo es extraer conclusiones sobre una población completa basándose en la observación de una parte de ella. Una muestra aleatoria de tamaño $n$ se define como un conjunto de $n$ variables aleatorias $X_1, X_2, \dots, X_n$ que son independientes e idénticamente distribuidas (i.i.d.), es decir, que comparten la misma función de densidad de probabilidad (o función de masa) $f(x)$ (Devore, Capítulo 5, Sección 5.3). 
+
+La independencia y la idéntica distribución implican que la función de densidad de probabilidad conjunta de la muestra completa es simplemente el producto de las densidades marginales:
+$$ f(x_1, x_2, \dots, x_n) = \prod_{i=1}^{n} f(x_i) $$
 
 \section{Estadísticos}
 
+Un estadístico es cualquier función de las variables aleatorias de la muestra que no depende de parámetros desconocidos. Formalmente, si $X_1, X_2, \dots, X_n$ es una muestra aleatoria, un estadístico es una variable aleatoria $T$ definida como $T = h(X_1, X_2, \dots, X_n)$ (Devore, Capítulo 5, Sección 5.3). 
+
+Los estadísticos más fundamentales para resumir la tendencia central y la dispersión de la muestra son la media muestral $\bar{X}$ y la varianza muestral $S^2$:
+$$ \bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i $$
+$$ S^2 = \frac{1}{n-1} \sum_{i=1}^{n} (X_i - \bar{X})^2 $$
+
+Mediante el uso de las propiedades de linealidad del valor esperado y la independencia de la muestra, podemos demostrar rigurosamente las propiedades de estos estadísticos. Asumiendo que la población tiene media $E(X_i) = \mu$ y varianza $V(X_i) = \sigma^2$:
+
+\textbf{Valor esperado de la media muestral:}
+$$ E(\bar{X}) = E\left( \frac{1}{n} \sum_{i=1}^{n} X_i \right) = \frac{1}{n} \sum_{i=1}^{n} E(X_i) = \frac{1}{n} (n\mu) = \mu $$
+
+\textbf{Varianza de la media muestral:}
+Dado que las $X_i$ son independientes, la varianza de la suma es la suma de las varianzas:
+$$ V(\bar{X}) = V\left( \frac{1}{n} \sum_{i=1}^{n} X_i \right) = \frac{1}{n^2} \sum_{i=1}^{n} V(X_i) = \frac{1}{n^2} (n\sigma^2) = \frac{\sigma^2}{n} $$
+
+\textbf{Valor esperado de la varianza muestral:}
+Para demostrar que $S^2$ es un estimador insesgado de $\sigma^2$, primero expandimos la suma de cuadrados utilizando la identidad algebraica $\sum (X_i - \bar{X})^2 = \sum X_i^2 - n\bar{X}^2$:
+$$ E(S^2) = \frac{1}{n-1} E\left( \sum_{i=1}^{n} X_i^2 - n\bar{X}^2 \right) = \frac{1}{n-1} \left[ \sum_{i=1}^{n} E(X_i^2) - nE(\bar{X}^2) \right] $$
+Recordando que $E(Y^2) = V(Y) + [E(Y)]^2$, sustituimos $E(X_i^2) = \sigma^2 + \mu^2$ y $E(\bar{X}^2) = \frac{\sigma^2}{n} + \mu^2$:
+$$ E(S^2) = \frac{1}{n-1} \left[ n(\sigma^2 + \mu^2) - n\left(\frac{\sigma^2}{n} + \mu^2\right) \right] = \frac{1}{n-1} \left[ n\sigma^2 + n\mu^2 - \sigma^2 - n\mu^2 \right] $$
+$$ E(S^2) = \frac{1}{n-1} \left[ (n-1)\sigma^2 \right] = \sigma^2 $$
+Esta demostración formal justifica el uso del divisor $n-1$ (grados de libertad) en lugar de $n$ para obtener un estimador insesgado de la varianza poblacional.
+
 \section{Distribución de estadísticos}
 
-\section{Muestras}
+La distribución de probabilidad de un estadístico $T$ se denomina distribución de muestreo. Dado que $T = h(X_1, \dots, X_n)$ es en sí misma una variable aleatoria, posee su propia función de densidad o masa de probabilidad, la cual describe cómo varía el valor del estadístico a través de todas las muestras posibles de tamaño $n$ (Devore, Capítulo 5, Sección 5.3).
+
+La función de distribución acumulativa (FDA) de un estadístico continuo $T$ se obtiene integrando la densidad conjunta de la muestra sobre la región donde $h(x_1, \dots, x_n) \le t$:
+$$ F_T(t) = P(T \le t) = \int \dots \int_{h(x_1, \dots, x_n) \le t} \prod_{i=1}^{n} f(x_i) \, dx_1 \dots dx_n $$
+
+1. \textbf{Distribución de la media muestral:}
+$$ \bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) $$
+Su densidad es $f_{\bar{X}}(x) = \frac{\sqrt{n}}{\sigma\sqrt{2\pi}} \exp\left( -\frac{n(x-\mu)^2}{2\sigma^2} \right)$.
+
+2. \textbf{Distribución de la varianza muestral:}
+La variable estandarizada $(n-1)S^2/\sigma^2$ sigue una distribución Chi-cuadrada con $\nu = n-1$ grados de libertad:
+$$ \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1} $$
+
+3. \textbf{Independencia de $\bar{X}$ y $S^2$:}
+Bajo la suposición de normalidad poblacional, el teorema de Basu garantiza que $\bar{X}$ y $S^2$ son estadísticos mutuamente independientes, una propiedad crucial para la construcción de pruebas de hipótesis como la $t$ de Student.
+
+\section{Teorema central del límite}
+
+Cuando la población subyacente no es normal, las distribuciones de muestreo exactas pueden ser intratables. Sin embargo, el Teorema Central del Límite (TCL) proporciona una aproximación asintótica fundamental. El TCL establece que, para una muestra aleatoria de tamaño $n$ extraída de cualquier población con media finita $\mu$ y varianza finita $\sigma^2 > 0$, la distribución de la media muestral estandarizada converge a la distribución normal estándar a medida que $n \to \infty$ (Devore, Capítulo 5, Sección 5.4).
+
+Formalmente, si definimos la variable estandarizada $Z_n$ como:
+$$ Z_n = \frac{\bar{X}_n - \mu}{\sigma / \sqrt{n}} = \frac{\sum_{i=1}^{n} X_i - n\mu}{\sigma \sqrt{n}} $$
+Entonces, la convergencia en distribución se expresa mediante el límite de la función de distribución acumulativa:
+$$ \lim_{n \to \infty} P(Z_n \le z) = \lim_{n \to \infty} \int_{-\infty}^{z} \frac{1}{\sqrt{2\pi}} e^{-t^2/2} \, dt = \Phi(z) $$
+para todo $z \in \mathbb{R}$. 
+
+En la práctica astronámica y astrofísica, esto implica que para tamaños de muestra suficientemente grandes (típicamente $n \ge 30$), podemos aproximar la distribución de $\bar{X}$ como:
+$$ \bar{X}_n \overset{\text{aprox}}{\sim} N\left(\mu, \frac{\sigma^2}{n}\right) $$
+De manera equivalente, para la suma total de las observaciones $T_n = \sum_{i=1}^n X_i$, el TCL dicta que:
+$$ T_n \overset{\text{aprox}}{\sim} N(n\mu, n\sigma^2) $$
+Esta propiedad es la justificación teórica de por qué el ruido de disparo (\textit{shot noise}) en los detectores CCD, que sigue una distribución de Poisson (discreta y asimétrica para tasas bajas), se modela como una distribución Gaussiana (continua y simétrica) cuando el número de fotones colectados es grande, permitiendo el uso de técnicas de mínimos cuadrados y máxima verosimilitud basadas en la normalidad.
 
 \section{Estimación puntual: Método de momentos}
+
+La estimación puntual busca calcular un valor único, basado en los datos de la muestra, que sirva como la mejor aproximación para un parámetro poblacional desconocido $\theta$. El Método de Momentos es una técnica algorítmica para derivar estimadores que consiste en igualar los momentos muestrales con los momentos poblacionales correspondientes (Devore, Capítulo 6, Sección 6.2).
+
+Sea $X_1, \dots, X_n$ una muestra aleatoria de una población con densidad $f(x; \theta_1, \dots, \theta_k)$, donde $\theta_1, \dots, \theta_k$ son $k$ parámetros desconocidos. 
+
+El $j$-ésimo momento poblacional (no centrado) se define como una función de los parámetros:
+$$ \mu_j' = E(X^j) = \int_{-\infty}^{\infty} x^j f(x; \theta_1, \dots, \theta_k) \, dx = g_j(\theta_1, \dots, \theta_k) $$
+
+El $j$-ésimo momento muestral se define puramente en términos de las observaciones:
+$$ M_j = \frac{1}{n} \sum_{i=1}^{n} X_i^j $$
+
+El método establece el siguiente sistema de $k$ ecuaciones simultáneas:
+$$ \mu_1'(\theta_1, \dots, \theta_k) = M_1 $$
+$$ \mu_2'(\theta_1, \dots, \theta_k) = M_2 $$
+$$ \vdots $$
+$$ \mu_k'(\theta_1, \dots, \theta_k) = M_k $$
+
+Al resolver este sistema algebraico para $\theta_1, \dots, \theta_k$, se obtienen los estimadores de momentos $\hat{\theta}_1, \dots, \hat{\theta}_k$.
+
+\textbf{Ejemplo de formulación matemática: Estimación para una Distribución Gamma}
+Supongamos que los tiempos de llegada de ciertos eventos astrofísicos siguen una distribución Gamma con parámetros de forma $\alpha$ y escala $\beta$. La densidad es $f(x; \alpha, \beta) = \frac{1}{\Gamma(\alpha)\beta^\alpha} x^{\alpha-1} e^{-x/\beta}$. Los primeros dos momentos poblacionales son:
+$$ \mu_1' = E(X) = \alpha\beta $$
+$$ \mu_2' = E(X^2) = V(X) + [E(X)]^2 = \alpha\beta^2 + (\alpha\beta)^2 = \alpha\beta^2(1 + \alpha) $$
+
+Igualamos a los momentos muestrales $M_1 = \bar{X}$ y $M_2 = \frac{1}{n}\sum X_i^2$:
+1) $\hat{\alpha}\hat{\beta} = \bar{X} \implies \hat{\beta} = \frac{\bar{X}}{\hat{\alpha}}$
+2) $\hat{\alpha}\hat{\beta}^2(1 + \hat{\alpha}) = M_2$
+
+Sustituimos (1) en (2):
+$$ \hat{\alpha} \left( \frac{\bar{X}}{\hat{\alpha}} \right)^2 (1 + \hat{\alpha}) = M_2 \implies \frac{\bar{X}^2}{\hat{\alpha}} (1 + \hat{\alpha}) = M_2 \implies \bar{X}^2 \left( \frac{1}{\hat{\alpha}} + 1 \right) = M_2 $$
+Despejando $\hat{\alpha}$:
+$$ \frac{1}{\hat{\alpha}} + 1 = \frac{M_2}{\bar{X}^2} \implies \frac{1}{\hat{\alpha}} = \frac{M_2 - \bar{X}^2}{\bar{X}^2} $$
+Notamos que $M_2 - \bar{X}^2 = \frac{1}{n}\sum X_i^2 - \bar{X}^2 = \frac{1}{n}\sum (X_i - \bar{X})^2$, la cual es la varianza muestral sesgada, denotada comúnmente como $\tilde{S}^2$. Por lo tanto, los estimadores de momentos cerrados son:
+$$ \hat{\alpha} = \frac{\bar{X}^2}{\tilde{S}^2} $$
+$$ \hat{\beta} = \frac{\tilde{S}^2}{\bar{X}} $$
+
+Este procedimiento demuestra cómo el método de momentos traduce directamente las propiedades teóricas de la distribución (sus momentos) en fórmulas algebraicas explícitas aplicables a los datos observacionales, sin requerir la maximización de funciones de verosimilitud complejas.
+
+
+\subsection{Ejemplo 1: Acumulación de Errores de Navegación y el Significado del Teorema Central del Límite}
+
+Para visualizar el poder y el significado profundo del Teorema Central del Límite (TCL), es necesario alejarse de las distribuciones normales y observar qué ocurre cuando los errores individuales siguen una distribución exótica, con colas pesadas y una función de densidad compleja. En la astrodinámica operativa, los sensores de navegación a menudo enfrentan ambientes de ruido no gaussianos.
+
+Consideremos un rastreador de estrellas (Star Tracker) en una sonda de espacio profundo. Debido a la dispersión de la luz zodiacal y a impactos microscópicos de polvo en los baffles ópticos, el error de medición angular $X_i$ (en arcosegundos) no sigue una campana de Gauss, sino una distribución con colas pesadas modelada por la siguiente función de densidad de probabilidad:
+
+$$ f(x) = \frac{\sqrt{2}}{\pi} \frac{1}{1 + x^4} \quad \text{para } -\infty < x < \infty $$
+
+Esta es una distribución legítima. Para comprobarlo y extraer sus momentos, debemos evaluar integrales impropias no triviales. 
+
+\textbf{Paso 1: Verificación de la densidad y cálculo de momentos}
+La integral de normalización es un resultado clásico del análisis complejo (residuos):
+$$ \int_{-\infty}^{\infty} \frac{1}{1 + x^4} \, dx = \frac{\pi}{\sqrt{2}} $$
+Por lo tanto, $\int_{-\infty}^{\infty} f(x) \, dx = \frac{\sqrt{2}}{\pi} \cdot \frac{\pi}{\sqrt{2}} = 1$. 
+Dado que $f(x)$ es una función par y $x$ es impar, el valor esperado (la media) es estrictamente cero por simetría:
+$$ \mu = E(X) = \int_{-\infty}^{\infty} x f(x) \, dx = 0 $$
+Para la varianza, evaluamos el segundo momento:
+$$ \sigma^2 = E(X^2) = \int_{-\infty}^{\infty} x^2 \frac{\sqrt{2}}{\pi} \frac{1}{1 + x^4} \, dx = \frac{\sqrt{2}}{\pi} \int_{-\infty}^{\infty} \frac{x^2}{1 + x^4} \, dx $$
+La integral $\int_{-\infty}^{\infty} \frac{x^2}{1 + x^4} \, dx$ también converge a $\frac{\pi}{\sqrt{2}}$. Por lo tanto, la varianza es:
+$$ \sigma^2 = \frac{\sqrt{2}}{\pi} \cdot \frac{\pi}{\sqrt{2}} = 1 $$
+Tenemos una variable aleatoria con media $\mu = 0$ y varianza finita $\sigma^2 = 1$, pero cuya forma es radicalmente distinta a una normal (sus colas decaen como $1/x^4$, mucho más lento que la exponencial $e^{-x^2}$ de una Gaussiana).
+
+\textbf{Paso 2: El problema de la medición individual (La pesadilla analítica)}
+Supongamos que queremos calcular la probabilidad de que un solo error de medición supere los 0.15 arcosegundos. Debemos integrar la función exótica:
+$$ P(X_1 > 0.15) = \int_{0.15}^{\infty} \frac{\sqrt{2}}{\pi} \frac{1}{1 + x^4} \, dx $$
+La antiderivada de $\frac{1}{1+x^4}$ es notoriamente compleja, involucrando logaritmos y arcotangentes:
+$$ \int \frac{1}{1+x^4} dx = \frac{1}{4\sqrt{2}} \ln\left( \frac{x^2 + x\sqrt{2} + 1}{x^2 - x\sqrt{2} + 1} \right) + \frac{1}{2\sqrt{2}} \arctan\left( \frac{x\sqrt{2}}{1 - x^2} \right) $$
+Evaluar esta expresión entre $0.15$ e $\infty$ es un proceso tedioso y propenso a errores numéricos debido a las asíntotas de la arcotangente. Además, debido a las colas pesadas, esta probabilidad es relativamente alta comparada con una distribución normal.
+
+\textbf{Paso 3: La magia del Teorema Central del Límite}
+Ahora, el sistema de navegación no toma una sola medición, sino que promedia $n = 100$ observaciones independientes para suavizar el ruido. La variable de interés es la media muestral:
+$$ \bar{X}_{100} = \frac{1}{100} \sum_{i=1}^{100} X_i $$
+
+Aquí es donde el TCL (Devore, Capítulo 5, Sección 5.4) revela su verdadero significado físico y matemático. El teorema establece que, sin importar cuán exótica, asimétrica o de colas pesadas sea la distribución original $f(x)$, siempre que la varianza sea finita, la distribución de la media muestral $\bar{X}_n$ converge a una distribución normal a medida que $n$ crece. 
+
+Para $n = 100$, la aproximación es extraordinariamente precisa. La media de $\bar{X}_{100}$ es $\mu_{\bar{X}} = \mu = 0$, y su varianza es $\sigma^2_{\bar{X}} = \sigma^2 / n = 1 / 100 = 0.01$. Por lo tanto:
+$$ \bar{X}_{100} \approx N(0, 0.01) $$
+
+\textbf{Paso 4: Cálculo de la probabilidad acumulada}
+Ahora, calcular la probabilidad de que el error promedio de las 100 mediciones supere los 0.15 arcosegundos se vuelve trivial. Ya no necesitamos la antiderivada exótica. Estandarizamos y usamos la función de distribución acumulativa estándar $\Phi(z)$:
+$$ P(\bar{X}_{100} > 0.15) = P\left( Z > \frac{0.15 - 0}{\sqrt{0.01}} \right) = P(Z > 1.5) $$
+$$ P(Z > 1.5) = 1 - \Phi(1.5) \approx 1 - 0.9332 = 0.0668 $$
+
+\textbf{Significado y Conclusión}
+Este ejemplo visualiza la esencia del Teorema Central del Límite. En el mundo físico, los errores instrumentales rara vez son puros y gaussianos; están contaminados por anomalías, colas pesadas y distribuciones complejas (como nuestra $f(x)$ con raíces cuárticas). Intentar modelar el error total sumando analíticamente estas distribuciones exóticas es computacional y matemáticamente inviable. 
+
+El TCL nos garantiza que el acto de promediar (o sumar) múltiples fuentes de error independientes actúa como un filtro matemático universal. Transforma el caos de distribuciones individuales irregulares en la perfecta, predecible y tabulada campana de Gauss. Esto permite a los ingenieros de astrodinámica utilizar las tablas normales estándar para calcular márgenes de error y probabilidades de fallo, confiando en que la naturaleza misma de la acumulación de variables aleatorias finitas dicta este comportamiento asintótico, independientemente de la física subyacente de cada sensor individual.
+
+\subsection{Ejemplo: Estimación de Parámetros de Albedo en Poblaciones de Asteroides mediante el Método de Momentos}
+
+Para exprimir al máximo la metodología y comprender su alcance deductivo, aplicaremos el Método de Momentos a un problema real en la ciencia planetaria. Según los principios de estadística aplicada a la caracterización de superficies (\textit{Planetary Geology}, Capítulo sobre \textit{Surface Properties and Reflectance}), el albedo geométrico $p_V$ de una población de asteroides es una variable estrictamente acotada en el intervalo $(0, 1)$. 
+
+Para modelar la distribución de albedos de una familia colisional específica (por ejemplo, la familia Flora, dominada por asteroides de tipo S), la distribución Beta es un modelo continuo excepcionalmente adecuado. La función de densidad de probabilidad para el albedo $X$ está dada por:
+$$ f(x; \alpha, \beta) = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} x^{\alpha-1} (1-x)^{\beta-1} \quad \text{para } 0 < x < 1 $$
+donde $\alpha > 0$ y $\beta > 0$ son los parámetros de forma que definen la asimetría y concentración de la población.
+
+El objetivo es encontrar los estimadores de momento $\hat{\alpha}$ y $\hat{\beta}$ para una muestra aleatoria de $n$ asteroides con albedos observados $X_1, X_2, \dots, X_n$. Dado que tenemos $m=2$ parámetros desconocidos, el método (Devore, Capítulo 6, Sección 6.2) nos exige igualar los dos primeros momentos poblacionales con los dos primeros momentos muestrales.
+
+\textbf{Paso 1: Definición de los Momentos Poblacionales}
+De la teoría de la distribución Beta, los primeros dos momentos crudos poblacionales son:
+$$ \mu_1' = E(X) = \frac{\alpha}{\alpha + \beta} $$
+$$ \mu_2' = E(X^2) = \frac{\alpha(\alpha + 1)}{(\alpha + \beta)(\alpha + \beta + 1)} $$
+
+\textbf{Paso 2: Definición de los Momentos Muestrales}
+Los momentos muestrales se calculan puramente a partir de los datos observados, sin asumir ninguna distribución subyacente:
+$$ M_1 = \frac{1}{n} \sum_{i=1}^n X_i = \bar{X} $$
+$$ M_2 = \frac{1}{n} \sum_{i=1}^n X_i^2 $$
+
+\textbf{Paso 3: Planteamiento y Resolución del Sistema de Ecuaciones}
+El núcleo del método consiste en resolver el sistema no lineal de dos ecuaciones con dos incógnitas:
+1) $\frac{\alpha}{\alpha + \beta} = M_1$
+2) $\frac{\alpha(\alpha + 1)}{(\alpha + \beta)(\alpha + \beta + 1)} = M_2$
+
+Para despejar los parámetros de manera elegante, definimos la suma de los parámetros como $S = \alpha + \beta$. 
+De la ecuación (1), obtenemos inmediatamente $\alpha = M_1 S$. Dado que $\alpha + \beta = S$, podemos deducir que $\beta = S - \alpha = S(1 - M_1)$.
+
+Sustituimos $\alpha = M_1 S$ y $\alpha + \beta = S$ en la ecuación (2):
+$$ \frac{(M_1 S)(M_1 S + 1)}{S(S + 1)} = M_2 $$
+Cancelamos $S$ en el denominador y expandimos el numerador:
+$$ \frac{M_1^2 S + M_1}{S + 1} = M_2 $$
+$$ M_1^2 S + M_1 = M_2 S + M_2 $$
+Agrupamos los términos que contienen $S$ en un lado de la igualdad:
+$$ S(M_1^2 - M_2) = M_2 - M_1 $$
+Despejamos $S$:
+$$ S = \frac{M_2 - M_1}{M_1^2 - M_2} = \frac{M_1 - M_2}{M_2 - M_1^2} $$
+
+Finalmente, sustituimos $S$ en las expresiones para $\alpha$ y $\beta$ para obtener los estimadores de momento cerrados:
+$$ \hat{\alpha} = M_1 \left( \frac{M_1 - M_2}{M_2 - M_1^2} \right) $$
+$$ \hat{\beta} = (1 - M_1) \left( \frac{M_1 - M_2}{M_2 - M_1^2} \right) $$
+
+\textbf{Paso 4: Interpretación Matemática y Física de los Estimadores}
+El resultado anterior nos permite realizar un desglose profundo de las propiedades de estos estimadores:
+
+1. \textbf{Relación con la Varianza Muestral:} 
+El denominador $M_2 - M_1^2$ es exactamente la varianza muestral sesgada (el segundo momento central muestral), denotada comúnmente como $\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$. 
+El numerador $M_1 - M_2$ puede reescribirse como $\bar{X} - \frac{1}{n}\sum X_i^2$. Dado que el albedo está estrictamente acotado entre 0 y 1, se cumple que $X_i > X_i^2$ para todo $i$. Por lo tanto, $M_1 > M_2$, lo que garantiza que el numerador es estrictamente positivo. 
+
+2. \textbf{Garantía del Espacio de Parámetros:}
+Una de las críticas frecuentes al Método de Momentos es que puede producir estimadores fuera del espacio de parámetros físico (por ejemplo, una varianza negativa). Sin embargo, para variables acotadas en $(0,1)$ como el albedo, la estructura algebraica garantiza que $\tilde{S}^2 > 0$ y $M_1 - M_2 > 0$. En consecuencia, $\hat{\alpha} > 0$ y $\hat{\beta} > 0$ están matemáticamente asegurados para cualquier muestra válida. El método no fallará arrojando formas paramétricas imposibles.
+
+3. \textbf{Significado Planetológico:}
+Los parámetros $\alpha$ y $\beta$ dictan la naturaleza de la familia de asteroides. 
+Si la muestra arroja un albedo promedio $\bar{X} = 0.25$ y una varianza $\tilde{S}^2 = 0.01$, los estimadores serían:
+$$ \hat{\alpha} = 0.25 \left( \frac{0.25 - (0.01 + 0.25^2)}{0.01} \right) = 0.25 \left( \frac{0.1875}{0.01} \right) = 4.6875 $$
+$$ \hat{\beta} = (1 - 0.25) (18.75) = 14.0625 $$
+La relación $\hat{\alpha} / \hat{\beta} \approx 1/3$ indica que la distribución está fuertemente sesgada hacia valores oscuros. En el contexto de \textit{Planetary Geology}, esto confirmaría que la familia está dominada por condritas carbonáceas (tipo C), con muy pocos miembros de alto albedo. 
+
+4. \textbf{Ventaja Computacional frente a la Máxima Verosimilitud:}
+Para la distribución Beta, obtener los estimadores de Máxima Verosimilitud (MLE) requiere igualar las derivadas de la log-verosimilitud a cero, lo que involucra la función Digamma $\psi(x) = \frac{d}{dx} \ln \Gamma(x)$. Esto no tiene solución algebraica cerrada y exige algoritmos numéricos iterativos (como Newton-Raphson). El Método de Momentos, en contraste, nos ha proporcionado una solución explícita, exacta y de costo computacional nulo, ideal para pipelines de reducción de datos en tiempo real donde se procesan miles de objetos transitorios diariamente.
