@@ -2,6 +2,268 @@
 
 \section{Probabilidad condicional}
 
+En la práctica astronómica y astrofísica, rara vez se evalúan los eventos de manera aislada. Frecuentemente, se dispone de información parcial o de observaciones preliminares que restringen el universo de posibilidades. La probabilidad condicional es la herramienta analítica que permite cuantificar cómo cambia la probabilidad de un evento cuando se tiene la certeza de que otro evento relacionado ya ha ocurrido. 
+
+Si $A$ y $B$ son dos eventos tales que $P(B) > 0$, la probabilidad condicional de $A$ dado que $B$ ha ocurrido se define como (Devore, Capítulo 2, Sección 2.4):
+
+$$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$
+
+Conceptualmente, esta definición refleja un cambio fundamental en el espacio muestral. El nuevo espacio muestral ya no es el conjunto original $S$, sino que se reduce exclusivamente al evento $B$ (el evento condicionante). La probabilidad $P(A|B)$ mide la fracción de $B$ que también pertenece a $A$. 
+
+A partir de esta definición, se deriva una de las herramientas más poderosas para el modelado de procesos observacionales secuenciales: la \textbf{regla de multiplicación}. Si reordenamos la ecuación anterior, obtenemos la probabilidad de la intersección de dos eventos:
+
+$$ P(A \cap B) = P(A|B) \cdot P(B) $$
+
+Esta regla es esencial para calcular la probabilidad de que ocurran múltiples etapas en un proceso de observación o navegación, donde el éxito de una etapa depende condicionalmente del resultado de la etapa previa.
+
+\subsection{Ejemplo 1: Caracterización de Asteroides mediante Albedo Radar}
+
+Un radiotelescopio realiza un sondeo de 200 Asteroides Cercanos a la Tierra (NEAs) para estudiar su composición superficial. 
+
+Definimos los siguientes eventos para un asteroide seleccionado al azar de esta muestra:
+\begin{itemize}
+    \item $M$: El asteroide es de tipo espectral M (metálico, compuesto principalmente de hierro y níquel).
+    \item $R$: El asteroide presenta una alta reflectividad (albedo) en las observaciones de radar.
+\end{itemize}
+
+Tras procesar los datos del sondeo, se obtienen las siguientes frecuencias conjuntas:
+\begin{itemize}
+    \item 40 asteroides son de tipo M: $P(M) = 40/200 = 0.20$.
+    \item 60 asteroides tienen alta reflectividad radar: $P(R) = 60/200 = 0.30$.
+    \item 30 asteroides son de tipo M \textit{y} además tienen alta reflectividad radar: $P(M \cap R) = 30/200 = 0.15$.
+\end{itemize}
+
+\textbf{Pregunta 1:} Si el sistema de radar detecta que un asteroide tiene alta reflectividad ($R$), ¿cuál es la probabilidad de que sea metálico ($M$)?
+
+$$ P(M|R) = \frac{P(M \cap R)}{P(R)} = \frac{0.15}{0.30} = 0.50 $$
+Esto significa que, dado que el asteroide brilla intensamente en el radar, hay un 50\% de probabilidad de que su composición sea metálica. El espacio muestral se ha reducido a los 60 asteroides con alta reflectividad.
+
+\textbf{Pregunta 2:} Si un asteroide ya ha sido clasificado espectroscópicamente como de tipo M ($M$), ¿cuál es la probabilidad de que presente alta reflectividad radar ($R$)?
+$$ P(R|M) = \frac{P(M \cap R)}{P(M)} = \frac{0.15}{0.20} = 0.75 $$
+Aquí, el espacio muestral se reduce a los 40 asteroides metálicos. La probabilidad es notablemente distinta (75\%). Este ejemplo resalta una de las advertencias más importantes en la inferencia estadística (Devore, Sección 2.4): la probabilidad de que un asteroide sea metálico dado su radar ($P(M|R)$) no es la misma que la probabilidad de que tenga alto radar dado que es metálico ($P(R|M)$).
+
+\subsection{Ejemplo 2: Regla de Multiplicación en Pipelines de Transitorios Astrofísicos}
+
+La regla de multiplicación es indispensable para modelar cadenas de eventos dependientes. En la astronomía de grandes sondeos temporales (como los realizados por el Observatorio Vera C. Rubin), los "pipelines" de reducción de datos deben filtrar miles de alertas nocturnas. Analicemos la detección de transitorios.
+
+Definimos el experimento como el procesamiento de una alerta nocturna por parte del pipeline automatizado.
+\begin{itemize}
+    \item $V$: El evento astrofísico subyacente es \textit{verdadero} y genuino (ej. una kilonova o supernova real).
+    \item $V'$: El evento es un \textit{artefacto} instrumental o ruido cósmico (falso astrofísico).
+    \item $F$: El pipeline de software etiqueta la alerta como 'Candidato de Alta Prioridad' (Flag).
+\end{itemize}
+
+Basado en el rendimiento histórico del telescopio y la naturaleza de los falsos positivos, sabemos que:
+\begin{itemize}
+    \item La probabilidad a priori de que una alerta aleatoria sea un evento genuino es baja: $P(V) = 0.10$. Por lo tanto, $P(V') = 1 - 0.10 = 0.90$.
+    \item Si el evento es genuino ($V$), el pipeline es muy eficiente detectándolo: $P(F|V) = 0.90$.
+    \item Si el evento es un artefacto ($V'$), el pipeline aún puede ser engañado y etiquetarlo erróneamente como candidato (tasa de falsos positivos): $P(F|V') = 0.15$.
+\end{itemize}
+
+\textbf{Escenario 1: Detección Exitosa (Verdadero Positivo)}
+¿Cuál es la probabilidad de que una alerta sea un evento genuino \textit{y} que el pipeline la etiquete correctamente como candidato?
+$$ P(V \cap F) = P(F|V) \cdot P(V) = 0.90 \cdot 0.10 = 0.09 $$
+Esto indica que el 9\% de todas las alertas procesadas serán descubrimientos científicos reales y confirmados por el software.
+
+\textbf{Escenario 2: Falso Positivo}
+¿Cuál es la probabilidad de que una alerta sea un artefacto \textit{y} que el pipeline la etiquete erróneamente como candidato?
+$$ P(V' \cap F) = P(F|V') \cdot P(V') = 0.15 \cdot 0.90 = 0.135 $$
+Esto revela que el 13.5\% de todas las alertas procesadas serán falsos positivos que consumirán tiempo valioso de seguimiento telescópico.
+
+Este análisis condicional y multiplicativo permite a los arquitectos de misiones evaluar el 'costo' de falsas alarmas frente a la tasa de descubrimientos reales, justificando analíticamente la necesidad de introducir filtros secundarios (como la verificación de movimiento propio o el análisis de la forma del punto, PSF) antes de enviar alertas a la comunidad astronómica global.
+
 \section{Independencia de eventos}
 
+Dos eventos $A$ y $B$ se consideran independientes si la ocurrencia de uno de ellos no proporciona ninguna información sobre la ocurrencia del otro (Devore, Capítulo 2, Sección 2.5). 
+
+Analíticamente, esta noción se formaliza a través de la probabilidad condicional. Si $A$ y $B$ son independientes, entonces la probabilidad de $A$ dado que $B$ ha ocurrido es simplemente la probabilidad marginal de $A$:
+$$ P(A|B) = P(A) $$
+
+Sustituyendo la definición de probabilidad condicional $P(A|B) = \frac{P(A \cap B)}{P(B)}$ en la ecuación anterior y reordenando, obtenemos la \textbf{regla de multiplicación para eventos independientes}, que es la definición operativa más utilizada en la práctica:
+$$ P(A \cap B) = P(A) \cdot P(B) $$
+
+Es crucial destacar una distinción analítica fundamental (Devore, Sección 2.5): la independencia y la exclusión mutua son conceptos radicalmente distintos. Si dos eventos son mutuamente excluyentes ($A \cap B = \emptyset$), saber que $A$ ocurrió garantiza que $B$ no ocurrió ($P(B|A) = 0$), lo cual implica una dependencia extrema. Por el contrario, si son independientes, la ocurrencia de $A$ no altera en absoluto la probabilidad de $B$.
+
+\subsection{Ejemplo 1: Confiabilidad de Subsistemas Críticos en una Sonda Interplanetaria}
+
+ \textit{Modern Spacecraft Guidance, Navigation, and Control} (Capítulo 4, "Fault Detection and Isolation"). 
+
+Considere una sonda espacial que viaja hacia los planetas exteriores. Para mantener su actitud y orientación, la nave depende de dos subsistemas físicamente separados y eléctricamente aislados:
+\begin{itemize}
+    \item $A$: El evento en el que el rastreador de estrellas principal (Star Tracker) sufre un bloqueo temporal por radiación cósmica.
+    \item $B$: El evento en el que la unidad de medición inercial (IMU) experimenta una deriva térmica fuera de los límites de tolerancia.
+\end{itemize}
+
+Basado en los datos de pruebas en tierra y modelos de entorno espacial, se han estimado las siguientes probabilidades marginales para una ventana de misión de 30 días:
+$$ P(A) = 0.04 $$
+$$ P(B) = 0.02 $$
+
+Dado que el rastreador de estrellas (óptico) y la IMU (mecánico-inercial) operan bajo principios físicos distintos y están blindados contra fallas en cascada, el modelo de confiabilidad asume que estos eventos son \textit{mutuamente independientes}. 
+
+Podemos calcular la probabilidad de que la sonda experimente una pérdida total de referencia de actitud (el evento $A \cap B$, donde ambos sensores fallan simultáneamente) aplicando la regla de multiplicación para eventos independientes:
+$$ P(A \cap B) = P(A) \cdot P(B) = 0.04 \cdot 0.02 = 0.0008 $$
+
+Si hubiéramos asumido erróneamente que los eventos eran dependientes (por ejemplo, si una tormenta de radiación afectara a ambos por igual), la probabilidad de falla catastrófica sería mucho mayor. La independencia analítica permite a los ingenieros de vuelo demostrar que la probabilidad de pérdida de control ($0.08\%$) cumple con los estrictos requisitos de riesgo de la misión. Además, se puede verificar que $P(A|B) = \frac{P(A \cap B)}{P(B)} = \frac{0.0008}{0.02} = 0.04 = P(A)$, confirmando que la falla de la IMU no altera la probabilidad de fallo del rastreador de estrellas.
+
+\subsection{Ejemplo 2: Discriminación de Señales en la Red de Interferómetros de Ondas Gravitacionales}
+
+En la astronomía de multi-mensajeros y la astrofísica de altas energías, la independencia es la piedra angular para distinguir señales astrofísicas genuinas de ruido instrumental local. Tomemos como referencia los principios de detección de señales y análisis de ruido en redes de observatorios (\textit{Astronomical Measurement}, Capítulo 6, "Signal-to-Noise and Detection").
+
+Considere la red de interferómetros láser (como LIGO), compuesta por detectores separados geográficamente miles de kilómetros. Definimos los siguientes eventos para un intervalo de tiempo de 1 milisegundo:
+\begin{itemize}
+    \item $N_1$: El detector 1 (ej. Hanford) registra un transitorio de ruido sísmico/instrumental que supera el umbral de activación.
+    \item $N_2$: El detector 2 (ej. Livingston) registra un transitorio de ruido que supera el umbral.
+    \item $W$: El paso de una onda gravitacional real proveniente de una fusión de agujeros negros.
+\end{itemize}
+
+Las fuentes de ruido local (microsismos, ruido térmico en los espejos, fluctuaciones láser) en el detector 1 son físicamente independientes de las del detector 2. Por lo tanto, los eventos de ruido $N_1$ y $N_2$ son \textit{independientes}. Si la tasa de falsas alarmas (ruido superando el umbral) en cada detector es $P(N_1) = 10^{-3}$ y $P(N_2) = 10^{-3}$, la probabilidad de que \textit{ambos} detectores registren un falso positivo simultáneamente por puro azar es:
+$$ P(N_1 \cap N_2) = P(N_1) \cdot P(N_2) = 10^{-3} \cdot 10^{-3} = 10^{-6} $$
+
+Esta drástica reducción en la probabilidad de error (de $10^{-3}$ a $10^{-6}$) es la base de la \textit{coincidencia de red}. 
+
+Sin embargo, analicemos qué ocurre si el evento $W$ (una onda gravitacional real) ocurre. Una onda gravitacional real afecta el espacio-tiempo local en ambos detectores casi simultáneamente. En este escenario, los eventos de 'detección de un umbral cruzado' en el detector 1 y el detector 2 \textbf{ya no son independientes}. La ocurrencia de la señal real condiciona fuertemente a ambos detectores:
+$$ P(\text{Umbral}_1 \cap \text{Umbral}_2 | W) \neq P(\text{Umbral}_1 | W) \cdot P(\text{Umbral}_2 | W) $$
+
+De hecho, si $W$ ocurre, la probabilidad de que ambos detectores se activen es cercana a 1 (dependiendo de la polarización y ubicación de la fuente), mientras que el producto de sus probabilidades marginales condicionadas a $W$ no reflejaría esta correlación física. Este contraste analítico entre la independencia del ruido local ($N_1 \perp N_2$) y la dependencia inducida por una señal astrofísica común ($W$) es el mecanismo estadístico fundamental que permite a los astrónomos confirmar el descubrimiento de nuevos fenómenos cósmicos, filtrando el ruido instrumental aleatorio de las verdaderas perturbaciones del universo.
+
 \section{Teorema de Bayes}
+
+El Teorema de Bayes constituye la piedra angular del razonamiento estadístico inverso. Mientras que la probabilidad condicional tradicional nos permite calcular la probabilidad de una observación (efecto) dado un estado físico conocido (causa), el Teorema de Bayes invierte esta lógica: nos permite actualizar la probabilidad de una causa hipotética a la luz de una nueva evidencia observacional. 
+
+Si $A_1, A_2, \dots, A_k$ son eventos mutuamente excluyentes y exhaustivos (una partición del espacio muestral $S$), y $B$ es cualquier evento con $P(B) > 0$, la probabilidad posterior de $A_i$ dado $B$ se calcula mediante (Devore, Capítulo 2, Sección 2.4):
+
+$$ P(A_i | B) = \frac{P(B | A_i) P(A_i)}{\sum_{j=1}^k P(B | A_j) P(A_j)} $$
+
+En esta formulación analítica, $P(A_i)$ se denomina \textit{probabilidad a priori}, representando nuestro conocimiento o creencia sobre el estado del sistema antes de realizar la observación $B$. El término $P(B | A_i)$ es la \textit{verosimilitud} (likelihood), que cuantifica la probabilidad de observar la evidencia $B$ asumiendo que la hipótesis $A_i$ es verdadera. El denominador, calculado mediante la Ley de Probabilidad Total, actúa como una constante de normalización. El resultado, $P(A_i | B)$, es la \textit{probabilidad a posteriori}. 
+
+En la astronomía moderna, este marco es fundamental. Como se discute en \textit{Astronomical Measurement} (Apéndice A.12.1, \textit{Prior and Posterior Probability Distributions}), el enfoque bayesiano permite a los astrofísicos combinar conocimientos teóricos previos (como modelos de formación planetaria) con datos observacionales ruidosos (como fotones detectados en un CCD) para refinar rigurosamente los parámetros del universo.
+
+\subsection{Ejemplo 1: Demostración del Teorema de Actualización Secuencial}
+
+En la astronomía observacional y la exploración espacial, los datos rara vez llegan en un solo lote; las observaciones son secuenciales. Un telescopio toma una imagen, luego otra, y cada nueva medición debería refanir nuestro conocimiento del sistema. El Teorema de Bayes posee una propiedad matemática profunda y elegante que justifica este proceso: la \textit{Actualización Secuencial}. 
+
+A continuación, demostraremos un teorema fundamental que establece que actualizar una hipótesis $H$ con un primer conjunto de datos $D_1$ y utilizar el resultado como la nueva probabilidad a priori para un segundo conjunto de datos $D_2$, es matemáticamente idéntico a actualizar la hipótesis original con ambos conjuntos de datos $D_1 \cap D_2$ simultáneamente.
+
+\textbf{Teorema de Actualización Secuencial:}
+Sean $H$ una hipótesis, y $D_1, D_2$ dos conjuntos de datos observacionales. La probabilidad posterior de $H$ dado ambos conjuntos de datos satisface:
+$$ P(H | D_1 \cap D_2) = \frac{P(D_2 | H \cap D_1) P(H | D_1)}{P(D_2 | D_1)} $$
+
+\textbf{Demostración:}
+La probabilidad de $H$ dado que han ocurrido tanto $D_1$ como $D_2$ es:
+$$ P(H | D_1 \cap D_2) = \frac{P(H \cap D_1 \cap D_2)}{P(D_1 \cap D_2)} $$
+
+Para el numerador, aplicamos la regla de multiplicación para la intersección de tres eventos. Podemos expandir $P(H \cap D_1 \cap D_2)$ condicionando secuencialmente:
+$$ P(H \cap D_1 \cap D_2) = P(D_2 | H \cap D_1) \cdot P(H \cap D_1) $$
+
+A su vez, el término $P(H \cap D_1)$ puede expandirse nuevamente usando la regla de multiplicación:
+$$ P(H \cap D_1) = P(H | D_1) \cdot P(D_1) $$
+
+Sustituyendo esto en la expresión del numerador, obtenemos:
+$$ P(H \cap D_1 \cap D_2) = P(D_2 | H \cap D_1) \cdot P(H | D_1) \cdot P(D_1) $$
+
+Para el denominador, aplicamos la regla de multiplicación para la intersección de $D_1$ y $D_2$:
+$$ P(D_1 \cap D_2) = P(D_2 | D_1) \cdot P(D_1) $$
+
+Ahora, sustituimos el numerador y el denominador expandidos en la ecuación original de la probabilidad condicional:
+$$ P(H | D_1 \cap D_2) = \frac{P(D_2 | H \cap D_1) \cdot P(H | D_1) \cdot P(D_1)}{P(D_2 | D_1) \cdot P(D_1)} $$
+
+Dado que $P(D_1) > 0$ (asumiendo que la primera observación es posible), podemos cancelar $P(D_1)$ en el numerador y el denominador, lo que nos deja con el resultado deseado:
+$$ P(H | D_1 \cap D_2) = \frac{P(D_2 | H \cap D_1) P(H | D_1)}{P(D_2 | D_1)} $$
+
+\textbf{Análisis del resultado:} Esta demostración revela que el término $P(H | D_1)$ actúa exactamente como la \textit{nueva probabilidad a priori} para el segundo paso, y $P(D_2 | H \cap D_1)$ actúa como la \textit{nueva verosimilitud}. Esto garantiza que el orden en que procesamos las observaciones astronómicas (por ejemplo, medir la posición de un asteroide noche tras noche) no altera el resultado final, siempre que se aplique rigurosamente el Teorema de Bayes.
+
+
+\subsection{Ejemplo 2: Clasificación Mineralógica mediante Espectroscopia de Reflexión}
+
+Para ilustrar la actualización bayesiana en la ciencia planetaria, nos inspiramos en los principios de identificación mineralógica a través de firmas espectrales (\textit{Planetary Geology}, Capítulo sobre \textit{Spectroscopy and Mineralogy}). 
+
+Un rover marciano utiliza su espectrómetro de infrarrojo cercano para analizar un afloramiento rocoso. Basado en el contexto geológico de la cuenca de impacto, el equipo científico establece las siguientes probabilidades a priori para la composición de la roca:
+\begin{itemize}
+    \item $A_1$: La roca es basáltica (rica en piroxeno). $P(A_1) = 0.20$.
+    \item $A_2$: La roca es una condrita carbonácea (rica en arcillas). $P(A_2) = 0.60$.
+    \item $A_3$: La roca es metálica (hierro-níquel). $P(A_3) = 0.20$.
+\end{itemize}
+
+El espectrómetro detecta una profunda banda de absorción centrada en 1 $\mu$m, una firma característica de los enlaces Fe-O en el piroxeno. Definimos este evento observacional como $B$. Conociendo las calibraciones instrumentales y las propiedades físicas de los minerales, establecemos las verosimilitudes:
+\begin{itemize}
+    \item $P(B | A_1) = 0.90$ (El basalto casi siempre muestra esta banda).
+    \item $P(B | A_2) = 0.10$ (Las condritas raramente la presentan).
+    \item $P(B | A_3) = 0.05$ (Los metales no tienen bandas de absorción silicatadas).
+\end{itemize}
+
+Nos interesa calcular la probabilidad a posteriori de que la roca sea basáltica dado que se detectó la banda de 1 $\mu$m, es decir, $P(A_1 | B)$. Primero, calculamos la probabilidad total de observar la banda (el denominador):
+
+$$ P(B) = P(B | A_1)P(A_1) + P(B | A_2)P(A_2) + P(B | A_3)P(A_3) $$
+$$ P(B) = (0.90)(0.20) + (0.10)(0.60) + (0.05)(0.20) = 0.18 + 0.06 + 0.01 = 0.25 $$
+
+Aplicando ahora el Teorema de Bayes:
+
+$$ P(A_1 | B) = \frac{P(B | A_1) P(A_1)}{P(B)} = \frac{0.18}{0.25} = 0.72 $$
+
+Analíticamente, este resultado es revelador. Aunque la creencia a priori de encontrar basalto en esa zona era baja (20\%), la fuerte evidencia espectral (una verosimilitud del 90\%) actualiza nuestra certeza a un 72\%. Este es el poder del razonamiento bayesiano (\textit{Astronomical Measurement}, Sección A.12.2): los datos observacionales pueden dominar y corregir drásticamente las suposiciones iniciales derivadas de modelos geológicos contextuales.
+
+\subsection{Ejemplo 3: Aislamiento de Fallas en el Sistema de Control de Actitud}
+
+El Teorema de Bayes también es vital en la ingeniería de sistemas autónomos para la toma de decisiones en tiempo real. Tomemos como referencia los algoritmos de Detección y Aislamiento de Fallas (FDI) en naves espaciales (\textit{Modern Spacecraft Guidance, Navigation, And Control}, Capítulo sobre \textit{Fault Detection and Isolation}).
+
+Durante una maniobra de giro, el ordenador de vuelo detecta un pico de torque anómalo en la rueda de reacción principal (Evento $B$). El sistema debe diagnosticar la causa raíz para seleccionar el modo de contingencia adecuado. Las causas hipotéticas mutuamente excluyentes son:
+\begin{itemize}
+    \item $A_1$: Ruido transitorio en el sensor de efecto Hall (falsa alarma). $P(A_1) = 0.70$.
+    \item $A_2$: Impacto de micrometeorito en el panel solar adyacente, generando una vibración estructural. $P(A_2) = 0.20$.
+    \item $A_3$: Falla mecánica real en los rodamientos de la rueda. $P(A_3) = 0.10$.
+\end{itemize}
+
+Para discriminar entre estas causas, el sistema cruza la información con un sensor independiente: el rastreador de estrellas secundario. Si hay una vibración estructural real ($A_2$) o una falla mecánica ($A_3$), el rastreador de estrellas debería detectar un "jitter" (temblor) de alta frecuencia en la línea de visión. Definimos este evento corroborativo como $C$. Las verosimilitudes de detectar el jitter en el rastreador de estrellas son:
+\begin{itemize}
+    \item $P(C | A_1) = 0.05$ (El ruido del sensor de la rueda no afecta al rastreador de estrellas).
+    \item $P(C | A_2) = 0.85$ (La vibración estructural se propaga y es claramente visible en el rastreador).
+    \item $P(C | A_3) = 0.40$ (La falla mecánica genera algo de vibración, pero menos acoplada a la estructura general).
+\end{itemize}
+
+El sistema de FDI necesita calcular la probabilidad a posteriori de que se trate de un impacto de micrometeorito ($A_2$) dado que \textit{ambos} sensores reportaron la anomalía. Asumiendo independencia condicional de los sensores dado el estado de la nave, el evento observacional combinado es la intersección del pico de torque ($B$) y el jitter óptico ($C$). Para simplificar el modelo bayesiano directo sobre la causa, actualizamos las probabilidades usando la nueva evidencia $C$ sobre las creencias a priori de las causas.
+
+La probabilidad total de observar el jitter $C$ es:
+$$ P(C) = P(C | A_1)P(A_1) + P(C | A_2)P(A_2) + P(C | A_3)P(A_3) $$
+$$ P(C) = (0.05)(0.70) + (0.85)(0.20) + (0.40)(0.10) = 0.035 + 0.170 + 0.040 = 0.245 $$
+
+Aplicando el Teorema de Bayes para encontrar $P(A_2 | C)$:
+
+$$ P(A_2 | C) = \frac{P(C | A_2) P(A_2)}{P(C)} = \frac{0.170}{0.245} \approx 0.694 $$
+
+Antes de la observación del rastreador de estrellas, la hipótesis más probable era un simple error de sensor (70\%), lo que habría llevado al software a ignorar la alerta. Sin embargo, la evidencia cruzada ($C$) invierte la situación: la probabilidad de un impacto de micrometeorito salta al 69.4\%. Con esta probabilidad a posteriori, el algoritmo de \textit{Modern Spacecraft GN$\&$C} puede justificar matemáticamente la transición a un modo de control de actitud que filtre las frecuencias de resonancia estructurales, evitando así que el sistema de control entre en inestabilidad por realimentación positiva de la vibración.
+
+\subsection{Ejemplo 4: Clasificación Orbital de Cometas (Parabólico vs. Hiperbólico)}
+
+\textit{Practical Astronomy with your Calculator} (Duffett-Smith y Zwart, Sección 61). 
+
+Cuando se descubre un nuevo cometa, determinar su excentricidad orbital ($e$) es crucial para entender su origen. Si $e = 1$, la órbita es parabólica (el cometa está gravitacionalmente ligado al sistema solar o en el límite de escape). Si $e > 1$, la órbita es hiperbólica, lo que indicaría un objeto interestelar (como 'Oumuamua o Borisov) que solo está de paso.
+
+Sin embargo, las mediciones astrométricas (Ascensión Recta y Declinación) tienen errores inherentes. Definamos el evento $M$ como: \textit{la excentricidad medida es } $\hat{e} \ge 1.0$. 
+
+Tenemos dos hipótesis mutuamente excluyentes sobre la verdadera naturaleza del cometa:
+\begin{itemize}
+    \item $H_P$: El cometa tiene una órbita verdaderamente parabólica ($e = 1$).
+    \item $H_H$: El cometa tiene una órbita verdaderamente hiperbólica ($e > 1$).
+\end{itemize}
+
+Basado en el catálogo histórico de cometas, la inmensa mayoría de los cometas de período largo provienen de la nube de Oort y tienen órbitas parabólicas. Por lo tanto, establecemos las siguientes probabilidades a priori:
+$$ P(H_P) = 0.95 $$
+$$ P(H_H) = 0.05 $$
+
+Conociendo la precisión típica de los telescopios terrestres y la propagación de errores en el cálculo de elementos orbitales (Duffett-Smith y Zwart, Sección 62), estimamos las siguientes verosimilitudes de obtener una medición $\hat{e} \ge 1.0$:
+\begin{itemize}
+    \item $P(M | H_P) = 0.10$: Si el cometa es realmente parabólico, hay un 10\% de probabilidad de que el ruido observacional empuje la excentricidad medida a $\ge 1.0$ (falso positivo de hiperbolicidad).
+    \item $P(M | H_H) = 0.90$: Si el cometa es realmente hiperbólico, hay un 90\% de probabilidad de que la medición lo refleje correctamente como $\ge 1.0$.
+\end{itemize}
+
+El pipeline de reducción de datos reporta que para el nuevo cometa C/202X, la excentricidad calculada es $\hat{e} = 1.03$. Es decir, el evento $M$ ha ocurrido. Nos interesa calcular la probabilidad a posteriori de que sea un objeto interestelar, $P(H_H | M)$.
+
+Primero, calculamos la probabilidad total de observar $M$ (el denominador del Teorema de Bayes):
+$$ P(M) = P(M | H_P)P(H_P) + P(M | H_H)P(H_H) $$
+$$ P(M) = (0.10)(0.95) + (0.90)(0.05) = 0.095 + 0.045 = 0.140 $$
+
+Ahora, aplicamos el Teorema de Bayes para encontrar la probabilidad posterior:
+$$ P(H_H | M) = \frac{P(M | H_H) P(H_H)}{P(M)} = \frac{0.045}{0.140} \approx 0.3214 $$
+
+\textbf{Conclusión:} 
+A pesar de que la medición directa sugiere una órbita hiperbólica ($\hat{e} = 1.03$), el Teorema de Bayes nos revela que la probabilidad real de que el cometa sea interestelar es de apenas un 32.14\%. La fuerte probabilidad a priori de que los cometas sean parabólicos ($95\%$), combinada con una tasa de falsos positivos del 10\% debido al error instrumental, hace que sea estadísticamente más probable (67.86\%) que el cometa sea en realidad parabólico y que la medición $\hat{e} \ge 1.0$ sea solo una fluctuación del ruido. Este ejemplo demuestra por qué en la astrometría moderna, nunca se debe confiar ciegamente en un parámetro orbital derivado sin un análisis bayesiano riguroso que contemple las tasas base y los errores de medición.

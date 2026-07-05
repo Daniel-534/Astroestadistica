@@ -2,6 +2,133 @@
 
 \section{Conteos}
 
+En el desarrollo de la teoría de la probabilidad, antes de poder asignar valores numéricos a los eventos, es imperativo determinar el tamaño del espacio muestral, es decir, el número total de resultados posibles. Cuando los resultados de un experimento son numerosos, enumerarlos uno por uno se vuelve una tarea impracticable. Para resolver esto, la estadística se apoya en principios fundamentales de conteo. 
+
+El principio más elemental y poderoso es la \textbf{Regla del Producto} (Devore, Capítulo 2, Sección 2.3). Esta regla establece que si un proceso o experimento puede describirse como una sucesión de $k$ etapas, donde la primera etapa tiene $n_1$ resultados posibles, la segunda tiene $n_2$ resultados (independientemente de lo que haya ocurrido en la primera), y así sucesivamente, entonces el número total de resultados en el espacio muestral $S$ es el producto de las posibilidades de cada etapa:
+
+$$ N(S) = n_1 \times n_2 \times \dots \times n_k $$
+
+Complementariamente, la \textbf{Regla de la Suma} se utiliza cuando un evento puede descomponerse en categorías mutuamente excluyentes, sumando simplemente el número de resultados de cada categoría (Devore, Sección 2.3).
+
+\subsection{Ejemplo 1: Configuración de Carga Útil en una Sonda Espacial}
+
+Para ilustrar la Regla del Producto en un contexto de ingeniería espacial, nos inspiramos en la arquitectura modular de los subsistemas de naves no tripuladas (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Spacecraft Subsystems and Payloads}). 
+
+Durante la fase de diseño preliminar de una misión a asteroides, el equipo de sistemas debe definir la configuración base del bus de la nave. El proceso de configuración se divide en tres etapas secuenciales e independientes, donde cada etapa representa la selección de un subsistema crítico:
+\begin{itemize}
+    \item \textbf{Etapa 1 (Propulsión):} Se debe elegir entre 3 tipos de sistemas de propulsión disponibles (Propulsión química bipropelente, Propulsión iónica de efecto Hall, Propulsión eléctrica de plasma).
+    \item \textbf{Etapa 2 (Navegación):} Se debe seleccionar el conjunto de sensores primarios entre 4 arquitecturas distintas (Solo rastreador de estrellas, Rastreador de estrellas + IMU, Navegación óptica relativa, Navegación por radio de espacio profundo).
+    \item \textbf{Etapa 3 (Comunicación):} Se debe elegir la banda de frecuencia para el enlace de telemetry entre 2 opciones (Banda X, Banda Ka).
+\end{itemize}
+
+El experimento consiste en definir una configuración única para la sonda. Aplicando la Regla del Producto (Devore, Sección 2.3), el número total de configuraciones posibles (el tamaño del espacio muestral $S$) es:
+
+$$ N(S) = 3 \times 4 \times 2 = 24 $$
+
+Desde una perspectiva analítica, este espacio muestral de 24 elementos define el universo de configuraciones que los ingenieros deben evaluar mediante simulaciones de Monte Carlo para garantizar que al menos una configuración satisfaga los requisitos de masa, potencia y $\Delta V$ de la misión. Si se quisiera calcular la probabilidad de seleccionar al azar una configuración que utilice propulsión iónica (asumiendo que todas las configuraciones son igualmente probables en un sorteo de diseño), el conteo preciso de $N(S)$ es el denominador indispensable para aplicar la definición clásica de probabilidad.
+
+\subsection{Ejemplo 2: Matriz de Observación Fotométrica en un Telescopio Robótico}
+
+En la astronomía observacional, la planificación de las tomas de datos implica la configuración de múltiples parámetros instrumentales. Tomemos como referencia los sistemas de adquisición de datos y la fotometría de precisión (\textit{Practical Astronomy with your Calculator}, Sección sobre \textit{Photometry and the UBVRI System}, y \textit{Astronomical Measurement}, Capítulo sobre \textit{Detectors and Instruments}).
+
+Un telescopio robótico está programado para ejecutar una secuencia de observación de un cúmulo estelar. El pipeline de control del telescopio debe configurar el instrumento para cada exposición individual. La configuración de un "frame" (cuadro) de imagen se realiza en tres etapas secuenciales:
+\begin{itemize}
+    \item \textbf{Etapa 1 (Filtro):} La rueda de filtros selecciona una banda espectral entre 5 opciones estándar del sistema Johnson-Cousins ($U, B, V, R, I$).
+    \item \textbf{Etapa 2 (Tiempo de exposición):} El controlador de la cámara CCD establece el tiempo de integración entre 3 opciones predefinidas (Corto: 10s, Medio: 60s, Largo: 300s).
+    \item \textbf{Etapa 3 (Modo de lectura):} Se elige la velocidad de lectura del CCD para equilibrar el ruido de lectura y el tiempo muerto entre 2 opciones (Modo Rápido, Modo Lento).
+\end{itemize}
+
+El experimento consiste en generar un tipo único de cuadro fotométrico. Utilizando la Regla del Producto, el número total de configuraciones de cuadro distintas que el telescopio puede producir es:
+
+$$ N(S) = 5 \times 3 \times 2 = 30 $$
+
+Este resultado analítico nos indica que el espacio muestral de posibles configuraciones de un solo cuadro está compuesto por 30 eventos simples. Por ejemplo, un resultado simple sería la tupla $(V, \text{Medio}, \text{Lento})$. 
+
+Si el telescopio toma una secuencia de 3 cuadros consecutivos para promediar y reducir el ruido cósmico, y cada cuadro se configura de manera independiente, la Regla del Producto se aplica nuevamente a nivel de la secuencia. El número total de secuencias de 3 cuadros posibles sería $30 \times 30 \times 30 = 27,000$. Comprender la magnitud de estos espacios muestrales discretos es fundamental para los astrónomos al diseñar estrategias de observación (dithering) y para los estadísticos que modelan la probabilidad de que ciertos errores sistemáticos instrumentales (como el ruido de lectura en el modo rápido) se correlacionen con bandas espectrales específicas.
+
 \section{Permutaciones}
 
+En muchas situaciones experimentales, no solo nos interesa seleccionar un subconjunto de objetos o eventos de una población mayor, sino que el \textit{orden} en el que estos elementos son seleccionados o dispuestos es fundamental para el resultado del experimento. Cuando el orden de los elementos importa, estamos tratando con permutaciones. 
+
+Una permutación es un subconjunto ordenado de tamaño $k$ que se puede formar a partir de $n$ individuos u objetos en un grupo (Devore, Capítulo 2, Sección 2.3). El número de permutaciones de tamaño $k$ que se pueden formar con $n$ objetos se denota como $P_{k,n}$. 
+
+Analíticamente, la fórmula para calcular el número de permutaciones se deriva directamente de la Regla del Producto. Para la primera posición hay $n$ opciones, para la segunda hay $n-1$ opciones (ya que un objeto ha sido utilizado y no hay reemplazo), y así sucesivamente hasta la $k$-ésima posición, donde quedan $n-k+1$ opciones. Esto se expresa de manera compacta utilizando la notación factorial:
+
+$$ P_{k,n} = n(n-1)(n-2)\cdots(n-k+1) = \frac{n!}{(n-k)!} $$
+
+La distinción analítica crucial entre permutaciones y combinaciones (que se verá en la siguiente sección) radica estrictamente en la relevancia del orden.
+
+\subsection{Ejemplo 1: Secuencia de Apuntamiento en un Telescopio Espacial}
+
+Para ilustrar la aplicación de las permutaciones en la planificación orbital, consideremos la programación de un telescopio espacial en órbita baja terrestre (LEO). El telescopio tiene una lista de 10 objetivos astrofísicos de alta prioridad (por ejemplo, exoplanetas específicos en tránsito). Sin embargo, debido a las estrictas restricciones de presupuesto térmico y a las ventanas de comunicación con la red de espacio profundo, el telescopio solo puede realizar observaciones consecutivas de 3 de estos 10 objetivos durante una órbita específica.
+
+Definamos el experimento como: \textit{Seleccionar y ordenar 3 objetivos de una lista de 10 para ser observados en secuencia}. 
+
+Es imperativo modelar esto como una permutación y no como una simple combinación. En la dinámica de naves espaciales (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Attitude Control Systems}), el orden de apuntamiento (slew) altera drásticamente el perfil térmico de la nave. Observar el objetivo A, luego el B y finalmente el C requiere un gasto de combustible y una disipación de calor completamente diferentes que observar C, luego B y luego A, debido a la inercia del telescopio y la exposición diferencial de sus radiadores al Sol.
+
+Por lo tanto, calculamos el número total de secuencias de observación posibles (el tamaño del espacio muestral $S$) utilizando la fórmula de permutaciones con $n = 10$ y $k = 3$:
+
+$$ P_{3,10} = \frac{10!}{(10-3)!} = \frac{10!}{7!} = 10 \times 9 \times 8 = 720 $$
+
+Existen 720 secuencias ordenadas distintas. Si el planificador de la misión quisiera calcular la probabilidad de que una secuencia generada aleatoriamente cumpla con un perfil térmico específico (asumiendo que todas las permutaciones son igualmente probables en un sorteo ciego), el denominador de su modelo probabilístico sería rigurosamente 720. Ignorar el orden y usar combinaciones ($\binom{10}{3} = 120$) subestimaría el espacio muestral real y destruiría la validez física del modelo de probabilidad.
+
+\subsection{Ejemplo 2: Secuencia de Análisis en un Espectrómetro de Masas Planetario}
+
+En la ciencia planetaria, el análisis in situ de muestras geológicas requiere instrumentación de altísima precisión. Tomemos como referencia los procedimientos de los laboratorios de muestras en rovers marcianos, como el instrumento SAM (Sample Analysis at Mars) (\textit{Planetary Geology}, Capítulo sobre \textit{In Situ Instrumentation and Analytical Techniques}).
+
+Un rover ha recolectado polvo y regolito de 7 ubicaciones geológicas distintas. El laboratorio a bordo debe procesar 4 de estas muestras en una secuencia de horneado dentro del espectrómetro de masas. Debido a la física del instrumento, el orden en que las muestras se introducen en la cámara de vacío es crítico: las muestras procesadas primero pueden dejar "residuos de memoria" (gases adsorbidos en las paredes) que contaminan las lecturas de las muestras procesadas posteriormente.
+
+Definimos el experimento como: \textit{Seleccionar y ordenar 4 muestras geológicas de un total de 7 para la secuencia de análisis}.
+
+Dado que la secuencia de horneado afecta los resultados científicos (la contaminación cruzada depende de qué muestra precede a cuál), el orden es una variable de estado fundamental. Aplicamos la fórmula de permutaciones (Devore, Sección 2.3) con $n = 7$ y $k = 4$:
+
+$$ P_{4,7} = \frac{7!}{(7-4)!} = \frac{7!}{3!} = 7 \times 6 \times 5 \times 4 = 840 $$
+
+El espacio muestral consta de 840 secuencias de análisis únicas. Desde una perspectiva de diseño de experimentos, el equipo científico debe evaluar estas 840 permutaciones para encontrar aquella que minimice el sesgo analítico (por ejemplo, colocando las muestras más 'prístinas' al final de la secuencia o intercalando muestras de limpieza). La modelación permutacional permite cuantificar la incertidumbre introducida por el orden de procesamiento y justificar analíticamente la secuencia óptima antes de comandar el instrumento en Marte.
+
+
 \section{Combinaciones}
+
+En muchas aplicaciones de la estadística y la probabilidad, el interés analítico no radica en el orden de los elementos seleccionados, sino únicamente en \textit{cuáles} elementos conforman el subconjunto resultante. Cuando se seleccionan $k$ objetos de un grupo de $n$ objetos sin reemplazo y el orden de selección es irrelevante, el número de subconjuntos posibles se denomina combinaciones (Devore, Capítulo 2, Sección 2.3). 
+
+La fórmula para calcular el número de combinaciones de tamaño $k$ que se pueden extraer de un conjunto de tamaño $n$ se denota como $\binom{n}{k}$ y se expresa analíticamente mediante factoriales:
+
+$$ \binom{n}{k} = \frac{n!}{k!(n-k)!} $$
+
+Es crucial establecer la distinción analítica entre permutaciones y combinaciones. Dado que cada combinación de $k$ elementos puede ser ordenada internamente de $k!$ formas distintas, el número de combinaciones es siempre una fracción del número de permutaciones. La relación que las vincula es:
+
+$$ \binom{n}{k} = \frac{P_{k,n}}{k!} $$
+
+\subsection{Ejemplo 1: Selección de Sitios de Aterrizaje en Ciencia Planetaria}
+
+Para ilustrar el uso de combinaciones en la planificación de misiones, nos inspiramos en los criterios de selección de regiones de interés y sitios de aterrizaje discutidos en \textit{Planetary Geology} (Capítulo sobre \textit{Landing Site Selection and Geological Context}). 
+
+Durante la Fase 0/A de una misión de retorno de muestras marcianas, el equipo científico ha identificado un total de $n = 15$ sitios candidatos que poseen alto valor geológico (por ejemplo, lechos de antiguos lagos o depósitos de arcillas). Sin embargo, debido a las limitaciones estrictas de presupuesto, tiempo de computación y ventanas de lanzamiento, la ingeniería de sistemas solo puede realizar un estudio de factibilidad detallado para un subconjunto de exactamente $k = 4$ sitios.
+
+Definimos el experimento como: \textit{Seleccionar un grupo de 4 sitios de aterrizaje de los 15 candidatos disponibles}. 
+
+Dado que en esta etapa el objetivo es simplemente formar un \textit{conjunto} de 4 sitios para ser evaluados en paralelo por los equipos de ingeniería, el orden en el que los sitios son nominados o extraídos de la lista original es completamente irrelevante. El resultado del experimento es la composición del grupo, no su secuencia. Por lo tanto, aplicamos la fórmula de combinaciones (Devore, Sección 2.3):
+
+$$ \binom{15}{4} = \frac{15!}{4!(15-4)!} = \frac{15!}{4! \cdot 11!} = \frac{15 \times 14 \times 13 \times 12}{4 \times 3 \times 2 \times 1} = \frac{32760}{24} = 1365 $$
+
+El espacio muestral $S$ consta de 1365 configuraciones únicas de sitios. 
+
+Desde una perspectiva analítica, si hubiéramos cometido el error de modelar esto como una permutación (asumiendo que el orden de prioridad de los 4 sitios importa), habríamos calculado $P_{4,15} = 32760$ resultados. Esto habría sobreestimado el espacio muestral en un factor de $4! = 24$, introduciendo una asimetría inexistente en el problema físico y haciendo que cualquier cálculo de probabilidad clásica (como la probabilidad de que un sitio específico con una mineralogía particular sea incluido en el estudio) fuera matemáticamente erróneo. El uso correcto de combinaciones garantiza que la asignación de probabilidades a los eventos refleje fielmente la naturaleza del proceso de selección.
+
+\subsection{Ejemplo 2: Configuración de Sub-arrays en Radio Interferometría}
+
+En la astronomía observacional de altas resoluciones, la disposición geométrica de los telescopios define la calidad de la imagen final. Tomemos como referencia los principios de síntesis de apertura y diseño de arreglos en \textit{Astronomical Measurement} (Capítulo sobre \textit{Interferometry and Aperture Synthesis}).
+
+Considere un observatorio de radio interferometría (análogo al VLA o ALMA) que cuenta con una configuración base de $n = 10$ antenas parabólicas distribuidas a lo largo de una pista en forma de "Y". Debido a una falla temporal en el sistema de criogenia de los receptores, 4 de las antenas han sido desconectadas de la red de correlación, dejando únicamente $k = 6$ antenas operativas para una campaña de observación crítica de un disco protoplanetario.
+
+Definimos el experimento como: \textit{Determinar la configuración del arreglo de observación seleccionando las 6 antenas que formarán la red activa}.
+
+En la interferometría, la calidad de la imagen (el haz sintetizado y la cobertura del plano $uv$) depende exclusivamente de \textit{cuáles} antenas están activas y de las distancias geométricas entre ellas (las líneas base). El orden temporal o la secuencia en la que el software de control 'activa' o 'selecciona' las antenas no altera en absoluto la respuesta física del interferómetro. Por lo tanto, el problema es estrictamente de combinaciones.
+
+Calculamos el número total de configuraciones de sub-arrays posibles que el observatorio podría haber formado con 6 antenas de un total de 10:
+
+$$ \binom{10}{6} = \frac{10!}{6!(10-6)!} = \frac{10!}{6! \cdot 4!} = \frac{10 \times 9 \times 8 \times 7}{4 \times 3 \times 2 \times 1} = \frac{5040}{24} = 210 $$
+
+Existen 210 sub-arrays únicos posibles. 
+
+Este resultado es fundamental para los astrónomos que realizan simulaciones de rendimiento antes de la observación. Dado que cada una de las 210 combinaciones produce un patrón de interferencia (y por ende, artefactos de imagen o "sidelobes") ligeramente distinto, el equipo científico debe evaluar este espacio muestral de 210 elementos para determinar si la configuración específica de 6 antenas que quedó operativa es suficiente para cumplir con los requisitos de dinámica de contraste necesarios para detectar un exoplaneta en formación dentro del disco. Nuevamente, la correcta delimitación del espacio muestral mediante combinaciones (Devore, Sección 2.3) es el prerrequisito para cualquier inferencia estadística sobre la confiabilidad de los datos astronómicos obtenidos.

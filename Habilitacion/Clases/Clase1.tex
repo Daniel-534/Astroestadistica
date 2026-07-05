@@ -1,9 +1,258 @@
 \chapter{Clase 1}
 
-\section{Espacios muestrales}
+\section{Espacios Muestrales}
+
+El espacio muestral de un experimento denotado por $S$, es el conjunto de todos los posibles resultados de dicho experimento (Devore, Capítulo 2). 
+
+Cada resultado individual se denomina \textit{evento simple}. Un \textit{evento compuesto} es cualquier subconjunto del espacio muestral que contenga más de un resultado.
+
+\subsection{Ejemplo 1: Clasificación Morfológica de Galaxias}
+Un telescopio espacial apunta hacia un campo profundo del universo y detecta una galaxia previamente no catalogada. El experimento consiste en analizar su perfil de brillo superficial y asignarle una clase morfológica.
+
+El resultado de esta observación debe caer en una de cuatro categorías macroscópicas mutuamente excluyentes:
+\begin{itemize}
+    \item $E$: Galaxia Espiral.
+    \item $L$: Galaxia Elíptica.
+    \item $I$: Galaxia Irregular.
+    \item $D$: Galaxia Lenticular (de disco, sin brazos espirales evidentes).
+\end{itemize}
+El espacio muestral $S$ para este experimento es simplemente el conjunto:
+
+$$ S = \{E, L, I, D\} $$
+
+\subsection{Ejemplo 2: Espacio Muestral Infinito en el Seguimiento de Cometas}
+
+Los espacios muestrales infinitos son fundamentales cuando modelamos procesos de 'espera' o 'búsqueda' en astronomía. Para determinar la órbita de un cometa recién descubierto, un observatorio necesita obtener imágenes astrométricas de alta calidad (libres de nubes y con un \textit{seeing} atmosférico adecuado) en múltiples noches.
+
+Definamos el experimento como: \textit{Intentar obtener una imagen usable del cometa noche tras noche hasta lograr el primer éxito}. 
+Los resultados básicos para cada noche son:
+\begin{itemize}
+    \item $E$: Noche despejada, imagen exitosa (Éxito).
+    \item $F$: Noche nublada o con mal \textit{seeing}, imagen descartada (Falla).
+\end{itemize}
+
+A diferencia del ejemplo anterior, aquí no fijamos un número finito de intentos de antemano. El experimento termina en el momento en que se obtiene el primer éxito. Por lo tanto, el espacio muestral $S$ contiene un número infinito de resultados posibles:
+
+$$ S = \{E, FE, FFE, FFFE, FFFFE, \dots\} $$
+
+Cada elemento de $S$ representa una secuencia única de noches. Por ejemplo, el resultado $FFFE$ significa que el astrónomo sufrió tres noches consecutivas de mal clima antes de lograr captar el cometa en la cuarta noche. 
+
+Podemos construir eventos compuestos para analizar la eficiencia del observatorio. Sea $C$ el evento \textit{lograr la imagen exitosa en un número par de noches}. Analíticamente, este evento se expresa como:
+
+$$ C = \{FE, FFFE, FFFFFFE, \dots\} $$
+
+O sea, $C = \{F^{2k-1}E \mid k = 1, 2, 3, \dots\}$. 
+
+Este tipo de espacio muestral infinito discreto es la base para modelar distribuciones de probabilidad como la Geométrica, la cual es sumamente útil en la astronomía observacional para calcular el tiempo esperado (o número de noches) que un telescopio debe invertir para caracterizar un objeto transitorio débil, como un cometa de órbita parabólica (Duffett-Smith y Zwart, Sección 62) o un evento de microlente gravitacional.
+
+\subsection{Extensión Analítica: Espacios Muestrales Continuos en Coordenadas Celestes}
+
+Aunque los ejemplos anteriores son discretos, es vital notar que la mayoría de las mediciones astronómicas generan espacios muestrales continuos. Por ejemplo, al calcular las coordenadas ecuatoriales (Ascensión Recta $\alpha$ y Declinación $\delta$) de un planeta exterior como Júpiter (Duffett-Smith y Zwart, Sección 54), el resultado de una medición sujeta a error instrumental no es un punto exacto, sino un vector continuo. 
+
+Si definimos el experimento como \textit{medir la posición aparente de un astro}, el espacio muestral es un subconjunto de $\mathbb{R}^2$:
+
+$$ S = \{ (\alpha, \delta) \in \mathbb{R}^2 \mid 0 \le \alpha < 24^h, -90^\circ \le \delta \le 90^\circ \} $$
+
+En este escenario continuo, la probabilidad de obtener un resultado exacto (un evento simple) es estrictamente cero. Los eventos de interés (como que el planeta esté en una región específica de la eclíptica para estudiar sus perturbaciones orbitales) se definen como regiones o áreas dentro de este espacio muestral continuo, requiriendo el uso de funciones de densidad de probabilidad y cálculo integral para su evaluación.
 
 \section{Eventos}
 
+Un evento es cualquier recopilación o subconjunto de resultados contenidos en el espacio muestral $S$ (Devore, Capítulo 2, Sección 2.1). 
+
+Si un evento consiste en exactamente un resultado, se denomina \textit{evento simple}; si consiste en más de un resultado, se denomina \textit{evento compuesto}. Dado que un evento es simplemente un conjunto, las operaciones y resultados de la teoría elemental de conjuntos se utilizan para estudiar las relaciones entre ellos. Las operaciones primarias incluyen:
+\begin{itemize}
+    \item \textbf{Unión ($A \cup B$):} El evento que consiste en todos los resultados que están en $A$, en $B$, o en ambos.
+    \item \textbf{Intersección ($A \cap B$):} El evento que consiste en todos los resultados que están tanto en $A$ como en $B$.
+    \item \textbf{Complemento ($A'$):} El conjunto de todos los resultados en $S$ que no están en $A$.
+    \item \textbf{Eventos mutuamente excluyentes (disjuntos):} Dos eventos son mutuamente excluyentes si no tienen resultados en común (es decir, $A \cap B = \emptyset$).
+\end{itemize}
+
+La correcta formulación de eventos permite traducir preguntas físicas o astronómicas complejas a lenguaje matemático riguroso, sentando las bases para el cálculo de probabilidades y la inferencia estadística.
+
+\subsection{Ejemplo 1: Clasificación Taxonómica de Asteroides}
+
+Un sondeo astronómico detecta dos asteroides cercanos a la Tierra. Basado en sus espectros de reflexión, cada asteroide se clasifica en uno de tres complejos taxonómicos principales:
+\begin{itemize}
+    \item $C$: Complejo-C (Carbonáceos).
+    \item $S$: Complejo-S (Silicáceos).
+    \item $X$: Complejo-X (Metálicos).
+\end{itemize}
+
+El experimento consiste en registrar la clasificación del par de asteroides. El espacio muestral $S$ está compuesto por $3^2 = 9$ eventos simples, representados como pares ordenados:
+
+
+$$ S = \{CC, CS, CX, SC, SS, SX, XC, XS, XX\} $$
+
+A partir de este espacio muestral, podemos definir eventos compuestos que representen escenarios de interés para la ciencia planetaria y la defensa planetaria:
+
+Sea $A$ el evento en el que \textit{ambos asteroides pertenecen al mismo complejo taxonómico}:
+$$ A = \{CC, SS, XX\} $$
+
+Sea $B$ el evento en el que \textit{al menos uno de los asteroides es de tipo S (silicáceo)}:
+$$ B = \{CS, SC, SS, SX, XS\} $$
+
+Podemos analizar las operaciones entre estos eventos para extraer conclusiones analíticas:
+\begin{itemize}
+    \item \textbf{Intersección ($A \cap B$):} El evento en que ambos son del mismo tipo \textit{y} al menos uno es tipo S. Esto solo ocurre si ambos son silicáceos.
+    $$ A \cap B = \{SS\} $$
+    \item \textbf{Unión ($A \cup B$):} El evento en que ambos son del mismo tipo \textit{o} al menos uno es tipo S.
+    $$ A \cup B = \{CC, CS, SC, SS, SX, XS, XX\} $$
+    \item \textbf{Complemento ($A'$):} El evento en que los asteroides \textit{no} son del mismo tipo (población taxonómicamente diversa).
+    $$ A' = \{CS, CX, SC, SX, XC, XS\} $$
+\end{itemize}
+
+Finalmente, para ilustrar la exclusión mutua (Devore, Sección 2.1), definamos el evento $D$ como \textit{exactamente un asteroide es de tipo X y el otro es de tipo C}:
+$$ D = \{CX, XC\} $$
+Los eventos $A$ y $D$ son \textit{mutuamente excluyentes} (o disjuntos), ya que es lógicamente imposible que ambos asteroides sean del mismo tipo ($A$) y que al mismo tiempo sean de tipos diferentes ($D$). Analíticamente, $A \cap D = \emptyset$.
+
+\subsection{Ejemplo 2: Modelado Gravitacional en Operaciones de Proximidad}
+
+Los espacios muestrales y sus eventos también son cruciales en la ingeniería aeroespacial y la navegación de naves autónomas (Capítulo 4, \textit{Modern Spacecraft Guidance, Navigation, and Control}, sección "Irregular solar system bodies"). 
+
+Cuando una nave espacial (chaser) se aproxima a un asteroide, el campo gravitacional es altamente irregular. Los modelos de Armónicos Esféricos (SHE) son computacionalmente rápidos pero solo son válidos fuera de la 'esfera de Brillouin' (la región que engloba todo el cuerpo). Para operar dentro de esta esfera, el sistema de navegación debe cambiar a un modelo de Mascones o Poliedros, el cual es más preciso pero computacionalmente costoso.
+
+Definamos el experimento como: \textit{La nave ejecuta 3 pasadas de aproximación consecutivas. En cada pasada, el sistema de navegación a bordo selecciona el modelo gravitacional a utilizar para el filtro de navegación}. 
+Los resultados básicos para cada pasada son:
+\begin{itemize}
+    \item $H$: Se utiliza el modelo de Armónicos Esféricos (SHE).
+    \item $M$: Se utiliza el modelo de Mascones.
+\end{itemize}
+
+El espacio muestral $S$ está compuesto por $2^3 = 8$ eventos simples:
+$$ S = \{HHH, HHM, HMH, MHH, HMM, MHM, MMH, MMM\} $$
+
+Definamos los siguientes eventos compuestos para evaluar la estrategia de navegación:
+
+Sea $A$ el evento en el que \textit{el modelo SHE se utiliza exactamente en dos de las tres pasadas}:
+$$ A = \{HHM, HMH, MHH\} $$
+
+Sea $B$ el evento en el que \textit{el modelo de Mascones se utiliza en la primera pasada} (lo que indicaría que la nave penetró la esfera de Brillouin de manera temprana o agresiva):
+$$ B = \{MHH, MHM, MMH, MMM\} $$
+
+La intersección de estos eventos, $A \cap B$, representa el escenario donde la nave usó Mascones en la primera pasada, pero logró revertir al modelo SHE (más ligero computacionalmente) en las dos siguientes (probablemente porque la trayectoria de aproximación la alejó temporalmente de la esfera de Brillouin):
+$$ A \cap B = \{MHH\} $$
+
+Por último, consideremos el evento $C$ definido como \textit{el modelo de Mascones nunca es utilizado en las tres pasadas} (la nave se mantuvo estrictamente fuera de la esfera de Brillouin):
+$$ C = \{HHH\} $$
+
+Los eventos $B$ y $C$ son \textit{mutuamente excluyentes}. Físicamente, la nave no puede haber utilizado el modelo de Mascones en la primera pasada ($B$) y al mismo tiempo no haberlo utilizado nunca ($C$). Por lo tanto, $B \cap C = \emptyset$. La modelación de estos eventos como subconjuntos del espacio muestral dota a los ingenieros de GNC de un marco analítico riguroso para cuantificar el riesgo de saturación del ordenador de a bordo (OBC). A través de esta representación, es posible estimar la probabilidad de que la exigencia computacional —derivada de la conmutación entre los distintos modelos de navegación— rebase los umbrales de seguridad del hardware durante las críticas fases de operaciones de proximidad, vinculando directamente esta métrica de riesgo con la geometría de la trayectoria relativa planificada.
+
 \section{Probabilidad}
 
+La probabilidad es la rama de las matemáticas que proporciona un marco riguroso para cuantificar la incertidumbre y el azar en cualquier situación donde pueden ocurrir diversos sucesos. En el contexto de la astronomía y la exploración espacial, la probabilidad es una herramienta fundamental para modelar desde la distribución de materia en el universo hasta la confiabilidad de los sistemas de navegación de una sonda interplanetaria. 
+
+La probabilidad asigna a cada evento $A$ un número $P(A)$ que representa una medida precisa de la oportunidad de que $A$ ocurra (Devore, Capítulo 2, Sección 2.2). En la práctica astronómica, esta asignación puede basarse en la interpretación frecuentista (por ejemplo, la tasa de ocurrencia de supernovas en un volumen dado, o la fracción de estrellas que poseen planetas) o en la interpretación geométrica/combinatoria (como la probabilidad de que un exoplaneta esté alineado con nuestra línea de visión). 
+
 \section{Axiomas de probabilidad}
+
+Para garantizar que las asignaciones de probabilidad sean matemáticamente consistentes y respeten las nociones intuitivas de la frecuencia y la certeza, la teoría moderna se fundamenta en los Axiomas de Kolmogorov. Estos axiomas establecen las reglas inquebrantables que gobiernan la medida de probabilidad $P$ sobre un espacio muestral $S$ (Devore, Capítulo 2, Sección 2.2):
+
+\begin{itemize}
+    \item \textbf{AXIOMA 1:} Para cualquier evento $A$, $P(A) \ge 0$. (La probabilidad no puede ser negativa).
+    \item \textbf{AXIOMA 2:} $P(S) = 1$. (La probabilidad del espacio muestral completo, es decir, de que ocurra algún resultado, es la certeza absoluta).
+    \item \textbf{AXIOMA 3:} Si $A_1, A_2, A_3, \dots$ es un conjunto (finito o infinito) de eventos mutuamente excluyentes (disjuntos), entonces la probabilidad de su unión es la suma de sus probabilidades individuales:
+    $$ P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i) $$
+\end{itemize}
+
+A partir de estos tres axiomas, se pueden derivar rigurosamente todas las demás propiedades y teoremas de la probabilidad, como la probabilidad del complemento o la probabilidad de la unión de eventos no disjuntos.
+
+\subsection{Propiedades Fundamentales Derivadas de los Axiomas}
+
+A partir de los tres axiomas de Kolmogorov, se pueden demostrar rigurosamente las siguientes propiedades (Devore, Capítulo 2, Sección 2.2). Sea $S$ el espacio muestral y $A, B, C \subseteq S$ eventos cualesquiera:
+
+\begin{enumerate}
+    \item \textbf{Probabilidad del evento nulo:}
+    $$ P(\emptyset) = 0 $$
+
+    \item \textbf{Cota superior de la probabilidad:} Para todo evento $A$,
+    $$ P(A) \le 1 $$
+
+    \item \textbf{Regla del complemento:} 
+    $$ P(A') = 1 - P(A) $$
+
+    \item \textbf{Monotonicidad:} Si $A \subseteq B$, entonces
+    $$ P(A) \le P(B) $$
+
+    \item \textbf{Regla de adición para dos eventos:}
+    $$ P(A \cup B) = P(A) + P(B) - P(A \cap B) $$
+
+    \item \textbf{Regla de adición para tres eventos (Principio de Inclusión-Exclusión):}
+    $$ P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C) $$
+
+    \item \textbf{Desigualdad de Boole (cota de la unión):} Para cualesquiera eventos $A_1, A_2, \dots, A_n$,
+    $$ P\left(\bigcup_{i=1}^{n} A_i\right) \le \sum_{i=1}^{n} P(A_i) $$
+
+    \item \textbf{Leyes de De Morgan aplicadas a la probabilidad:}
+    $$ P\left((A \cup B)'\right) = P(A' \cap B') $$
+    $$ P\left((A \cap B)'\right) = P(A' \cup B') $$
+\end{enumerate}
+
+
+
+\subsection{Ejemplo 1: Demostración de la Probabilidad del Evento Nulo}
+
+Consideremos una sucesión infinita de eventos donde cada evento es el conjunto vacío:
+$$ A_1 = \emptyset, \quad A_2 = \emptyset, \quad A_3 = \emptyset, \quad \dots $$
+
+Primero, notamos que estos eventos son mutuamente excluyentes, ya que la intersección de cualquier par de ellos es el conjunto vacío ($A_i \cap A_j = \emptyset \cap \emptyset = \emptyset$). 
+
+Segundo, la unión de todos estos eventos es simplemente el conjunto vacío:
+$$ \bigcup_{i=1}^{\infty} A_i = \emptyset $$
+
+Aplicando el \textbf{Axioma 3} (aditividad para eventos mutuamente excluyentes), tenemos:
+$$ P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i) $$
+
+Sustituyendo la unión y los eventos individuales por $\emptyset$, la ecuación se convierte en:
+$$ P(\emptyset) = \sum_{i=1}^{\infty} P(\emptyset) = P(\emptyset) + P(\emptyset) + P(\emptyset) + \dots $$
+
+Por el \textbf{Axioma 1}, sabemos que $P(\emptyset) \ge 0$, y por el \textbf{Axioma 2}, sabemos que cualquier probabilidad debe ser un número finito (acotado superiormente por 1). La única forma en que una suma infinita de un mismo valor no negativo converge a un número finito es si dicho valor es estrictamente cero. Si $P(\emptyset)$ fuera mayor que 0, la suma divergiría al infinito, violando la definición de probabilidad. 
+
+Por lo tanto, concluimos que:
+$$ P(\emptyset) = 0 $$
+
+\subsection{Ejemplo 2: Clasificación de Señales en Astronomía de Ondas Gravitacionales}
+
+En el campo emergente de la astronomía de ondas gravitacionales, los interferómetros como LIGO y Virgo detectan continuamente candidatos a señales transitorias. Históricamente, tras años de ciclos de observación, la colaboración científica ha catalogado la naturaleza de estos eventos. Definamos el espacio muestral $S$ para la clasificación de un nuevo candidato a señal como:
+\begin{itemize}
+    \item $A$: Fusión de agujeros negros binarios (BBH).
+    \item $B$: Fusión de estrellas de neutrones binarias (BNS).
+    \item $C$: Artefacto instrumental o ruido sísmico (falso positivo).
+\end{itemize}
+
+Estos tres eventos son mutuamente excluyentes y exhaustivos. Basándonos en la frecuencia relativa histórica de los catálogos de eventos (como los catálogos GWTC de la colaboración LIGO-Virgo-KAGRA), podemos asignar las siguientes probabilidades a priori para un candidato genérico no validado:
+$$ P(A) = 0.78, \quad P(B) = 0.07, \quad P(C) = 0.15 $$
+
+Supongamos que el sistema de alerta temprana dispara una notificación para un nuevo evento candidato. Nos interesa calcular la probabilidad de que esta señal corresponda a una coalescencia binaria compacta genuina de origen astrofísico. Definamos este evento compuesto como $E = A \cup B$.
+
+Dado que los eventos $A$ y $B$ son mutuamente excluyentes (un evento no puede ser simultáneamente una fusión de agujeros negros y de estrellas de neutrones), la probabilidad de su unión es simplemente la suma de sus probabilidades individuales:
+$$ P(E) = P(A) + P(B) = 0.78 + 0.07 = 0.85 $$
+
+Alternativamente, este mismo resultado puede obtenerse de manera más directa utilizando la regla del complemento. El evento de que la señal sea una coalescencia genuina ($E$) es exactamente el complemento del evento de que sea un artefacto instrumental ($C$). Por lo tanto:
+$$ P(E) = 1 - P(C) = 1 - 0.15 = 0.85 $$
+
+Estas asignaciones probabilísticas son críticas para los algoritmos de filtrado que procesan las alertas en tiempo real, priorizando aquellas candidatas con una probabilidad de ser astrofísicas ($P(E)$) lo suficientemente alta como para activar telescopios de seguimiento electromagnético en todo el mundo.
+
+\subsection{Ejemplo 3: Análisis de Modos de Falla en un Rover de Exploración}
+
+Los axiomas de probabilidad son la base para evaluar la confiabilidad de sistemas críticos en la ingeniería aeroespacial. Tomemos como referencia los análisis de modos de falla y efectos críticos (FMECA) utilizados en la operación de rovers en superficies planetarias (\textit{Modern Spacecraft Guidance, Navigation, and Control}, y \textit{Planetary Geology}).
+
+Considere el mecanismo de perforación y muestreo de un rover marciano. Durante un ciclo operativo de 1 hora, el sistema puede experimentar uno de tres modos de falla críticos. Definimos los eventos mutuamente excluyentes (ya que el diagnóstico del sistema identifica la causa raíz primaria de manera única):
+\begin{itemize}
+    \item $A$: Atasco mecánico del motor del taladro.
+    \item $B$: Sobrecarga térmica en la electrónica de control.
+    \item $C$: Pérdida de sincronización en el bus de comunicación.
+\end{itemize}
+
+Basado en datos históricos de pruebas en cámaras de vacío térmico, se han asignado las siguientes probabilidades para un ciclo operativo dado:
+$$ P(A) = 0.04, \quad P(B) = 0.03, \quad P(C) = 0.01 $$
+
+Sea $F$ el evento compuesto definido como \textit{que ocurra cualquier tipo de falla durante el ciclo}. Matemáticamente, $F$ es la unión de los tres eventos:
+$$ F = A \cup B \cup C $$
+
+Dado que $A$, $B$ y $C$ son mutuamente excluyentes, podemos aplicar directamente el \textbf{Axioma 3} para calcular la probabilidad de falla total del sistema:
+$$ P(F) = P(A) + P(B) + P(C) = 0.04 + 0.03 + 0.01 = 0.08 $$
+
+El evento de interés para la misión es que el rover complete el ciclo de perforación \textit{sin fallas}, lo cual corresponde al evento complemento $F'$. Utilizando la propiedad derivada de los Axiomas 2 y 3 (donde $P(F) + P(F') = 1$), calculamos la probabilidad de éxito:
+$$ P(F') = 1 - P(F) = 1 - 0.08 = 0.92 $$
+
+Este cálculo indica que el rover tiene un 92\% de confiabilidad por ciclo. Los ingenieros de vuelo utilizan este valor para propagar la incertidumbre a través de la planificación de la misión, determinando cuántos ciclos redundantes deben programarse para asegurar que la probabilidad acumulada de obtener al menos una muestra geológica supere el umbral requerido para los objetivos científicos de la misión.
