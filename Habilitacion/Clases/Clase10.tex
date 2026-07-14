@@ -1,4 +1,4 @@
-\chapter{Clase 10}
+	\chapter{Clase 10}
 
 \section{Método de Mínimos Cuadrados}
 
@@ -266,3 +266,112 @@ Dado que $\theta$ es una función de $\alpha$, es decir, $\theta = h(\alpha)$, n
 $$ \hat{\theta} = h(\hat{\alpha}) = \frac{m_{max}^{1-\hat{\alpha}} - 8^{1-\hat{\alpha}}}{m_{max}^{1-\hat{\alpha}} - m_{min}^{1-\hat{\alpha}}} $$
 
 Este resultado demuestra la elegancia y utilidad del marco de máxima verosimilitud en la astrofísica moderna. Permite a los investigadores extraer el parámetro fundamental de la población ($\hat{\alpha}$) mediante optimización numérica de la log-verosimilitud, y luego propagar instantáneamente esa estimación a cualquier cantidad física derivada (como la fracción de supernovas, la masa total del cúmulo, o la tasa de formación de enanas blancas) simplemente sustituyendo $\hat{\alpha}$ en las ecuaciones teóricas correspondientes, preservando todas las propiedades de optimalidad estadística.
+
+
+\subsection{Ejemplo: Estimación de Máxima Verosimilitud en Funciones de Luminosidad con Umbral de Detección Desconocido}
+
+En la astrofísica de altas energías y los sondeos de gran campo, una de las tareas estadísticas más complejas y frecuentes es la caracterización de poblaciones transitorias (como Brotes de Rayos Gamma o Fractures de Radio Rápidos). La función de distribución de luminosidades de estas poblaciones a menudo sigue una ley de potencias. Sin embargo, debido a los límites de sensibilidad instrumental, el umbral mínimo de luminosidad $L_{min}$ que la población puede tener (o que el instrumento puede detectar de manera fiable) no siempre se conoce a priori y debe ser inferido directamente de los datos. 
+
+Este problema es un ejemplo magistral de estimación de máxima verosimilitud donde el parámetro define el soporte de la distribución, lo que requiere un tratamiento matemático riguroso (Devore, Capítulo 6, Sección 6.2).
+
+Definimos la variable aleatoria continua $X$ como la luminosidad intrínseca de un evento. Supongamos que $X$ sigue una distribución de Pareto (una ley de potencias truncada inferiormente), cuya función de densidad de probabilidad depende de dos parámetros desconocidos: el índice espectral $\alpha > 1$ y el umbral mínimo $x_m > 0$:
+
+$$
+f(x; \alpha, x_m) = 
+\begin{cases} 
+\frac{\alpha - 1}{x_m} \left( \frac{x}{x_m} \right)^{-\alpha} & \text{para } x \ge x_m \\
+0 & \text{para } x < x_m
+\end{cases}
+$$
+
+Sea $x_1, x_2, \dots, x_n$ una muestra aleatoria de $n$ eventos detectados. El objetivo es encontrar los estimadores de máxima verosimilitud (EMV) $\hat{\alpha}$ y $\hat{x}_m$.
+
+\textbf{Paso 1: Construcción de la Función de Verosimilitud con Soporte Variable}
+La función de verosimilitud conjunta, dado que las observaciones son independientes, es el producto de las densidades individuales. Para manejar rigurosamente el soporte dependiente del parámetro, introducimos la función indicadora $\mathbb{I}(\cdot)$:
+
+$$ L(\alpha, x_m) = \prod_{i=1}^{n} \left[ \frac{\alpha - 1}{x_m} \left( \frac{x_i}{x_m} \right)^{-\alpha} \mathbb{I}(x_i \ge x_m) \right] $$
+
+Para que la verosimilitud sea estrictamente positiva (es decir, para que el modelo sea compatible con los datos observados), debe cumplirse que $x_m \le x_i$ para todo $i = 1, \dots, n$. Esto impone una restricción analítica dura: $x_m \le \min(x_1, \dots, x_n)$. Denotemos al estadístico de orden mínimo como $x_{(1)} = \min(x_i)$.
+
+\textbf{Paso 2: La Log-Verosimilitud de Perfil}
+Asumiendo que la restricción $x_m \le x_{(1)}$ se satisface, la función indicadora es 1 y podemos aplicar el logaritmo natural para obtener la log-verosimilitud $\ell(\alpha, x_m)$:
+
+$$ \ell(\alpha, x_m) = n \ln(\alpha - 1) - n \ln(x_m) - \alpha \sum_{i=1}^{n} \ln\left( \frac{x_i}{x_m} \right) $$
+
+Expandiendo el logaritmo de la razón:
+
+$$ \ell(\alpha, x_m) = n \ln(\alpha - 1) - n \ln(x_m) - \alpha \sum_{i=1}^{n} \ln(x_i) + n \alpha \ln(x_m) $$
+
+Agrupando los términos que dependen de $x_m$:
+
+$$ \ell(\alpha, x_m) = n \ln(\alpha - 1) - \alpha \sum_{i=1}^{n} \ln(x_i) + n(\alpha - 1) \ln(x_m) $$
+
+\textbf{Paso 3: Maximización respecto al Umbral $x_m$}
+Observamos analíticamente que, dado que $\alpha > 1$, el término $n(\alpha - 1) \ln(x_m)$ es una función estrictamente creciente de $x_m$. Para maximizar $\ell(\alpha, x_m)$, debemos hacer $x_m$ tan grande como sea posible. Sin embargo, la restricción de soporte dicta que $x_m \le x_{(1)}$. 
+
+Por lo tanto, el estimador de máxima verosimilitud para el umbral inferior es exactamente el valor mínimo observado en la muestra:
+$$ \hat{x}_m = x_{(1)} $$
+
+Este resultado es fundamental en astronomía: la mejor estimación del límite de corte de la población es el evento más débil que hemos logrado detectar.
+
+\textbf{Paso 4: Maximización respecto al Índice Espectral $\alpha$}
+Sustituimos $\hat{x}_m = x_{(1)}$ en la log-verosimilitud para obtener la log-verosimilitud perfilada $\ell_p(\alpha)$:
+
+$$ \ell_p(\alpha) = n \ln(\alpha - 1) - \alpha \sum_{i=1}^{n} \ln(x_i) + n(\alpha - 1) \ln(x_{(1)}) $$
+
+Derivamos respecto a $\alpha$ e igualamos a cero para encontrar el punto crítico (la ecuación de score):
+
+$$ \frac{\partial \ell_p}{\partial \alpha} = \frac{n}{\alpha - 1} - \sum_{i=1}^{n} \ln(x_i) + n \ln(x_{(1)}) = 0 $$
+
+Reorganizando y factorizando $n$:
+
+$$ \frac{n}{\alpha - 1} = \sum_{i=1}^{n} \ln(x_i) - n \ln(x_{(1)}) = \sum_{i=1}^{n} \left[ \ln(x_i) - \ln(x_{(1)}) \right] = \sum_{i=1}^{n} \ln\left( \frac{x_i}{x_{(1)}} \right) $$
+
+Despejando $\alpha$, obtenemos el EMV cerrado para el índice espectral:
+
+$$ \hat{\alpha} = 1 + \frac{n}{\sum_{i=1}^{n} \ln\left( \frac{x_i}{x_{(1)}} \right)} $$
+
+\textbf{Paso 5: Información de Fisher y Varianza Asintótica}
+Para cuantificar la incertidumbre de nuestra estimación, calculamos la segunda derivada de la log-verosimilitud perfilada respecto a $\alpha$:
+
+$$ \frac{\partial^2 \ell_p}{\partial \alpha^2} = -\frac{n}{(\alpha - 1)^2} $$
+
+La Información de Fisher esperada $I(\alpha)$ es el valor esperado del negativo de esta segunda derivada. Dado que la segunda derivada es determinista (no depende de las variables aleatorias $X_i$ una vez perfilada), tenemos:
+
+$$ I(\alpha) = \frac{n}{(\alpha - 1)^2} $$
+
+De acuerdo con las propiedades asintóticas del EMV (Devore, Proposición en Sección 6.2), la varianza asintótica de $\hat{\alpha}$ está dada por la inversa de la Información de Fisher (el límite inferior de Cramér-Rao):
+
+$$ V(\hat{\alpha}) \approx [I(\alpha)]^{-1} = \frac{(\alpha - 1)^2}{n} $$
+
+\subsection*{Preguntas Clave y Análisis de la Teoría}
+
+\textbf{Pregunta 1: Sobre las Condiciones de Regularidad y el Estadístico de Orden}
+\textit{¿Por qué la estimación de $\hat{x}_m = x_{(1)}$ no puede obtenerse simplemente igualando la derivada parcial $\frac{\partial \ell}{\partial x_m}$ a cero, y cómo se relaciona esto con las condiciones de regularidad mencionadas en la teoría de la estimación?}
+
+\textbf{Respuesta Analítica:}
+Si intentamos derivar $\ell(\alpha, x_m)$ respecto a $x_m$ directamente, obtenemos $\frac{\partial \ell}{\partial x_m} = \frac{n(\alpha - 1)}{x_m}$. Dado que $\alpha > 1$ y $x_m > 0$, esta derivada es estrictamente positiva y nunca se anula. Esto ocurre porque el parámetro $x_m$ define el límite del soporte de la distribución, violando la condición de regularidad estándar que exige que el soporte de $f(x; \theta)$ no dependa del parámetro $\theta$ (Devore, Sección 6.2). El máximo no se encuentra en un punto crítico del cálculo diferencial interior, sino en la frontera del espacio de parámetros permitidos por la función indicadora, lo que obliga a utilizar el estadístico de orden mínimo $x_{(1)}$ como solución de optimización con restricciones.
+
+\textbf{Pregunta 2: Aplicación del Principio de Invarianza}
+\textit{En astrofísica, rara vez nos interesa solo el índice $\alpha$; usualmente queremos conocer la luminosidad media de la población. Si el valor esperado teórico de la distribución es $E[X] = \frac{\alpha x_m}{\alpha - 1}$, ¿cuál es el EMV de la luminosidad media y por qué no es necesario derivar una nueva función de verosimilitud?}
+
+\textbf{Respuesta Analítica:}
+Gracias al \textbf{Principio de Invarianza} de los estimadores de máxima verosimilitud (Devore, Proposición 6.19), si $\hat{\alpha}$ y $\hat{x}_m$ son los EMV de los parámetros originales, el EMV de cualquier función $g(\alpha, x_m)$ es simplemente $g(\hat{\alpha}, \hat{x}_m)$. Por lo tanto, el estimador de la luminosidad media es:
+
+$$ \widehat{E[X]} = \frac{\hat{\alpha} \hat{x}_m}{\hat{\alpha} - 1} = \frac{\hat{\alpha} x_{(1)}}{\hat{\alpha} - 1} $$
+
+Sustituyendo la expresión de $\hat{\alpha}$, notamos que $\hat{\alpha} - 1 = \frac{n}{\sum \ln(x_i / x_{(1)})}$. Esto simplifica enormemente la expresión a:
+
+$$ \widehat{E[X]} = x_{(1)} \left( 1 + \frac{n}{\sum_{i=1}^{n} \ln\left( \frac{x_i}{x_{(1)}} \right)} \right) $$
+
+Este resultado demuestra la potencia computacional del método: una vez resuelto el sistema de score, las propiedades de cualquier momento poblacional se obtienen por sustitución algebraica directa.
+
+\textbf{Pregunta 3: Comportamiento Asintótico y Límites Físicos}
+\textit{Analice la expresión de la varianza asintótica $V(\hat{\alpha}) \approx \frac{(\alpha - 1)^2}{n}$. ¿Qué ocurre con la precisión del estimador cuando la población astrofísica es extremadamente "plana" (es decir, cuando $\alpha \to 1^+$), y qué implicaciones tiene esto para el diseño de sondeos telescópicos?}
+
+\textbf{Respuesta Analítica:}
+Si el índice espectral $\alpha$ se acerca a 1 por la derecha ($\alpha \to 1^+$), el numerador de la varianza asintótica $(\alpha - 1)^2$ tiende a cero. Esto parecería indicar que la estimación se vuelve infinitamente precisa. Sin embargo, esto es una ilusión matemática que esconde una catástrofe física. 
+
+Cuando $\alpha \to 1^+$, la distribución de colas pesadas implica que la probabilidad de observar eventos de luminosidad extremadamente alta domina la muestra. El estadístico $\sum \ln(x_i / x_{(1)})$ en el denominador de $\hat{\alpha}$ crecerá descontroladamente debido a la presencia de valores atípicos (outliers) astrofísicos, haciendo que $\hat{\alpha}$ colapse hacia 1. Además, para $\alpha \le 2$, la varianza teórica de la población $V(X)$ diverge, por lo que el Teorema Central del Límite y las aproximaciones asintóticas normales pierden su validez práctica. 
+
+Para el diseño de sondeos, esto dicta que si se sospecha que $\alpha$ es cercano a 1 (poblaciones dominadas por eventos ultra-luminosos pero raros), un tamaño de muestra $n$ grande no garantizando la convergencia gaussiana del estimador. Se requerirá el uso de técnicas robustas o estimación bayesiana con previas informativas (Devore, Capítulo 6, ejercicios suplementarios) para regularizar la divergencia de la verosimilitud.
