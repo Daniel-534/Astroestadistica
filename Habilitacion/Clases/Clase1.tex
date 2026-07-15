@@ -57,7 +57,7 @@ En este escenario continuo, la probabilidad de obtener un resultado exacto (un e
 
 \section{Eventos}
 
-Un evento es cualquier recopilación o subconjunto de resultados contenidos en el espacio muestral $S$ (Devore, Capítulo 2, Sección 2.1). 
+Un evento es cualquier recopilación o subconjunto de resultados contenidos en el espacio muestral $S$. 
 
 Si un evento consiste en exactamente un resultado, se denomina \textit{evento simple}; si consiste en más de un resultado, se denomina \textit{evento compuesto}. Dado que un evento es simplemente un conjunto, las operaciones y resultados de la teoría elemental de conjuntos se utilizan para estudiar las relaciones entre ellos. Las operaciones primarias incluyen:
 \begin{itemize}
@@ -101,13 +101,13 @@ Podemos analizar las operaciones entre estos eventos para extraer conclusiones a
     $$ A' = \{CS, CX, SC, SX, XC, XS\} $$
 \end{itemize}
 
-Finalmente, para ilustrar la exclusión mutua (Devore, Sección 2.1), definamos el evento $D$ como \textit{exactamente un asteroide es de tipo X y el otro es de tipo C}:
+Finalmente, para ilustrar la exclusión mutua, definamos el evento $D$ como \textit{exactamente un asteroide es de tipo X y el otro es de tipo C}:
 $$ D = \{CX, XC\} $$
-Los eventos $A$ y $D$ son \textit{mutuamente excluyentes} (o disjuntos), ya que es lógicamente imposible que ambos asteroides sean del mismo tipo ($A$) y que al mismo tiempo sean de tipos diferentes ($D$). Analíticamente, $A \cap D = \emptyset$.
+Los eventos $A$ y $D$ son \textit{mutuamente excluyentes} (o disjuntos), ya que es lógicamente imposible que ambos asteroides sean del mismo tipo ($A$) y que al mismo tiempo sean de tipos diferentes ($D$). $$A \cap D = \emptyset$$
 
 \subsection{Ejemplo 2: Modelado Gravitacional en Operaciones de Proximidad}
 
-Los espacios muestrales y sus eventos también son cruciales en la ingeniería aeroespacial y la navegación de naves autónomas (Capítulo 4, \textit{Modern Spacecraft Guidance, Navigation, and Control}, sección "Irregular solar system bodies"). 
+Los espacios muestrales y sus eventos también son cruciales en la ingeniería aeroespacial y la navegación de naves autónomas (Capítulo 4, \textit{Modern Spacecraft Guidance, Navigation, and Control}, sección `Irregular solar system bodies'). 
 
 Cuando una nave espacial (chaser) se aproxima a un asteroide, el campo gravitacional es altamente irregular. Los modelos de Armónicos Esféricos (SHE) son computacionalmente rápidos pero solo son válidos fuera de la 'esfera de Brillouin' (la región que engloba todo el cuerpo). Para operar dentro de esta esfera, el sistema de navegación debe cambiar a un modelo de Mascones o Poliedros, el cual es más preciso pero computacionalmente costoso.
 
@@ -120,6 +120,111 @@ Los resultados básicos para cada pasada son:
 
 El espacio muestral $S$ está compuesto por $2^3 = 8$ eventos simples:
 $$ S = \{HHH, HHM, HMH, MHH, HMM, MHM, MMH, MMM\} $$
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    asteroid/.style={circle, draw=black!55, fill=gray!18, minimum size=22mm, align=center, font=\bfseries},
+    zone/.style={draw=orange!75!black, dashed, thick},
+    orbit/.style={draw=blue!70!black, thick, -{Stealth[length=2.2mm]}},
+    spacecraft/.style={draw=black!70, fill=white, regular polygon, regular polygon sides=3, minimum size=6mm, rotate=25},
+    hlabel/.style={rectangle, rounded corners=2pt, draw=blue!70!black, fill=blue!10, inner sep=2pt, font=\scriptsize\bfseries},
+    mlabel/.style={rectangle, rounded corners=2pt, draw=orange!85!black, fill=orange!15, inner sep=2pt, font=\scriptsize\bfseries},
+    note/.style={align=center, font=\scriptsize}
+]
+
+\node[asteroid] (body) at (0,0) {Asteroide\\irregular};
+\draw[zone] (body.center) circle [radius=2.15cm];
+\node[orange!85!black, font=\scriptsize\bfseries] at (0,-2.45) {esfera de Brillouin};
+
+\draw[orbit] (-4.7,1.85) .. controls (-3.0,2.70) and (-1.55,2.10) .. (-0.75,1.25)
+    .. controls (0.10,0.25) and (1.35,0.80) .. (4.7,1.75);
+
+\node[spacecraft] (s1) at (-3.15,2.35) {};
+\node[spacecraft, rotate=-10] (s2) at (-0.72,1.23) {};
+\node[spacecraft, rotate=20] (s3) at (2.40,1.05) {};
+
+\node[hlabel, above=2mm of s1] {Pasada 1: $H$};
+\node[mlabel, below left=1mm and -2mm of s2] {Pasada 2: $M$};
+\node[hlabel, below=2mm of s3] {Pasada 3: $H$};
+
+\draw[blue!55!black, densely dotted, thick] (s1) -- (body);
+\draw[orange!80!black, densely dotted, thick] (s2) -- (body);
+\draw[blue!55!black, densely dotted, thick] (s3) -- (body);
+
+\node[note, blue!70!black] at (-3.65,0.10) {Fuera de la esfera:\\modelo SHE rápido};
+\node[note, orange!85!black] at (3.25,-0.40) {Dentro de la esfera:\\modelo de Mascones};
+
+\end{tikzpicture}
+\caption{Representación física de las operaciones de proximidad. La nave realiza pasadas alrededor de un asteroide irregular; fuera de la esfera de Brillouin puede usar Armónicos Esféricos ($H$), mientras que al entrar en la región cercana debe cambiar a Mascones ($M$).}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    level 1/.style={sibling distance=7.2cm, level distance=1.35cm},
+    level 2/.style={sibling distance=3.6cm, level distance=1.35cm},
+    level 3/.style={sibling distance=1.8cm, level distance=1.95cm},
+    edge from parent/.style={draw=black!45, -{Stealth[length=2mm]}},
+    start/.style={circle, draw=black!55, fill=black!5, minimum size=8mm, font=\bfseries},
+    hnode/.style={rectangle, rounded corners=2pt, draw=blue!70!black, fill=blue!10, minimum width=13mm, minimum height=6mm, font=\bfseries},
+    mnode/.style={rectangle, rounded corners=2pt, draw=orange!85!black, fill=orange!15, minimum width=13mm, minimum height=6mm, font=\bfseries},
+    leaf/.style={rectangle, rounded corners=2pt, draw=black!50, fill=white, minimum width=16mm, minimum height=7mm, font=\ttfamily\bfseries},
+    leafA/.style={leaf, fill=blue!8, draw=blue!65!black},
+    leafB/.style={leaf, fill=orange!10, draw=orange!85!black},
+    leafAB/.style={leaf, fill=red!10, draw=red!70!black},
+    leafC/.style={leaf, fill=green!10, draw=green!45!black},
+    badge/.style={rounded corners=1pt, font=\tiny\bfseries, inner sep=1.5pt},
+    label/.style={font=\bfseries\footnotesize, text=black!70}
+]
+
+\node[start] {Inicio}
+    child { node[hnode] {H}
+        child { node[hnode] {H}
+            child { node[leafC] (HHH) {HHH} }
+            child { node[leafA] (HHM) {HHM} }
+        }
+        child { node[mnode] {M}
+            child { node[leafA] (HMH) {HMH} }
+            child { node[leaf] (HMM) {HMM} }
+        }
+    }
+    child { node[mnode] {M}
+        child { node[hnode] {H}
+            child { node[leafAB] (MHH) {MHH} }
+            child { node[leafB] (MHM) {MHM} }
+        }
+        child { node[mnode] {M}
+            child { node[leafB] (MMH) {MMH} }
+            child { node[leafB] (MMM) {MMM} }
+        }
+    };
+
+
+\node[badge, draw=green!45!black, fill=green!20, text=green!35!black, above=1mm of HHH] {C};
+\node[badge, draw=blue!65!black, fill=blue!18, text=blue!65!black, above=1mm of HHM] {A};
+\node[badge, draw=blue!65!black, fill=blue!18, text=blue!65!black, above=1mm of HMH] {A};
+\node[badge, draw=red!70!black, fill=red!18, text=red!70!black, above=1mm of MHH] {$A\cap B$};
+\node[badge, draw=orange!85!black, fill=orange!22, text=orange!85!black, above=1mm of MHM] {B};
+\node[badge, draw=orange!85!black, fill=orange!22, text=orange!85!black, above=1mm of MMH] {B};
+\node[badge, draw=orange!85!black, fill=orange!22, text=orange!85!black, above=1mm of MMM] {B};
+
+\end{tikzpicture}
+
+\vspace{2mm}
+\begin{minipage}{0.96\textwidth}
+\footnotesize
+\textbf{Clave:} \textcolor{blue!70!black}{$H$} denota Armónicos Esféricos (SHE) y \textcolor{orange!85!black}{$M$} denota Mascones. Los colores resaltan los eventos $A=\{HHM, HMH, MHH\}$, $B=\{MHH, MHM, MMH, MMM\}$, $C=\{HHH\}$ y la intersección $A\cap B=\{MHH\}$.
+\end{minipage}
+\caption{Diagrama jerárquico del espacio muestral para tres pasadas de aproximación. Cada rama representa la elección del modelo gravitacional en una pasada y cada hoja corresponde a uno de los ocho eventos simples.}
+\end{figure}
+
+
 
 Definamos los siguientes eventos compuestos para evaluar la estrategia de navegación:
 
@@ -222,6 +327,57 @@ En el campo emergente de la astronomía de ondas gravitacionales, los interferó
 Estos tres eventos son mutuamente excluyentes y exhaustivos. Basándonos en la frecuencia relativa histórica de los catálogos de eventos (como los catálogos GWTC de la colaboración LIGO-Virgo-KAGRA), podemos asignar las siguientes probabilidades a priori para un candidato genérico no validado:
 $$ P(A) = 0.78, \quad P(B) = 0.07, \quad P(C) = 0.15 $$
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    detector/.style={rectangle, rounded corners=3pt, draw=black!55, fill=black!4, minimum width=27mm, minimum height=9mm, align=center, font=\bfseries},
+    process/.style={rectangle, rounded corners=3pt, draw=purple!65!black, fill=purple!7, minimum width=34mm, minimum height=10mm, align=center, font=\bfseries},
+    classA/.style={rectangle, rounded corners=3pt, draw=blue!70!black, fill=blue!10, minimum width=30mm, minimum height=11mm, align=center},
+    classB/.style={rectangle, rounded corners=3pt, draw=green!50!black, fill=green!10, minimum width=30mm, minimum height=11mm, align=center},
+    classC/.style={rectangle, rounded corners=3pt, draw=red!70!black, fill=red!8, minimum width=30mm, minimum height=11mm, align=center},
+    group/.style={draw=blue!60!black, dashed, rounded corners=5pt, inner sep=5mm},
+    arrow/.style={draw=black!55, thick, -{Stealth[length=2.2mm]}},
+    bar/.style={draw=black!30, rounded corners=1pt, minimum height=3mm, anchor=west},
+    note/.style={align=center, font=\scriptsize}
+]
+
+\node[detector] (ligo) at (-3.8,2.0) {LIGO};
+\node[detector] (virgo) at (0,2.0) {Virgo};
+\node[detector] (kagra) at (3.8,2.0) {KAGRA};
+\node[process] (alerta) at (0,0.65) {Candidato transitorio\\en alerta temprana};
+
+\draw[arrow] (ligo) -- (alerta);
+\draw[arrow] (virgo) -- (alerta);
+\draw[arrow] (kagra) -- (alerta);
+
+\node[classA] (bbh) at (-3.6,-1.05) {$A$: BBH\\$P(A)=0.78$};
+\node[classB] (bns) at (0,-1.05) {$B$: BNS\\$P(B)=0.07$};
+\node[classC] (ruido) at (3.6,-1.05) {$C$: ruido\\$P(C)=0.15$};
+
+\draw[arrow] (alerta) -- (bbh);
+\draw[arrow] (alerta) -- (bns);
+\draw[arrow] (alerta) -- (ruido);
+
+\begin{scope}[on background layer]
+    \node[group, fit=(bbh)(bns), label={[blue!60!black, font=\scriptsize\bfseries]below:$E=A\cup B$: origen astrofísico, $P(E)=0.85$}] {};
+\end{scope}
+
+\node[note] (excl) at (0,-2.85) {Clasificación exhaustiva y mutuamente excluyente:\\cada candidato cae en una sola de las clases $A$, $B$ o $C$.};
+
+\node[bar, fill=blue!45, minimum width=39mm] at (-2.5,-3.85) {};
+\node[bar, fill=green!45, minimum width=3.5mm] at (1.5,-3.85) {};
+\node[bar, fill=red!45, minimum width=7.5mm] at (1.95,-3.85) {};
+\node[font=\tiny, blue!70!black] at (-0.55,-4.15) {BBH};
+\node[font=\tiny, green!45!black] at (1.68,-4.15) {BNS};
+\node[font=\tiny, red!70!black] at (2.32,-4.15) {ruido};
+
+\end{tikzpicture}
+\caption{Representación visual del experimento de clasificación de una señal candidata de ondas gravitacionales. La red de interferómetros produce una alerta, y el candidato se asigna a una de tres clases mutuamente excluyentes: fusión de agujeros negros binarios ($A$), fusión de estrellas de neutrones binarias ($B$) o artefacto instrumental ($C$).}
+\end{figure}
+
+
 Supongamos que el sistema de alerta temprana dispara una notificación para un nuevo evento candidato. Nos interesa calcular la probabilidad de que esta señal corresponda a una coalescencia binaria compacta genuina de origen astrofísico. Definamos este evento compuesto como $E = A \cup B$.
 
 Dado que los eventos $A$ y $B$ son mutuamente excluyentes (un evento no puede ser simultáneamente una fusión de agujeros negros y de estrellas de neutrones), la probabilidad de su unión es simplemente la suma de sus probabilidades individuales:
@@ -245,6 +401,60 @@ Considere el mecanismo de perforación y muestreo de un rover marciano. Durante 
 
 Basado en datos históricos de pruebas en cámaras de vacío térmico, se han asignado las siguientes probabilidades para un ciclo operativo dado:
 $$ P(A) = 0.04, \quad P(B) = 0.03, \quad P(C) = 0.01 $$
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    roverbody/.style={rectangle, rounded corners=4pt, draw=black!65, fill=gray!15, minimum width=29mm, minimum height=12mm},
+    wheel/.style={circle, draw=black!70, fill=black!18, minimum size=7mm},
+    fail/.style={rectangle, rounded corners=3pt, draw=red!70!black, fill=red!8, minimum width=31mm, minimum height=10mm, align=center, font=\scriptsize\bfseries},
+    ok/.style={rectangle, rounded corners=3pt, draw=green!45!black, fill=green!10, minimum width=34mm, minimum height=10mm, align=center, font=\scriptsize\bfseries},
+    line/.style={draw=black!45, thick, -{Stealth[length=2.1mm]}},
+    warn/.style={draw=red!70!black, thick, dashed},
+    note/.style={align=center, font=\scriptsize}
+]
+
+\fill[brown!12] (-5.2,-1.65) rectangle (5.2,-2.35);
+\draw[brown!55!black, thick] (-5.2,-1.65) .. controls (-3.5,-1.45) and (-2.2,-1.85) .. (-0.8,-1.62)
+    .. controls (0.7,-1.36) and (2.4,-1.88) .. (5.2,-1.58);
+\foreach \x/\y in {-4.5/-1.86,-3.7/-2.08,-2.9/-1.75,2.7/-1.96,3.55/-1.78,4.25/-2.12}
+    \fill[brown!45!black] (\x,\y) circle (0.035);
+
+\node[roverbody] (body) at (0,0) {};
+\node[wheel] at (-0.95,-0.73) {};
+\node[wheel] at (0.95,-0.73) {};
+\draw[black!65, thick] (-0.95,-0.73) circle (0.18);
+\draw[black!65, thick] (0.95,-0.73) circle (0.18);
+\draw[black!65, thick] (-0.55,0.62) -- (-0.2,1.12) -- (0.45,1.12);
+\draw[fill=blue!18, draw=blue!60!black] (0.45,0.92) rectangle (1.3,1.32);
+\draw[black!60, thick] (1.28,-0.05) -- (2.1,-0.75);
+\draw[black!60, thick] (2.1,-0.75) -- (2.1,-1.55);
+\draw[fill=orange!35, draw=orange!80!black] (1.93,-1.55) rectangle (2.27,-1.88);
+\node[font=\scriptsize\bfseries] at (0,0.03) {Rover};
+\node[note] at (2.85,-1.25) {taladro\\muestreo};
+
+\node[ok] (success) at (0,2.05) {$F'$: ciclo sin fallas\\$P(F')=0.92$};
+\node[fail] (jam) at (-3.55,0.65) {$A$: atasco\\mecánico $0.04$};
+\node[fail] (heat) at (3.55,0.65) {$B$: sobrecarga\\térmica $0.03$};
+\node[fail] (bus) at (0,-2.95) {$C$: pérdida de\\comunicación $0.01$};
+
+\draw[line, green!45!black] (body) -- (success);
+\draw[warn] (body.west) -- (jam.east);
+\draw[warn] (body.east) -- (heat.west);
+\draw[warn] (body.south) -- (bus.north);
+
+\draw[green!45!black, line width=4pt] (-2.8,2.85) -- (2.25,2.85);
+\draw[red!70!black, line width=4pt] (2.25,2.85) -- (2.69,2.85);
+\node[font=\tiny, green!40!black] at (-0.25,3.1) {92\% operación nominal};
+\node[font=\tiny, red!70!black] at (2.47,3.1) {8\% falla};
+
+\node[note, text=black!70] at (0,-3.75) {Los tres modos de falla compiten como causas raíz mutuamente excluyentes;\\su unión forma el evento total de falla $F=A\cup B\cup C$.};
+
+\end{tikzpicture}
+\caption{Escena conceptual de un ciclo de perforación de un rover marciano. La barra superior resume la confiabilidad del ciclo: la mayor parte corresponde al evento complementario $F'$ (operación nominal), mientras que el segmento rojo agrupa los modos de falla $A$, $B$ y $C$.}
+\end{figure}
 
 Sea $F$ el evento compuesto definido como \textit{que ocurra cualquier tipo de falla durante el ciclo}. Matemáticamente, $F$ es la unión de los tres eventos:
 $$ F = A \cup B \cup C $$

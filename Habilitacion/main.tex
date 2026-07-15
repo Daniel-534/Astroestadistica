@@ -6,20 +6,26 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage[margin=2cm]{geometry}
-\usepackage[hidelinks]{hyperref}
-\usepackage{titlesec}
 \usepackage{parskip}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,babel,backgrounds,fit,positioning,shapes.geometric}
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
 
 \title{Astroestadística}
 \author{Daniel Soto Villada\\Estudiante del pregrado de astronomía}
 \date{\today}
 
-\titleformat{\chapter}
-  {\normalfont\huge\bfseries}
-  {}
-  {0pt}
-  {}
-\titlespacing*{\chapter}{0pt}{0pt}{1cm}
+\makeatletter
+\def\@makechapterhead#1{%
+  {\parindent \z@ \raggedright \normalfont
+    \huge\bfseries #1\par\nobreak
+    \vskip 1cm}}
+\def\@makeschapterhead#1{%
+  {\parindent \z@ \raggedright \normalfont
+    \huge\bfseries #1\par\nobreak
+    \vskip 1cm}}
+\makeatother
 
 \begin{document}
 
