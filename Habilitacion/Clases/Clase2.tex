@@ -4,7 +4,7 @@
 
 En la práctica astronómica y astrofísica, rara vez se evalúan los eventos de manera aislada. Frecuentemente, se dispone de información parcial o de observaciones preliminares que restringen el universo de posibilidades. La probabilidad condicional es la herramienta analítica que permite cuantificar cómo cambia la probabilidad de un evento cuando se tiene la certeza de que otro evento relacionado ya ha ocurrido. 
 
-Si $A$ y $B$ son dos eventos tales que $P(B) > 0$, la probabilidad condicional de $A$ dado que $B$ ha ocurrido se define como (Devore, Capítulo 2, Sección 2.4):
+Si $A$ y $B$ son dos eventos tales que $P(B) > 0$, la probabilidad condicional de $A$ dado que $B$ ha ocurrido se define como:
 
 $$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$
 
@@ -40,7 +40,9 @@ Esto significa que, dado que el asteroide brilla intensamente en el radar, hay u
 
 \textbf{Pregunta 2:} Si un asteroide ya ha sido clasificado espectroscópicamente como de tipo M ($M$), ¿cuál es la probabilidad de que presente alta reflectividad radar ($R$)?
 $$ P(R|M) = \frac{P(M \cap R)}{P(M)} = \frac{0.15}{0.20} = 0.75 $$
-Aquí, el espacio muestral se reduce a los 40 asteroides metálicos. La probabilidad es notablemente distinta (75\%). Este ejemplo resalta una de las advertencias más importantes en la inferencia estadística (Devore, Sección 2.4): la probabilidad de que un asteroide sea metálico dado su radar ($P(M|R)$) no es la misma que la probabilidad de que tenga alto radar dado que es metálico ($P(R|M)$).
+Aquí, el espacio muestral se reduce a los 40 asteroides metálicos. La probabilidad es notablemente distinta (75\%). Este ejemplo resalta una de las advertencias más importantes en la inferencia estadística: la probabilidad de que un asteroide sea metálico dado su radar ($P(M|R)$) no es la misma que la probabilidad de que tenga alto radar dado que es metálico ($P(R|M)$).
+
+$$P(M|R)\neq P(R|M)$$
 
 \subsection{Ejemplo 2: Regla de Multiplicación en Pipelines de Transitorios Astrofísicos}
 
@@ -48,7 +50,7 @@ La regla de multiplicación es indispensable para modelar cadenas de eventos dep
 
 Definimos el experimento como el procesamiento de una alerta nocturna por parte del pipeline automatizado.
 \begin{itemize}
-    \item $V$: El evento astrofísico subyacente es \textit{verdadero} y genuino (ej. una kilonova o supernova real).
+    \item $V$: El evento astrofísico es \textit{verdadero} y genuino (ej. una kilonova o supernova real).
     \item $V'$: El evento es un \textit{artefacto} instrumental o ruido cósmico (falso astrofísico).
     \item $F$: El pipeline de software etiqueta la alerta como 'Candidato de Alta Prioridad' (Flag).
 \end{itemize}
@@ -74,7 +76,7 @@ Este análisis condicional y multiplicativo permite a los arquitectos de misione
 
 \section{Independencia de eventos}
 
-Dos eventos $A$ y $B$ se consideran independientes si la ocurrencia de uno de ellos no proporciona ninguna información sobre la ocurrencia del otro (Devore, Capítulo 2, Sección 2.5). 
+Dos eventos $A$ y $B$ se consideran independientes si la ocurrencia de uno de ellos no proporciona ninguna información sobre la ocurrencia del otro. 
 
 Analíticamente, esta noción se formaliza a través de la probabilidad condicional. Si $A$ y $B$ son independientes, entonces la probabilidad de $A$ dado que $B$ ha ocurrido es simplemente la probabilidad marginal de $A$:
 $$ P(A|B) = P(A) $$
@@ -82,7 +84,7 @@ $$ P(A|B) = P(A) $$
 Sustituyendo la definición de probabilidad condicional $P(A|B) = \frac{P(A \cap B)}{P(B)}$ en la ecuación anterior y reordenando, obtenemos la \textbf{regla de multiplicación para eventos independientes}, que es la definición operativa más utilizada en la práctica:
 $$ P(A \cap B) = P(A) \cdot P(B) $$
 
-Es crucial destacar una distinción analítica fundamental (Devore, Sección 2.5): la independencia y la exclusión mutua son conceptos radicalmente distintos. Si dos eventos son mutuamente excluyentes ($A \cap B = \emptyset$), saber que $A$ ocurrió garantiza que $B$ no ocurrió ($P(B|A) = 0$), lo cual implica una dependencia extrema. Por el contrario, si son independientes, la ocurrencia de $A$ no altera en absoluto la probabilidad de $B$.
+Es crucial destacar una distinción analítica fundamental: la independencia y la exclusión mutua son conceptos radicalmente distintos. Si dos eventos son mutuamente excluyentes ($A \cap B = \emptyset$), saber que $A$ ocurrió garantiza que $B$ no ocurrió ($P(B|A) = 0$), lo cual implica una dependencia extrema. Por el contrario, si son independientes, la ocurrencia de $A$ no altera en absoluto la probabilidad de $B$.
 
 \subsection{Ejemplo 1: Confiabilidad de Subsistemas Críticos en una Sonda Interplanetaria}
 
