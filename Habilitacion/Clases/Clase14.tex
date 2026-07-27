@@ -1,0 +1,232 @@
+\chapter{Clase 14}
+
+\section{Técnicas de prueba de hipótesis de una muestra Parte 1}
+
+La inferencia estadística no se limita únicamente a estimar parámetros mediante intervalos de confianza; con frecuencia, el objetivo científico o ingenieril es tomar una decisión binaria respecto a una pretensión o afirmación sobre el estado físico de un sistema. De acuerdo con el texto guía, una prueba de hipótesis es un procedimiento formal que utiliza datos muestrales para evaluar la validez de una afirmación sobre una población (Devore, Capítulo 8, Sección 8.1). 
+
+En el contexto de la astrodinámica y la astronomía, esto se traduce en validar si un nuevo algoritmo de navegación cumple con los requisitos de precisión, si la luminosidad promedio de una clase de estrellas cefeidas coincide con los modelos teóricos, o si la tasa de éxito de un sistema de adquisición de estrellas supera el umbral mínimo de la misión.
+
+\subsection{Lógica y estructura de una prueba de hipótesis}
+
+El procedimiento se fundamenta en la contradicción lógica. En lugar de intentar probar directamente que una afirmación es verdadera, la estadística asume que una afirmación base (la hipótesis nula) es cierta, y busca evidencia muestral tan contundente que haga imposible sostenerla.
+
+\begin{itemize}
+    \item \textbf{Hipótesis Nula ($H_0$):} Es la afirmación inicial que se asume verdadera. Representa el estado de las cosas, el modelo teórico establecido o la especificación de diseño. Siempre tiene la forma de una igualdad, por ejemplo, $H_0: \theta = \theta_0$.
+    \item \textbf{Hipótesis Alternativa ($H_a$):} Es la afirmación que entrará en vigor si la evidencia muestral contradice fuertemente a $H_0$. Puede ser bilateral ($H_a: \theta \neq \theta_0$) o unilateral ($H_a: \theta > \theta_0$ o $H_a: \theta < \theta_0$).
+    \item \textbf{Estadístico de Prueba:} Es una variable aleatoria calculada a partir de los datos muestrales que sirve como base para la toma de decisiones. Su distribución de probabilidad bajo el supuesto de que $H_0$ es verdadera debe ser completamente conocida.
+    \item \textbf{Región de Rechazo:} Es el conjunto de valores del estadístico de prueba que son tan extremos que conducen al rechazo de $H_0$.
+\end{itemize}
+
+\subsection{Errores de Tipo I y Tipo II}
+
+Dado que la decisión se basa en una muestra aleatoria y no en la población completa, existe la posibilidad inherente de cometer errores. La teoría de pruebas de hipótesis clasifica estos errores en dos categorías fundamentales (Devore, Sección 8.1):
+
+\begin{enumerate}
+    \item \textbf{Error de Tipo I ($\alpha$):} Ocurre cuando se rechaza la hipótesis nula $H_0$ siendo esta realmente verdadera. Es un `falso positivo'. En ingeniería aeroespacial, esto equivaldría a abortar una maniobra crítica porque los sensores indican una falla que en realidad no existe. La probabilidad de cometer este error se denota como $\alpha$ y se le conoce como el \textit{nivel de significación}.
+    $$ \alpha = P(\text{Rechazar } H_0 \mid H_0 \text{ es verdadera}) $$
+    \item \textbf{Error de Tipo II ($\beta$):} Ocurre cuando no se rechaza la hipótesis nula $H_0$ siendo esta realmente falsa. Es un `falso negativo'. En el contexto de la misión, esto equivaldría a continuar una maniobra a pesar de que el sistema está genuinamente degradado. La probabilidad de cometer este error se denota como $\beta$.
+    $$ \beta = P(\text{No rechazar } H_0 \mid H_0 \text{ es falsa}) $$
+\end{enumerate}
+
+El diseño de cualquier prueba estadística busca minimizar $\alpha$ y $\beta$ simultáneamente. Sin embargo, para un tamaño de muestra fijo $n$, reducir la probabilidad de un error incrementa inevitablemente la probabilidad del otro. La única forma de reducir ambos es aumentando el tamaño de la muestra.
+
+\subsection{Pruebas para la media poblacional (Varianza conocida: Prueba Z)}
+
+Supongamos que estamos evaluando el empuje promedio $\mu$ de un propulsor de hidracina. Sabemos por pruebas históricas extensas que la varianza del proceso de combustión es $\sigma^2$ (constante y conocida). Tomamos una muestra de $n$ encendidos y calculamos la media muestral $\bar{X}$. 
+
+Si la población es normal, o si $n$ es suficientemente grande para invocar el Teorema Central del Límite, el estadístico de prueba bajo $H_0: \mu = \mu_0$ es la variable normal estándar:
+$$ Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}} $$
+
+Las regiones de rechazo para un nivel de significación $\alpha$ dependen de la forma de $H_a$:
+\begin{itemize}
+    \item \textbf{Cola superior ($H_a: \mu > \mu_0$):} Rechazar $H_0$ si $Z \ge z_{\alpha}$.
+    \item \textbf{Cola inferior ($H_a: \mu < \mu_0$):} Rechazar $H_0$ si $Z \le -z_{\alpha}$.
+    \item \textbf{Bilateral ($H_a: \mu \neq \mu_0$):} Rechazar $H_0$ si $Z \ge z_{\alpha/2}$ o $Z \le -z_{\alpha/2}$.
+\end{itemize}
+
+Esta prueba es el estándar de oro cuando la incertidumbre del instrumento de medición ($\sigma$) ha sido caracterizada exhaustivamente en laboratorios de calibración en tierra.
+
+\subsection{Pruebas para la media poblacional (Varianza desconocida: Prueba t)}
+
+En la mayoría de los escenarios de astronomía observacional y operaciones espaciales, la varianza poblacional $\sigma^2$ es desconocida y debe ser estimada a partir de la propia muestra mediante la varianza muestral $S^2$. 
+
+Al sustituir $\sigma$ por $S$, el estadístico de prueba ya no sigue una distribución normal estándar, sino una distribución $t$ de Student con $\nu = n - 1$ grados de libertad. Esta distribución tiene colas más pesadas que la normal, lo que refleja la incertidumbre adicional introducida por estimar la dispersión poblacional. El estadístico de prueba es (Devore, Sección 8.2):
+$$ T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} $$
+
+Las regiones de rechazo se construyen utilizando los valores críticos de la tabla $t$:
+\begin{itemize}
+    \item \textbf{Cola superior:} Rechazar $H_0$ si $T \ge t_{\alpha, n-1}$.
+    \item \textbf{Cola inferior:} Rechazar $H_0$ si $T \le -t_{\alpha, n-1}$.
+    \item \textbf{Bilateral:} Rechazar $H_0$ si $|T| \ge t_{\alpha/2, n-1}$.
+\end{itemize}
+
+Es imperativo notar que esta prueba asume que la población subyacente es aproximadamente normal. Si $n$ es pequeño y la población es fuertemente asimétrica, la prueba $t$ puede no ser válida, requiriendo métodos no paramétricos.
+
+\subsection{Pruebas para una proporción poblacional}
+
+En muchas misiones, el parámetro de interés no es una media continua, sino una proporción o probabilidad de éxito. Por ejemplo, la fracción $p$ de imágenes astronómicas que cumplen con los criterios de calidad de enfoque (Strehl ratio $> 0.8$). 
+
+Si se toma una muestra de $n$ imágenes y $X$ es el número de éxitos, el estimador puntual es $\hat{P} = X/n$. Para tamaños de muestra grandes (donde $np_0 \ge 10$ y $n(1-p_0) \ge 10$), la distribución binomial puede aproximarse mediante una normal. Para probar $H_0: p = p_0$, el estadístico de prueba es (Devore, Sección 8.3):
+$$ Z = \frac{\hat{P} - p_0}{\sqrt{\frac{p_0(1-p_0)}{n}}} $$
+
+Las regiones de rechazo son idénticas a las de la prueba $Z$ para la media descrita anteriormente. Esta técnica es vital para validar si un nuevo algoritmo de procesamiento de señales cumple con las tasas de detección requeridas por la agencia espacial.
+
+\subsection{El valor P como medida de evidencia}
+
+El enfoque clásico de regiones de rechazo tiene una limitación práctica: obliga a elegir un $\alpha$ arbitrario (como 0.05) antes de ver los datos. Para superar esto, la estadística moderna introduce el \textit{valor P} (p-valor). 
+
+El valor P se define como la probabilidad de obtener un valor del estadístico de prueba tan extremo o más extremo que el observado, asumiendo que $H_0$ es verdadera (Devore, Sección 8.4). Matemáticamente, para una prueba de cola superior con estadístico $Z$:
+$$ \text{Valor P} = P(Z \ge z_{\text{obs}} \mid H_0 \text{ es verdadera}) $$
+
+Para una prueba bilateral:
+$$ \text{Valor P} = 2 \times P(Z \ge |z_{\text{obs}}|) $$
+
+\textbf{Regla de decisión universal:} Rechazar $H_0$ si el Valor P $\le \alpha$.
+
+El valor P actúa como una medida continua de la fuerza de la evidencia en los datos contra $H_0$. Un valor P de 0.001 indica que, si el modelo nulo fuera correcto, sería casi imposible observar los datos actuales. En la literatura astrofísica, reportar el valor P (junto con los intervalos de confianza) es preferible a simplemente declarar `significativo' o `no significativo', ya que proporciona el contexto completo de la inferencia.
+
+\subsection{Potencia de la prueba y determinación del tamaño de muestra}
+
+La \textit{potencia} de una prueba estadística es la probabilidad de rechazar correctamente la hipótesis nula cuando esta es falsa. Es decir, es la capacidad del test para detectar una discrepancia real respecto al valor nominal $\mu_0$.
+$$ \text{Potencia} = 1 - \beta = P(\text{Rechazar } H_0 \mid H_0 \text{ es falsa}) $$
+
+La potencia no es un número fijo; depende de cuál sea el verdadero valor del parámetro $\mu$. Si el verdadero valor está muy cerca de $\mu_0$, la potencia será baja (es difícil distinguir el ruido de la señal). Si el verdadero valor se aleja mucho de $\mu_0$, la potencia se acerca a 1.
+
+Para una prueba $Z$ de cola superior ($H_a: \mu > \mu_0$), si el verdadero valor es $\mu = \mu'$, la potencia se calcula como:
+$$ \text{Potencia}(\mu') = P\left(Z \ge z_{\alpha} - \frac{\mu' - \mu_0}{\sigma / \sqrt{n}}\right) $$
+
+En la fase de diseño de una misión espacial (Conceptual Design), los ingenieros utilizan esta fórmula de manera inversa. Si se requiere que la prueba tenga una potencia de al menos $1 - \beta$ para detectar una desviación específica $\delta = \mu' - \mu_0$, se puede despejar $n$ para determinar el número mínimo de experimentos o mediciones necesarias:
+$$ n = \left( \frac{\sigma (z_{\alpha} + z_{\beta})}{\delta} \right)^2 $$
+
+Este cálculo es fundamental para optimizar los recursos. Por ejemplo, determina cuántas noches de telescopio se deben asignar para caracterizar la atmósfera de un exoplaneta con la certeza estadística requerida, o cuántos ciclos de prueba en cámara de vacío debe soportar un mecanismo de despliegue solar antes de certificar su confiabilidad. La estadística, por lo tanto, no es solo una herramienta de análisis posterior, sino el cimiento matemático de la planificación y el presupuesto de las misiones científicas.
+
+
+\subsection{Ejemplo: Manipulación Integral de las Herramientas de Prueba de Hipótesis}
+
+Para consolidar el dominio de las técnicas de prueba de hipótesis basadas en una sola muestra, es fundamental explorar cómo las diferentes herramientas matemáticas (regiones de rechazo, valores P, probabilidad de error de Tipo II y determinación del tamaño de muestra) interactúan entre sí dentro de un mismo escenario. A continuación, se presenta un ejercicio puramente estadístico que permite manipular estas fórmulas de manera rigurosa, basándose en los procedimientos establecidos en el texto guía (Devore, Capítulo 8, Secciones 8.1, 8.2 y 8.4).
+
+\textbf{Contexto del problema:}
+Un proceso químico industrial está diseñado para producir un compuesto con un rendimiento medio objetivo de $\mu_0 = 85$ gramos. Por estudios históricos extensos, se sabe que la desviación estándar del proceso es $\sigma = 4$ gramos. Se extrae una muestra aleatoria de $n = 16$ lotes para evaluar si el proceso ha sufrido una desviación en su media. Se establece un nivel de significación de $\alpha = 0.05$.
+
+\textbf{Paso 1: Formulación de Hipótesis y Región de Rechazo}
+El equipo de control de calidad está preocupado específicamente por si el rendimiento medio ha \textit{disminuido} por debajo del objetivo, lo que afectaría la rentabilidad. Por lo tanto, se plantea una prueba de cola inferior:
+$$ H_0: \mu = 85 $$
+$$ H_a: \mu < 85 $$
+
+El estadístico de prueba para una población normal con varianza conocida es (Devore, Sección 8.2):
+$$ Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}} = \frac{\bar{X} - 85}{4 / \sqrt{16}} = \frac{\bar{X} - 85}{1} = \bar{X} - 85 $$
+
+Para una prueba de cola inferior con $\alpha = 0.05$, la región de rechazo en términos del estadístico estandarizado es $Z \le -z_{0.05}$. Consultando la tabla normal estándar, $z_{0.05} = 1.645$, por lo que se rechaza $H_0$ si:
+$$ Z \le -1.645 $$
+
+Para comprender esto en las unidades originales del proceso, despejamos $\bar{X}$:
+$$ \frac{\bar{X} - 85}{1} \le -1.645 \implies \bar{X} \le 85 - 1.645 = 83.355 $$
+La región de rechazo en términos de la media muestral es $\bar{X} \le 83.355$.
+
+\textbf{Paso 2: Cálculo del Estadístico y el Valor P}
+Supongamos que la muestra de 16 lotes arroja una media muestral de $\bar{x} = 82.8$ gramos. 
+Calculamos el valor observado del estadístico de prueba:
+$$ z_{\text{obs}} = 82.8 - 85 = -2.2 $$
+
+Dado que $-2.2$ cae en la región de rechazo ($-2.2 \le -1.645$), la decisión formal es rechazar $H_0$. 
+
+Para cuantificar la fuerza de la evidencia, calculamos el valor P (Devore, Sección 8.4). Para una prueba de cola inferior, el valor P es la probabilidad de obtener un valor tan extremo o más extremo que el observado:
+$$ \text{Valor P} = P(Z \le -2.2) = \Phi(-2.2) $$
+Usando la tabla de distribución normal, $\Phi(-2.2) = 0.0139$. 
+Como el valor P ($0.0139$) es menor que el nivel de significación $\alpha$ ($0.05$), se corrobora el rechazo de la hipótesis nula. Existe evidencia estadística sólida de que el rendimiento medio ha caído por debajo de 85 gramos.
+
+\textbf{Paso 3: Evaluación de la Probabilidad de Error de Tipo II ($\beta$)}
+Rechazar $H_0$ conlleva el riesgo de un Error de Tipo I ($\alpha = 0.05$), pero no rechazarla cuando es falsa conlleva un Error de Tipo II ($\beta$). Supongamos que la verdadera media del proceso en realidad ha caído a $\mu' = 83.5$ gramos. ¿Cuál es la probabilidad de que nuestra prueba falle en detectar esta caída y erróneamente no rechace $H_0$?
+
+La fórmula para $\beta$ en una prueba de cola inferior es (Devore, Sección 8.4):
+$$ \beta(\mu') = P(Z > -z_{\alpha} \mid \mu = \mu') = \Phi\left( -z_{\alpha} + \frac{\mu_0 - \mu'}{\sigma / \sqrt{n}} \right) $$
+
+Sustituimos los valores ($\mu' = 83.5$, $\mu_0 = 85$, $\sigma/\sqrt{n} = 1$, $z_{\alpha} = 1.645$):
+$$ \beta(83.5) = \Phi\left( -1.645 + \frac{85 - 83.5}{1} \right) = \Phi(-1.645 + 1.5) = \Phi(-0.145) $$
+
+Buscando en la tabla normal estándar (o interpolando entre $-0.14$ y $-0.15$):
+$$ \beta(83.5) \approx 0.4424 $$
+
+Esto significa que hay un 44.24\% de probabilidad de que el test no detecte que la media real es 83.5 gramos. La potencia de la prueba para este valor alternativo es $1 - \beta = 1 - 0.4424 = 0.5576$, lo cual es relativamente bajo.
+
+\textbf{Paso 4: Determinación del Tamaño de Muestra para una Potencia Específica}
+Para mejorar la capacidad de detección del proceso, los ingenieros exigen que la prueba tenga una potencia de al menos $0.90$ (es decir, $\beta \le 0.10$) para detectar una caída de la media a $\mu' = 83.5$. ¿Cuántos lotes deben muestrear?
+
+Utilizamos la fórmula de determinación del tamaño de muestra para una prueba de una cola (Devore, Sección 8.4):
+$$ n = \left( \frac{\sigma (z_{\alpha} + z_{\beta})}{\mu_0 - \mu'} \right)^2 $$
+
+Para $\beta = 0.10$, el valor crítico es $z_{0.10} = 1.28$. Sustituimos los parámetros:
+$$ n = \left( \frac{4 (1.645 + 1.28)}{85 - 83.5} \right)^2 = \left( \frac{4 (2.925)}{1.5} \right)^2 $$
+$$ n = \left( \frac{11.7}{1.5} \right)^2 = (7.8)^2 = 60.84 $$
+
+Dado que el tamaño de la muestra debe ser un número entero y debemos garantizar como mínimo la potencia requerida, siempre redondeamos hacia arriba:
+$$ n = 61 $$
+
+\textbf{Conclusión del ejercicio:}
+Este ejemplo demuestra la interconexión matemática de las herramientas de inferencia. La región de rechazo (Paso 1) dicta el umbral de decisión. El valor P (Paso 2) proporciona una medida continua de evidencia basada en ese mismo umbral estandarizado. La probabilidad de Error de Tipo II (Paso 3) evalúa la vulnerabilidad de la prueba ante una realidad alternativa específica, y el cálculo del tamaño de muestra (Paso 4) utiliza exactamente los mismos parámetros ($z_{\alpha}$, $z_{\beta}$, $\sigma$, y la diferencia de medias) para diseñar un experimento que controle matemáticamente ambos tipos de errores simultáneamente.
+
+\subsection{Ejemplo: Prueba de Hipótesis sobre la Metalicidad de un Flujo Estelar Recién Descubierto}
+
+En la astrofísica galáctica moderna, la técnica de \textit{arqueología galáctica} utiliza las abundancias químicas de las estrellas para rastrear la historia de ensamblaje de la Vía Láctea. Los flujos estelares (stellar streams) son los remanentes de cúmulos globulares o galaxias enanas que han sido destruidos por las fuerzas de marea galáctica. De acuerdo con los principios de espectroscopia de alta resolución y análisis de errores (\textit{Astronomical Measurement}, Capítulo sobre \textit{Spectroscopy and Chemical Abundances}), la determinación de la metalicidad $[Fe/H]$ de estas estrellas está sujeta a incertidumbres instrumentales y astrofísicas.
+
+Supongamos que un equipo de astrónomos ha descubierto un nuevo flujo estelar en el halo galáctico, denominado ``Stream-Alpha''. Los modelos cosmológicos de materia oscura fría ($\Lambda$CDM) predicen que este flujo debería provenir de una galaxia enana específica que fue acrecida hace 10 mil millones de años. Basado en las simulaciones de evolución química para ese progenitor enano, la metalicidad media teórica esperada para sus estrellas remanentes es de $\mu_0 = -1.50$ dex.
+
+Para poner a prueba este modelo cosmológico, se obtienen espectros de alta resolución de $n = 25$ estrellas miembros del flujo utilizando un telescopio de 8 metros. El objetivo es determinar si la metalicidad media observada es consistente con la predicción teórica, o si los datos muestrales proporcionan evidencia estadística suficiente para rechazar el modelo de formación.
+
+\textbf{Paso 1: Formulación de Hipótesis}
+Dado que una desviación significativa en \textit{cualquier} dirección (ya sea que el flujo sea mucho más metálico o mucho más pobre en metales de lo previsto) invalidaría el modelo específico de evolución química del progenitor, planteamos una prueba bilateral (Devore, Capítulo 8, Sección 8.1):
+
+$$ H_0: \mu = -1.50 $$
+$$ H_a: \mu \neq -1.50 $$
+
+donde $\mu$ es la verdadera metalicidad media poblacional de las estrellas del Stream-Alpha.
+
+\textbf{Paso 2: Datos Muestrales y Suposiciones}
+Del análisis de los 25 espectros, se obtienen los siguientes estadísticos muestrales:
+\begin{itemize}
+    \item Tamaño de la muestra: $n = 25$
+    \item Media muestral de metalicidad: $\bar{x} = -1.62$ dex
+    \item Desviación estándar muestral: $s = 0.20$ dex
+\end{itemize}
+
+Dado que la varianza poblacional $\sigma^2$ es desconocida (una realidad ineludible en las observaciones astronómicas, donde el ruido instrumental y las variaciones atmosféricas contribuyen a la dispersión total), y asumiendo que las erreurs de medición espectroscópica se distribuyen aproximadamente de forma normal, el estadístico de prueba adecuado es la $t$ de Student (Devore, Capítulo 8, Sección 8.2).
+
+\textbf{Paso 3: Cálculo del Estadístico de Prueba}
+La fórmula para el estadístico $t$ de una sola muestra es:
+
+$$ T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} $$
+
+Sustituyendo los valores observados y el valor nulo propuesto por el modelo:
+
+$$ t_{\text{obs}} = \frac{-1.62 - (-1.50)}{0.20 / \sqrt{25}} = \frac{-0.12}{0.20 / 5} = \frac{-0.12}{0.04} = -3.00 $$
+
+El valor observado del estadístico es $-3.00$. Esto indica que la media muestral está a 3 errores estándar por debajo de la media teórica predicha.
+
+\textbf{Paso 4: Región de Rechazo y Decisión}
+Fijamos un nivel de significación de $\alpha = 0.05$. Para una prueba bilateral con $\nu = n - 1 = 24$ grados de libertad, buscamos los valores críticos en la tabla de la distribución $t$ (Devore, Tabla A.4). 
+
+El valor crítico que deja un área de 0.025 en cada cola es:
+$$ t_{0.025, 24} = 2.064 $$
+
+La región de rechazo para $H_0$ es:
+$$ T \le -2.064 \quad \text{o} \quad T \ge 2.064 $$
+
+Dado que nuestro estadístico observado $t_{\text{obs}} = -3.00$ cae profundamente dentro de la región de rechazo inferior ($-3.00 < -2.064$), la decisión formal es \textbf{rechazar la hipótesis nula $H_0$}.
+
+\textbf{Paso 5: Cálculo e Interpretación del Valor P}
+Para cuantificar la fuerza de la evidencia contra el modelo cosmológico, calculamos el valor P (Devore, Capítulo 8, Sección 8.4). Para una prueba bilateral:
+
+$$ \text{Valor P} = 2 \times P(T_{24} \le -3.00) $$
+
+Consultando las tablas de la distribución $t$ con 24 grados de libertad, sabemos que $t_{0.005, 24} = 2.797$ y $t_{0.0025, 24} = 3.091$. Dado que $2.797 < 3.00 < 3.091$, el área en una cola está estrictamente entre 0.0025 y 0.005. Por lo tanto:
+
+$$ 0.005 < \text{Valor P} < 0.010 $$
+
+(El cálculo exacto por software arroja un valor P $\approx 0.0062$). 
+
+Dado que el valor P es mucho menor que nuestro nivel de significación $\alpha = 0.05$ (e incluso menor que un $\alpha$ más estricto de 0.01), la evidencia muestral en contra de $H_0$ es extremadamente fuerte.
+
+\textbf{Paso 6: Conclusión Astrofísica}
+Desde la perspectiva de la inferencia estadística aplicada a la astronomía, los datos proporcionan evidencia estadísticamente sólida de que la metalicidad media del Stream-Alpha no es $-1.50$ dex. 
+
+Físicamente, esto tiene implicaciones profundas para los modelos de formación de galaxias. El hecho de que el flujo sea significativamente más pobre en metales ($\bar{x} = -1.62$) sugiere que la galaxia enana progenitora tuvo una eficiencia de formación estelar menor a la asumida en las simulaciones de $\Lambda$CDM, o que el enriquecimiento químico por supernovas fue interrumpido prematuramente (posiblemente por una reionización temprana del medio intergaláctico). El modelo teórico original debe ser descartado o recalibrado para tener en cuenta estos nuevos límites observacionales. Este ejemplo demuestra cómo la prueba de hipótesis de una sola muestra actúa como el puente riguroso entre las predicciones teóricas abstractas y los datos observacionales ruidosos.

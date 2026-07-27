@@ -1,0 +1,127 @@
+\chapter{Clase 11}
+
+\section{Límite de Cramer-Rao}
+
+En la teoría de la estimación estadística, no basta con encontrar un estimador insesgado; es imperativo determinar si existe un estimador óptimo, es decir, aquel que posea la menor dispersión posible alrededor del valor verdadero. El límite de Cramer-Rao establece una cota inferior fundamental para la varianza de cualquier estimador insesgado de un parámetro determinista. Este teorema define el límite absoluto de precisión que cualquier algoritmo o instrumento puede alcanzar, independientemente de la complejidad del procesamiento de datos.
+
+De acuerdo con la teoría de la inferencia estadística (Devore, Capítulo 6, Sección de propiedades de los estimadores de máxima verosimilitud), la formalización matemática requiere definir primero la Información de Fisher. 
+
+Sea $X_1, X_2, \dots, X_n$ una muestra aleatoria de una población con función de densidad (o masa) de probabilidad $f(x; \theta)$, donde $\theta$ es un parámetro desconocido. La función de log-verosimilitud de la muestra se define como:
+$$ \ell(\theta) = \sum_{i=1}^{n} \ln f(X_i; \theta) $$
+
+La Información de Fisher contenida en la muestra completa, denotada como $I_n(\theta)$, mide la cantidad de información que los datos observados aportan sobre el parámetro $\theta$. Se define mediante el valor esperado del cuadrado de la derivada primera de la log-verosimilitud (conocida como la función de puntuación o score):
+$$ I_n(\theta) = E\left[ \left( \frac{\partial \ell(\theta)}{\partial \theta} \right)^2 \right] $$
+
+Bajo condiciones regulares que permiten intercambiar la derivada y la integral, esta expresión es matemáticamente equivalente al negativo del valor esperado de la derivada segunda:
+$$ I_n(\theta) = -E\left[ \frac{\partial^2 \ell(\theta)}{\partial \theta^2} \right] $$
+
+Dado que las observaciones son independientes e idénticamente distribuidas, la información de Fisher de la muestra es simplemente $n$ veces la información de una sola observación:
+$$ I_n(\theta) = n I_1(\theta) = n E\left[ \left( \frac{\partial}{\partial \theta} \ln f(X; \theta) \right)^2 \right] $$
+
+\subsection{Enunciado del Teorema}
+
+Si $T = T(X_1, \dots, X_n)$ es cualquier estimador insesgado de $\theta$, lo que significa que $E[T] = \theta$ para todo $\theta$, entonces la varianza de $T$ está acotada inferiormente por la inversa de la Información de Fisher:
+$$ V(T) \ge \frac{1}{I_n(\theta)} $$
+
+Si el objetivo es estimar una función del parámetro, digamos $g(\theta)$, y $T$ es un estimador insesgado de $g(\theta)$ (es decir, $E[T] = g(\theta)$), el límite se generaliza como:
+$$ V(T) \ge \frac{[g'(\theta)]^2}{I_n(\theta)} $$
+
+Esta cota inferior se conoce como el Límite de Cramer-Rao. Un estimador insesgado que alcanza esta cota (es decir, cuya varianza es exactamente igual a $1/I_n(\theta)$) se denomina estimador eficiente de varianza mínima uniforme.
+
+\subsection{Eficiencia y Conexión con la Máxima Verosimilitud}
+
+La eficiencia relativa de un estimador insesgado $T$ se define como la razón entre el límite de Cramer-Rao y la varianza real del estimador:
+$$ e(T) = \frac{1 / I_n(\theta)}{V(T)} $$
+Dado que $V(T) \ge 1 / I_n(\theta)$, la eficiencia siempre satisface $0 < e(T) \le 1$. Un valor de $e(T) = 1$ indica que el estimador es perfectamente eficiente.
+
+En el contexto de la astronomía observacional y la astrofísica, como se detalla en \textit{Astronomical Measurement} (Apéndice sobre estimación de parámetros y límites de error), los Estimadores de Máxima Verosimilitud (MLE) poseen una propiedad asintótica crucial: son asintóticamente eficientes. Esto significa que, a medida que el tamaño de la muestra $n$ tiende a infinito, la distribución del MLE converge a una normal y su varianza converge exactamente al límite de Cramer-Rao. Por lo tanto, para sondeos astronómicos con millones de fotones detectados, el MLE proporciona la mejor estimación teóricamente posible.
+
+\subsection{Implicaciones en Astrodinámica y Navegación Espacial}
+
+En la determinación de órbitas y la navegación de naves espaciales (\textit{Fundamentals of Astrodynamics and Applications}, Vallado, Capítulo 10), el estado de una nave (posición y velocidad) se estima a partir de observaciones de sensores (como rango, azimut y elevación) corruptas por ruido. 
+
+Si modelamos el vector de estado como $\vec{\theta}$ y las observaciones tienen una matriz de covarianza de ruido $\Sigma$, la Información de Fisher para un vector de parámetros se generaliza mediante la matriz de información de Fisher $\mathcal{I}(\vec{\theta})$. El límite de Cramer-Rao multivariante establece que la matriz de covarianza de cualquier estimador insesgado $\hat{\vec{\theta}}$ debe satisfacer la desigualdad matricial:
+$$ V(\hat{\vec{\theta}}) \ge \mathcal{I}(\vec{\theta})^{-1} $$
+donde la desigualdad se interpreta en el sentido de que la diferencia $V(\hat{\vec{\theta}}) - \mathcal{I}(\vec{\theta})^{-1}$ es una matriz semidefinida positiva.
+
+En la práctica, la matriz $\mathcal{I}(\vec{\theta})^{-1}$ es exactamente la matriz de covarianza que produce el filtro de mínimos cuadrados ponderados o el filtro de Kalman cuando el modelo es lineal y el ruido es gaussiano. Este resultado demuestra que los algoritmos de navegación espacial óptimos no solo minimizan la suma de cuadrados de los residuos, sino que también extraen la máxima información posible de los sensores, alcanzando el límite de precisión física impuesto por el CRLB. Ningún software de navegación, por avanzado que sea, puede reducir la incertidumbre del estado de la nave por debajo de esta frontera matemática.
+
+\subsection{Ejemplo: Límite Fundamental de Precisión en Velocidades Radiales de Exoplanetas}
+
+En la astrofísica observacional moderna, la detección y caracterización de exoplanetas mediante el método de velocidades radiales (RV) representa un desafío estadístico de alta precisión. Como se detalla en \textit{Astronomical Measurement} (Capítulo sobre \textit{Radial Velocity Measurements and Precision Limits}), el objetivo es extraer la señal gravitacional minúscula de un planeta a partir de espectros estelares corruptos por ruido instrumental y actividad estelar intrínseca (jitter). 
+
+Para determinar la máxima precisión teóricamente alcanzable por cualquier algoritmo de ajuste (como MCMC o Mínimos Cuadrados), debemos calcular el Límite de Cramer-Rao (CRLB). Este ejemplo demuestra cómo la Matriz de Información de Fisher (FIM) se utiliza para desacoplar las incertidumbres de los parámetros orbitales en un modelo no lineal.
+
+\textbf{Paso 1: Formulación del Modelo de Observación}
+Supongamos que disponemos de $N$ observaciones espectroscópicas tomadas en instantes $t_i$. La velocidad radial medida $y_i$ se modela como una señal kepleriana circular (excentricidad $e=0$) sumada a un ruido gaussiano:
+$$ y_i = h(t_i, \vec{\theta}) + \epsilon_i $$
+donde el modelo determinista es:
+$$ h(t_i, \vec{\theta}) = K \sin\left( \frac{2\pi}{P} t_i + \phi \right) + v_0 $$
+El vector de parámetros desconocidos a estimar es $\vec{\theta} = [K, \phi, v_0]^T$, donde $K$ es la semi-amplitud orbital, $\phi$ es la fase orbital, y $v_0$ es la velocidad sistémica. Asumimos que el periodo $P$ es conocido con alta precisión gracias a un periodograma preliminar. El término de error $\epsilon_i$ sigue una distribución normal con media cero y varianza $\sigma^2 = \sigma_{inst}^2 + \sigma_{jit}^2$, que agrupa la incertidumbre instrumental y el ruido astrofísico de la estrella.
+
+\textbf{Paso 2: Función de Log-Verosimilitud y Vector Score}
+Dado que los errores son independientes e idénticamente distribuidos, la función de log-verosimilitud $\ell(\vec{\theta})$ para las $N$ observaciones es (Devore, Capítulo 6):
+$$ \ell(\vec{\theta}) = -\frac{N}{2} \ln(2\pi\sigma^2) - \frac{1}{2\sigma^2} \sum_{i=1}^N \left[ y_i - h(t_i, \vec{\theta}) \right]^2 $$
+
+Para construir la Matriz de Información de Fisher, primero calculamos las derivadas parciales del modelo $h_i$ respecto a los parámetros. Definimos la fase instantánea $\psi_i = \frac{2\pi}{P} t_i + \phi$:
+$$ \frac{\partial h_i}{\partial K} = \sin\psi_i, \quad \frac{\partial h_i}{\partial \phi} = K \cos\psi_i, \quad \frac{\partial h_i}{\partial v_0} = 1 $$
+
+\textbf{Paso 3: Construcción de la Matriz de Información de Fisher}
+Para un modelo de regresión no lineal con ruido gaussiano aditivo, los elementos de la FIM $\mathcal{I}(\vec{\theta})$ se obtienen mediante el valor esperado del producto de las derivadas primeras (Devore, Sección de propiedades del MLE):
+$$ \mathcal{I}_{jk}(\vec{\theta}) = \frac{1}{\sigma^2} \sum_{i=1}^N \frac{\partial h_i}{\partial \theta_j} \frac{\partial h_i}{\partial \theta_k} $$
+
+Sustituyendo las derivadas parciales, la matriz de $3 \times 3$ adopta la siguiente estructura formal:
+$$ \mathcal{I}(\vec{\theta}) = \frac{1}{\sigma^2} \sum_{i=1}^N \begin{bmatrix} 
+\sin^2\psi_i & K\sin\psi_i\cos\psi_i & \sin\psi_i \\ 
+K\sin\psi_i\cos\psi_i & K^2\cos^2\psi_i & K\cos\psi_i \\ 
+\sin\psi_i & K\cos\psi_i & 1 
+\end{bmatrix} $$
+
+\textbf{Paso 4: Aproximación Continua y Diagonalización}
+Invertir esta matriz para un conjunto discreto y arbitrario de tiempos $t_i$ es algebraicamente complejo. Sin embargo, en la práctica astronómica, las campañas de observación suelen cubrir múltiples órbitas con un muestreo relativamente uniforme. Podemos aplicar una aproximación continua donde la suma discreta converge a la integral temporal sobre un periodo completo $P$:
+$$ \frac{1}{N} \sum_{i=1}^N g(t_i) \approx \frac{1}{P} \int_0^P g(t) \, dt $$
+
+Evaluamos las integrales trigonométricas fundamentales sobre el periodo $P$:
+$$ \frac{1}{P} \int_0^P \sin^2\left(\frac{2\pi}{P}t + \phi\right) dt = \frac{1}{2} $$
+$$ \frac{1}{P} \int_0^P \cos^2\left(\frac{2\pi}{P}t + \phi\right) dt = \frac{1}{2} $$
+$$ \frac{1}{P} \int_0^P \sin\left(\frac{2\pi}{P}t + \phi\right)\cos\left(\frac{2\pi}{P}t + \phi\right) dt = 0 $$
+$$ \frac{1}{P} \int_0^P \sin\left(\dots\right) dt = 0, \quad \frac{1}{P} \int_0^P \cos\left(\dots\right) dt = 0 $$
+
+Gracias a estas identidades ortogonales, los términos cruzados (fuera de la diagonal) se anulan rigurosamente. La Matriz de Información de Fisher promedio se simplifica a una matriz diagonal:
+$$ \mathcal{I}(\vec{\theta}) \approx \frac{N}{\sigma^2} \begin{bmatrix} 
+1/2 & 0 & 0 \\ 
+0 & K^2/2 & 0 \\ 
+0 & 0 & 1 
+\end{bmatrix} $$
+
+\textbf{Paso 5: Extracción del Límite de Cramer-Rao}
+El Teorema de Cramer-Rao establece que la matriz de covarianza de cualquier estimador insesgado $\hat{\vec{\theta}}$ está acotada inferiormente por la inversa de la FIM: $V(\hat{\vec{\theta}}) \ge \mathcal{I}^{-1}(\vec{\theta})$. Al ser diagonal, la inversión es trivial:
+$$ \mathcal{I}^{-1}(\vec{\theta}) = \frac{\sigma^2}{N} \begin{bmatrix} 
+2 & 0 & 0 \\ 
+0 & \frac{2}{K^2} & 0 \\ 
+0 & 0 & 1 
+\end{bmatrix} $$
+
+De aquí extraemos las varianzas mínimas absolutas (los límites de Cramer-Rao) para cada parámetro:
+$$ V(\hat{K}) \ge \frac{2\sigma^2}{N} \implies \sigma_{CRLB}(K) = \sqrt{\frac{2}{N}} \sigma $$
+$$ V(\hat{\phi}) \ge \frac{2\sigma^2}{N K^2} \implies \sigma_{CRLB}(\phi) = \sqrt{\frac{2}{N}} \frac{\sigma}{K} $$
+$$ V(\hat{v}_0) \ge \frac{\sigma^2}{N} \implies \sigma_{CRLB}(v_0) = \frac{\sigma}{\sqrt{N}} $$
+
+\textbf{Interpretación Física y Conclusión}
+Este resultado matemático revela verdades fundamentales sobre la arquitectura de los sondeos de exoplanetas (\textit{Astronomical Measurement}, Sección sobre \textit{Detection Limits}):
+
+1. \textbf{Incertidumbre en la Masa (Semi-amplitud $K$):} La precisión con la que podemos medir la masa del planeta ($\propto K$) depende exclusivamente del ruido total $\sigma$ y del número de épocas $N$. Curiosamente, no depende de la masa del planeta mismo. Un planeta supermasivo y un planeta terrestre alrededor de la misma estrella requerirán el mismo número de observaciones para alcanzar la misma precisión relativa en $K$, asumiendo que el ruido $\sigma$ se mantiene constante.
+
+2. \textbf{Incertidumbre en la Fase Orbital ($\phi$):} La precisión en la fase (y por ende, en el tiempo de tránsito predicho $T_0$) es inversamente proporcional a la semi-amplitud $K$. Esto significa que para planetas de baja masa (señales de RV débiles), la incertidumbre en la fase se dispara. 
+
+3. \textbf{Diseño de Misiones:} Si un equipo científico desea predecir el tránsito de un exoplaneta recién descubierto por RV para observarlo con el telescopio espacial James Webb, el CRLB dicta exactamente cuántas noches de telescopio ($N$) y qué resolución espectral ($\sigma$) se necesitan para reducir $\sigma_{CRLB}(\phi)$ a un margen de minutos. Cualquier algoritmo de ajuste de curvas que reporte una incertidumbre menor a estos valores teóricos es matemáticamente imposible y probablemente sufre de sobreestimación (overfitting) o subestimación de las barras de error.
+
+\section{Introducción a los intervalos de confianza}
+
+En la práctica estadística y científica, rara vez tenemos el lujo de medir una población completa. Ya sea para determinar la distancia promedio a un cúmulo de galaxias o la vida útil media de un componente crítico de una nave espacial, debemos conformarnos con una muestra limitada de datos observados. 
+
+Tradicionalmente, podríamos calcular un único número a partir de esa muestra, conocido como estimación puntual, para representar el valor verdadero pero desconocido de la población. Sin embargo, una estimación puntual por sí sola es inherentemente incompleta: no nos dice nada sobre su propia precisión, dispersión o confiabilidad. Es análogo a proporcionar una coordenada de destino en el espacio sin indicar el margen de error del instrumento de navegación.
+
+Para superar esta limitación, la estadística introduce el concepto de intervalo de confianza. En lugar de apostar por un solo valor numérico, proporcionamos un rango completo de valores factibles o plausibles para el parámetro desconocido. Este rango se construye mediante un procedimiento que garantiza que, si repitiéramos el proceso de muestreo y cálculo muchas veces, una proporción especificada de estos intervalos (por ejemplo, el 95 por ciento) contendría el valor verdadero de la población. 
+
+Esta herramienta es fundamental en campos como la astronomía observacional y la ingeniería aeroespacial, donde el ruido instrumental, las perturbaciones ambientales y las limitaciones de los sensores son inevitables. Un intervalo de confianza no solo nos sugiere ``cuál'' podría ser el valor real, sino que cuantifica explícitamente ``cuánta'' incertidumbre estamos manejando, permitiendo tomar decisiones informadas y evaluar la solidez de nuestras conclusiones científicas.

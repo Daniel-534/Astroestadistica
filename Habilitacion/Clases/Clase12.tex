@@ -1,0 +1,264 @@
+\chapter{Clase 12}
+
+\section{Intervalos de confianza}
+
+En la inferencia estadística, una estimación puntual proporciona un único valor numérico como mejor aproximación de un parámetro poblacional desconocido $\theta$. Sin embargo, debido a la variabilidad inherente del muestreo, esta estimación casi nunca coincide exactamente con el valor verdadero. Para cuantificar la precisión y la incertidumbre de la estimación, la teoría estadística introduce los intervalos de confianza. De acuerdo con el texto guía, un intervalo de confianza proporciona un rango de valores factibles para el parámetro, acompañado de un nivel de confianza que cuantifica la fiabilidad del procedimiento de generación del intervalo (Devore, Capítulo 7, Sección 7.1).
+
+\subsection{Formulación general y el método de la cantidad pivotal}
+
+La construcción rigurosa de un intervalo de confianza no se basa en adivinar límites, sino en el uso de una \textit{cantidad pivotal} (o pivote). Una cantidad pivotal es una función de las observaciones muestrales y del parámetro desconocido cuya distribución de probabilidad es completamente conocida y no depende de ningún parámetro desconocido (Devore, Capítulo 7, Sección 7.1).
+
+Sea $X_1, X_2, \dots, X_n$ una muestra aleatoria y $\theta$ el parámetro de interés. Sea $Q = Q(X_1, \dots, X_n, \theta)$ una cantidad pivotal. Para un nivel de confianza deseado $1 - \alpha$ (donde $0 < \alpha < 1$), podemos encontrar constantes $a$ y $b$ tales que la probabilidad de que $Q$ caiga entre estos valores sea exactamente $1 - \alpha$:
+
+$$ P(a \le Q(X_1, \dots, X_n, \theta) \le b) = 1 - \alpha $$
+
+El paso matemático fundamental consiste en manipular algebraicamente las desigualdades dentro de la probabilidad para aislar el parámetro $\theta$. Si la función $Q$ es monótona respecto a $\theta$, podemos invertir las desigualdades para obtener dos estadísticos, un límite inferior $L$ y un límite superior $U$, que dependen únicamente de los datos muestrales:
+
+$$ P(L(X_1, \dots, X_n) \le \theta \le U(X_1, \dots, X_n)) = 1 - \alpha $$
+
+La expresión $[L, U]$ constituye el intervalo de confianza del $100(1-\alpha)\%$ para $\theta$. En la gran mayoría de las aplicaciones prácticas, la distribución de $Q$ es simétrica, y se elige $a$ y $b$ de manera que las colas de probabilidad sean iguales, es decir, $P(Q < a) = \alpha/2$ y $P(Q > b) = \alpha/2$.
+
+\subsection{Interpretación frecuentista}
+
+Es imperativo comprender la interpretación correcta del nivel de confianza, ya que es un error común malinterpretarlo como una probabilidad condicional sobre el parámetro (Devore, Sección 7.1). 
+
+Una vez que se extrae la muestra y se calculan los valores numéricos $l$ y $u$, el intervalo $[l, u]$ es fijo. Dado que $\theta$ es una constante fija (aunque desconocida), la probabilidad de que $\theta$ esté en $[l, u]$ es estrictamente 1 o 0. 
+
+La afirmación ``tenemos un 95\% de confianza'' se refiere al procedimiento, no a un intervalo específico. Significa que si repetimos el proceso de extracción de muestras aleatorias de tamaño $n$ un número infinito de veces, y calculamos un intervalo de confianza para cada muestra, aproximadamente el 95\% de todos esos intervalos generados contendrán el valor verdadero de $\theta$. El nivel de confianza $1-\alpha$ es la proporción a largo plazo de éxito del método de construcción.
+
+\subsection{Intervalos clásicos para una sola muestra}
+
+A partir del método pivotal, se derivan las fórmulas operativas para los escenarios más comunes en la modelación de datos físicos y astronómicos.
+
+\textbf{1. Intervalo para la media $\mu$ (Varianza poblacional $\sigma^2$ conocida o muestra grande):}
+Si la población es normal con varianza conocida, o si el tamaño de muestra $n$ es suficientemente grande para invocar el Teorema Central del Límite, la cantidad pivotal es la variable normal estándar:
+$$ Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1) $$
+Planteando $P(-z_{\alpha/2} \le Z \le z_{\alpha/2}) = 1 - \alpha$ y despejando $\mu$, obtenemos el intervalo de confianza de muestra grande (Devore, Sección 7.2):
+$$ \bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} $$
+Si $\sigma$ es desconocida y $n$ es grande, se sustituye $\sigma$ por la desviación estándar muestral $s$, y la aproximación sigue siendo válida por el Teorema Central del Límite y la Ley de los Grandes Números.
+
+\textbf{2. Intervalo para la media $\mu$ (Población normal, Varianza $\sigma^2$ desconocida, muestra pequeña):}
+Cuando la población es estrictamente normal, la varianza es desconocida y $n$ es pequeño, la cantidad pivotal adecuada sigue una distribución $t$ de Student con $\nu = n-1$ grados de libertad:
+$$ T = \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t_{n-1} $$
+Al igualar $P(-t_{\alpha/2, n-1} \le T \le t_{\alpha/2, n-1}) = 1 - \alpha$ y despejar $\mu$, el intervalo de confianza exacto es (Devore, Sección 7.2):
+$$ \bar{x} \pm t_{\alpha/2, n-1} \frac{s}{\sqrt{n}} $$
+Nótese que la incertidumbre adicional por estimar $\sigma$ con $S$ se paga con colas más pesadas en la distribución $t$, resultando en un valor crítico $t_{\alpha/2, n-1} > z_{\alpha/2}$, lo que ensancha el intervalo para mantener el nivel de cobertura nominal.
+
+\textbf{3. Intervalo para una proporción poblacional $p$:}
+Para datos binarios, el estimador puntual es $\hat{p} = X/n$. Usando la aproximación normal a la binomial (válida cuando $np \ge 10$ y $n(1-p) \ge 10$), la cantidad pivotal es:
+$$ Z = \frac{\hat{P} - p}{\sqrt{p(1-p)/n}} \sim N(0, 1) $$
+Dado que el error estándar $\sqrt{p(1-p)/n}$ depende del parámetro desconocido $p$, se estima mediante $\sqrt{\hat{p}(1-\hat{p})/n}$. El intervalo de confianza de muestra grande resultante es (Devore, Sección 7.2):
+$$ \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} $$
+
+\subsection{Propiedades de precisión y determinación del tamaño de muestra}
+
+La utilidad de un intervalo de confianza depende de dos factores en competencia: la \textit{confiabilidad} (el nivel de confianza $1-\alpha$) y la \textit{precisión} (el ancho del intervalo). 
+
+El ancho total $W$ de un intervalo de la forma $\hat{\theta} \pm c \cdot \sigma_{\hat{\theta}}$ es:
+$$ W = 2 \cdot c \cdot \sigma_{\hat{\theta}} $$
+
+De esta expresión matemática se desprenden tres propiedades fundamentales para el diseño de experimentos y sondeos:
+\begin{enumerate}
+    \item \textbf{Efecto del nivel de confianza:} Aumentar $1-\alpha$ (por ejemplo, pasar de 95\% a 99\%) incrementa el valor crítico $c$, ensanchando el intervalo. Se gana confiabilidad a costa de precisión.
+    \item \textbf{Efecto del tamaño de muestra:} Dado que el error estándar $\sigma_{\hat{\theta}}$ típicamente es inversamente proporcional a $\sqrt{n}$ (como en $\sigma/\sqrt{n}$), aumentar $n$ reduce el ancho del intervalo. Esta es la única forma de aumentar simultáneamente la confiabilidad y la precisión.
+    \item \textbf{Cálculo inverso para el muestreo:} Si se exige un error máximo de estimación (margen de error) $E$, podemos despejar $n$ de la ecuación $E = z_{\alpha/2} \frac{\sigma}{\sqrt{n}}$ para determinar el tamaño de muestra mínimo requerido antes de iniciar la recolección de datos:
+    $$ n = \left( \frac{z_{\alpha/2} \sigma}{E} \right)^2 $$
+\end{enumerate}
+
+En la planificación de misiones espaciales o campañas de observación astronómica, esta relación es vital. Permite a los ingenieros y científicos calcular exactamente cuántas mediciones independientes (cuántos fotones, cuántas épocas de observación, cuántos ciclos de telemetría) son necesarias para acotar un parámetro físico dentro de una tolerancia $E$ con un riesgo $\alpha$ de fallar en el intento.
+
+\subsection{Ejemplo: Intervalo de Confianza para el Parámetro de una Distribución Uniforme}
+
+En muchas situaciones estadísticas, los intervalos de confianza no toman la forma simétrica clásica $\hat{\theta} \pm c \cdot \sigma_{\hat{\theta}}$. Para ilustrar la mecánica fundamental de las cantidades pivotes y la manipulación rigurosa de desigualdades (Devore, Capítulo 7, Sección 7.1), construiremos un intervalo para el límite superior de una distribución uniforme. Este ejercicio es esencial para comprender cómo la estructura matemática del estimador dicta la geometría del intervalo resultante.
+
+Sea $X_1, X_2, \dots, X_n$ una muestra aleatoria de una distribución uniforme en el intervalo $[0, \theta]$, donde $\theta > 0$ es un parámetro desconocido. La función de densidad es $f(x) = 1/\theta$ para $0 \le x \le \theta$.
+
+\textbf{Paso 1: Construcción de la Cantidad Pivotal}
+El estadístico de orden máximo $Y = \max(X_i)$ es un estimador natural para $\theta$. Para encontrar su distribución, primero determinamos su función de distribución acumulativa (FDA):
+$$ F_Y(y) = P(Y \le y) = \prod_{i=1}^n P(X_i \le y) = \left( \frac{y}{\theta} \right)^n \quad \text{para } 0 < y < \theta $$
+
+El método general para obtener intervalos de confianza exige encontrar una variable aleatoria cuya distribución no dependa de ningún parámetro desconocido. Definimos la cantidad pivotal $U = Y/\theta$. La FDA de $U$ es:
+$$ F_U(u) = P(U \le u) = P\left(\frac{Y}{\theta} \le u\right) = P(Y \le u\theta) = \left( \frac{u\theta}{\theta} \right)^n = u^n \quad \text{para } 0 < u < 1 $$
+
+La función de densidad de $U$ es $f_U(u) = n u^{n-1}$. Lo crucial aquí es que la distribución de $U$ depende exclusivamente del tamaño de muestra $n$ y es completamente independiente de $\theta$. Por lo tanto, $U$ es una cantidad pivotal legítima.
+
+\textbf{Paso 2: Planteamiento de la Probabilidad}
+Para un nivel de confianza $1 - \alpha$, buscamos constantes $a$ y $b$ tales que $P(a \le U \le b) = 1 - \alpha$. 
+Adoptando el criterio de colas iguales para distribuir el error $\alpha$:
+$$ P(U < a) = \frac{\alpha}{2} \implies a^n = \frac{\alpha}{2} \implies a = \left(\frac{\alpha}{2}\right)^{1/n} $$
+$$ P(U < b) = 1 - \frac{\alpha}{2} \implies b^n = 1 - \frac{\alpha}{2} \implies b = \left(1 - \frac{\alpha}{2}\right)^{1/n} $$
+
+Sustituyendo $U = Y/\theta$, la proposición de probabilidad fundamental es:
+$$ P\left( \left(\frac{\alpha}{2}\right)^{1/n} \le \frac{Y}{\theta} \le \left(1 - \frac{\alpha}{2}\right)^{1/n} \right) = 1 - \alpha $$
+
+\textbf{Paso 3: Manipulación Algebraica para Aislar el Parámetro}
+El paso matemático más importante consiste en despejar $\theta$ de las desigualdades. Dado que $\theta > 0$ y $Y > 0$, invertimos las fracciones. Recordemos que invertir los términos de una desigualdad invierte el sentido de la misma:
+$$ \frac{1}{\left(1 - \frac{\alpha}{2}\right)^{1/n}} \le \frac{\theta}{Y} \le \frac{1}{\left(\frac{\alpha}{2}\right)^{1/n}} $$
+
+Multiplicamos toda la cadena de desigualdades por $Y$ (que es estrictamente positivo, preservando el sentido):
+$$ P\left( \frac{Y}{\left(1 - \frac{\alpha}{2}\right)^{1/n}} \le \theta \le \frac{Y}{\left(\frac{\alpha}{2}\right)^{1/n}} \right) = 1 - \alpha $$
+
+Esta es la fórmula general del intervalo de confianza. Los límites aleatorios son $L = Y / (1 - \alpha/2)^{1/n}$ y $U = Y / (\alpha/2)^{1/n}$.
+
+\textbf{Paso 4: Evaluación Numérica}
+Supongamos que se extrae una muestra de tamaño $n = 15$ de un proceso industrial, y el valor máximo observado en la muestra es $y = 4.2$. Construimos un intervalo de confianza del 95\% ($\alpha = 0.05$).
+
+Calculamos los límites sustituyendo los valores:
+$$ L = \frac{4.2}{(0.975)^{1/15}} \approx \frac{4.2}{0.99829} \approx 4.207 $$
+$$ U = \frac{4.2}{(0.025)^{1/15}} \approx \frac{4.2}{0.79370} \approx 5.292 $$
+
+El intervalo de confianza del 95\% para $\theta$ es $[4.207, 5.292]$.
+
+\textbf{Interpretación Matemática}
+Este resultado resalta propiedades estructurales que los intervalos simétricos clásicos ocultan. Primero, el intervalo no está centrado en el estimador puntual $Y=4.2$; de hecho, el límite inferior está extremadamente cerca de $Y$, mientras que el superior se extiende mucho más hacia la derecha. Esta asimetría no es un defecto, sino una necesidad matemática: por la propia definición del soporte de la distribución uniforme, el parámetro $\theta$ nunca puede ser menor que el máximo valor observado $Y$. 
+
+Segundo, este ejercicio demuestra que el método de la cantidad pivotal (Devore, Sección 7.1) es una herramienta algebraica general. No requiere que la distribución del estimador sea normal ni simétrica, sino que se adapta perfectamente a la geometría real del espacio de parámetros, garantizando la cobertura de probabilidad exacta $1-\alpha$ independientemente de la forma de la distribución subyacente.
+
+
+\subsection{Ejemplo: Determinación de la Distancia a un Cúmulo Globular mediante Variables RR Lyrae}
+
+En la astrofísica estelar, la calibración de la escala de distancias cósmicas es uno de los problemas fundamentales. Las estrellas variables RR Lyrae, que pulsan con periodos cortos y poseen una luminosidad intrínseca bien calibrada, se utilizan como ``candelas estándar'' para medir la distancia a cúmulos globulares y galaxias cercanas (\textit{Astronomical Measurement}, Capítulo sobre \textit{Standard Candles and the Distance Ladder}). 
+
+Supongamos que un equipo de astrónomos está caracterizando el cúmulo globular NGC 7492, ubicado en el halo galáctico. Utilizando fotometría de precisión con el telescopio espacial, han identificado $n = 12$ estrellas RR Lyrae confirmadas en el cúmulo. Tras corregir cada medición por la extinción interestelar (el enrojecimiento causado por el polvo en el plano galáctico), obtienen las siguientes magnitudes aparentes en la banda V:
+
+$$ \{14.02, 14.38, 13.95, 14.21, 14.10, 14.45, 13.88, 14.15, 14.29, 14.07, 14.33, 13.98\} $$
+
+A partir de los modelos de evolución estelar y calibraciones con el satélite Gaia, se sabe que la magnitud absoluta intrínseca de las RR Lyrae es $M_V = 0.60$.
+
+A continuación, resolvemos una secuencia de requerimientos científicos para determinar la distancia al cúmulo y evaluar la factibilidad de una campaña de observación posterior.
+
+\textbf{a) Estadísticos muestrales y verificación de supuestos}
+Primero, calculamos la media y la desviación estándar muestral de las magnitudes aparentes observadas (Devore, Capítulo 1, Sección 1.3):
+
+$$ \bar{m} = \frac{1}{12} \sum_{i=1}^{12} m_i = \frac{169.81}{12} = 14.151 $$
+
+Para la desviación estándar muestral, calculamos la suma de cuadrados de las desviaciones:
+$$ \sum_{i=1}^{12} (m_i - \bar{m})^2 = 0.4287 $$
+$$ s = \sqrt{\frac{\sum (m_i - \bar{m})^2}{n-1}} = \sqrt{\frac{0.4287}{11}} = \sqrt{0.03897} = 0.1974 $$
+
+Antes de proceder, debemos verificar si la suposición de normalidad es razonable. Dado que $n = 12$ es pequeño, la validez del intervalo $t$ depende de que la población de magnitudes aparentes sea aproximadamente normal. En la práctica astronómica, esto se justifica porque las fluctuaciones en la magnitud aparente de estrellas del mismo tipo en un cúmulo (debido a errores fotométricos, variaciones metalicidad- luminosidad y dispersión de profundidad a lo largo de la línea de visión) tienden a distribuirse simétricamente alrededor de la media. Un diagrama Q-Q normal de los datos muestra una alineación aceptable con la recta teórica.
+
+\textbf{b) Intervalo de confianza para la magnitud aparente media}
+Dado que la varianza poblacional es desconocida y el tamaño de muestra es pequeño, utilizamos la distribución $t$ de Student como cantidad pivotal (Devore, Capítulo 7, Sección 7.2):
+
+$$ T = \frac{\bar{M} - \mu_m}{S / \sqrt{n}} \sim t_{n-1} $$
+
+Para un nivel de confianza del 95\% ($\alpha = 0.05$) con $\nu = n - 1 = 11$ grados de libertad, el valor crítico es $t_{0.025, 11} = 2.201$.
+
+El intervalo de confianza para la magnitud aparente media verdadera $\mu_m$ es:
+$$ \bar{m} \pm t_{0.025, 11} \cdot \frac{s}{\sqrt{n}} $$
+$$ 14.151 \pm 2.201 \cdot \frac{0.1974}{\sqrt{12}} $$
+$$ 14.151 \pm 2.201 \cdot 0.0570 = 14.151 \pm 0.1254 $$
+
+Por lo tanto, el intervalo de confianza del 95\% para $\mu_m$ es:
+$$ [14.026, \ 14.276] \text{ mag} $$
+
+\textbf{c) Intervalo de confianza para el módulo de distancia}
+El módulo de distancia $\mu$ es la diferencia entre la magnitud aparente media y la magnitud absoluta conocida. La relación es lineal:
+$$ \mu = \mu_m - M_V $$
+
+Dado que $M_V = 0.60$ es una constante conocida, podemos transformar directamente los límites del intervalo. Esta es una aplicación directa de la propiedad de que si $[L, U]$ es un intervalo de confianza para $\mu_m$, entonces $[L - c, U - c]$ es un intervalo de confianza con el mismo nivel para $\mu_m - c$:
+
+$$ \mu \in [14.026 - 0.60, \ 14.276 - 0.60] = [13.426, \ 13.676] \text{ mag} $$
+
+El módulo de distancia estimado es $\hat{\mu} = 14.151 - 0.60 = 13.551$ mag.
+
+\textbf{d) Intervalo de confianza para la distancia física (Transformación no lineal)}
+Aquí es donde la teoría de intervalos de confianza revela su profundidad analítica. La distancia física $d$ (en parsecs) se relaciona con el módulo de distancia mediante la función no lineal:
+$$ d = 10^{(\mu + 5)/5} $$
+
+A diferencia del paso anterior, esta transformación es no lineal y monótona creciente. Para construir el intervalo de confianza para $d$, no podemos simplemente aplicar la fórmula $\hat{d} \pm c \cdot \sigma_{\hat{d}}$. En su lugar, debemos aplicar la transformación a los límites del intervalo de $\mu$ directamente, preservando la cobertura de probabilidad.
+
+Dado que $g(\mu) = 10^{(\mu+5)/5}$ es una función estrictamente creciente, la desigualdad $L \le \mu \le U$ se transforma en $g(L) \le g(\mu) \le g(U)$ sin cambiar el sentido de las desigualdades ni la probabilidad de cobertura:
+
+$$ P(13.426 \le \mu \le 13.676) = 0.95 \implies P\left(10^{(13.426+5)/5} \le d \le 10^{(13.676+5)/5}\right) = 0.95 $$
+
+Calculamos cada límite:
+$$ d_L = 10^{18.426/5} = 10^{3.6852} = 4844 \text{ pc} \approx 4.84 \text{ kpc} $$
+$$ d_U = 10^{18.676/5} = 10^{3.7352} = 5437 \text{ pc} \approx 5.44 \text{ kpc} $$
+
+El intervalo de confianza del 95\% para la distancia física al cúmulo es:
+$$ d \in [4.84, \ 5.44] \text{ kpc} $$
+
+La estimación puntual de la distancia es $\hat{d} = 10^{(13.551+5)/5} = 10^{3.7102} = 5131 \text{ pc} \approx 5.13 \text{ kpc}$.
+
+\textbf{Análisis de la asimetría:}
+Observemos la geometría del intervalo resultante:
+$$ \hat{d} - d_L = 5.13 - 4.84 = 0.29 \text{ kpc} $$
+$$ d_U - \hat{d} = 5.44 - 5.13 = 0.31 \text{ kpc} $$
+
+El intervalo \textit{no es simétrico} alrededor de la estimación puntual. La cola superior es más ancha que la inferior. Esto no es un artefacto ni un error, sino una consecuencia matemática inevitable de aplicar una función convexa creciente (la exponencial en base 10) a un intervalo simétrico en el espacio del módulo de distancia. En el espacio logarítmico (magnitudes), la incertidumbre es aditiva y simétrica; en el espacio lineal (distancia física), la incertidumbre se amplifica asimétricamente hacia distancias mayores. Este fenómeno es ubicuo en astronomía y explica por qué reportar incertidumbres de distancia como $\hat{d} \pm \Delta d$ puede ser engañoso.
+
+\textbf{e) Determinación del tamaño de muestra para una misión de seguimiento}
+El equipo científico desea proponer tiempo de telescopio con el James Webb Space Telescope (JWST) para realizar espectroscopia de alta resolución de las RR Lyrae. Para que la propuesta sea aceptada, deben demostrar que pueden determinar la distancia al cúmulo con un margen de error en el módulo de distancia no mayor a $E = 0.05$ mag con un nivel de confianza del 95\%.
+
+Utilizando la fórmula de determinación de tamaño de muestra (Devore, Sección 7.2), donde el error estándar es $\sigma / \sqrt{n}$, y dado que no conocemos $\sigma$ poblacional, utilizamos $s = 0.1974$ como estimador preliminar:
+
+$$ n = \left( \frac{t_{\alpha/2} \cdot s}{E} \right)^2 $$
+
+Para una primera aproximación (dado que $t$ depende de $n$, usamos $z_{0.025} = 1.96$ como valor inicial):
+$$ n \approx \left( \frac{1.96 \cdot 0.1974}{0.05} \right)^2 = \left( \frac{0.3869}{0.05} \right)^2 = (7.738)^2 = 59.88 $$
+
+Redondeando hacia arriba, se requieren al menos $n = 60$ estrellas RR Lyrae. Dado que el cúmulo NGC 7492 es relativamente pobre y solo contiene aproximadamente 15 RR Lyrae conocidas, este resultado tiene una implicación científica profunda: con la población disponible de variables en este cúmulo específico, es matemáticamente imposible alcanzar la precisión de 0.05 mag en el módulo de distancia utilizando únicamente el método de candelas estándar con un intervalo $t$ clásico. 
+
+El equipo debe entonces considerar estrategias alternativas: combinar las RR Lyrae con otras candelas estándar (como la rama horizontal roja), utilizar isócronas de ajuste al diagrama color-magnitud completo del cúmulo, o recurrir a mediciones astrométricas de paralaje trigonométrico si la precisión de Gaia lo permite para estrellas a 5 kpc. Este ejercicio demuestra cómo el cálculo del intervalo de confianza y la determinación del tamaño de muestra no son solo operaciones algebraicas, sino herramientas que dictan directamente la viabilidad científica de misiones observacionales y la estrategia de investigación.
+
+
+\subsection{Ejemplo: Evaluación de Jitter de Apuntamiento en Telescopios Espaciales}
+
+En la ingeniería de sistemas espaciales, la estabilidad de la línea de visión de un telescopio orbital es crítica para la obtención de imágenes de alta resolución. Durante las campañas de prueba en vacío térmico, los sensores de guiño y cabeceo registran micro-vibraciones inducidas por los criocooladores y los ventiladores de refrigeración. Este fenómeno, conocido como jitter de apuntamiento, se modela según los principios de control de actitud y análisis de errores (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Line-of-Sight Stability and Jitter Analysis}).
+
+Supongamos que un equipo de ingenieros extrae una muestra de $n = 16$ mediciones de jitter (en arcosegundos) durante un ciclo de operación estable. Para construir un intervalo de confianza para la verdadera media poblacional del jitter $\mu$, debemos recurrir a la distribución $t$ de Student, dado que la varianza poblacional es desconocida y el tamaño de la muestra es pequeño.
+
+\textbf{Paso 1: Resumen Estadístico y Suposiciones}
+De los 16 registros de telemetría, se calculan los siguientes estadísticos muestrales:
+$$ \bar{x} = 0.144 \text{ arcosegundos} $$
+$$ s = 0.023 \text{ arcosegundos} $$
+Dado que el jitter es el resultado de la superposición de múltiples fuentes de ruido mecánico y térmico independientes, es razonable asumir que la población subyacente se distribuye aproximadamente de forma normal. Esta suposición es un requisito fundamental para la validez del intervalo $t$ con muestras pequeñas (Devore, Capítulo 7, Sección 7.3).
+
+\textbf{Paso 2: Construcción de la Cantidad Pivotal}
+La cantidad pivotal adecuada para la media $\mu$ cuando $\sigma$ es desconocida es el estadístico $T$:
+$$ T = \frac{\bar{X} - \mu}{S / \sqrt{n}} $$
+Bajo la suposición de normalidad, $T$ sigue una distribución $t$ de Student con $\nu = n - 1 = 15$ grados de libertad.
+
+\textbf{Paso 3: Determinación del Valor Crítico}
+Para un nivel de confianza del 95\% ($\alpha = 0.05$), buscamos el valor crítico $t_{\alpha/2, \nu}$ que deja un área de 0.025 en cada cola de la distribución $t_{15}$. Consultando las tablas de la distribución $t$ (Devore, Tabla A.4), obtenemos:
+$$ t_{0.025, 15} = 2.131 $$
+
+\textbf{Paso 4: Cálculo del Intervalo de Confianza}
+La fórmula general para el intervalo de confianza de $100(1-\alpha)\%$ es:
+$$ \bar{x} \pm t_{\alpha/2, n-1} \frac{s}{\sqrt{n}} $$
+Sustituyendo los valores numéricos:
+$$ 0.144 \pm 2.131 \left( \frac{0.023}{\sqrt{16}} \right) $$
+$$ 0.144 \pm 2.131 \left( 0.00575 \right) $$
+$$ 0.144 \pm 0.01225 $$
+
+El intervalo de confianza del 95\% para el jitter medio verdadero es:
+$$ [0.1317, 0.1562] \text{ arcosegundos} $$
+
+Esto indica que, con un 95\% de confianza, el jitter promedio real del telescopio durante la fase térmica se encuentra entre 0.1317 y 0.1562 arcosegundos. Si el requisito de la misión dicta que el jitter no debe superar los 0.150 arcosegundos, este intervalo sugiere que el diseño podría estar al límite de la especificación, ya que el límite superior lo excede ligeramente.
+
+\subsection*{Tarea de Implementación Computacional: Validación y Bootstrap}
+
+El enfoque matemático anterior asume ciegamente la normalidad de los datos. En la práctica astronámica y aeroespacial, los conjuntos de datos de telemetría a menudo contienen valores atípicos (outliers) debido a interferencias electromagnéticas o errores de cuantización del sensor. Si la población no es normal, el intervalo $t$ puede tener una cobertura de confianza real muy distinta al 95\% nominal. 
+
+Su tarea es utilizar Python para validar la suposición de normalidad y calcular un intervalo de confianza alternativo que no dependa de dicha suposición, aplicando los conceptos de intervalos de confianza bootstrap (Devore, Capítulo 7, Sección 7.1 y Capítulo 6).
+
+\textbf{Instrucciones para el lector:}
+
+1. \textbf{Definición de Datos:} Utilice el siguiente conjunto de 16 mediciones reales de jitter (en arcosegundos) extraídas de la telemetría cruda:
+   \textit{0.121, 0.155, 0.132, 0.189, 0.141, 0.115, 0.162, 0.144, 0.210, 0.138, 0.149, 0.125, 0.171, 0.143, 0.136, 0.152}
+   (Nota: Observe que el valor 0.210 es sospechosamente alto comparado con el resto).
+
+2. \textbf{Estadísticos Descriptivos:} Escriba un script que calcule la media muestral y la desviación estándar muestral de este arreglo utilizando la biblioteca \textit{numpy}. Verifique si coinciden con los valores redondeados ($\bar{x} \approx 0.149$, $s \approx 0.026$) usados en un escenario hipotético, y recalcule el intervalo $t$ del 95\% con estos datos exactos.
+
+3. \textbf{Prueba de Normalidad:} Utilice la función \textit{shapiro} de la biblioteca \textit{scipy.stats} para realizar la prueba de normalidad de Shapiro-Wilk sobre los 16 datos. Con un nivel de significancia de $\alpha = 0.05$, ¿existe evidencia estadística suficiente para rechazar la hipótesis nula de que los datos provienen de una distribución normal? ¿Cómo afecta esto la validez del intervalo $t$ calculado en el Paso 4?
+
+4. \textbf{Intervalo de Confianza Bootstrap:} Dado que la presencia del valor atípico (0.210) podría estar violando la normalidad, implemente un método de remuestreo bootstrap para construir un intervalo de confianza del 95\% para la media sin asumir ninguna distribución subyacente.
+   \begin{itemize}
+       \item Genere $B = 10,000$ muestras bootstrap extrayendo 16 valores con reemplazo del arreglo original de datos.
+       \item Calcule la media de cada una de las 10,000 muestras bootstrap.
+       \item Utilice el método del percentil (Devore, Sección 7.1) para encontrar el percentil 2.5 y el percentil 97.5 de la distribución de medias bootstrap. Estos valores constituirán su intervalo de confianza bootstrap.
+   \end{itemize}
+
+5. \textbf{Análisis Comparativo:} Compare el ancho y la posición del intervalo $t$ de Student con el intervalo bootstrap. ¿El valor atípico desplaza el intervalo $t$ de manera desproporcionada? ¿El método bootstrap proporciona una estimación más robusta de la incertidumbre de la media en este escenario específico? Redacte una breve conclusión técnica sobre qué intervalo presentaría al comité de revisión de la misión.

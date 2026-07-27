@@ -1,0 +1,41 @@
+\chapter{Clase 13}
+
+\section{Inferencia Estadística: Introducción}
+
+El estudio de la estadística se divide fundamentalmente en dos grandes ramas: la estadística descriptiva y la estadística inferencial. Mientras que la primera se ocupa de resumir y presentar la información contenida en un conjunto de datos mediante gráficos, tablas y medidas numéricas, la segunda tiene un objetivo mucho más ambicioso. De acuerdo con el texto guía, la inferencia estadística es el conjunto de métodos y procedimientos que permiten utilizar la información contenida en una muestra para sacar conclusiones o generalizaciones acerca de la población de la cual fue extraída (Devore, Capítulo 1, Sección 1.1; Capítulo 6, Introducción).
+
+Para comprender este proceso, es imperativo establecer con rigor la distinción entre los conceptos fundamentales que lo componen:
+
+\begin{itemize}
+    \item \textbf{Población:} Es la colección completa de todos los individuos, objetos o mediciones de interés en un estudio particular. Puede ser finita (como todas las estrellas de un cúmulo globular específico) o conceptualmente infinita (como todos los posibles resultados de un experimento de medición repetido indefinidamente).
+    \item \textbf{Muestra:} Es un subconjunto de la población, seleccionado de tal manera que se espera que sea representativo de la totalidad. Debido a restricciones de tiempo, costo o viabilidad física, rara vez es posible observar la población completa.
+    \item \textbf{Parámetro:} Es una característica numérica fija, aunque generalmente desconocida, que describe a la población completa. Se denota tradicionalmente con letras griegas (por ejemplo, la media poblacional $\mu$, la varianza poblacional $\sigma^2$ o una proporción poblacional $p$).
+    \item \textbf{Estadístico:} Es cualquier cantidad numérica calculada a partir de los datos de la muestra. Se denota con letras latinas (por ejemplo, la media muestral $\bar{x}$, la varianza muestral $s^2$ o la proporción muestral $\hat{p}$). Un estadístico es, en sí mismo, una variable aleatoria, ya que su valor fluctúa de una muestra a otra debido al azar del muestreo.
+\end{itemize}
+
+La relación entre probabilidad e inferencia es inversa. La teoría de la probabilidad es deductiva: asume que se conocen los parámetros de la población y se utiliza para predecir el comportamiento de las posibles muestras. La inferencia estadística es inductiva: se observan los datos de la muestra (el estadístico) y se utiliza esta información para deducir o estimar los parámetros desconocidos de la población.
+
+El objetivo central de la inferencia estadística, que se desarrollará en los capítulos subsiguientes, se bifurca en dos direcciones principales (Devore, Capítulo 6, Introducción):
+\begin{enumerate}
+    \item \textbf{Estimación:} Utilizar un estadístico muestral para aproximar el valor de un parámetro poblacional desconocido. Esto puede hacerse mediante una estimación puntual (un solo número) o una estimación por intervalos (un rango de valores plausibles).
+    \item \textbf{Prueba de Hipótesis:} Formular una afirmación o pretensión sobre el valor de un parámetro poblacional y utilizar los datos muestrales para decidir, con un cierto nivel de riesgo controlado, si la evidencia es suficiente para rechazar dicha afirmación.
+\end{enumerate}
+
+En esta etapa introductoria, es crucial entender que cualquier conclusión inferencial está inherentemente sujeta a incertidumbre. La muestra es solo una ventana parcial a la población, y por lo tanto, los métodos inferenciales deben incorporar medidas de confiabilidad (como niveles de confianza o valores de significación) para cuantificar el margen de error de nuestras generalizaciones.
+
+\subsection{Ejemplo: Velocidad de Recesión en un Cúmulo de Galaxias}
+
+Para ilustrar la transición conceptual de la descripción a la inferencia, consideremos un escenario en astronomía extragaláctica. Supongamos que un equipo de astrofísicos desea determinar la velocidad media de recesión de las galaxias que pertenecen al cúmulo de Virgo, con el fin de refinar las estimaciones de la constante de Hubble en esa región del espacio.
+
+\begin{itemize}
+    \item \textbf{La Población:} El conjunto de \textit{todas} las galaxias que están gravitacionalmente ligadas al cúmulo de Virgo.
+    \item \textbf{El Parámetro ($\mu$):} La velocidad de recesión promedio verdadera de esta población completa. Este valor es una constante física fija, pero es desconocida para los investigadores, ya que es imposible medir el corrimiento al rojo de cada una de las miles de galaxias del cúmulo con la precisión requerida.
+    \item \textbf{La Muestra:} Un conjunto de $n = 40$ galaxias seleccionadas aleatoriamente del cúmulo, para las cuales se obtienen espectros de alta resolución utilizando un telescopio de 8 metros.
+    \item \textbf{El Estadístico ($\bar{x}$):} La velocidad de recesión promedio calculada a partir de las 40 galaxias observadas. Supongamos que este cálculo arroja $\bar{x} = 1150$ km/s.
+\end{itemize}
+
+La estadística descriptiva se limita a afirmar: ``En nuestra muestra de 40 galaxias, la velocidad promedio fue de 1150 km/s, con una desviación estándar de 120 km/s''. 
+
+La inferencia estadística, en cambio, da el salto conceptual. El investigador utiliza el estadístico $\bar{x} = 1150$ km/s como base para hacer una afirmación sobre el parámetro $\mu$. Sin embargo, debido a la variabilidad del muestreo, el investigador sabe que si hubiera seleccionado otras 40 galaxias, habría obtenido un promedio ligeramente distinto. Por lo tanto, la inferencia no se limita a decir ``$\mu$ es 1150 km/s''. En su lugar, el marco inferencial que se desarrollará permitirá al investigador afirmar, por ejemplo, que ``tenemos un 95\% de confianza en que la verdadera velocidad media $\mu$ del cúmulo se encuentra entre 1110 km/s y 1190 km/s'', o plantear una prueba formal para evaluar la pretensión de que ``$\mu$ es mayor a 1100 km/s''. 
+
+Este ejemplo destaca que el estadístico es la herramienta observable, mientras que el parámetro es la verdad oculta que la inferencia intenta desvelar, siempre acompañada de una cuantificación rigurosa de la incertidumbre inherente al proceso.
