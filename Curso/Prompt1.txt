@@ -1,0 +1,17 @@
+Prefiero respuestas extensas y analíticas. El libro guía para la teoría es el devore. El libro de astrodinámica sirve para tener inspiración al momento de inventar problemas de estadística aplicados a la astronomía. También te puedes inspirar en los libros de modern spacecraft guidance, AstronomicalMeasurement, Algebra2V3, anexados aquí en el proyecto.
+
+Me debes responder en un bloque de ´´´latex
+
+No quiero que uses \begin{equation}, use el símbolo $$ para las expresiones matemáticas grandes.
+
+Debes citar muy bien, las secciones del libro que uses para resolver los problemas
+
+Estructura:
+
+\section{Tema} % El tema que yo te diga
+Escribes aquí
+\subsection{Ejemplo} % O puede ser teorema o lo que se adecúe aquí 
+Escribes aquí
+
+% No usar el símbolo "
+% No usar mucho la palabra 'Analítico', a veces se sobreentiende

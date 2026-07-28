@@ -1,0 +1,560 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Problemset 1}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\Large Universidad de Antioquia\par}
+  \vspace{2cm}
+  {\huge\bfseries Astroestadística\par}
+  \vspace{0.4cm}
+  {\Large Problemset 1 \par}
+  \vspace{2.5cm}
+  {\large Autor:\par}
+  \vspace{0.2cm}
+  {\large Daniel Soto Villada\par}
+  {\large Estudiante de Astronomía\par}
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Espacios Muestrales y Clasificación Morfológica de Galaxias}
+
+Un telescopio espacial de nueva generación apunta hacia un campo profundo del universo y detecta un conjunto de galaxias previamente no catalogadas. El experimento consiste en analizar el perfil de brillo superficial de cada galaxia y asignarle una clase morfológica específica. El resultado de esta observación para una galaxia individual debe caer en una de cuatro categorías macroscópicas mutuamente excluyentes: E (Galaxia Espiral), L (Galaxia Elíptica), I (Galaxia Irregular) y D (Galaxia Lenticular, de disco, sin brazos espirales evidentes).
+
+El espacio muestral $S$ para este experimento aleatorio discreto está definido por el conjunto de todos los resultados posibles:
+$$ S = \{E, L, I, D\} $$
+
+\begin{enumerate}[a)]
+\item Defina formalmente los eventos compuestos $A$ (galaxias que presentan estructura de disco) y $B$ (galaxias que carecen de brazos espirales evidentes) como subconjuntos de $S$.
+\item Determine la intersección $A \cap B$ y la unión $A \cup B$, e interprete su significado físico en el contexto de la morfología galáctica.
+\item Si el telescopio observa una secuencia de tres galaxias independientes y se registra su categoría morfológica en orden de detección, describa la estructura del nuevo espacio muestral $S_3$ y calcule su cardinalidad total.
+\item Demuestre que los eventos elementales $\{E\}$, $\{L\}$, $\{I\}$ y $\{D\}$ son mutuamente excluyentes y exhaustivos bajo la definición del espacio muestral $S$.
+\end{enumerate}
+
+\textbf{Parte computacional}
+
+Escriba un script en Python que defina el espacio muestral $S$ como un conjunto de cadenas de texto, y utilice la biblioteca itertools para generar y mostrar todas las secuencias posibles de clasificaciones para un cúmulo de $N=3$ galaxias.
+
+\section{Espacios Muestrales Infinitos y Seguimiento de Cometas}
+
+Un observatorio astronómico terrestre está realizando una campaña de seguimiento astrométrico para determinar la órbita de un cometa de período largo recién descubierto. Para obtener imágenes de alta calidad, libres de nubes y con un seeing atmosférico adecuado, el telescopio debe intentar captar el objeto noche tras noche. El experimento consiste en registrar el resultado de cada noche de observación hasta lograr la primera imagen exitosa. Los resultados posibles para cada noche son $E$ (noche despejada, imagen exitosa) y $F$ (noche nublada o mal seeing, imagen descartada).
+
+El espacio muestral $S$ para este experimento de espera está dado por el conjunto infinito:
+$$
+S = \{E, FE, FFE, FFFFE, \dots\}
+$$
+donde cada elemento representa una secuencia única de intentos. Por ejemplo, el resultado $FFFE$ indica que el astrónomo sufrió tres noches consecutivas de mal clima antes de lograr captar el cometa en la cuarta noche.
+
+\begin{enumerate}[a)]
+\item Demuestre que el espacio muestral $S$ es infinito discreto y explique por qué este modelo es la base para calcular el tiempo esperado de observación utilizando la distribución de probabilidad geométrica.
+\item Defina el evento $A$ como obtener la primera imagen exitosa en un número par de noches, y exprese $A$ como un subconjunto explícito de $S$.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que simule este proceso de observación asumiendo una probabilidad de éxito nocturno $p = 0.3$. El código debe generar la secuencia de resultados de cada noche hasta el primer éxito y repetir esta simulación para 1000 cometas diferentes, almacenando el número total de noches requeridas en cada caso.
+\item Genere un histograma con las frecuencias absolutas del número de noches necesarias para lograr el éxito en las 1000 simulaciones, asegurándose de etiquetar correctamente los ejes y el título de la figura utilizando la biblioteca matplotlib.
+\end{enumerate}
+
+\section{Espacios Muestrales Continuos en Coordenadas Ecuatoriales}
+
+Un observatorio astronómico está realizando un seguimiento astrométrico de alta precisión de un planeta exterior, específicamente Júpiter, para refinar su efemérides orbital. Debido a las limitaciones físicas del instrumento y a la turbulencia atmosférica, la medición de la posición aparente del astro no arroja un punto exacto, sino que está sujeta a un error instrumental distribuido continuamente. El experimento consiste en medir las coordenadas ecuatoriales del planeta, definidas por su Ascensión Recta $\alpha$ y su Declinación $\delta$.
+
+El espacio muestral $S$ para este experimento continuo se define como un subconjunto del plano cartesiano $\mathbb{R}^2$:
+$$
+S = \{(\alpha, \delta) \in \mathbb{R}^2 \mid 0 \leq \alpha < 24^h, -90^\circ \leq \delta \leq 90^\circ\}
+$$
+
+\begin{enumerate}[a)]
+\item Explique por qué la probabilidad de medir exactamente un punto $(\alpha_0, \delta_0)$ es estrictamente cero.
+\item Defina el evento $A$ como la región del espacio muestral donde el planeta se encuentra en el hemisferio celeste norte y su ascensión recta está en el primer cuadrante ($0 \leq \alpha < 6^h$). Exprese $A$ formalmente como un subconjunto de $S$.
+\item Si el error de medición se modela con una función de densidad de probabilidad conjunta $f(\alpha, \delta)$ uniforme sobre todo el espacio muestral $S$, calcule el valor de la constante de normalización $k$ tal que $f(\alpha, \delta) = k$.
+\item Calcule la probabilidad de que una medición aleatoria caiga dentro de una región de interés científico $R$ definida por $12^h \leq \alpha < 18^h$ y $0^\circ \leq \delta \leq 45^\circ$.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que genere $N = 10000$ mediciones simuladas de las coordenadas $(\alpha, \delta)$ asumiendo la distribución uniforme descrita en el inciso c.
+\item Utilice la biblioteca matplotlib para crear un gráfico de dispersión de las coordenadas generadas, proyectadas en un sistema donde el eje horizontal represente la Ascensión Recta en horas y el eje vertical la Declinación en grados.
+\item Calcule empíricamente la probabilidad de que las mediciones caigan en la región $R$ definida en el inciso d, y compare este resultado con el valor teórico obtenido analíticamente.
+\end{enumerate}
+
+
+\section{Eventos y Clasificación Taxonómica de Asteroides}
+
+Un telescopio espacial de nueva generación realiza un sondeo espectroscópico de asteroides cercanos a la Tierra. Basado en sus espectros de reflexión, cada asteroide detectado se clasifica en uno de tres complejos taxonómicos principales: C (Carbonáceos), S (Silicáceos) y X (Metálicos). El experimento consiste en registrar la clasificación taxonómica de un par de asteroides que pertenecen a la misma familia orbital. 
+
+El espacio muestral $S$ para este experimento está compuesto por $3^2 = 9$ eventos simples, representados como pares ordenados donde la primera posición corresponde al primer asteroide y la segunda posición al segundo asteroide:
+
+$$
+S = \{CC, CS, CX, SC, SS, SX, XC, XS, XX\}
+$$
+
+\begin{enumerate}[a)]
+\item Defina el evento $A$ como el conjunto de resultados donde al menos uno de los dos asteroides clasificados es de tipo C. Liste explícitamente todos los elementos que conforman el evento $A$.
+\item Defina el evento $B$ como el conjunto de resultados donde ambos asteroides pertenecen exactamente al mismo complejo taxonómico. Exprese $B$ formalmente como un subconjunto de $S$.
+\item Determine la intersección $A \cap B$ y la unión $A \cup B$. Interprete el significado físico de ambos resultados en el contexto de la observación astronómica.
+\item Defina el evento $D$ como el complemento de $B$, denotado como $B^c$. Determine si los eventos $A$ y $D$ son mutuamente excluyentes, justificando su respuesta mediante la intersección de ambos conjuntos.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que defina el espacio muestral $S$ como una lista de cadenas de texto o tuplas. Utilice operaciones de conjuntos nativas de Python para filtrar e imprimir en pantalla los elementos que conforman los eventos $A$ y $B$.
+\item Simule la detección de $N = 1000$ pares de asteroides. Asuma que las probabilidades marginales de encontrar un asteroide de tipo C, S y X son $P(C) = 0.7$, $P(S) = 0.2$ y $P(X) = 0.1$, respectivamente, y que las clasificaciones de ambos asteroides son eventos independientes.
+\item A partir de los datos generados en la simulación, calcule la probabilidad empírica de que ocurra el evento $A$ y compárela con el valor de probabilidad teórica calculada analíticamente.
+\item Genere un gráfico de barras que muestre la frecuencia absoluta de cada uno de los 9 eventos simples del espacio muestral $S$ obtenidos en la simulación, asegurándose de etiquetar correctamente los ejes y el título utilizando la biblioteca matplotlib.
+\end{enumerate}
+
+\section{Modelado Gravitacional en Operaciones de Proximidad}
+
+Una sonda espacial autónoma se encuentra en fase de aproximación a un asteroide cercano a la Tierra de forma altamente irregular (similar a 433 Eros o 4769 Castalia). Debido a la geometría no esférica del cuerpo, el campo gravitacional no puede modelarse adecuadamente con la aproximación de masa puntual. El sistema de navegación a bordo (GNC) dispone de dos modelos gravitacionales que puede seleccionar de forma adaptativa para alimentar el filtro de estimación de estado durante cada pasada de aproximación:
+
+\begin{itemize}
+\item \textbf{H}: Modelo de Armónicos Esféricos (SHE), que aproxima el potencial gravitacional mediante una expansión en polinomios de Legendre con coeficientes $C_{ij}$ y $S_{ij}$, válido únicamente fuera de la esfera de Brillouin.
+\item \textbf{M}: Modelo de Mascones, que discretiza la masa del asteroide en un conjunto de $N$ masas puntuales distribuidas en su interior, válido a cualquier distancia incluyendo la superficie.
+\end{itemize}
+
+Definimos el experimento como: la nave ejecuta 3 pasadas de aproximación consecutivas al asteroide. En cada pasada, el sistema de navegación selecciona de forma autónoma el modelo gravitacional a utilizar para el filtro de navegación. Los resultados básicos para cada pasada son $H$ (se utiliza el modelo de Armónicos Esféricos) y $M$ (se utiliza el modelo de Mascones).
+
+El espacio muestral $S$ está compuesto por $2^3 = 8$ eventos simples:
+$$
+S = \{HHH, HHM, HMH, MHH, HMM, MHM, MMH, MMM\}
+$$
+
+\begin{enumerate}[a)]
+\item Defina el evento $A$ como el conjunto de resultados en los que el modelo de Mascones se utiliza al menos en dos de las tres pasadas. Liste explícitamente todos los elementos de $A$ y calcule su cardinalidad.
+\item Defina el evento $B$ como el conjunto de resultados en los que el modelo seleccionado en la primera pasada es idéntico al modelo seleccionado en la tercera pasada. Exprese $B$ como subconjunto de $S$.
+\item Determine la intersección $A \cap B$ y la unión $A \cup B$. Interprete el significado físico de $A \cap B$ en el contexto de la estrategia de navegación de la sonda durante las operaciones de proximidad.
+\item Defina el evento $C$ como el complemento de $A$, denotado $A^c$. Verifique si los eventos $B$ y $C$ son mutuamente excluyentes, justificando su respuesta mediante el cálculo de $B \cap C$.
+\item Suponga que la probabilidad de seleccionar el modelo $H$ en cada pasada es $P(H) = 0.6$ y la de seleccionar $M$ es $P(M) = 0.4$, y que las selecciones en pasadas distintas son independientes. Calcule la probabilidad teórica del evento $A$.
+\end{enumerate}
+
+
+\section{Demostración de la Probabilidad del Evento Nulo mediante Axiomas}
+
+En el marco de los fundamentos axiomáticos de la probabilidad, el tercer axioma establece la aditividad numerable para sucesiones de eventos mutuamente excluyentes. Sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una sucesión infinita de eventos $A_1, A_2, A_3, \dots$ definidos en el espacio muestral, donde cada evento es idénticamente el conjunto vacío, es decir, $A_i = \emptyset$ para todo $i \geq 1$.
+
+\begin{enumerate}[a)]
+\item Demuestre que la sucesión de eventos $A_i$ cumple con la condición de ser mutuamente excluyentes, calculando la intersección de cualquier par de eventos $A_i \cap A_j$ para $i \neq j$.
+\item Determine el conjunto resultante de la unión infinita de estos eventos, expresado formalmente como $\bigcup_{i=1}^{\infty} A_i$.
+\item Aplicando rigurosamente el tercer axioma de la probabilidad, plantee la ecuación que relaciona la probabilidad de la unión infinita con la suma infinita de las probabilidades individuales. La expresión matemática base a evaluar es:
+$$
+P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)
+$$
+\item A partir de la ecuación obtenida en el inciso anterior, deduzca analíticamente el valor exacto de la probabilidad del evento nulo, $P(\emptyset)$
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Implemente una simulación numérica que calcule la suma parcial $S_N = \sum_{i=1}^{N} p$ para un valor de prueba $p = 0.05$. Grafique el comportamiento de $S_N$ en función de $N$ para $N$ desde 1 hasta 1000 utilizando matplotlib, demostrando visualmente la divergencia de la serie si $p > 0$.
+\item Modifique el script anterior para evaluar la suma parcial con $p = 0$. Genere una tabla comparativa en la consola que muestre los valores de $S_N$ para $N = 10, 100, 1000$ en ambos casos ($p = 0.05$ y $p = 0$), evidenciando numéricamente la necesidad lógica de que la probabilidad del evento nulo sea estrictamente cero para no violar los axiomas de probabilidad.
+\end{enumerate}
+
+
+\section{Clasificación de Señales en Astronomía de Ondas Gravitacionales}
+
+En el campo emergente de la astronomía de ondas gravitacionales, redes de interferómetros como LIGO y Virgo detectan continuamente candidatos a señales transitorias. Tras años de ciclos de observación, la colaboración científica ha establecido un espacio muestral $S$ para la clasificación de un nuevo candidato a señal, el cual se asigna a una de tres clases mutuamente excluyentes y exhaustivas:
+
+\begin{itemize}
+\item $A$: Fusión de agujeros negros binarios (BBH).
+\item $B$: Fusión de estrellas de neutrones binarias (BNS).
+\item $C$: Artefacto instrumental o ruido sísmico (falso positivo).
+\end{itemize}
+
+Suponga que, basándose en el historial de detecciones de un detector específico durante su último ciclo de observación, las probabilidades a priori de que una nueva alerta corresponda a cada uno de estos eventos son $P(A) = 0.45$, $P(B) = 0.15$ y $P(C) = 0.40$.
+
+\begin{enumerate}[a)]
+\item Verifique analíticamente que las probabilidades asignadas satisfacen los axiomas de probabilidad para el espacio muestral $S$, demostrando que se cumple la condición de normalización:
+$$ \sum_{i \in \{A, B, C\}} P(i) = 1 $$
+\item Calcule la probabilidad de que una nueva señal candidata sea de origen astrofísico genuino (es decir, que ocurra el evento $A \cup B$).
+\item Determine la probabilidad del evento complementario $B^c$ y explique su significado físico en el contexto de la validación de señales gravitacionales.
+\item Si se define un nuevo evento $D$ como la ocurrencia de una fusión de agujeros negros o un falso positivo ($D = A \cup C$), calcule $P(D)$ y demuestre que $P(D) = 1 - P(B)$ utilizando las propiedades fundamentales derivadas de los axiomas de probabilidad.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Simule la detección de $N = 10000$ señales candidatas utilizando las probabilidades dadas. Utilice la función de elección aleatoria ponderada de la biblioteca numpy para generar las clasificaciones de cada evento.
+\item A partir de los datos simulados, calcule las frecuencias relativas de los eventos $A$, $B$ y $C$. Compare estos valores empíricos con las probabilidades teóricas y genere un gráfico de barras agrupadas que muestre ambas comparaciones, asegurándose de incluir leyendas, etiquetas en los ejes y un título claro utilizando matplotlib.
+\item Calcule empíricamente la probabilidad de que una señal sea de origen astrofísico ($A \cup B$) a partir de la simulación y verifique que el resultado coincide con el valor teórico calculado en el inciso b.
+\end{enumerate}
+
+\section{Análisis de Modos de Falla en un Rover de Exploración}
+
+El mecanismo de perforación y muestreo de un rover marciano opera en ciclos de 1 hora. Durante un ciclo operativo, el sistema puede experimentar uno de tres modos de falla críticos, los cuales son mutuamente excluyentes ya que el diagnóstico del sistema identifica la causa raíz primaria de manera única. Los eventos de falla se definen como:
+
+\begin{itemize}
+\item $A$: Atasco mecánico del motor del taladro.
+\item $B$: Sobrecarga térmica en la electrónica de control.
+\item $C$: Pérdida de sincronización en el bus de comunicación.
+\end{itemize}
+
+Basado en datos históricos de pruebas en cámaras de vacío térmico, se han asignado las siguientes probabilidades para un ciclo operativo dado: $P(A) = 0.04$, $P(B) = 0.03$ y $P(C) = 0.01$. Sea $F$ el evento compuesto definido como que ocurra cualquier tipo de falla durante el ciclo, y sea $F'$ el evento complementario que representa la operación nominal sin fallas.
+
+\begin{enumerate}[a)]
+\item Justifique por qué es válido aplicar directamente el tercer axioma de la probabilidad para calcular $P(F)$ y determine el valor de la probabilidad de falla total del sistema mediante la expresión:
+$$ P(F) = P(A \cup B \cup C) = P(A) + P(B) + P(C) $$
+\item Calcule la probabilidad de que el rover complete el ciclo de perforación de manera exitosa, es decir, $P(F')$
+\item Para garantizar los objetivos científicos de la misión, se requiere que la probabilidad acumulada de obtener al menos una muestra geológica exitosa sea superior al 99\%. Asumiendo que los ciclos operativos son independientes entre sí, determine analíticamente el número mínimo de ciclos redundantes $n$ que deben programarse.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que simule $N = 10000$ ciclos operativos del rover. Utilice la biblioteca numpy para generar los resultados de cada ciclo asignando las categorías $A$, $B$, $C$ y $F'$ según sus probabilidades teóricas.
+\item A partir de los datos simulados, calcule las frecuencias relativas de cada modo de falla y del evento de éxito $F'$. Genere un gráfico de barras que compare las probabilidades empíricas con las teóricas, asegurándose de incluir leyendas y etiquetas claras utilizando matplotlib.
+\item Implemente una función que calcule la probabilidad acumulada de éxito en función del número de ciclos programados $n$. Genere una gráfica de esta función para $n$ desde 1 hasta 200, y marque visualmente el punto exacto donde la probabilidad acumulada supera el umbral del 99\%.
+\end{enumerate}
+
+\section{Caracterización de Asteroides mediante Albedo Radar}
+
+Un radiotelescopio de la Red del Espacio Profundo realiza observaciones de asteroides cercanos a la Tierra para determinar su composición superficial mediante el envío de pulsos de radio. El albedo radar $\hat{\rho}$ es un indicador físico clave para la taxonomía: los asteroides metálicos (tipo M) poseen superficies altamente reflectantes, los rocosos (tipo S) tienen una reflectancia moderada, y los carbonáceos (tipo C) son altamente absorbentes.
+
+Definimos los eventos mutuamente excluyentes y exhaustivos que representan la composición real del asteroide: $M$ (tipo metálico), $S$ (tipo rocoso) y $C$ (tipo carbonáceo). Basado en censos astronómicos previos, las probabilidades a priori de encontrar cada tipo en la población objetivo son $P(M) = 0.15$, $P(S) = 0.60$ y $P(C) = 0.25$.
+
+El sistema de procesamiento de señales clasifica las observaciones en dos categorías según el umbral de detección. Definimos el evento $A$ como la medición de un albedo radar alto ($\hat{\rho} > 0.3$). Las probabilidades condicionales de que el sistema registre un albedo alto, dado el tipo real del asteroide, se han calibrado mediante observaciones históricas como:
+$$
+P(A|M) = 0.90, \quad P(A|S) = 0.20, \quad P(A|C) = 0.05
+$$
+
+\begin{enumerate}[a)]
+\item Calcule la probabilidad total de que el radiotelescopio registre un albedo radar alto, es decir, determine el valor de $P(A)$ utilizando la Ley de Probabilidad Total.
+\item Si una nueva observación arroja un albedo radar alto (evento $A$), calcule la probabilidad de que el asteroide sea realmente de tipo metálico ($M$). 
+\item Defina el evento $B$ como la medición de un albedo radar bajo o moderado ($\hat{\rho} \leq 0.3$). Determine la probabilidad condicional $P(S|B)$ y discuta cómo este resultado afecta la confianza en la clasificación de asteroides rocosos cuando la señal de retorno es débil.
+\end{enumerate}
+
+\section{Regla de Multiplicación en Pipelines de Transitorios Astrofísicos}
+
+Un observatorio de radio de nueva generación opera un pipeline automatizado para la detección y clasificación de Ráfagas Rápidas de Radio (FRB). El procesamiento de datos se divide en tres etapas secuenciales y dependientes. Definimos los siguientes eventos para cada candidato a señal:
+
+\begin{itemize}
+\item $E_1$: La señal cruda supera el umbral de activación del hardware y genera un disparador válido.
+\item $E_2$: La señal supera el filtro de coincidencia espacial y temporal entre los haces del interferómetro.
+\item $E_3$: El clasificador de aprendizaje profundo confirma que la señal es de origen astrofísico y no interferencia de radiofrecuencia terrestre.
+\end{itemize}
+
+Basado en el rendimiento histórico del sistema, se han estimado las siguientes probabilidades: la probabilidad de generar un disparador válido es $P(E_1) = 0.85$. Dado que se generó un disparador, la probabilidad de pasar el filtro de coincidencia es $P(E_2 | E_1) = 0.60$. Finalmente, dada la superación de las dos primeras etapas, la probabilidad de clasificación astrofísica exitosa es $P(E_3 | E_1 \cap E_2) = 0.92$.
+
+\begin{enumerate}[a)]
+\item Plantee la expresión analítica para la probabilidad de que un candidato a señal complete exitosamente todo el pipeline, aplicando la regla general de la multiplicación:
+$$
+P(E_1 \cap E_2 \cap E_3) = P(E_1) \cdot P(E_2 | E_1) \cdot P(E_3 | E_1 \cap E_2)
+$$
+\item Calcule el valor numérico de la probabilidad de detección exitosa de extremo a extremo.
+\item Defina el evento de fallo del pipeline $F$ como aquel en el que la señal es descartada en cualquier etapa. Calcule $P(F)$
+\item Si se implementa una nueva versión del filtro de coincidencia que aumenta la probabilidad condicional a $P(E_2 | E_1) = 0.75$, manteniendo constantes las demás probabilidades, determine la nueva probabilidad de detección exitosa.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que simule el paso de $N = 100,000$ candidatos a señal a través de las tres etapas del pipeline original, utilizando la biblioteca numpy para generar los resultados secuenciales basados en las probabilidades condicionales dadas.
+\item A partir de la simulación, calcule la frecuencia empírica de señales que completan las tres etapas y compare este valor con el resultado teórico obtenido en el inciso b.
+\item Genere un gráfico de barras de embudo utilizando matplotlib que muestre el número de señales que sobreviven en cada etapa, ilustrando visualmente la pérdida de candidatos en el pipeline.
+\item Realice un análisis de sensibilidad: cree una malla de valores para $P(E_2 | E_1)$ y $P(E_3 | E_1 \cap E_2)$ variando de 0.1 a 0.99. Calcule la probabilidad final para cada combinación y genere un mapa de calor con matplotlib para visualizar qué etapa condicional impacta más drásticamente la eficiencia global del sistema.
+\end{enumerate}
+
+
+\section{Confiabilidad de Subsistemas Críticos en una Sonda Interplanetaria}
+
+Una sonda interplanetaria que se encuentra en fase de crucero hacia el sistema solar exterior depende de tres subsistemas críticos para mantener la salud de la nave y transmitir datos: el Subsistema de Generación de Energía (evento $A$), el Subsistema de Control Térmico (evento $B$) y el Subsistema de Comunicaciones de Alta Ganancia (evento $C$). 
+
+Debido a la arquitectura física y lógica de la nave, el funcionamiento de estos tres subsistemas se modela como eventos estadísticamente independientes. Las probabilidades de que cada subsistema opere correctamente durante un periodo crítico de un año son $P(A) = 0.95$, $P(B) = 0.92$ y $P(C) = 0.98$.
+
+Es fundamental en el diseño aeroespacial no confundir la independencia estadística con la exclusión mutua. Por ejemplo, la sonda no puede operar simultáneamente en el Modo de Observación de Alta Resolución (evento $M_1$) y en el Modo de Transmisión de Datos Masivos (evento $M_2$), por lo que $M_1$ y $M_2$ son mutuamente excluyentes, con $P(M_1) = 0.6$ y $P(M_2) = 0.4$.
+
+\begin{enumerate}[a)]
+\item Calcule la probabilidad de que los tres subsistemas críticos funcionen correctamente de manera simultánea
+\item Determine la probabilidad de que exactamente uno de los tres subsistemas críticos falle durante el periodo crítico. La expresión analítica para este evento se puede construir como:
+$$
+P(\text{Exactamente un fallo}) = P(A^c \cap B \cap C) + P(A \cap B^c \cap C) + P(A \cap B \cap C^c)
+$$
+\item Calcule la probabilidad de que la sonda deba entrar en un modo de seguridad, definido como el evento donde fallan al menos dos de los tres subsistemas críticos.
+\item Para los eventos mutuamente excluyentes $M_1$ y $M_2$, calcule $P(M_1 \cup M_2)$ y $P(M_1 \cap M_2)$. Explique analíticamente por qué la probabilidad de su intersección es cero y cómo esto contrasta con la intersección de los subsistemas independientes $A$, $B$ y $C$.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que utilice la biblioteca numpy para simular el funcionamiento de los tres subsistemas críticos durante $N = 100,000$ periodos de un año. Genere matrices aleatorias donde cada columna represente un subsistema y cada fila un periodo, asignando 1 (éxito) o 0 (fallo) según sus respectivas probabilidades.
+\item A partir de la simulación, calcule la frecuencia empírica del evento donde exactamente un subsistema falla y compárela con el valor teórico obtenido en el inciso b. Imprima ambos valores en la consola para su verificación.
+\item Genere un gráfico de barras con matplotlib que muestre las probabilidades teóricas de las 8 combinaciones posibles de éxito y fallo de los subsistemas $A$, $B$ y $C$ (por ejemplo, el estado donde todos fallan, donde solo A falla, etc.). Asegúrese de etiquetar los ejes y el título correctamente.
+\item Implemente una función que calcule la probabilidad teórica de éxito de la misión (al menos dos subsistemas funcionando) en función de la probabilidad del Subsistema de Comunicaciones $P(C)$, manteniendo $P(A)$ y $P(B)$ constantes. Grafique esta función para $P(C)$ variando desde 0.5 hasta 1.0 para analizar la sensibilidad del sistema ante degradaciones en el enlace de radio.
+\end{enumerate}
+
+
+\section{Discriminación de Señales en Interferometría de Ondas Gravitacionales}
+
+Considere una red de interferómetros láser, análoga a LIGO o Virgo, compuesta por detectores separados geográficamente por miles de kilómetros. Para un intervalo de tiempo de 1 milisegundo, definimos los siguientes eventos elementales:
+
+\begin{itemize}
+\item $N_1$: El detector 1 registra un transitorio de ruido sísmico o instrumental que supera el umbral de activación.
+\item $N_2$: El detector 2 registra un transitorio de ruido que supera el umbral de activación.
+\item $W_{ok}$: Se produce la detección exitosa de una onda gravitacional real proveniente de una fusión de agujeros negros.
+\end{itemize}
+
+Debido a la gran distancia física entre los observatorios, los eventos de ruido local $N_1$ y $N_2$ se modelan como estadísticamente independientes. Asimismo, la ocurrencia de una onda gravitacional real $W_{ok}$ es un evento astrofísico independiente de los flujos de ruido instrumental locales. Las probabilidades asignadas para un intervalo de 1 milisegundo son $P(N_1) = 0.02$, $P(N_2) = 0.03$ y $P(W_{ok}) = 10^{-4}$.
+
+\begin{enumerate}[a)]
+\item Defina formalmente el evento de 'falsa alarma por coincidencia' $C$ en términos de $N_1$ y $N_2$. Utilizando la definición de independencia estadística, calcule la probabilidad teórica de que ambos detectores se activen simultáneamente solo por ruido local.
+\item El sistema de alerta temprana emite una notificación si ocurre una coincidencia de ruido $C$ o si se detecta una onda real $W_{ok}$. Defina el evento de alerta total $A = C \cup W_{ok}$. Asumiendo que $C$ y $W_{ok}$ son eventos independientes, calcule $P(A)$ utilizando la siguiente expresión matemática:
+$$
+P(A) = P(C \cup W_{ok}) = P(C) + P(W_{ok}) - P(C \cap W_{ok})
+$$
+\item En la práctica, una coincidencia de ruido y una señal real son eventos mutuamente excluyentes en la interpretación física del dato (un pico no puede ser ruido y señal al mismo tiempo). Si se modelan como mutuamente excluyentes en lugar de independientes, ¿cómo cambiaría el cálculo de $P(A)$? Justifique su respuesta analíticamente.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que utilice la biblioteca numpy para simular $10^7$ intervalos de 1 milisegundo. Genere arreglos booleanos para $N_1$, $N_2$ y $W_{ok}$ basándose en sus probabilidades teóricas, y calcule las frecuencias empíricas de los eventos $C$ y $A$.
+\item A partir de la simulación, estime la Tasa de Falsas Alarmas (FAR, por sus siglas en inglés) expresada en 'falsas alarmas por año', asumiendo que el detector opera ininterrumpidamente (365 días al año).
+\item Genere una gráfica utilizando matplotlib que muestre la convergencia de la probabilidad empírica del evento $C$ a medida que aumenta el número de intervalos simulados. El eje x debe estar en escala logarítmica (desde $10^2$ hasta $10^7$) y el eje y en escala lineal, incluyendo una línea horizontal que represente el valor teórico para facilitar la comparación visual.
+\end{enumerate}
+
+\section{Demostración y Aplicación del Teorema de Actualización Secuencial}
+
+En el marco de la teoría de la probabilidad, sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una hipótesis $H \in \mathcal{F}$ y dos conjuntos de datos observacionales $D_1, D_2 \in \mathcal{F}$. El enfoque bayesiano permite actualizar el grado de creencia en la hipótesis $H$ a medida que se incorporan nuevos datos. El Teorema de Actualización Secuencial establece que actualizar la hipótesis $H$ con un primer conjunto de datos $D_1$ y utilizar el resultado como la nueva probabilidad a priori para un segundo conjunto de datos $D_2$, es matemáticamente idéntico a actualizar la hipótesis original con ambos conjuntos de datos $D_1 \cap D_2$ de manera simultánea. La expresión matemática que rige este proceso es:
+
+$$
+P(H|D_1 \cap D_2) = \frac{P(D_2|H \cap D_1)P(H|D_1)}{P(D_2|D_1)}
+$$
+
+\begin{enumerate}[a)]
+\item Partiendo de la definición fundamental de probabilidad condicional y el Teorema de Bayes, demuestre el Teorema de Actualización Secuencial mostrado en la ecuación anterior.
+\item Suponga que la probabilidad a priori de la hipótesis es $P(H) = 0.4$. Los modelos de verosimilitud indican que $P(D_1|H) = 0.8$ y $P(D_1|H^c) = 0.2$. Calcule la probabilidad posterior $P(H|D_1)$ tras la primera observación.
+\item Para la segunda observación, los modelos indican que $P(D_2|H \cap D_1) = 0.9$ y $P(D_2|H^c \cap D_1) = 0.3$. Utilizando el Teorema de Actualización Secuencial, calcule la probabilidad posterior final $P(H|D_1 \cap D_2)$.
+\item Verifique el resultado del inciso anterior calculando la posterior conjunta $P(H|D_1 \cap D_2)$ directamente desde la probabilidad a priori original $P(H)$, asumiendo independencia condicional de los datos dado $H$ (es decir, $P(D_1 \cap D_2|H) = P(D_1|H)P(D_2|H)$ y $P(D_1 \cap D_2|H^c) = P(D_1|H^c)P(D_2|H^c)$).
+\end{enumerate}
+
+\section{Clasificación Mineralógica mediante Espectroscopía de Reflexión}
+
+Un rover de exploración marciana utiliza su espectrómetro de infrarrojo cercano para analizar un afloramiento rocoso en la cuenca de Jezero. Basado en el contexto geológico orbital, el equipo científico establece las siguientes hipótesis mutuamente excluyentes y exhaustivas sobre la composición mineralógica de la roca:
+
+\begin{itemize}
+\item $A_1$: La roca es basáltica (rica en piroxeno).
+\item $A_2$: La roca es una condrita carbonácea (rica en arcillas).
+\item $A_3$: La roca es de origen metálico (hierro-níquel, probablemente un meteorito).
+\end{itemize}
+
+Las probabilidades a priori, derivadas de la geomorfología de la zona, son $P(A_1) = 0.20$, $P(A_2) = 0.60$ y $P(A_3) = 0.20$. El espectrómetro detecta una profunda banda de absorción centrada en 1 µm, una firma característica de los enlaces Fe-O en el piroxeno. Definimos este evento observacional como $B$. Conociendo las calibraciones instrumentales y las propiedades físicas de los minerales, las verosimilitudes son $P(B|A_1) = 0.90$, $P(B|A_2) = 0.10$ y $P(B|A_3) = 0.05$.
+
+\begin{enumerate}[a)]
+\item Calcule la probabilidad total de que el espectrómetro detecte la banda de absorción en 1 µm, aplicando la Ley de Probabilidad Total.
+\item Utilice el Teorema de Bayes para determinar las probabilidades a posteriori de cada hipótesis. La expresión matemática general para este cálculo es:
+$$
+P(A_i|B) = \frac{P(B|A_i)P(A_i)}{\sum_{j=1}^{3} P(B|A_j)P(A_j)}
+$$
+\item Identifique la clasificación de Máximo A Posteriori (MAP). Discuta cómo la evidencia espectral modifica la creencia inicial del equipo científico respecto a la composición predominante de la cuenca.
+\item Suponga que el rover realiza una segunda medición $C$ (una banda de absorción en 1.05 µm asociada a olivino). Plantee la expresión analítica para la actualización secuencial bayesiana $P(A_1|B \cap C)$, asumiendo que las mediciones son condicionalmente independientes dada la composición real de la roca.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que simule el análisis de $N = 100,000$ afloramientos rocosos. Utilice la biblioteca numpy para generar las composiciones reales según las probabilidades a priori y, posteriormente, simule la detección del evento $B$ usando las verosimilitudes dadas. Calcule las frecuencias relativas empíricas a posteriori y compárelas con los valores teóricos.
+\item Genere un diagrama de Sankey utilizando la biblioteca plotly para visualizar el flujo de las 100,000 simulaciones. El diagrama debe mostrar cómo las rocas de cada tipo real (nodo izquierdo) se distribuyen entre la detección y la no detección de la banda de 1 µm (nodo derecho), permitiendo identificar visualmente la tasa de falsos positivos para las condritas carbonáceas.
+\item Implemente un análisis de sensibilidad mediante un bucle en Python. Varíe la probabilidad a priori $P(A_1)$ desde 0.01 hasta 0.99 (distribuyendo el resto equitativamente entre $A_2$ y $A_3$). Para cada valor, calcule la probabilidad a posteriori $P(A_1|B)$ y genere una gráfica con matplotlib que muestre cómo la evidencia espectral $B$ logra dominar sobre la creencia a priori, identificando el umbral exacto donde la probabilidad a posteriori supera el 95\%.
+\end{enumerate}
+
+\section{Aislamiento de Fallas en el Sistema de Control de Actitud}
+
+El Sistema de Control y Determinación de Actitud (ADCS) de un satélite de observación terrestre ha detectado una anomalía específica en la estimación de actitud, denotada como el evento $A$. Tras un análisis de telemetría, los ingenieros de vuelo han identificado tres posibles causas raíz mutuamente excluyentes y exhaustivas para esta anomalía:
+
+\begin{itemize}
+\item $F_1$: Degradación radiativa en el sensor de horizonte terrestre.
+\item $F_2$: Desalineación térmica en la unidad de referencia inercial.
+\item $F_3$: Error transitorio en el bus de datos de la computadora de a bordo.
+\end{itemize}
+
+Basado en el historial de la misión y las condiciones del entorno espacial, las probabilidades a priori de cada causa son $P(F_1) = 0.15$, $P(F_2) = 0.65$ y $P(F_3) = 0.20$. Las probabilidades condicionales de que se manifieste la anomalía $A$ dada cada causa raíz se han modelado mediante pruebas en cámara de vacío térmico como:
+$$
+P(A|F_1) = 0.95, \quad P(A|F_2) = 0.45, \quad P(A|F_3) = 0.10
+$$
+
+\begin{enumerate}[a)]
+\item Calcule P(A)
+\item Dado que la anomalía $A$ ha sido confirmada, utilice el Teorema de Bayes para determinar la probabilidad a posteriori de cada una de las tres causas raíz. La expresión matemática general para este cálculo es:
+$$
+P(F_i|A) = \frac{P(A|F_i)P(F_i)}{\sum_{j=1}^{3} P(A|F_j)P(F_j)}
+$$
+\item Identifique la causa raíz más probable (estimación de Máximo A Posteriori) y discuta cómo este resultado debería influir en la secuencia de comandos de contingencia que se enviará desde el centro de control en tierra para aislar la falla.
+\end{enumerate}
+
+\section{Clasificación Orbital de Cometas: Parabólico vs. Hiperbólico}
+
+Cuando se descubre un nuevo cometa de período largo, determinar su excentricidad orbital real es crucial para entender su origen. Si la excentricidad es exactamente uno, la órbita es parabólica y el cometa está gravitacionalmente ligado al sistema solar, proviniendo probablemente de la nube de Oort. Si la excentricidad es mayor que uno, la órbita es hiperbólica, lo que indicaría un objeto interestelar que solo está de paso.
+
+Sin embargo, las mediciones astrométricas de Ascensión Recta y Declinación tienen errores inherentes. Definamos el evento $M$ como: la excentricidad medida es $\hat{e} \geq 1.0$.
+
+Tenemos dos hipótesis mutuamente excluyentes sobre la verdadera naturaleza del cometa:
+\begin{itemize}
+\item $H_P$: El cometa tiene una órbita verdaderamente parabólica.
+\item $H_H$: El cometa tiene una órbita verdaderamente hiperbólica (interestelar).
+\end{itemize}
+
+Basado en el catálogo histórico, la inmensa mayoría de los cometas de período largo son parabólicos, estableciendo las siguientes probabilidades a priori: $P(H_P) = 0.95$ y $P(H_H) = 0.05$.
+
+Conociendo la precisión típica de los telescopios terrestres y la propagación de errores en el cálculo de elementos orbitales, estimamos las siguientes verosimilitudes de obtener una medición $\hat{e} \geq 1.0$:
+\begin{itemize}
+\item $P(M|H_P) = 0.10$: Si el cometa es realmente parabólico, hay un 10\% de probabilidad de que el ruido observacional empuje la excentricidad medida a $\geq 1.0$ (falso positivo).
+\item $P(M|H_H) = 0.90$: Si el cometa es realmente hiperbólico, hay un 90\% de probabilidad de que la medición lo refleje correctamente.
+\end{itemize}
+
+\begin{enumerate}[a)]
+\item Calcule la probabilidad total de obtener una medición $\hat{e} \geq 1.0$, aplicando rigurosamente la Ley de Probabilidad Total.
+\item Utilice el Teorema de Bayes para determinar la probabilidad a posteriori de que el cometa sea realmente interestelar ($H_H$) dado que la medición arrojó $\hat{e} \geq 1.0$. La expresión matemática para este cálculo es:
+$$
+P(H_H|M) = \frac{P(M|H_H)P(H_H)}{P(M|H_H)P(H_H) + P(M|H_P)P(H_P)}
+$$
+\item Analice el resultado obtenido en el inciso anterior. ¿Por qué, a pesar de que la medición directa sugiere una órbita hiperbólica, la probabilidad real de que el cometa sea interestelar resulta ser minoritaria? Discuta el impacto de la probabilidad a priori y la tasa de falsos positivos en la inferencia astronómica.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que simule el descubrimiento de $N = 50,000$ cometas. Utilice la biblioteca numpy para asignar la naturaleza real de cada cometa ($H_P$ o $H_H$) según las probabilidades a priori, y luego simule el resultado de la medición ($M$ o su complemento) usando las verosimilitudes dadas. Calcule la probabilidad empírica de que un cometa sea $H_H$ dado que ocurrió el evento $M$, y compárela con el valor teórico calculado en el inciso b.
+\item Genere una matriz de confusión visual utilizando la biblioteca seaborn o matplotlib. La matriz debe mostrar la distribución de los 50,000 cometas simulados, con la verdadera naturaleza del cometa en el eje vertical y el resultado de la medición en el eje horizontal. Añada anotaciones numéricas en cada celda para resaltar la cantidad de falsos positivos frente a las detecciones correctas, permitiendo evaluar visualmente el rendimiento del telescopio.
+\item Realice un análisis de sensibilidad para evaluar el impacto de la precisión instrumental en la clasificación. Varíe la tasa de falsos positivos $P(M|H_P)$ desde $0.01$ hasta $0.50$ en pasos de $0.01$, manteniendo constantes el resto de los parámetros. Para cada valor, calcule la probabilidad a posteriori $P(H_H|M)$ y genere una gráfica con matplotlib que muestre esta evolución. Determine e indique visualmente en la gráfica el umbral exacto de precisión (el valor de $P(M|H_P)$) en el cual la probabilidad a posteriori de que el cometa sea interestelar supera el 50\%.
+\end{enumerate}
+
+\section{Configuración de Carga Útil en una Sonda Espacial}
+
+Una sonda espacial en órbita alrededor de un gigante gaseoso debe configurar su paquete de instrumentos para una campaña de observación de la atmósfera superior. El sistema de adquisición de datos permite seleccionar independientemente tres parámetros críticos para cada toma de datos: el espectrómetro a activar, la rueda de filtros a posicionar y el modo de compresión de telemetry a utilizar. Existen 4 espectrómetros disponibles, 6 filtros en la rueda y 3 modos de compresión.
+
+\begin{enumerate}[a)]
+\item Calcule el número total de configuraciones únicas posibles aplicando el principio multiplicativo fundamental del conteo.
+\item Si el modo de compresión de alta fidelidad (1 de los 3 modos disponibles) requiere obligatoriamente el uso del espectrómetro ultravioleta (1 de los 4 disponibles) debido al ancho de banda, ¿cuántas configuraciones válidas quedan para este modo específico?
+\item Defina el evento $C$ como la selección de una configuración que incluya el filtro de metano. Si se elige una configuración al azar de todas las posibles, calcule la probabilidad teórica de que ocurra $C$.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que utilice la biblioteca itertools para generar el espacio muestral completo de configuraciones como un producto cartesiano y verifique el conteo total comparándolo con el resultado analítico.
+\item Implemente una función que filtre las configuraciones generadas según la restricción del inciso b y cuente los casos válidos, imprimiendo en consola la proporción de configuraciones que soportan alta fidelidad respecto al total.
+\item Simule la selección aleatoria de $10^5$ configuraciones utilizando numpy. A partir de esta muestra, grafique un diagrama de barras con la frecuencia de aparición de cada uno de los 6 filtros, validando empíricamente la probabilidad teórica del inciso c.
+\end{enumerate}
+
+\section{Secuencia de Observación en un Telescopio Robótico}
+
+Un telescopio robótico de sondeo debe programar su secuencia de observación fotométrica para una noche específica. El catálogo de candidatos contiene 12 estrellas variables, pero debido a limitaciones de tiempo y ventanas de visibilidad, el telescopio solo puede observar y registrar la curva de luz de exactamente 5 de ellas en un orden secuencial estricto.
+
+\begin{enumerate}[a)]
+\item Calcule el número total de secuencias de observación distintas que puede generar el telescopio, utilizando la fórmula de permutaciones. La expresión matemática que rige este cálculo es:
+$$ P(n, k) = \frac{n!}{(n-k)!} $$
+\item Si 3 de las 12 estrellas son consideradas prioritarias y el algoritmo de planificación exige que sean observadas exactamente en las primeras tres posiciones de la noche (en cualquier orden entre ellas), ¿cuántas secuencias válidas se pueden formar?
+\item Por restricciones térmicas del instrumento, dos estrellas específicas del catálogo (denotadas como $X$ e $Y$) no pueden ser observadas de manera consecutiva en la secuencia de 5 estrellas. Calcule analíticamente el número de secuencias donde $X$ e $Y$ no aparecen juntas, utilizando el método de conteo complementario.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que calcule analíticamente los valores de los incisos a, b y c utilizando la biblioteca math para el manejo de factoriales y permutaciones.
+\item Genere todas las permutaciones posibles de 5 elementos elegidos de un conjunto de 12 utilizando itertools. Aplique un filtro programático para contar cuántas secuencias cumplen la restricción de no consecutividad del inciso c y compare este resultado exhaustivo con el cálculo analítico.
+\item Realice una simulación de Monte Carlo donde se extraen $10^5$ secuencias válidas (que cumplan la restricción térmica) de manera aleatoria. Calcule la probabilidad empírica de que la estrella prioritaria número 1 sea observada en la primera posición de la noche y grafice la distribución de frecuencias de las posiciones de esta estrella a lo largo de la secuencia de 5 turnos.
+\end{enumerate}
+
+\section{Secuencia de Apuntamiento y Restricciones Térmicas en un Telescopio Espacial}
+
+Un telescopio espacial de órbita baja tiene un catálogo de $n = 10$ objetivos científicos (exoplanetas, nebulosas, galaxias) disponibles para ser observados durante una ventana de visibilidad orbital. Debido a limitaciones de tiempo y energía de las baterías, el telescopio solo puede ejecutar una secuencia de $k = 4$ observaciones. El orden de las observaciones es crítico debido a los tiempos de relajación térmica y los ángulos de giro mecánico.
+
+\begin{enumerate}[a)]
+\item Calcule el número total de secuencias de observación distintas que puede programar el telescopio, utilizando la fórmula de permutaciones sin repetición:
+$$ P(n, k) = \frac{n!}{(n-k)!} $$
+\item Por restricciones de saturación del detector, dos objetivos específicos (un cuásar brillante y una enana blanca) no pueden ser observados de manera consecutiva en la secuencia. Calcule analíticamente el número de secuencias válidas donde estos dos objetivos no aparecen juntos, utilizando el método de conteo complementario.
+\item Si el telescopio debe incluir obligatoriamente una estrella de calibración de guía como la primera observación de la secuencia, ¿cuántas secuencias válidas de longitud $k$ se pueden formar con los objetivos restantes del catálogo?
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que utilice la biblioteca math para calcular los valores teóricos de los incisos a, b y c. Imprima los resultados en consola con un formato claro y estructurado.
+\item Dado que el espacio muestral total es grande, reduzca el problema a $n = 6$ objetivos y $k = 3$ observaciones. Utilice la biblioteca itertools para generar exhaustivamente todas las permutaciones posibles. Filtre programáticamente aquellas que cumplan la restricción del inciso b (los dos objetivos específicos no son consecutivos) y compare el conteo resultante con la fórmula analítica adaptada a estos nuevos valores.
+\item Genere una matriz de transición (heatmap) utilizando matplotlib y seaborn. La matriz debe mostrar la frecuencia con la que cada objetivo $i$ es observado inmediatamente después del objetivo $j$ en un conjunto de 10,000 secuencias aleatorias válidas (generadas con numpy), permitiendo visualizar visualmente las restricciones de adyacencia térmica impuestas.
+\end{enumerate}
+
+\section{Secuencia de Análisis en un Espectrómetro de Masas Planetario}
+
+El laboratorio químico a bordo de un rover marciano cuenta con un espectrómetro de masas que procesa muestras de suelo utilizando un carrusel de $n = 12$ copas de muestra. Para una campaña científica específica, se deben seleccionar y analizar $k = 5$ copas distintas. El orden en el que las muestras se introducen en el horno de análisis determina el perfil térmico y el riesgo de contaminación cruzada entre los volátiles.
+
+\begin{enumerate}[a)]
+\item Determine el número total de secuencias de análisis posibles al seleccionar $k$ copas de las $n$ disponibles, aplicando el concepto de permutaciones.
+\item El protocolo de seguridad exige que tres muestras específicas de alta prioridad (denotadas como $A$, $B$ y $C$) deben ser analizadas exactamente en las tres primeras posiciones de la secuencia, aunque el orden interno entre ellas puede variar. Calcule el número de secuencias que satisfacen esta condición.
+\item Para limpiar las líneas de gas entre las muestras, el protocolo requiere que una copa vacía (denotada como $V$) sea insertada exactamente en la posición central (la tercera posición) de la secuencia de $k = 5$ análisis. Si se dispone de $n = 12$ copas (donde 1 es la vacía $V$ y 11 tienen muestras), calcule cuántas secuencias de análisis de 5 pasos cumplen con este requisito.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que defina una función recursiva o utilice itertools.permutations para generar todas las secuencias posibles para un caso reducido de $n = 5$ copas y $k = 3$ análisis. Cuente e imprima cuántas de estas secuencias cumplen la restricción del inciso c (la copa $V$ está en la posición central).
+\item Simule la ejecución de 50,000 secuencias de análisis aleatorias para el caso original ($n = 12, k = 5$). Utilice un arreglo de numpy para almacenar la posición en la que aparece la muestra de alta prioridad $A$ en cada simulación. Genere un gráfico de barras con matplotlib que muestre la distribución de frecuencias de la posición de la muestra $A$, verificando empíricamente la uniformidad de las permutaciones.
+\item Implemente un algoritmo de backtracking en Python que construya las secuencias paso a paso para el caso $n = 6, k = 4$, asegurando que la copa $V$ siempre caiga en la posición 2 o 3. Utilice la biblioteca networkx para graficar una red que muestre las transiciones desde la primera hasta la última posición de la secuencia, resaltando los nodos donde se inserta la copa $V$.
+\end{enumerate}
+
+\section{Selección de Sitios de Aterrizaje en Ciencia Planetaria}
+
+La misión de un rover de próxima generación a la luna Europa de Júpiter ha identificado, mediante imágenes orbitales de alta resolución, un total de $n = 14$ regiones candidatas para el aterrizaje. Estas regiones se distribuyen en tres zonas geológicas distintas: 6 regiones en terrenos de hielo caótico, 5 regiones en crestas lineales y 3 regiones en zonas de criovolcanismo activo. El comité científico debe seleccionar exactamente $k = 4$ sitios finales para la fase de descenso, y el orden de selección no es relevante ya que todos los sitios serán evaluados simultáneamente por el sistema de navegación autónoma.
+
+\begin{enumerate}[a)]
+\item Calcule el número total de combinaciones posibles de 4 sitios de aterrizaje seleccionados de los 14 candidatos, utilizando la fórmula de combinaciones sin repetición:
+$$
+\binom{n}{k} = \frac{n!}{k!(n-k)!}
+$$
+\item Si el comité exige que al menos uno de los 4 sitios seleccionados pertenezca a la zona de criovolcanismo activo (3 regiones disponibles), calcule analíticamente el número de combinaciones válidas utilizando el método de conteo complementario.
+\item Suponga ahora que se impone una restricción adicional: la selección debe incluir exactamente 2 sitios de hielo caótico, 1 sitio de crestas lineales y 1 sitio de criovolcanismo. Determine el número de combinaciones que satisfacen esta distribución geológica específica, aplicando el principio multiplicativo a las combinaciones parciales de cada zona.
+\item Si se elige una combinación de 4 sitios al azar de todas las posibles, calcule la probabilidad de que la selección incluya al menos un sitio de cada una de las tres zonas geológicas.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que utilice la biblioteca itertools.combinations para generar exhaustivamente todas las combinaciones de 4 sitios seleccionados de 14 candidatos. Etiquete cada sitio con su zona geológica (por ejemplo, C1 a C6 para caótico, L1 a L5 para lineal, V1 a V3 para volcánico) y verifique que el conteo total coincida con el resultado del inciso a.
+\item A partir de las combinaciones generadas, filtre programáticamente aquellas que cumplen la restricción del inciso c (exactamente 2 caóticos, 1 lineal, 1 volcánico). Imprima las primeras 10 combinaciones válidas y el conteo total, comparándolo con el valor analítico.
+\item Realice una simulación de Monte Carlo con $10^5$ selecciones aleatorias de 4 sitios. Calcule la frecuencia empírica de la condición del inciso d (al menos un sitio de cada zona) y compárela con la probabilidad teórica. Genere un gráfico de convergencia utilizando matplotlib que muestre cómo la probabilidad empírica se estabiliza a medida que aumenta el número de simulaciones desde $10^2$ hasta $10^5$, con el eje x en escala logarítmica.
+\end{enumerate}
+
+\section{Configuración de Sub-arrays en Radio Interferometría}
+
+Un radiotelescopio de nueva generación, inspirado en el diseño del Square Kilometre Array (SKA), dispone de una red de $n = 20$ antenas parabólicas distribuidas en una configuración en espiral logarítmica sobre una planicie desértica. Para una campaña de observación de líneas espectrales de hidrógeno neutro a 21 cm en galaxias de alto corrimiento al rojo, el sistema de correlación digital solo puede procesar simultáneamente las señales de $k = 6$ antenas, formando lo que se denomina un sub-array activo. La resolución angular del sub-array depende de las líneas de base (pares de antenas) que se formen, y cada par de antenas dentro del sub-array genera una línea de base única.
+
+\begin{enumerate}[a)]
+\item Calcule el número total de sub-arrays distintos de 6 antenas que se pueden configurar a partir de las 20 disponibles, aplicando la fórmula de combinaciones:
+$$
+\binom{n}{k} = \frac{n!}{k!(n-k)!}
+$$
+\item Para cada sub-array de $k = 6$ antenas, determine el número de líneas de base únicas que se forman. Recuerde que cada línea de base corresponde a un par no ordenado de antenas, por lo que este valor es $\binom{k}{2}$.
+\item Si 4 de las 20 antenas se encuentran en una zona de sombra orográfica y no pueden utilizarse simultáneamente en el mismo sub-array (es decir, a lo sumo 2 de estas 4 antenas pueden estar activas), calcule el número de sub-arrays válidos que cumplen esta restricción.
+\item El equipo de ingeniería desea evaluar todas las configuraciones posibles de sub-arrays de tamaño $k$ variando $k$ desde 3 hasta 10. Determine el valor de $k$ que maximiza el número total de sub-arrays posibles y justifique analíticamente por qué este máximo ocurre en dicho valor.
+\end{enumerate}
+
+\textbf{Parte computacional}
+\begin{enumerate}[a)]
+\item Escriba un script en Python que calcule y almacene en un arreglo el número de sub-arrays posibles $\binom{20}{k}$ para cada valor de $k$ desde 1 hasta 20, utilizando la función math.comb. Genere un gráfico de barras con matplotlib que muestre la distribución completa, resaltando en color diferente la barra correspondiente al valor de $k$ que maximiza el número de configuraciones.
+\item Para el caso $k = 6$, simule la generación aleatoria de $50,000$ sub-arrays. Para cada sub-array, calcule el número de líneas de base y la longitud máxima de línea de base asumiendo que las 20 antenas están ubicadas en posiciones aleatorias dentro de un círculo de radio 5 km. Genere un histograma de la distribución de la línea de base máxima utilizando seaborn, con un kernel density estimate superpuesto.
+\item Implemente un algoritmo de fuerza bruta en Python que, para un caso reducido de $n = 10$ antenas y $k = 4$, genere todas las combinaciones posibles y filtre aquellas que cumplen la restricción del inciso c (a lo sumo 2 antenas de un grupo prohibido de 3). Compare el conteo resultante con el cálculo analítico adaptado a estos nuevos valores e imprima ambos resultados en consola.
+\end{enumerate}
+
+
+\clearpage
+\addcontentsline{toc}{section}{Referencias}
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{bibliography}
+\end{document}

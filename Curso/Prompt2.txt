@@ -1,0 +1,17 @@
+Mira el documento anexado llamado main.pdf
+
+Me debes responder en un bloque de ´´´latex
+
+No quiero que uses \begin{equation}, use el símbolo $$ para las expresiones matemáticas grandes.
+
+Estructura:
+
+\section{Nombre del problema}
+Escribes aquí el enunciado
+En caso de que el problema tenga items, usas \begin{enumerate}[a)]
+
+Aquí pones \textbf{Parte computacional} y escribes los items de las preguntas con instrucciones claras.
+
+No debes escribir la solución
+
+% No usar el símbolo "
