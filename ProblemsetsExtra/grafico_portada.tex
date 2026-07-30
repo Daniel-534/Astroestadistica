@@ -15,19 +15,30 @@
     (0,0) ellipse [x radius=2.65,y radius=1.02,rotate=62];
 
   \foreach \a/\c/\lab in {
-    18/statsblue/$\mu$,112/statspink/$\sigma$,
-    205/statsgold/$p$,292/statsmint/$\Sigma$}
+    205/statsgold/$p$}
     \node[circle,fill=\c,draw=statsnavy,line width=0.6pt,
           minimum size=7mm,blur shadow={shadow blur steps=5},
           text=statsnavy,font=\bfseries] at (\a:3.55) {\lab};
+
+  % Marcadores ubicados directamente sobre sus órbitas elípticas
+  \node[circle,fill=statsblue,draw=statsnavy,line width=0.6pt,
+        minimum size=7mm,blur shadow={shadow blur steps=5},
+        text=statsnavy,font=\bfseries] at (-2.55,0.60) {$\mu$};
+  \node[circle,fill=statspink,draw=statsnavy,line width=0.6pt,
+        minimum size=7mm,blur shadow={shadow blur steps=5},
+        text=statsnavy,font=\bfseries] at (-1.80,1.85) {$\sigma$};
+  \node[circle,fill=statsmint,draw=statsnavy,line width=0.6pt,
+        minimum size=7mm,blur shadow={shadow blur steps=5},
+        text=statsnavy,font=\bfseries] at (0.20,-1.65) {$\Sigma$};
+
+  \node[text=statsnavy,font=\small\bfseries] at (0,3.72)
+    {DATOS $\boldsymbol{\rightarrow}$ INFERENCIA};
 
   % Núcleo probabilístico
   \shade[ball color=statsblue!75,draw=statsnavy,line width=1.1pt]
     (0,0) circle (1.22);
   \draw[statsnavy!70,line width=0.5pt] (0,0) circle (0.91);
   \node[text=white,font=\Large\bfseries] at (0,0.23) {$P(A\mid B)$};
-  \node[text=statsnavy,font=\scriptsize\bfseries] at (0,-0.35)
-    {DATOS $\boldsymbol{\rightarrow}$ INFERENCIA};
 
   % Curva de densidad y área bajo la curva
   \begin{scope}[shift={(-5.75,-2.95)},x=0.72cm,y=0.72cm]

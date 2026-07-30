@@ -105,10 +105,10 @@ conceptual, la extensión del desarrollo y la complejidad de implementación.
 \filaaplicacion{sec:problema-02}{Clasificación morfológica de galaxias}{Espacios muestrales finitos; eventos; unión e intersección; secuencias.}{3}
 \filaaplicacion{sec:problema-03}{Seguimiento de cometas}{Espacio infinito discreto; tiempo de espera; distribución geométrica.}{4}
 \filaaplicacion{sec:problema-04}{Coordenadas ecuatoriales}{Espacios continuos; densidad uniforme; normalización; probabilidad por áreas.}{5}
-\filaaplicacion{sec:problema-05}{Taxonomía de asteroides}{Eventos compuestos; complementos; independencia; probabilidades empíricas.}{4}
+\filaaplicacion{sec:problema-05}{Taxonomía de asteroides}{Espacio muestral; eventos compuestos; unión, intersección y complementos.}{3}
 \filaaplicacion{sec:problema-06}{Modelado gravitacional}{Secuencias binarias; cardinalidad; eventos y estrategias de navegación.}{5}
 \filaaplicacion{sec:problema-11}{Señales de ondas gravitacionales}{Clasificación; probabilidades a priori; eventos exhaustivos y falsos positivos.}{4}
-\filaaplicacion{sec:problema-12}{Modos de falla de un rover}{Unión de fallas; complemento; confiabilidad y simulación.}{3}
+\filaaplicacion{sec:problema-12}{Modos de falla de un rover}{Unión de fallas; complemento; confiabilidad y ciclos redundantes.}{4}
 \filaaplicacion{sec:problema-13}{Albedo radar de asteroides}{Probabilidad total; Bayes; sensibilidad de clasificación.}{5}
 \filaaplicacion{sec:problema-14}{Pipeline de transitorios}{Regla de multiplicación; eventos dependientes; etapas secuenciales.}{4}
 \filaaplicacion{sec:problema-15}{Confiabilidad de una sonda}{Independencia; fallas exactas; confiabilidad de sistemas.}{6}
@@ -118,7 +118,7 @@ conceptual, la extensión del desarrollo y la complejidad de implementación.
 \filaaplicacion{sec:problema-23}{Clasificación orbital de cometas}{Bayes; errores de medición; hipótesis parabólica e hiperbólica.}{6}
 \filaaplicacion{sec:problema-24}{Carga útil de una sonda}{Principio multiplicativo; producto cartesiano; configuraciones restringidas.}{4}
 \filaaplicacion{sec:problema-26}{Observación con telescopio robótico}{Permutaciones; posiciones prioritarias; restricciones de adyacencia.}{6}
-\filaaplicacion{sec:problema-27}{Apuntamiento de telescopio espacial}{Permutaciones sin repetición; restricciones térmicas; conteo complementario.}{6}
+\filaaplicacion{sec:problema-27}{Apuntamiento de telescopio espacial}{Permutaciones sin repetición; restricciones térmicas; conteo complementario.}{5}
 \filaaplicacion{sec:problema-28}{Espectrómetro de masas}{Secuencias restringidas; permutaciones; backtracking; redes.}{7}
 \filaaplicacion{sec:problema-29}{Sitios de aterrizaje}{Combinaciones; selección estratificada; probabilidad; Monte Carlo.}{6}
 \filaaplicacion{sec:problema-30}{Sub-arrays interferométricos}{Combinaciones; líneas de base; restricciones; optimización y geometría.}{8}
@@ -150,7 +150,7 @@ conceptual, la extensión del desarrollo y la complejidad de implementación.
 \color{white}\textbf{Dif.}\\\hline
 \endhead
 \filateorica{sec:problema-01}{Identificación de espacios muestrales}{Resultados ordenados; defectos; conteos; extracción con y sin reemplazo.}{2}
-\filateorica{sec:problema-07}{Probabilidad del evento nulo}{Axiomas de probabilidad; exclusión mutua; aditividad numerable; demostración.}{4}
+\filateorica{sec:problema-07}{Probabilidad del evento nulo}{Axiomas de probabilidad; aditividad numerable; demostración de $P(\emptyset)=0$.}{3}
 \filateorica{sec:problema-08}{Inclusión-exclusión}{Uniones e intersecciones; sumas alternantes; inducción matemática.}{7}
 \filateorica{sec:problema-09}{Probabilidad I}{Axiomas; distribuciones de Poisson y geométrica; contraejemplos.}{6}
 \filateorica{sec:problema-10}{Probabilidad II}{Medidas sobre Borel; densidades; normalización; contraejemplos.}{7}
@@ -188,20 +188,17 @@ conceptual, la extensión del desarrollo y la complejidad de implementación.
 \color{white}\textbf{Dif.}\\\hline
 \endhead
 \filacomputacional{sec:problema-02}{Clasificación morfológica}{Producto cartesiano; \texttt{itertools}; enumeración exhaustiva.}{3}
-\filacomputacional{sec:problema-03}{Seguimiento de cometas}{Simulación geométrica; histogramas; \texttt{matplotlib}.}{4}
+\filacomputacional{sec:problema-03}{Seguimiento de cometas}{Simulación geométrica; tiempos de espera; histograma de frecuencias.}{4}
 \filacomputacional{sec:problema-04}{Coordenadas ecuatoriales}{Muestreo uniforme; dispersión 2D; estimación Monte Carlo.}{5}
-\filacomputacional{sec:problema-05}{Taxonomía de asteroides}{Operaciones de conjuntos; muestreo ponderado; barras de frecuencia.}{4}
-\filacomputacional{sec:problema-07}{Evento nulo y axiomas}{Verificación numérica; sumas parciales; visualización de convergencia.}{4}
-\filacomputacional{sec:problema-11}{Señales gravitacionales}{Simulación categórica; frecuencias; validación de probabilidades.}{4}
-\filacomputacional{sec:problema-12}{Fallas de rover}{Simulación de eventos; confiabilidad empírica; visualización.}{3}
-\filacomputacional{sec:problema-14}{Pipeline de transitorios}{Simulación secuencial condicionada; validación de tasas.}{4}
-\filacomputacional{sec:problema-15}{Confiabilidad de sonda}{Bernoulli independientes; conteo de fallas; Monte Carlo.}{6}
-\filacomputacional{sec:problema-16}{Interferometría gravitacional}{Coincidencias raras; simulación; estimación de falsos positivos.}{6}
-\filacomputacional{sec:problema-21}{Clasificación mineralógica}{Cálculo posterior; simulación categórica; comparación bayesiana.}{5}
-\filacomputacional{sec:problema-23}{Órbitas de cometas}{Simulación de clasificación; matrices de confusión; Bayes.}{6}
+\filacomputacional{sec:problema-07}{Evento nulo}{Sumas parciales; divergencia; gráfica y tabla comparativa.}{3}
+\filacomputacional{sec:problema-11}{Señales gravitacionales}{\texttt{np.random.choice}; frecuencias relativas; validación empírica.}{4}
+\filacomputacional{sec:problema-14}{Pipeline de transitorios}{Simulación secuencial; gráfico de embudo; análisis de sensibilidad.}{4}
+\filacomputacional{sec:problema-15}{Confiabilidad de sonda}{Simulación matricial; conteo de fallas; análisis de sensibilidad.}{6}
+\filacomputacional{sec:problema-16}{Interferometría gravitacional}{Eventos raros; tasa de falsas alarmas; gráfica de convergencia.}{6}
+\filacomputacional{sec:problema-21}{Clasificación mineralógica}{Simulación bayesiana; diagrama de Sankey con \texttt{plotly}; sensibilidad.}{6}
+\filacomputacional{sec:problema-23}{Órbitas de cometas}{Simulación de clasificación; matriz de confusión; sensibilidad instrumental.}{6}
 \filacomputacional{sec:problema-24}{Configuración de carga útil}{\texttt{itertools.product}; filtrado; espacio de configuraciones.}{4}
-\filacomputacional{sec:problema-26}{Telescopio robótico}{\texttt{permutations}; filtrado de adyacencias; simulación.}{6}
-\filacomputacional{sec:problema-27}{Apuntamiento espacial}{Generación exhaustiva; restricciones; algoritmos de filtrado.}{6}
+\filacomputacional{sec:problema-26}{Telescopio robótico}{Factoriales; \texttt{itertools}; filtrado de adyacencias; Monte Carlo.}{6}
 \filacomputacional{sec:problema-28}{Espectrómetro de masas}{Permutaciones; Monte Carlo; backtracking; \texttt{networkx}.}{7}
 \filacomputacional{sec:problema-29}{Sitios de aterrizaje}{\texttt{combinations}; Monte Carlo; gráfica de convergencia.}{6}
 \filacomputacional{sec:problema-30}{Sub-arrays interferométricos}{Combinaciones; geometría aleatoria; \texttt{seaborn}; fuerza bruta.}{8}
