@@ -1,0 +1,80 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Quiz 1 ???}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+
+\begin{document}
+
+\section{Quiz de Probabilidad y Estadística}
+
+Seleccione la opción correcta en cada pregunta.
+
+\begin{enumerate}
+
+\item Si dos eventos A y B son independientes, entonces:
+\begin{enumerate}[a)]
+    \item $P(A \cap B) = P(A) + P(B)$
+    \item $P(A|B) = P(A)$
+    \item $P(A|B) = P(B|A)$
+    \item $P(A \cup B) = 1$
+\end{enumerate}
+
+\item ¿Cuál es la diferencia principal entre eventos mutuamente excluyentes e independientes?
+\begin{enumerate}[a)]
+    \item En ambos casos la intersección es vacía.
+    \item Los excluyentes no pueden ocurrir juntos; los independientes no afectan sus probabilidades.
+    \item Los excluyentes dependen uno del otro; los independientes son incompatibles.
+    \item No hay diferencia práctica entre ambos.
+\end{enumerate}
+
+\item En técnicas de conteo, ¿cuándo se usa una permutación en lugar de una combinación?
+\begin{enumerate}[a)]
+    \item Cuando el orden no importa.
+    \item Cuando se reemplazan elementos.
+    \item Cuando el orden sí importa.
+    \item Cuando hay repeticiones idénticas.
+\end{enumerate}
+
+\item ¿Cuál es una condición necesaria para aplicar el teorema de Bayes?
+\begin{enumerate}[a)]
+    \item Que los eventos sean independientes.
+    \item Que el espacio muestral sea infinito.
+    \item Que las probabilidades sean mayores que cero.
+    \item Que haya al menos dos eventos mutuamente excluyentes que cubran todo el espacio.
+\end{enumerate}
+
+\item Una empresa tiene tres fábricas: A, B y C. El 40\% de los productos vienen de la fábrica A, el 35\% de la B y el 25\% de la C. Las tasas de defectos en cada fábrica son 2\% para A, 3\% para B y 5\% para C. ¿Qué representa la expresión siguiente?
+$$P(D) = 0.02 \times 0.40 + 0.03 \times 0.35 + 0.05 \times 0.25$$
+\begin{enumerate}[a)]
+    \item La probabilidad de que un producto provenga de la fábrica A.
+    \item La probabilidad de que un producto sea defectuoso, sabiendo que viene de la fábrica A.
+    \item La probabilidad de que un producto cualquiera sea defectuoso.
+    \item La probabilidad de que un producto defectuoso haya sido fabricado en la fábrica B.
+\end{enumerate}
+
+\end{enumerate}
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}

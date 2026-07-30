@@ -1,0 +1,97 @@
+% Gráfico estadístico reutilizable para la portada.
+% Se inserta desde Problemset1.tex con \input{grafico_portada}.
+
+\vspace{0.9cm}
+
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex]
+  \path[use as bounding box] (-7,-4.35) rectangle (7,4.35);
+
+  % Órbitas de variables aleatorias
+  \draw[statsblue!75,line width=0.9pt]
+    (0,0) ellipse [x radius=3.65,y radius=1.55,rotate=14];
+  \draw[statspink!75,line width=0.9pt]
+    (0,0) ellipse [x radius=3.2,y radius=1.25,rotate=-28];
+  \draw[statsmint!70,line width=0.8pt,dashed]
+    (0,0) ellipse [x radius=2.65,y radius=1.02,rotate=62];
+
+  \foreach \a/\c/\lab in {
+    18/statsblue/$\mu$,112/statspink/$\sigma$,
+    205/statsgold/$p$,292/statsmint/$\Sigma$}
+    \node[circle,fill=\c,draw=statsnavy,line width=0.6pt,
+          minimum size=7mm,blur shadow={shadow blur steps=5},
+          text=statsnavy,font=\bfseries] at (\a:3.55) {\lab};
+
+  % Núcleo probabilístico
+  \shade[ball color=statsblue!75,draw=statsnavy,line width=1.1pt]
+    (0,0) circle (1.22);
+  \draw[statsnavy!70,line width=0.5pt] (0,0) circle (0.91);
+  \node[text=white,font=\Large\bfseries] at (0,0.23) {$P(A\mid B)$};
+  \node[text=statsnavy,font=\scriptsize\bfseries] at (0,-0.35)
+    {DATOS $\boldsymbol{\rightarrow}$ INFERENCIA};
+
+  % Curva de densidad y área bajo la curva
+  \begin{scope}[shift={(-5.75,-2.95)},x=0.72cm,y=0.72cm]
+    \draw[statsnavy!70,->,line width=0.55pt] (0,0) -- (4.5,0);
+    \draw[statsnavy!70,->,line width=0.55pt] (0,0) -- (0,2.35);
+    \fill[statsblue!38]
+      plot[smooth,samples=60,domain=0.25:4.15]
+      (\x,{2.05*exp(-((\x-2.2)^2)/1.1)}) -- (4.15,0) -- (0.25,0) -- cycle;
+    \draw[statsblue,line width=1.4pt]
+      plot[smooth,samples=70,domain=0.15:4.25]
+      (\x,{2.05*exp(-((\x-2.2)^2)/1.1)});
+    \draw[statsgold,densely dashed,line width=0.7pt] (2.2,0) -- (2.2,2.05);
+    \node[text=statsnavy,font=\scriptsize] at (2.2,-0.32) {$\mu$};
+    \node[text=statsblue,font=\scriptsize\bfseries] at (2.2,2.37) {$f(x)$};
+  \end{scope}
+
+  % Histograma multicolor
+  \begin{scope}[shift={(3.25,-3.05)}]
+    \draw[statsnavy!70,->,line width=0.55pt] (-0.2,0) -- (3.65,0);
+    \draw[statsnavy!70,->,line width=0.55pt] (0,0) -- (0,2.35);
+    \foreach \x/\h/\c in {
+      0.15/0.55/statsviolet,0.65/1.05/statspink,
+      1.15/1.75/statsgold,1.65/2.15/statsmint,
+      2.15/1.55/statsblue,2.65/0.95/statsviolet,3.15/0.45/statspink}
+      \fill[\c!88,rounded corners=1.5pt]
+        (\x,0) rectangle ++(0.36,\h);
+    \draw[statsnavy,line width=1pt,smooth]
+      plot coordinates {(0.2,0.45) (0.75,0.95) (1.3,1.55)
+                        (1.83,2.02) (2.35,1.42) (2.87,0.82) (3.35,0.38)};
+    \node[text=statsnavy,font=\scriptsize\bfseries] at (1.75,2.55) {FRECUENCIAS};
+  \end{scope}
+
+  % Nube de puntos y regresión
+  \begin{scope}[shift={(4.35,1.55)}]
+    \draw[statsnavy!70,->,line width=0.5pt] (-1.65,-1.05) -- (1.75,-1.05);
+    \draw[statsnavy!70,->,line width=0.5pt] (-1.65,-1.05) -- (-1.65,1.15);
+    \foreach \x/\y in {
+      -1.35/-0.72,-1.08/-0.36,-0.82/-0.53,-0.57/-0.08,
+      -0.31/0.16,-0.04/-0.03,0.18/0.39,0.46/0.27,
+      0.69/0.73,0.95/0.54,1.23/0.91,1.48/0.78}
+      \fill[statspink] (\x,\y) circle (1.7pt);
+    \draw[statsgold,line width=1.2pt] (-1.42,-0.73) -- (1.5,0.94);
+    \node[text=statsnavy,font=\scriptsize\bfseries] at (0,1.35) {$y=\beta_0+\beta_1x$};
+  \end{scope}
+
+  % Pequeña red bayesiana
+  \begin{scope}[shift={(-4.35,1.65)},
+    every node/.style={circle,draw=statsnavy,line width=0.55pt,
+                       minimum size=6.5mm,font=\scriptsize\bfseries}]
+    \node[fill=statsviolet,text=white] (a) at (-1.05,0.55) {$X$};
+    \node[fill=statspink,text=white] (b) at (1.05,0.55) {$Y$};
+    \node[fill=statsmint,text=statsnavy] (c) at (0,-0.95) {$Z$};
+    \draw[statsblue,->,line width=1pt] (a) -- (b);
+    \draw[statsblue,->,line width=1pt] (a) -- (c);
+    \draw[statsblue,->,line width=1pt] (b) -- (c);
+    \node[draw=none,text=statsnavy,font=\scriptsize\bfseries] at (0,1.15)
+      {RED BAYESIANA};
+  \end{scope}
+
+  % Fórmulas flotantes
+  \node[text=statsgold,font=\small\bfseries,rotate=8] at (-2.65,3.15)
+    {$\mathbb{E}[X]$};
+  \node[text=statsmint,font=\small\bfseries,rotate=-8] at (2.55,3.05)
+    {$\mathrm{Var}(X)$};
+  \node[text=statsnavy,font=\scriptsize\bfseries] at (0,-3.78)
+    {$\displaystyle \text{OBSERVAR}\;\boldsymbol{\cdot}\;\text{MODELAR}\;\boldsymbol{\cdot}\;\text{INFERIR}$};
+\end{tikzpicture}

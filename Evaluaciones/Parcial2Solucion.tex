@@ -1,0 +1,125 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Parcial 2}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+
+\begin{document}
+
+\textit{Problema aproximado al real}
+
+\section{Concentración de un contaminante en dos tipos de suelo}
+
+Un laboratorio ambiental desea determinar si la concentración promedio de un contaminante orgánico $X$ (medida en ppm) es mayor en suelos de zonas industriales (grupo 1) que en suelos de zonas residenciales (grupo 2). Se toman muestras independientes de ambos tipos de suelo y se obtienen los siguientes resultados:
+
+\begin{itemize}
+    \item \textbf{Zona industrial (grupo 1):} $n_1 = 16$ muestras, $\bar{x}_1 = 2.85$ ppm, $s_1 = 0.50$ ppm.
+    \item \textbf{Zona residencial (grupo 2):} $n_2 = 20$ muestras, $\bar{x}_2 = 2.35$ ppm, $s_2 = 0.45$ ppm.
+\end{itemize}
+
+Se asume que las concentraciones en ambos grupos siguen distribuciones normales con varianzas poblacionales iguales pero desconocidas.
+
+\begin{enumerate}[a)]
+    \item Establezca las hipótesis nula y alternativa para probar si la concentración promedio del contaminante $X$ es mayor en la zona industrial que en la zona residencial. Defina claramente los parámetros involucrados.
+
+    \item Realice la prueba de hipótesis con un nivel de significancia $\alpha = 0.05$. Calcule el estadístico de prueba, determine el valor crítico y concluya.
+
+    \item Suponga ahora que se conoce que la desviación estándar poblacional común es $\sigma = \sigma_1 = \sigma_2 = 0.48$ ppm. Si la verdadera diferencia de medias es $\mu_1 - \mu_2 = 0.3$ ppm, calcule la probabilidad de cometer un error tipo II ($\beta$) y la potencia de la prueba ($1 - \beta$).
+\end{enumerate}
+
+\textbf{Parte computacional}
+
+\begin{enumerate}[a)]
+    \item Implemente en Python (o R) el cálculo del estadístico $t$ de Student para dos muestras independientes con varianzas iguales. Verifique el valor del estadístico pooled $s_p$, los grados de libertad $\nu$ y el valor crítico $t_c$.
+
+    \item Grafique la distribución $t$ con $\nu = 34$ grados de libertad, sombreando la región de rechazo y marcando el valor del estadístico calculado $t \approx 3.1$.
+
+    \item Para el inciso c), implemente el cálculo de $\beta$ y $1-\beta$ usando la aproximación normal. Varíe el valor de la diferencia verdadera $\mu_1 - \mu_2$ desde $0$ hasta $1.0$ ppm en pasos de $0.05$ y grafique la curva de potencia $1-\beta$ en función de dicha diferencia.
+
+    \item Determine el tamaño de muestra mínimo (igual en ambos grupos, $n_1 = n_2 = n$) necesario para lograr una potencia de al menos $0.80$ cuando la diferencia verdadera es $\mu_1 - \mu_2 = 0.3$ ppm, manteniendo $\alpha = 0.05$ y $\sigma = 0.48$ ppm.
+\end{enumerate}
+
+\section*{Solución}
+
+\textbf{Inciso a)}
+
+Sean $\mu_1$ la concentración promedio del contaminante $X$ en la zona industrial y $\mu_2$ la concentración promedio en la zona residencial. Las hipótesis son:
+
+$$H_0: \mu_1 - \mu_2 = 0$$
+$$H_a: \mu_1 > \mu_2 \implies \mu_1 - \mu_2 > 0$$
+
+\textbf{Inciso b)}
+
+Primero se calcula la varianza pooled:
+
+$$s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2} = \frac{15(0.50)^2 + 19(0.45)^2}{16 + 20 - 2}$$
+
+$$s_p^2 = \frac{15(0.25) + 19(0.2025)}{34} = \frac{3.75 + 3.8475}{34} = \frac{7.5975}{34} \approx 0.2235$$
+
+$$s_p \approx 0.4727 \text{ ppm}$$
+
+El estadístico de prueba es:
+
+$$t = \frac{\bar{x}_1 - \bar{x}_2}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} = \frac{2.85 - 2.35}{0.4727 \sqrt{\frac{1}{16} + \frac{1}{20}}}$$
+
+$$t = \frac{0.50}{0.4727 \sqrt{0.1125}} = \frac{0.50}{0.4727 \times 0.3354} = \frac{0.50}{0.1586} \approx 3.15$$
+
+Los grados de libertad son $\nu = n_1 + n_2 - 2 = 34$.
+
+El valor crítico para una prueba unilateral derecha con $\alpha = 0.05$ y $\nu = 34$ es:
+
+$$t_c = t_{34,\, 0.05} \approx 1.691$$
+
+Regla de decisión: si $t > 1.691$, se rechaza $H_0$.
+
+Como $t \approx 3.15 > 1.691$, se rechaza $H_0$.
+
+\textbf{Conclusión:} Con un nivel de significancia $\alpha = 0.05$, existe evidencia suficiente para afirmar que la concentración promedio del contaminante $X$ es mayor en la zona industrial que en la zona residencial.
+
+\textbf{Inciso c)}
+
+Se usa la aproximación normal con $\sigma = 0.48$ ppm. El error estándar de la diferencia de medias es:
+
+$$\sigma_{\hat{\theta}} = \sigma \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 0.48 \sqrt{\frac{1}{16} + \frac{1}{20}} = 0.48 \times 0.3354 \approx 0.1610$$
+
+El valor crítico en la escala del estimador $\hat{\theta} = \bar{x}_1 - \bar{x}_2$ es:
+
+$$\theta_c = \theta_0 + z_\alpha \cdot \sigma_{\hat{\theta}} = 0 + 1.645 \times 0.1610 \approx 0.2648$$
+
+La probabilidad de error tipo II cuando $\theta' = \mu_1 - \mu_2 = 0.3$ es:
+
+$$\beta = P(\hat{\theta} < \theta_c \mid \theta' = 0.3) = P\left(Z < \frac{\theta_c - \theta'}{\sigma_{\hat{\theta}}}\right)$$
+
+$$\beta = P\left(Z < \frac{0.2648 - 0.3}{0.1610}\right) = P(Z < -0.2187)$$
+
+$$\beta \approx 0.4134$$
+
+La potencia de la prueba es:
+
+$$1 - \beta \approx 1 - 0.4134 = 0.5866$$
+
+Es decir, la prueba tiene aproximadamente un $58.66\%$ de probabilidad de detectar una diferencia verdadera de $0.3$ ppm.
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}

@@ -1,0 +1,79 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Quiz 3 ???}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+
+\begin{document}
+
+\section{Quiz de Pruebas de Hipótesis}
+
+Elija la respuesta correcta en cada caso.
+
+\begin{enumerate}
+
+\item Una prueba bilateral se utiliza cuando:
+\begin{enumerate}[a)]
+    \item Se desconoce la desviación estándar poblacional.
+    \item Se desea detectar cualquier desviación, sea por exceso o defecto.
+    \item Se quiere saber si el parámetro es mayor que un valor específico.
+    \item Se quiere confirmar si el parámetro es menor que un valor específico.
+\end{enumerate}
+
+\item ¿Por qué es importante definir la hipótesis alternativa antes de conocer los resultados de los datos?
+\begin{enumerate}[a)]
+    \item Porque así se puede suponer normalidad.
+    \item Porque lo exige el software estadístico.
+    \item Para facilitar los cálculos.
+    \item Para evitar sesgos y manipulación de los resultados.
+\end{enumerate}
+
+\item ¿Cuál de las siguientes afirmaciones describe correctamente el error tipo II en una prueba de hipótesis?
+\begin{enumerate}[a)]
+    \item No rechazar $H_0$ cuando $H_0$ es falsa.
+    \item Aceptar $H_0$ cuando $H_0$ es verdadera.
+    \item Rechazar $H_a$ cuando $H_a$ es verdadera.
+    \item Rechazar $H_0$ cuando $H_0$ es verdadera.
+\end{enumerate}
+
+\item ¿Qué efecto tiene reducir el nivel de significancia $\alpha$ (por ejemplo, de 0.05 a 0.01) en la probabilidad del error tipo II?
+\begin{enumerate}[a)]
+    \item Disminuye.
+    \item No cambia.
+    \item Aumenta.
+    \item Elimina el error tipo II.
+\end{enumerate}
+
+\item En una prueba de hipótesis, el valor-p representa:
+\begin{enumerate}[a)]
+    \item La probabilidad de encontrar un resultado igual o más acorde a $H_0$ que el observado.
+    \item La probabilidad de obtener el valor observado, suponiendo que $H_a$ es cierta.
+    \item La probabilidad de obtener un resultado igual o más contradictorio a $H_0$ que el observado.
+    \item La probabilidad de cometer un error tipo I.
+\end{enumerate}
+
+\end{enumerate}
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}

@@ -1,0 +1,78 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Quiz 2 ???}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+
+\begin{document}
+
+\section{Quiz de Probabilidad y Estadística}
+
+Seleccione la opción correcta en cada pregunta.
+
+\begin{enumerate}
+
+\item ¿Qué es estimación puntual en estadística?
+\begin{enumerate}[a)]
+    \item Un procedimiento para generar un conjunto de valores posibles para un parámetro poblacional desconocido.
+    \item Una aproximación mediante pruebas de hipótesis a un parámetro poblacional desconocido.
+    \item Cálculo de un intervalo en el que puede estar un parámetro poblacional desconocido.
+    \item Un único valor que sirve como estimación de un parámetro poblacional desconocido.
+\end{enumerate}
+
+\item ¿Qué propiedad no se asocia generalmente con los estimadores puntuales?
+\begin{enumerate}[a)]
+    \item Consistencia
+    \item Insesgadez
+    \item Simetría
+    \item Eficiencia
+\end{enumerate}
+
+\item Para una muestra independiente e idénticamente distribuida, la función de likelihood es:
+\begin{enumerate}[a)]
+    \item La suma de densidades
+    \item El logaritmo de las densidades
+    \item La media de densidades
+    \item El producto de densidades individuales
+\end{enumerate}
+
+\item ¿Cuál de los siguientes enunciados describe mejor el concepto de estimador eficiente?
+\begin{enumerate}[a)]
+    \item Es un estimador cuyo resultado tiende al parámetro poblacional a medida que el tamaño de la muestra aumenta.
+    \item Es un estimador insesgado y consistente.
+    \item Es el estimador con mínima varianza, sea insesgado o no.
+    \item Es un estimador insesgado que minimiza la varianza entre todos los estimadores insesgados.
+\end{enumerate}
+
+\item Sea $X_1, \dots, X_n \sim \text{Uniforme}(0, \theta)$. El estimador por momentos de $\theta$ es:
+\begin{enumerate}[a)]
+    \item $(1/n) \sum X_i$
+    \item $\max(X_i)$
+    \item $((n+1)/n) \max(X_i)$
+    \item $2 (1/n) \sum X_i$
+\end{enumerate}
+
+\end{enumerate}
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}
