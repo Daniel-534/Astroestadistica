@@ -45,6 +45,21 @@
 \tableofcontents
 \newpage
 
+\section{Identificación de espacios muestrales}
+
+En cada uno de los siguientes experimentos, ¿cuál es el espacio muestral?
+
+\begin{enumerate}[a)]
+    \item En una encuesta de familias con tres hijos, se registra el sexo de los hijos en orden creciente de edad.
+    \item El experimento consiste en seleccionar cuatro artículos de la producción de un fabricante y observar si cada artículo es defectuoso o no.
+    \item Se abre un libro en cualquier página y se cuenta el número de erratas.
+    \item Se extraen dos cartas 
+    \begin{itemize} 
+    	\item Con reemplazo.
+    	\item Sin reemplazo de una baraja ordinaria.
+    \end{itemize}
+\end{enumerate}
+
 \section{Espacios Muestrales y Clasificación Morfológica de Galaxias}
 
 Un telescopio espacial de nueva generación apunta hacia un campo profundo del universo y detecta un conjunto de galaxias previamente no catalogadas. El experimento consiste en analizar el perfil de brillo superficial de cada galaxia y asignarle una clase morfológica específica. El resultado de esta observación para una galaxia individual debe caer en una de cuatro categorías macroscópicas mutuamente excluyentes: E (Galaxia Espiral), L (Galaxia Elíptica), I (Galaxia Irregular) y D (Galaxia Lenticular, de disco, sin brazos espirales evidentes).
@@ -160,7 +175,7 @@ $$
 
 \section{Demostración de la Probabilidad del Evento Nulo mediante Axiomas}
 
-En el marco de los fundamentos axiomáticos de la probabilidad, el tercer axioma establece la aditividad numerable para sucesiones de eventos mutuamente excluyentes. Sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una sucesión infinita de eventos $A_1, A_2, A_3, \dots$ definidos en el espacio muestral, donde cada evento es idénticamente el conjunto vacío, es decir, $A_i = \emptyset$ para todo $i \geq 1$.
+Sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una sucesión infinita de eventos $A_1, A_2, A_3, \dots$ definidos en el espacio muestral, donde cada evento es idénticamente el conjunto vacío, es decir, $A_i = \emptyset$ para todo $i \geq 1$.
 
 \begin{enumerate}[a)]
 \item Demuestre que la sucesión de eventos $A_i$ cumple con la condición de ser mutuamente excluyentes, calculando la intersección de cualquier par de eventos $A_i \cap A_j$ para $i \neq j$.
@@ -178,6 +193,37 @@ $$
 \item Modifique el script anterior para evaluar la suma parcial con $p = 0$. Genere una tabla comparativa en la consola que muestre los valores de $S_N$ para $N = 10, 100, 1000$ en ambos casos ($p = 0.05$ y $p = 0$), evidenciando numéricamente la necesidad lógica de que la probabilidad del evento nulo sea estrictamente cero para no violar los axiomas de probabilidad.
 \end{enumerate}
 
+
+\section{Principio de Inclusión-Exclusión}
+
+Sean $A_1, A_2, \dots, A_n$ eventos en un espacio de probabilidad $(\Omega, \mathcal{S}, P)$. Demuestre que la probabilidad de la unión de estos eventos está dada por la siguiente fórmula:
+
+$$ P\left(\bigcup_{k=1}^n A_k\right) = \sum_{k=1}^n P(A_k) - \sum_{k_1 < k_2} P(A_{k_1} \cap A_{k_2}) + \sum_{k_1 < k_2 < k_3} P(A_{k_1} \cap A_{k_2} \cap A_{k_3}) - \dots + (-1)^{n+1} P\left(\bigcap_{k=1}^n A_k\right) $$
+
+\textit{Ayuda: Aplique el método de inducción matemática sobre el número de eventos $n$.}
+
+\section{Probabilidad \textit{I}}
+
+Sea $\Omega$ el conjunto de todos los enteros no negativos y $\mathcal{S}$ la clase de todos los subconjuntos de $\Omega$. En cada uno de los siguientes casos, ¿define $P$ una probabilidad en $(\Omega, \mathcal{S})$?
+
+\begin{enumerate}[a)]
+    \item Para $A \in \mathcal{S}$, sea
+    $$P_A = \sum_{x \in A} \frac{e^{-\lambda} \lambda^x}{x!}, \quad \lambda > 0.$$
+    \item Para $A \in \mathcal{S}$, sea
+    $$P_A = \sum_{x \in A} p(1-p)^x, \quad 0 < p < 1.$$
+    \item Para $A \in \mathcal{S}$, sea $P_A = 1$ si $A$ tiene un número finito de elementos, y $P_A = 0$ en caso contrario.
+\end{enumerate}
+
+\section{Probabilidad \textit{II}}
+
+Sea $\Omega = \mathbb{R}$ y $\mathcal{S} = \mathcal{B}=\mathcal{B}(\mathbb{R}) = \sigma\big(\{(a,b) : a,b \in \mathbb{R}\}\big) = \sigma\big(\{(-\infty, x] : x \in \mathbb{R}\}\big)$ \textit{($\sigma-$álgebra de Borel en $\mathbb{R}$)}. En cada uno de los siguientes casos, ¿define $P$ una probabilidad en $(\Omega, \mathcal{S})$?
+
+\begin{enumerate}[a)]
+    \item Para cada intervalo $I$, sea
+    $$P_I = \int_I \frac{1}{\pi} \cdot \frac{1}{1+x^2} \, dx.$$
+    \item Para cada intervalo $I$, sea $P_I = 1$ si $I$ es un intervalo de longitud finita y $P_I = 0$ si $I$ es un intervalo infinito.
+    \item Para cada intervalo $I$, sea $P_I = 0$ si $I \subseteq (-\infty, 1)$ y $P_I = \int_I \frac{1}{2} \, dx$ si $I \subseteq [1, \infty)$. (Si $I = I_1 + I_2$, donde $I_1 \subseteq (-\infty, 1)$ e $I_2 \subseteq [1, \infty)$, entonces $P_I = P_{I_2}$.)
+\end{enumerate}
 
 \section{Clasificación de Señales en Astronomía de Ondas Gravitacionales}
 
@@ -335,6 +381,20 @@ $$
 \item Genere una gráfica utilizando matplotlib que muestre la convergencia de la probabilidad empírica del evento $C$ a medida que aumenta el número de intervalos simulados. El eje x debe estar en escala logarítmica (desde $10^2$ hasta $10^7$) y el eje y en escala lineal, incluyendo una línea horizontal que represente el valor teórico para facilitar la comparación visual.
 \end{enumerate}
 
+
+\section{Probabilidad condicional I}
+
+Sean $A$ y $B$ dos eventos tales que $P(A) = p_1 > 0$, $P(B) = p_2 > 0$, y $p_1 + p_2 > 1$. Demuestre que:
+$$P(B | A) \ge 1 - \frac{1 - p_2}{p_1}$$
+
+\section{Probabilidad condicional II.1}
+La probabilidad de que una familia elegida al azar tenga exactamente $k$ hijos es $\alpha p^k$, con $0 < p < 1$. Suponga que la probabilidad de que cualquier hijo tenga ojos azules es $b$, con $0 < b < 1$, independientemente de los demás. ¿Cuál es la probabilidad de que una familia elegida al azar tenga exactamente $r$ ($r \ge 0$) hijos con ojos azules?
+
+\section{Probabilidad condicional II.2}
+En el problema anterior, escribamos $p_k =$ probabilidad de que una familia elegida al azar tenga exactamente $k$ hijos $= \alpha p^k$, para $k = 1, 2, \dots$, y $p_0 = 1 - \frac{\alpha p}{1-p}$.
+Suponga que todas las distribuciones de sexos de $k$ hijos son igualmente probables. Encuentre la probabilidad de que una familia tenga exactamente $r$ niños (varones), $r \ge 1$. Encuentre la probabilidad condicional de que una familia tenga al menos dos niños, dado que tiene al menos un niño.
+
+
 \section{Demostración y Aplicación del Teorema de Actualización Secuencial}
 
 En el marco de la teoría de la probabilidad, sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una hipótesis $H \in \mathcal{F}$ y dos conjuntos de datos observacionales $D_1, D_2 \in \mathcal{F}$. El enfoque bayesiano permite actualizar el grado de creencia en la hipótesis $H$ a medida que se incorporan nuevos datos. El Teorema de Actualización Secuencial establece que actualizar la hipótesis $H$ con un primer conjunto de datos $D_1$ y utilizar el resultado como la nueva probabilidad a priori para un segundo conjunto de datos $D_2$, es matemáticamente idéntico a actualizar la hipótesis original con ambos conjuntos de datos $D_1 \cap D_2$ de manera simultánea. La expresión matemática que rige este proceso es:
@@ -456,6 +516,18 @@ Una sonda espacial en órbita alrededor de un gigante gaseoso debe configurar su
 \item Simule la selección aleatoria de $10^5$ configuraciones utilizando numpy. A partir de esta muestra, grafique un diagrama de barras con la frecuencia de aparición de cada uno de los 6 filtros, validando empíricamente la probabilidad teórica del inciso c.
 \end{enumerate}
 
+\section{Conteo. Urna y canicas}
+
+Una urna contiene $R$ canicas rojas y $W$ canicas blancas. Se extraen canicas de la urna una tras otra sin reemplazo. Sea $A_k$ el evento de que se extraiga una canica roja por primera vez en la $k$-ésima extracción. 
+
+\begin{enumerate}[a)]
+	\item  Demuestre que la probabilidad de $A_k$ está dada por:
+$$P(A_k) = \frac{R}{R+W-k+1} \prod_{j=1}^{k-1} \left( 1 - \frac{R}{R+W-j+1} \right)$$
+
+	\item Sea $p$ la proporción de canicas rojas en la urna antes de la primera extracción. Demuestre que $P(A_k) \to p(1-p)^{k-1}$ cuando $R+W \to \infty$. ¿Era de esperarse este resultado?
+\end{enumerate}
+
+
 \section{Secuencia de Observación en un Telescopio Robótico}
 
 Un telescopio robótico de sondeo debe programar su secuencia de observación fotométrica para una noche específica. El catálogo de candidatos contiene 12 estrellas variables, pero debido a limitaciones de tiempo y ventanas de visibilidad, el telescopio solo puede observar y registrar la curva de luz de exactamente 5 de ellas en un orden secuencial estricto.
@@ -550,6 +622,15 @@ $$
 \item Para el caso $k = 6$, simule la generación aleatoria de $50,000$ sub-arrays. Para cada sub-array, calcule el número de líneas de base y la longitud máxima de línea de base asumiendo que las 20 antenas están ubicadas en posiciones aleatorias dentro de un círculo de radio 5 km. Genere un histograma de la distribución de la línea de base máxima utilizando seaborn, con un kernel density estimate superpuesto.
 \item Implemente un algoritmo de fuerza bruta en Python que, para un caso reducido de $n = 10$ antenas y $k = 4$, genere todas las combinaciones posibles y filtre aquellas que cumplen la restricción del inciso c (a lo sumo 2 antenas de un grupo prohibido de 3). Compare el conteo resultante con el cálculo analítico adaptado a estos nuevos valores e imprima ambos resultados en consola.
 \end{enumerate}
+
+\section{Independencia de eventos}
+
+Se realiza una prueba de vida a un lote de cinco baterías idénticas. La asignación de probabilidad se asume como
+$$P(A)=\int_A \frac{1}{\lambda}e^{-x/\lambda}dx$$
+para cualquier evento $A \subseteq [0,\infty)$, donde $\lambda > 0$ es una constante conocida. Así, la probabilidad de que una batería falle después del tiempo $t$ está dada por
+$$P(t,\infty)=\int_t^\infty \frac{1}{\lambda}e^{-x/\lambda}dx, \quad t \ge 0.$$
+Si los tiempos de falla de las baterías son independientes, ¿cuál es la probabilidad de que al menos una batería esté operando después de $t_0$ horas?
+
 
 
 \clearpage
