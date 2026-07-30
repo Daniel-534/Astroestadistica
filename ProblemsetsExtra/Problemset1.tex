@@ -12,6 +12,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{float}
 \usepackage{booktabs}
+\usepackage{array,longtable,colortbl}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,babel,backgrounds,calc,decorations.markings,decorations.pathmorphing,shadows.blur}
 
@@ -34,6 +35,7 @@
 
 \begin{document}
 
+\hypersetup{pageanchor=false}
 \begin{titlepage}
   \centering
   {\Large Universidad de Antioquia\par}
@@ -51,12 +53,15 @@
   \vfill
   {\large \today\par}
 \end{titlepage}
+\hypersetup{pageanchor=true}
 
-\newpage
+\clearpage
+\input{mapa_problemas}
+\clearpage
 \tableofcontents
-\newpage
 
 \section{Identificación de espacios muestrales}
+\label{sec:problema-01}
 
 En cada uno de los siguientes experimentos, ¿cuál es el espacio muestral?
 
@@ -72,6 +77,7 @@ En cada uno de los siguientes experimentos, ¿cuál es el espacio muestral?
 \end{enumerate}
 
 \section{Espacios Muestrales y Clasificación Morfológica de Galaxias}
+\label{sec:problema-02}
 
 Un telescopio espacial de nueva generación apunta hacia un campo profundo del universo y detecta un conjunto de galaxias previamente no catalogadas. El experimento consiste en analizar el perfil de brillo superficial de cada galaxia y asignarle una clase morfológica específica. El resultado de esta observación para una galaxia individual debe caer en una de cuatro categorías macroscópicas mutuamente excluyentes: E (Galaxia Espiral), L (Galaxia Elíptica), I (Galaxia Irregular) y D (Galaxia Lenticular, de disco, sin brazos espirales evidentes).
 
@@ -90,6 +96,7 @@ $$ S = \{E, L, I, D\} $$
 Escriba un script en Python que defina el espacio muestral $S$ como un conjunto de cadenas de texto, y utilice la biblioteca itertools para generar y mostrar todas las secuencias posibles de clasificaciones para un cúmulo de $N=3$ galaxias.
 
 \section{Espacios Muestrales Infinitos y Seguimiento de Cometas}
+\label{sec:problema-03}
 
 Un observatorio astronómico terrestre está realizando una campaña de seguimiento astrométrico para determinar la órbita de un cometa de período largo recién descubierto. Para obtener imágenes de alta calidad, libres de nubes y con un seeing atmosférico adecuado, el telescopio debe intentar captar el objeto noche tras noche. El experimento consiste en registrar el resultado de cada noche de observación hasta lograr la primera imagen exitosa. Los resultados posibles para cada noche son $E$ (noche despejada, imagen exitosa) y $F$ (noche nublada o mal seeing, imagen descartada).
 
@@ -111,6 +118,7 @@ donde cada elemento representa una secuencia única de intentos. Por ejemplo, el
 \end{enumerate}
 
 \section{Espacios Muestrales Continuos en Coordenadas Ecuatoriales}
+\label{sec:problema-04}
 
 Un observatorio astronómico está realizando un seguimiento astrométrico de alta precisión de un planeta exterior, específicamente Júpiter, para refinar su efemérides orbital. Debido a las limitaciones físicas del instrumento y a la turbulencia atmosférica, la medición de la posición aparente del astro no arroja un punto exacto, sino que está sujeta a un error instrumental distribuido continuamente. El experimento consiste en medir las coordenadas ecuatoriales del planeta, definidas por su Ascensión Recta $\alpha$ y su Declinación $\delta$.
 
@@ -135,6 +143,7 @@ $$
 
 
 \section{Eventos y Clasificación Taxonómica de Asteroides}
+\label{sec:problema-05}
 
 Un telescopio espacial de nueva generación realiza un sondeo espectroscópico de asteroides cercanos a la Tierra. Basado en sus espectros de reflexión, cada asteroide detectado se clasifica en uno de tres complejos taxonómicos principales: C (Carbonáceos), S (Silicáceos) y X (Metálicos). El experimento consiste en registrar la clasificación taxonómica de un par de asteroides que pertenecen a la misma familia orbital. 
 
@@ -160,6 +169,7 @@ $$
 \end{enumerate}
 
 \section{Modelado Gravitacional en Operaciones de Proximidad}
+\label{sec:problema-06}
 
 Una sonda espacial autónoma se encuentra en fase de aproximación a un asteroide cercano a la Tierra de forma altamente irregular (similar a 433 Eros o 4769 Castalia). Debido a la geometría no esférica del cuerpo, el campo gravitacional no puede modelarse adecuadamente con la aproximación de masa puntual. El sistema de navegación a bordo (GNC) dispone de dos modelos gravitacionales que puede seleccionar de forma adaptativa para alimentar el filtro de estimación de estado durante cada pasada de aproximación:
 
@@ -185,6 +195,7 @@ $$
 
 
 \section{Demostración de la Probabilidad del Evento Nulo mediante Axiomas}
+\label{sec:problema-07}
 
 Sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una sucesión infinita de eventos $A_1, A_2, A_3, \dots$ definidos en el espacio muestral, donde cada evento es idénticamente el conjunto vacío, es decir, $A_i = \emptyset$ para todo $i \geq 1$.
 
@@ -206,6 +217,7 @@ $$
 
 
 \section{Principio de Inclusión-Exclusión}
+\label{sec:problema-08}
 
 Sean $A_1, A_2, \dots, A_n$ eventos en un espacio de probabilidad $(\Omega, \mathcal{S}, P)$. Demuestre que la probabilidad de la unión de estos eventos está dada por la siguiente fórmula:
 
@@ -214,6 +226,7 @@ $$ P\left(\bigcup_{k=1}^n A_k\right) = \sum_{k=1}^n P(A_k) - \sum_{k_1 < k_2} P(
 \textit{Ayuda: Aplique el método de inducción matemática sobre el número de eventos $n$.}
 
 \section{Probabilidad \textit{I}}
+\label{sec:problema-09}
 
 Sea $\Omega$ el conjunto de todos los enteros no negativos y $\mathcal{S}$ la clase de todos los subconjuntos de $\Omega$. En cada uno de los siguientes casos, ¿define $P$ una probabilidad en $(\Omega, \mathcal{S})$?
 
@@ -226,6 +239,7 @@ Sea $\Omega$ el conjunto de todos los enteros no negativos y $\mathcal{S}$ la cl
 \end{enumerate}
 
 \section{Probabilidad \textit{II}}
+\label{sec:problema-10}
 
 Sea $\Omega = \mathbb{R}$ y $\mathcal{S} = \mathcal{B}=\mathcal{B}(\mathbb{R}) = \sigma\big(\{(a,b) : a,b \in \mathbb{R}\}\big) = \sigma\big(\{(-\infty, x] : x \in \mathbb{R}\}\big)$ \textit{($\sigma-$álgebra de Borel en $\mathbb{R}$)}. En cada uno de los siguientes casos, ¿define $P$ una probabilidad en $(\Omega, \mathcal{S})$?
 
@@ -237,6 +251,7 @@ Sea $\Omega = \mathbb{R}$ y $\mathcal{S} = \mathcal{B}=\mathcal{B}(\mathbb{R}) =
 \end{enumerate}
 
 \section{Clasificación de Señales en Astronomía de Ondas Gravitacionales}
+\label{sec:problema-11}
 
 En el campo emergente de la astronomía de ondas gravitacionales, redes de interferómetros como LIGO y Virgo detectan continuamente candidatos a señales transitorias. Tras años de ciclos de observación, la colaboración científica ha establecido un espacio muestral $S$ para la clasificación de un nuevo candidato a señal, el cual se asigna a una de tres clases mutuamente excluyentes y exhaustivas:
 
@@ -264,6 +279,7 @@ $$ \sum_{i \in \{A, B, C\}} P(i) = 1 $$
 \end{enumerate}
 
 \section{Análisis de Modos de Falla en un Rover de Exploración}
+\label{sec:problema-12}
 
 El mecanismo de perforación y muestreo de un rover marciano opera en ciclos de 1 hora. Durante un ciclo operativo, el sistema puede experimentar uno de tres modos de falla críticos, los cuales son mutuamente excluyentes ya que el diagnóstico del sistema identifica la causa raíz primaria de manera única. Los eventos de falla se definen como:
 
@@ -290,6 +306,7 @@ $$ P(F) = P(A \cup B \cup C) = P(A) + P(B) + P(C) $$
 \end{enumerate}
 
 \section{Caracterización de Asteroides mediante Albedo Radar}
+\label{sec:problema-13}
 
 Un radiotelescopio de la Red del Espacio Profundo realiza observaciones de asteroides cercanos a la Tierra para determinar su composición superficial mediante el envío de pulsos de radio. El albedo radar $\hat{\rho}$ es un indicador físico clave para la taxonomía: los asteroides metálicos (tipo M) poseen superficies altamente reflectantes, los rocosos (tipo S) tienen una reflectancia moderada, y los carbonáceos (tipo C) son altamente absorbentes.
 
@@ -307,6 +324,7 @@ $$
 \end{enumerate}
 
 \section{Regla de Multiplicación en Pipelines de Transitorios Astrofísicos}
+\label{sec:problema-14}
 
 Un observatorio de radio de nueva generación opera un pipeline automatizado para la detección y clasificación de Ráfagas Rápidas de Radio (FRB). El procesamiento de datos se divide en tres etapas secuenciales y dependientes. Definimos los siguientes eventos para cada candidato a señal:
 
@@ -338,6 +356,7 @@ $$
 
 
 \section{Confiabilidad de Subsistemas Críticos en una Sonda Interplanetaria}
+\label{sec:problema-15}
 
 Una sonda interplanetaria que se encuentra en fase de crucero hacia el sistema solar exterior depende de tres subsistemas críticos para mantener la salud de la nave y transmitir datos: el Subsistema de Generación de Energía (evento $A$), el Subsistema de Control Térmico (evento $B$) y el Subsistema de Comunicaciones de Alta Ganancia (evento $C$). 
 
@@ -365,6 +384,7 @@ $$
 
 
 \section{Discriminación de Señales en Interferometría de Ondas Gravitacionales}
+\label{sec:problema-16}
 
 Considere una red de interferómetros láser, análoga a LIGO o Virgo, compuesta por detectores separados geográficamente por miles de kilómetros. Para un intervalo de tiempo de 1 milisegundo, definimos los siguientes eventos elementales:
 
@@ -394,19 +414,23 @@ $$
 
 
 \section{Probabilidad condicional I}
+\label{sec:problema-17}
 
 Sean $A$ y $B$ dos eventos tales que $P(A) = p_1 > 0$, $P(B) = p_2 > 0$, y $p_1 + p_2 > 1$. Demuestre que:
 $$P(B | A) \ge 1 - \frac{1 - p_2}{p_1}$$
 
 \section{Probabilidad condicional II.1}
+\label{sec:problema-18}
 La probabilidad de que una familia elegida al azar tenga exactamente $k$ hijos es $\alpha p^k$, con $0 < p < 1$. Suponga que la probabilidad de que cualquier hijo tenga ojos azules es $b$, con $0 < b < 1$, independientemente de los demás. ¿Cuál es la probabilidad de que una familia elegida al azar tenga exactamente $r$ ($r \ge 0$) hijos con ojos azules?
 
 \section{Probabilidad condicional II.2}
+\label{sec:problema-19}
 En el problema anterior, escribamos $p_k =$ probabilidad de que una familia elegida al azar tenga exactamente $k$ hijos $= \alpha p^k$, para $k = 1, 2, \dots$, y $p_0 = 1 - \frac{\alpha p}{1-p}$.
 Suponga que todas las distribuciones de sexos de $k$ hijos son igualmente probables. Encuentre la probabilidad de que una familia tenga exactamente $r$ niños (varones), $r \ge 1$. Encuentre la probabilidad condicional de que una familia tenga al menos dos niños, dado que tiene al menos un niño.
 
 
 \section{Demostración y Aplicación del Teorema de Actualización Secuencial}
+\label{sec:problema-20}
 
 En el marco de la teoría de la probabilidad, sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad. Considere una hipótesis $H \in \mathcal{F}$ y dos conjuntos de datos observacionales $D_1, D_2 \in \mathcal{F}$. El enfoque bayesiano permite actualizar el grado de creencia en la hipótesis $H$ a medida que se incorporan nuevos datos. El Teorema de Actualización Secuencial establece que actualizar la hipótesis $H$ con un primer conjunto de datos $D_1$ y utilizar el resultado como la nueva probabilidad a priori para un segundo conjunto de datos $D_2$, es matemáticamente idéntico a actualizar la hipótesis original con ambos conjuntos de datos $D_1 \cap D_2$ de manera simultánea. La expresión matemática que rige este proceso es:
 
@@ -422,6 +446,7 @@ $$
 \end{enumerate}
 
 \section{Clasificación Mineralógica mediante Espectroscopía de Reflexión}
+\label{sec:problema-21}
 
 Un rover de exploración marciana utiliza su espectrómetro de infrarrojo cercano para analizar un afloramiento rocoso en la cuenca de Jezero. Basado en el contexto geológico orbital, el equipo científico establece las siguientes hipótesis mutuamente excluyentes y exhaustivas sobre la composición mineralógica de la roca:
 
@@ -451,6 +476,7 @@ $$
 \end{enumerate}
 
 \section{Aislamiento de Fallas en el Sistema de Control de Actitud}
+\label{sec:problema-22}
 
 El Sistema de Control y Determinación de Actitud (ADCS) de un satélite de observación terrestre ha detectado una anomalía específica en la estimación de actitud, denotada como el evento $A$. Tras un análisis de telemetría, los ingenieros de vuelo han identificado tres posibles causas raíz mutuamente excluyentes y exhaustivas para esta anomalía:
 
@@ -475,6 +501,7 @@ $$
 \end{enumerate}
 
 \section{Clasificación Orbital de Cometas: Parabólico vs. Hiperbólico}
+\label{sec:problema-23}
 
 Cuando se descubre un nuevo cometa de período largo, determinar su excentricidad orbital real es crucial para entender su origen. Si la excentricidad es exactamente uno, la órbita es parabólica y el cometa está gravitacionalmente ligado al sistema solar, proviniendo probablemente de la nube de Oort. Si la excentricidad es mayor que uno, la órbita es hiperbólica, lo que indicaría un objeto interestelar que solo está de paso.
 
@@ -511,6 +538,7 @@ $$
 \end{enumerate}
 
 \section{Configuración de Carga Útil en una Sonda Espacial}
+\label{sec:problema-24}
 
 Una sonda espacial en órbita alrededor de un gigante gaseoso debe configurar su paquete de instrumentos para una campaña de observación de la atmósfera superior. El sistema de adquisición de datos permite seleccionar independientemente tres parámetros críticos para cada toma de datos: el espectrómetro a activar, la rueda de filtros a posicionar y el modo de compresión de telemetry a utilizar. Existen 4 espectrómetros disponibles, 6 filtros en la rueda y 3 modos de compresión.
 
@@ -528,6 +556,7 @@ Una sonda espacial en órbita alrededor de un gigante gaseoso debe configurar su
 \end{enumerate}
 
 \section{Conteo. Urna y canicas}
+\label{sec:problema-25}
 
 Una urna contiene $R$ canicas rojas y $W$ canicas blancas. Se extraen canicas de la urna una tras otra sin reemplazo. Sea $A_k$ el evento de que se extraiga una canica roja por primera vez en la $k$-ésima extracción. 
 
@@ -540,6 +569,7 @@ $$P(A_k) = \frac{R}{R+W-k+1} \prod_{j=1}^{k-1} \left( 1 - \frac{R}{R+W-j+1} \rig
 
 
 \section{Secuencia de Observación en un Telescopio Robótico}
+\label{sec:problema-26}
 
 Un telescopio robótico de sondeo debe programar su secuencia de observación fotométrica para una noche específica. El catálogo de candidatos contiene 12 estrellas variables, pero debido a limitaciones de tiempo y ventanas de visibilidad, el telescopio solo puede observar y registrar la curva de luz de exactamente 5 de ellas en un orden secuencial estricto.
 
@@ -558,6 +588,7 @@ $$ P(n, k) = \frac{n!}{(n-k)!} $$
 \end{enumerate}
 
 \section{Secuencia de Apuntamiento y Restricciones Térmicas en un Telescopio Espacial}
+\label{sec:problema-27}
 
 Un telescopio espacial de órbita baja tiene un catálogo de $n = 10$ objetivos científicos (exoplanetas, nebulosas, galaxias) disponibles para ser observados durante una ventana de visibilidad orbital. Debido a limitaciones de tiempo y energía de las baterías, el telescopio solo puede ejecutar una secuencia de $k = 4$ observaciones. El orden de las observaciones es crítico debido a los tiempos de relajación térmica y los ángulos de giro mecánico.
 
@@ -576,6 +607,7 @@ $$ P(n, k) = \frac{n!}{(n-k)!} $$
 \end{enumerate}
 
 \section{Secuencia de Análisis en un Espectrómetro de Masas Planetario}
+\label{sec:problema-28}
 
 El laboratorio químico a bordo de un rover marciano cuenta con un espectrómetro de masas que procesa muestras de suelo utilizando un carrusel de $n = 12$ copas de muestra. Para una campaña científica específica, se deben seleccionar y analizar $k = 5$ copas distintas. El orden en el que las muestras se introducen en el horno de análisis determina el perfil térmico y el riesgo de contaminación cruzada entre los volátiles.
 
@@ -593,6 +625,7 @@ El laboratorio químico a bordo de un rover marciano cuenta con un espectrómetr
 \end{enumerate}
 
 \section{Selección de Sitios de Aterrizaje en Ciencia Planetaria}
+\label{sec:problema-29}
 
 La misión de un rover de próxima generación a la luna Europa de Júpiter ha identificado, mediante imágenes orbitales de alta resolución, un total de $n = 14$ regiones candidatas para el aterrizaje. Estas regiones se distribuyen en tres zonas geológicas distintas: 6 regiones en terrenos de hielo caótico, 5 regiones en crestas lineales y 3 regiones en zonas de criovolcanismo activo. El comité científico debe seleccionar exactamente $k = 4$ sitios finales para la fase de descenso, y el orden de selección no es relevante ya que todos los sitios serán evaluados simultáneamente por el sistema de navegación autónoma.
 
@@ -614,6 +647,7 @@ $$
 \end{enumerate}
 
 \section{Configuración de Sub-arrays en Radio Interferometría}
+\label{sec:problema-30}
 
 Un radiotelescopio de nueva generación, inspirado en el diseño del Square Kilometre Array (SKA), dispone de una red de $n = 20$ antenas parabólicas distribuidas en una configuración en espiral logarítmica sobre una planicie desértica. Para una campaña de observación de líneas espectrales de hidrógeno neutro a 21 cm en galaxias de alto corrimiento al rojo, el sistema de correlación digital solo puede procesar simultáneamente las señales de $k = 6$ antenas, formando lo que se denomina un sub-array activo. La resolución angular del sub-array depende de las líneas de base (pares de antenas) que se formen, y cada par de antenas dentro del sub-array genera una línea de base única.
 
@@ -635,6 +669,7 @@ $$
 \end{enumerate}
 
 \section{Independencia de eventos}
+\label{sec:problema-31}
 
 Se realiza una prueba de vida a un lote de cinco baterías idénticas. La asignación de probabilidad se asume como
 $$P(A)=\int_A \frac{1}{\lambda}e^{-x/\lambda}dx$$
