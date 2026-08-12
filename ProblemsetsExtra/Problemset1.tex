@@ -14,7 +14,7 @@
 \usepackage{booktabs}
 \usepackage{array,longtable,colortbl}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,babel,backgrounds,calc,decorations.markings,decorations.pathmorphing,shadows.blur}
+\usetikzlibrary{arrows.meta,babel,backgrounds,calc,decorations.markings,decorations.pathmorphing,fit,positioning,shadows.blur}
 
 \definecolor{statsnavy}{HTML}{081A33}
 \definecolor{statsblue}{HTML}{16C7FF}
@@ -35,27 +35,17 @@
 
 \begin{document}
 
-\hypersetup{pageanchor=false}
-\begin{titlepage}
-  \centering
-  {\Large Universidad de Antioquia\par}
-  \vspace{2cm}
-  {\huge\bfseries Astroestadística\par}
-  \vspace{0.4cm}
-  {\Large Problemset 1 \par}
-  \vspace{2.5cm}
-  {\large Autor:\par}
+% Encabezado académico compacto; el documento no utiliza portada.
+\begin{center}
+  {\Large\bfseries Universidad de Antioquia\par}
   \vspace{0.2cm}
-  {\large Daniel Soto Villada\par}
-  {\large Estudiante de Astronomía\par}
-  \input{grafico_portada}
+  {\large Astroestadística\par}
+  {\large\bfseries Problemset 1\par}
+  \vspace{0.2cm}
+  {\normalsize\textbf{Autor:} Daniel Soto Villada\par}
+\end{center}
 
-  \vfill
-  {\large \today\par}
-\end{titlepage}
-\hypersetup{pageanchor=true}
-
-\clearpage
+\vspace{0.5cm}
 \input{mapa_problemas}
 \clearpage
 \tableofcontents
@@ -172,6 +162,8 @@ Una sonda espacial autónoma se encuentra en fase de aproximación a un asteroid
 
 Definimos el experimento como: la nave ejecuta 3 pasadas de aproximación consecutivas al asteroide. En cada pasada, el sistema de navegación selecciona de forma autónoma el modelo gravitacional a utilizar para el filtro de navegación. Los resultados básicos para cada pasada son $H$ (se utiliza el modelo de Armónicos Esféricos) y $M$ (se utiliza el modelo de Mascones).
 
+\input{Fig1}
+
 El espacio muestral $S$ está compuesto por $2^3 = 8$ eventos simples:
 $$
 S = \{HHH, HHM, HMH, MHH, HMM, MHM, MMH, MMM\}
@@ -247,6 +239,8 @@ En el campo emergente de la astronomía de ondas gravitacionales, redes de inter
 
 Suponga que, basándose en el historial de detecciones de un detector específico durante su último ciclo de observación, las probabilidades a priori de que una nueva alerta corresponda a cada uno de estos eventos son $P(A) = 0.45$, $P(B) = 0.15$ y $P(C) = 0.40$.
 
+\input{Fig2}
+
 \begin{enumerate}[a)]
 \item Verifique que las probabilidades asignadas satisfacen los axiomas de probabilidad para el espacio muestral $S$, demostrando que se cumple la condición de normalización:
 $$ \sum_{i \in \{A, B, C\}} P(i) = 1 $$
@@ -274,6 +268,8 @@ El mecanismo de perforación y muestreo de un rover marciano opera en ciclos de 
 \end{itemize}
 
 Basado en datos históricos de pruebas en cámaras de vacío térmico, se han asignado las siguientes probabilidades para un ciclo operativo dado: $P(A) = 0.04$, $P(B) = 0.03$ y $P(C) = 0.01$. Sea $F$ el evento compuesto definido como que ocurra cualquier tipo de falla durante el ciclo, y sea $F'$ el evento complementario que representa la operación nominal sin fallas.
+
+\input{Fig3}
 
 \begin{enumerate}[a)]
 \item Justifique por qué es válido aplicar directamente el tercer axioma de la probabilidad para calcular $P(F)$ y determine el valor de la probabilidad de falla total del sistema mediante la expresión:
@@ -435,6 +431,8 @@ Un rover de exploración marciana utiliza su espectrómetro de infrarrojo cercan
 
 Las probabilidades a priori, derivadas de la geomorfología de la zona, son $P(A_1) = 0.20$, $P(A_2) = 0.60$ y $P(A_3) = 0.20$. El espectrómetro detecta una profunda banda de absorción centrada en 1 µm, una firma característica de los enlaces Fe-O en el piroxeno. Definimos este evento observacional como $B$. Conociendo las calibraciones instrumentales y las propiedades físicas de los minerales, las verosimilitudes son $P(B|A_1) = 0.90$, $P(B|A_2) = 0.10$ y $P(B|A_3) = 0.05$.
 
+\input{Fig4}
+
 \begin{enumerate}[a)]
 \item Calcule la probabilidad total de que el espectrómetro detecte la banda de absorción en $1\mu$m
 \item Utilice el Teorema de Bayes para determinar las probabilidades a posteriori de cada hipótesis.
@@ -495,6 +493,8 @@ Conociendo la precisión típica de los telescopios terrestres y la propagación
 \item $P(M|H_P) = 0.10$: Si el cometa es realmente parabólico, hay un 10\% de probabilidad de que el ruido observacional empuje la excentricidad medida a $\geq 1.0$ (falso positivo).
 \item $P(M|H_H) = 0.90$: Si el cometa es realmente hiperbólico, hay un 90\% de probabilidad de que la medición lo refleje correctamente.
 \end{itemize}
+
+\input{Fig5}
 
 \begin{enumerate}[a)]
 \item Calcule la probabilidad total de obtener una medición $\hat{e} \geq 1.0$
@@ -611,6 +611,8 @@ La misión de un rover de próxima generación a la luna Europa de Júpiter ha i
 \label{sec:problema-30}
 
 Un radiotelescopio de nueva generación, inspirado en el diseño del Square Kilometre Array (SKA), dispone de una red de $n = 20$ antenas parabólicas distribuidas en una configuración en espiral logarítmica sobre una planicie desértica. Para una campaña de observación de líneas espectrales de hidrógeno neutro a 21 cm en galaxias de alto corrimiento al rojo, el sistema de correlación digital solo puede procesar simultáneamente las señales de $k = 6$ antenas, formando lo que se denomina un sub-array activo. La resolución angular del sub-array depende de las líneas de base (pares de antenas) que se formen, y cada par de antenas dentro del sub-array genera una línea de base única.
+
+\input{Fig6}
 
 \begin{enumerate}[a)]
 \item Calcule el número total de sub-arrays distintos de 6 antenas que se pueden configurar a partir de las 20 disponibles.

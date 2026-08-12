@@ -126,36 +126,49 @@ $$ S = \{HHH, HHM, HMH, MHH, HMM, MHM, MMH, MMM\} $$
 \begin{tikzpicture}[
     font=\footnotesize,
     >=Stealth,
-    asteroid/.style={circle, draw=black!55, fill=gray!18, minimum size=22mm, align=center, font=\bfseries},
-    zone/.style={draw=orange!75!black, dashed, thick},
-    orbit/.style={draw=blue!70!black, thick, -{Stealth[length=2.2mm]}},
-    spacecraft/.style={draw=black!70, fill=white, regular polygon, regular polygon sides=3, minimum size=6mm, rotate=25},
+    asteroid/.style={circle, draw=black!70, fill=gray!25, minimum size=22mm, align=center, font=\bfseries},
+    zone/.style={draw=gray!70, dashed, thick},
+    orbitblue/.style={draw=blue!75!black, very thick},
+    orbitred/.style={draw=red!75!black, very thick},
+    orbitblack/.style={draw=black!80, very thick},
     hlabel/.style={rectangle, rounded corners=2pt, draw=blue!70!black, fill=blue!10, inner sep=2pt, font=\scriptsize\bfseries},
-    mlabel/.style={rectangle, rounded corners=2pt, draw=orange!85!black, fill=orange!15, inner sep=2pt, font=\scriptsize\bfseries},
+    hblacklabel/.style={rectangle, rounded corners=2pt, draw=black!75, fill=gray!12, inner sep=2pt, font=\scriptsize\bfseries},
+    mlabel/.style={rectangle, rounded corners=2pt, draw=red!75!black, fill=red!10, inner sep=2pt, font=\scriptsize\bfseries},
     note/.style={align=center, font=\scriptsize}
 ]
 
 \node[asteroid] (body) at (0,0) {Asteroide\\irregular};
 \draw[zone] (body.center) circle [radius=2.15cm];
-\node[orange!85!black, font=\scriptsize\bfseries] at (0,-2.45) {esfera de Brillouin};
+\node[fill=white, inner sep=1.5pt, text=gray!65!black, font=\scriptsize\bfseries]
+    at (0,-2.68) {esfera de Brillouin};
 
-\draw[orbit] (-4.7,1.85) .. controls (-3.0,2.70) and (-1.55,2.10) .. (-0.75,1.25)
-    .. controls (0.10,0.25) and (1.35,0.80) .. (4.7,1.75);
+\begin{scope}[rotate=12]
+    \draw[orbitblue] (0,0) ellipse [x radius=4.55cm, y radius=2.35cm];
+    \draw[blue!75!black, very thick, -{Stealth[length=2.2mm]}]
+        (4.55,0) arc [start angle=0, end angle=24, x radius=4.55cm, y radius=2.35cm];
+    \coordinate (s1) at (-3.45,1.53);
+\end{scope}
 
-\node[spacecraft] (s1) at (-3.15,2.35) {};
-\node[spacecraft, rotate=-10] (s2) at (-0.72,1.23) {};
-\node[spacecraft, rotate=20] (s3) at (2.40,1.05) {};
+\begin{scope}[rotate=-18]
+    \draw[orbitred] (0,0) ellipse [x radius=3.55cm, y radius=1.45cm];
+    \draw[red!75!black, very thick, -{Stealth[length=2.2mm]}]
+        (-3.55,0) arc [start angle=180, end angle=150, x radius=3.55cm, y radius=1.45cm];
+    \coordinate (s2) at (-0.75,1.42);
+\end{scope}
 
-\node[hlabel, above=2mm of s1] {Pasada 1: $H$};
-\node[mlabel, below left=1mm and -2mm of s2] {Pasada 2: $M$};
-\node[hlabel, below=2mm of s3] {Pasada 3: $H$};
+\begin{scope}[rotate=34]
+    \draw[orbitblack] (0,0) ellipse [x radius=4.25cm, y radius=1.85cm];
+    \draw[black!80, very thick, -{Stealth[length=2.2mm]}]
+        (4.25,0) arc [start angle=0, end angle=25, x radius=4.25cm, y radius=1.85cm];
+    \coordinate (s3) at (2.75,1.41);
+\end{scope}
 
-\draw[blue!55!black, densely dotted, thick] (s1) -- (body);
-\draw[orange!80!black, densely dotted, thick] (s2) -- (body);
-\draw[blue!55!black, densely dotted, thick] (s3) -- (body);
+\node[hlabel, above left=1mm and -1mm of s1] {Pasada 1: $H$};
+\node[mlabel, above=2mm of s2] {Pasada 2: $M$};
+\node[hblacklabel, below right=1mm and -1mm of s3] {Pasada 3: $H$};
 
-\node[note, blue!70!black] at (-3.65,0.10) {Fuera de la esfera:\\modelo SHE rápido};
-\node[note, orange!85!black] at (3.25,-0.40) {Dentro de la esfera:\\modelo de Mascones};
+\node[note, blue!75!black] at (-4.0,-2.92) {Órbita exterior:\\modelo SHE rápido};
+\node[note, red!75!black] at (4.0,-2.92) {Órbita cercana:\\modelo de Mascones};
 
 \end{tikzpicture}
 \caption{Representación física de las operaciones de proximidad. La nave realiza pasadas alrededor de un asteroide irregular; fuera de la esfera de Brillouin puede usar Armónicos Esféricos ($H$), mientras que al entrar en la región cercana debe cambiar a Mascones ($M$).}
@@ -361,7 +374,7 @@ $$ P(A) = 0.78, \quad P(B) = 0.07, \quad P(C) = 0.15 $$
 \draw[arrow] (alerta) -- (ruido);
 
 \begin{scope}[on background layer]
-    \node[group, fit=(bbh)(bns), label={[blue!60!black, font=\scriptsize\bfseries]below:$E=A\cup B$: origen astrofísico, $P(E)=0.85$}] {};
+    \node[group, fit=(bbh)(bns), label={[blue!60!black, fill=white, inner sep=1pt, font=\scriptsize\bfseries, yshift=2mm]below:$E=A\cup B$: origen astrofísico, $P(E)=0.85$}] {};
 \end{scope}
 
 \node[note] (excl) at (0,-2.85) {Clasificación exhaustiva y mutuamente excluyente:\\cada candidato cae en una sola de las clases $A$, $B$ o $C$.};
@@ -429,6 +442,8 @@ $$ P(A) = 0.04, \quad P(B) = 0.03, \quad P(C) = 0.01 $$
 \draw[black!65, thick] (0.95,-0.73) circle (0.18);
 \draw[black!65, thick] (-0.55,0.62) -- (-0.2,1.12) -- (0.45,1.12);
 \draw[fill=blue!18, draw=blue!60!black] (0.45,0.92) rectangle (1.3,1.32);
+\node[font=\tiny, text=blue!60!black, fill=white, inner sep=0.6pt, anchor=south west]
+    at (1.35,1.38) {panel solar};
 \draw[black!60, thick] (1.28,-0.05) -- (2.1,-0.75);
 \draw[black!60, thick] (2.1,-0.75) -- (2.1,-1.55);
 \draw[fill=orange!35, draw=orange!80!black] (1.93,-1.55) rectangle (2.27,-1.88);

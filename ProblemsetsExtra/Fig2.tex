@@ -1,0 +1,49 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    detector/.style={rectangle, rounded corners=3pt, draw=black!55, fill=black!4, minimum width=27mm, minimum height=9mm, align=center, font=\bfseries},
+    process/.style={rectangle, rounded corners=3pt, draw=purple!65!black, fill=purple!7, minimum width=34mm, minimum height=10mm, align=center, font=\bfseries},
+    classA/.style={rectangle, rounded corners=3pt, draw=blue!70!black, fill=blue!10, minimum width=30mm, minimum height=11mm, align=center},
+    classB/.style={rectangle, rounded corners=3pt, draw=green!50!black, fill=green!10, minimum width=30mm, minimum height=11mm, align=center},
+    classC/.style={rectangle, rounded corners=3pt, draw=red!70!black, fill=red!8, minimum width=30mm, minimum height=11mm, align=center},
+    group/.style={draw=blue!60!black, dashed, rounded corners=5pt, inner sep=5mm},
+    arrow/.style={draw=black!55, thick, -{Stealth[length=2.2mm]}},
+    bar/.style={draw=black!30, rounded corners=1pt, minimum height=3mm, anchor=west},
+    note/.style={align=center, font=\scriptsize}
+]
+
+\node[detector] (ligo) at (-3.8,2.0) {LIGO};
+\node[detector] (virgo) at (0,2.0) {Virgo};
+\node[detector] (kagra) at (3.8,2.0) {KAGRA};
+\node[process] (alerta) at (0,0.65) {Candidato transitorio\\en alerta temprana};
+
+\draw[arrow] (ligo) -- (alerta);
+\draw[arrow] (virgo) -- (alerta);
+\draw[arrow] (kagra) -- (alerta);
+
+\node[classA] (bbh) at (-3.6,-1.05) {$A$: BBH\\$P(A)=0.78$};
+\node[classB] (bns) at (0,-1.05) {$B$: BNS\\$P(B)=0.07$};
+\node[classC] (ruido) at (3.6,-1.05) {$C$: ruido\\$P(C)=0.15$};
+
+\draw[arrow] (alerta) -- (bbh);
+\draw[arrow] (alerta) -- (bns);
+\draw[arrow] (alerta) -- (ruido);
+
+\begin{scope}[on background layer]
+    \node[group, fit=(bbh)(bns), label={[blue!60!black, fill=white, inner sep=1pt, font=\scriptsize\bfseries, yshift=2mm]below:$E=A\cup B$: origen astrofísico, $P(E)=0.85$}] {};
+\end{scope}
+
+\node[note] (excl) at (0,-2.85) {Clasificación exhaustiva y mutuamente excluyente:\\cada candidato cae en una sola de las clases $A$, $B$ o $C$.};
+
+\node[bar, fill=blue!45, minimum width=39mm] at (-2.5,-3.85) {};
+\node[bar, fill=green!45, minimum width=3.5mm] at (1.5,-3.85) {};
+\node[bar, fill=red!45, minimum width=7.5mm] at (1.95,-3.85) {};
+\node[font=\tiny, blue!70!black] at (-0.55,-4.15) {BBH};
+\node[font=\tiny, green!45!black] at (1.68,-4.15) {BNS};
+\node[font=\tiny, red!70!black] at (2.32,-4.15) {ruido};
+
+\end{tikzpicture}
+\caption{Representación visual del experimento de clasificación de una señal candidata de ondas gravitacionales. La red de interferómetros produce una alerta, y el candidato se asigna a una de tres clases mutuamente excluyentes: fusión de agujeros negros binarios ($A$), fusión de estrellas de neutrones binarias ($B$) o artefacto instrumental ($C$).}
+\end{figure}

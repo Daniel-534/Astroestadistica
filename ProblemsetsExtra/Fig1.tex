@@ -1,0 +1,52 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    asteroid/.style={circle, draw=black!70, fill=gray!25, minimum size=22mm, align=center, font=\bfseries},
+    zone/.style={draw=gray!70, dashed, thick},
+    orbitblue/.style={draw=blue!75!black, very thick},
+    orbitred/.style={draw=red!75!black, very thick},
+    orbitblack/.style={draw=black!80, very thick},
+    hlabel/.style={rectangle, rounded corners=2pt, draw=blue!70!black, fill=blue!10, inner sep=2pt, font=\scriptsize\bfseries},
+    hblacklabel/.style={rectangle, rounded corners=2pt, draw=black!75, fill=gray!12, inner sep=2pt, font=\scriptsize\bfseries},
+    mlabel/.style={rectangle, rounded corners=2pt, draw=red!75!black, fill=red!10, inner sep=2pt, font=\scriptsize\bfseries},
+    note/.style={align=center, font=\scriptsize}
+]
+
+\node[asteroid] (body) at (0,0) {Asteroide\\irregular};
+\draw[zone] (body.center) circle [radius=2.15cm];
+\node[fill=white, inner sep=1.5pt, text=gray!65!black, font=\scriptsize\bfseries]
+    at (0,-2.68) {esfera de Brillouin};
+
+\begin{scope}[rotate=12]
+    \draw[orbitblue] (0,0) ellipse [x radius=4.55cm, y radius=2.35cm];
+    \draw[blue!75!black, very thick, -{Stealth[length=2.2mm]}]
+        (4.55,0) arc [start angle=0, end angle=24, x radius=4.55cm, y radius=2.35cm];
+    \coordinate (s1) at (-3.45,1.53);
+\end{scope}
+
+\begin{scope}[rotate=-18]
+    \draw[orbitred] (0,0) ellipse [x radius=3.55cm, y radius=1.45cm];
+    \draw[red!75!black, very thick, -{Stealth[length=2.2mm]}]
+        (-3.55,0) arc [start angle=180, end angle=150, x radius=3.55cm, y radius=1.45cm];
+    \coordinate (s2) at (-0.75,1.42);
+\end{scope}
+
+\begin{scope}[rotate=34]
+    \draw[orbitblack] (0,0) ellipse [x radius=4.25cm, y radius=1.85cm];
+    \draw[black!80, very thick, -{Stealth[length=2.2mm]}]
+        (4.25,0) arc [start angle=0, end angle=25, x radius=4.25cm, y radius=1.85cm];
+    \coordinate (s3) at (2.75,1.41);
+\end{scope}
+
+\node[hlabel, above left=1mm and -1mm of s1] {Pasada 1: $H$};
+\node[mlabel, above=2mm of s2] {Pasada 2: $M$};
+\node[hblacklabel, below right=1mm and -1mm of s3] {Pasada 3: $H$};
+
+\node[note, blue!75!black] at (-4.0,-2.92) {Órbita exterior:\\modelo SHE rápido};
+\node[note, red!75!black] at (4.0,-2.92) {Órbita cercana:\\modelo de Mascones};
+
+\end{tikzpicture}
+\caption{Representación física de las operaciones de proximidad. La nave realiza pasadas alrededor de un asteroide irregular; fuera de la esfera de Brillouin puede usar Armónicos Esféricos ($H$), mientras que al entrar en la región cercana debe cambiar a Mascones ($M$).}
+\end{figure}

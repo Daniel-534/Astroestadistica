@@ -1,0 +1,159 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    orbitP/.style={draw=blue!75!black, very thick},
+    orbitH/.style={draw=red!75!black, very thick},
+    directionP/.style={draw=blue!75!black, thick, -{Stealth[length=2.3mm]}},
+    directionH/.style={draw=red!75!black, thick, -{Stealth[length=2.3mm]}},
+    guide/.style={draw=black!30, dashed},
+    callout/.style={
+        rectangle, rounded corners=2pt, fill=white,
+        inner sep=1.5pt, font=\scriptsize
+    },
+    titleP/.style={
+        rectangle, rounded corners=4pt, draw=blue!70!black,
+        fill=blue!8, minimum width=48mm, minimum height=9mm,
+        font=\bfseries, text=blue!70!black
+    },
+    titleH/.style={
+        rectangle, rounded corners=4pt, draw=red!70!black,
+        fill=red!8, minimum width=48mm, minimum height=9mm,
+        font=\bfseries, text=red!70!black
+    },
+    note/.style={align=center, font=\scriptsize}
+]
+
+\path[use as bounding box] (-7.15,-3.65) rectangle (7.15,3.55);
+
+% Títulos de los paneles
+\node[titleP] at (-3.65,3.05)
+    {ÓRBITA PARABÓLICA: $e=1$};
+\node[titleH] at (3.65,3.05)
+    {ÓRBITA HIPERBÓLICA: $e>1$};
+
+% Fondos sutiles y separador
+\fill[blue!2, rounded corners=8pt] (-7.0,-2.55) rectangle (-0.25,2.55);
+\fill[red!2, rounded corners=8pt] (0.25,-2.55) rectangle (7.0,2.55);
+\draw[black!18, thick] (0,-2.72) -- (0,2.72);
+
+% -----------------------------------------------------------------
+% Panel parabólico
+% -----------------------------------------------------------------
+\shade[ball color=yellow!85, draw=orange!80!black, thick]
+    (-4.20,0) circle (0.42);
+\node[font=\scriptsize\bfseries, text=orange!70!black]
+    at (-4.20,-0.68) {Sol: foco};
+
+% Eje de simetría y directriz conceptual
+\draw[guide] (-6.80,0) -- (-1.00,0);
+\draw[blue!40!black, densely dashed]
+    (-5.52,-2.15) -- (-5.52,2.15);
+\node[callout, text=blue!60!black, rotate=90]
+    at (-5.74,1.40) {directriz};
+
+% Parábola abierta hacia la izquierda con perihelio a la derecha
+\draw[orbitP]
+    (-6.65,-2.15)
+    .. controls (-4.95,-1.52) and (-2.05,-1.02) .. (-1.55,0)
+    .. controls (-2.05,1.02) and (-4.95,1.52) .. (-6.65,2.15);
+
+\draw[directionP]
+    (-6.28,-2.01)
+    .. controls (-5.55,-1.74) and (-4.72,-1.52) .. (-4.05,-1.30);
+\draw[directionP]
+    (-3.90,1.33)
+    .. controls (-4.70,1.55) and (-5.52,1.78) .. (-6.28,2.01);
+
+% Perihelio y distancia q
+\fill[blue!75!black] (-1.55,0) circle (2.4pt);
+\node[callout, text=blue!70!black, above right=1mm and -1mm]
+    at (-1.55,0) {perihelio};
+\draw[<->, blue!60!black, thick]
+    (-4.20,-0.90) -- (-1.55,-0.90);
+\node[callout, text=blue!70!black] at (-2.88,-0.90)
+    {$q$: distancia perihélica};
+
+\node[
+    note, draw=blue!55!black, fill=blue!5,
+    rounded corners=3pt, inner sep=3pt
+] at (-3.85,-2.05)
+    {Energía orbital específica $\varepsilon=0$\\
+     velocidad asintótica $v_\infty=0$};
+
+\node[callout, text=blue!70!black] at (-6.10,-1.32) {entrada};
+\node[callout, text=blue!70!black] at (-6.10,1.32) {salida};
+
+% -----------------------------------------------------------------
+% Panel hiperbólico
+% -----------------------------------------------------------------
+\shade[ball color=yellow!85, draw=orange!80!black, thick]
+    (3.57,0) circle (0.42);
+\node[font=\scriptsize\bfseries, text=orange!70!black]
+    at (3.57,-0.68) {Sol: foco};
+
+% Hipérbola de centro (1.30,0), semiejes a=1.75 y b=1.45.
+% Sus asíntotas son y=+-(b/a)(x-1.30), y el Sol ocupa el foco derecho.
+\draw[red!55!black, dashed, thick]
+    (0.55,-0.62) -- (4.10,2.32);
+\draw[red!55!black, dashed, thick]
+    (0.55,0.62) -- (4.10,-2.32);
+\node[callout, text=red!65!black, rotate=31]
+    at (1.72,0.38) {asíntota};
+\node[callout, text=red!65!black, rotate=-31]
+    at (1.72,-0.38) {asíntota};
+
+% Rama derecha de la hipérbola; el vértice corresponde al perihelio.
+\draw[orbitH]
+    plot[smooth] coordinates {
+        (4.33,2.05) (3.91,1.60) (3.57,1.20) (3.30,0.80)
+        (3.12,0.40) (3.05,0)
+        (3.12,-0.40) (3.30,-0.80) (3.57,-1.20)
+        (3.91,-1.60) (4.33,-2.05)
+    };
+
+\draw[directionH]
+    (4.18,1.88)
+    .. controls (3.82,1.52) and (3.48,1.14) .. (3.28,0.78);
+\draw[directionH]
+    (3.28,-0.78)
+    .. controls (3.48,-1.14) and (3.82,-1.52) .. (4.18,-1.88);
+
+% Perihelio y distancia q
+\fill[red!75!black] (3.05,0) circle (2.4pt);
+\node[callout, text=red!70!black, above left=1mm and -1mm]
+    at (3.05,0) {perihelio};
+\draw[<->, red!60!black, thick]
+    (3.05,-0.90) -- (3.57,-0.90);
+\node[callout, text=red!70!black] at (3.31,-0.90) {$q$};
+
+\node[
+    note, draw=red!55!black, fill=red!5,
+    rounded corners=3pt, inner sep=3pt
+] at (3.85,-2.05)
+    {Energía orbital específica $\varepsilon>0$\\
+     velocidad asintótica $v_\infty>0$};
+
+\node[callout, text=red!70!black] at (4.72,1.62) {entrada};
+\node[callout, text=red!70!black] at (4.72,-1.62) {salida};
+
+% Comparación de excentricidad
+\draw[black!55, thick, -{Stealth[length=2.2mm]}]
+    (-6.45,-3.08) -- (6.45,-3.08)
+    node[right, font=\scriptsize] {excentricidad $e$};
+\fill[blue!8] (-6.35,-3.33) rectangle (0,-2.83);
+\fill[red!8] (0,-3.33) rectangle (6.35,-2.83);
+\draw[black!65, thick] (0,-3.38) -- (0,-2.76);
+\node[font=\scriptsize, text=blue!70!black]
+    at (-3.20,-3.08) {$e<1$: órbitas ligadas};
+\node[
+    circle, fill=blue!75!black, draw=white,
+    minimum size=5mm, font=\tiny\bfseries, text=white
+] at (0,-3.08) {$1$};
+\node[font=\scriptsize, text=red!70!black]
+    at (3.20,-3.08) {$e>1$: órbitas no ligadas};
+
+\end{tikzpicture}
+\caption{Comparación geométrica entre una órbita parabólica y una órbita hiperbólica. La parábola representa el caso límite $e=1$, con energía orbital específica nula, mientras que la hipérbola posee $e>1$, energía positiva y asíntotas que describen una velocidad residual distinta de cero lejos del Sol.}
+\end{figure}

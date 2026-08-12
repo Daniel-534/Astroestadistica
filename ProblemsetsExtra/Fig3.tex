@@ -1,0 +1,55 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >=Stealth,
+    roverbody/.style={rectangle, rounded corners=4pt, draw=black!65, fill=gray!15, minimum width=29mm, minimum height=12mm},
+    wheel/.style={circle, draw=black!70, fill=black!18, minimum size=7mm},
+    fail/.style={rectangle, rounded corners=3pt, draw=red!70!black, fill=red!8, minimum width=31mm, minimum height=10mm, align=center, font=\scriptsize\bfseries},
+    ok/.style={rectangle, rounded corners=3pt, draw=green!45!black, fill=green!10, minimum width=34mm, minimum height=10mm, align=center, font=\scriptsize\bfseries},
+    line/.style={draw=black!45, thick, -{Stealth[length=2.1mm]}},
+    warn/.style={draw=red!70!black, thick, dashed},
+    note/.style={align=center, font=\scriptsize}
+]
+
+\fill[brown!12] (-5.2,-1.65) rectangle (5.2,-2.35);
+\draw[brown!55!black, thick] (-5.2,-1.65) .. controls (-3.5,-1.45) and (-2.2,-1.85) .. (-0.8,-1.62)
+    .. controls (0.7,-1.36) and (2.4,-1.88) .. (5.2,-1.58);
+\foreach \x/\y in {-4.5/-1.86,-3.7/-2.08,-2.9/-1.75,2.7/-1.96,3.55/-1.78,4.25/-2.12}
+    \fill[brown!45!black] (\x,\y) circle (0.035);
+
+\node[roverbody] (body) at (0,0) {};
+\node[wheel] at (-0.95,-0.73) {};
+\node[wheel] at (0.95,-0.73) {};
+\draw[black!65, thick] (-0.95,-0.73) circle (0.18);
+\draw[black!65, thick] (0.95,-0.73) circle (0.18);
+\draw[black!65, thick] (-0.55,0.62) -- (-0.2,1.12) -- (0.45,1.12);
+\draw[fill=blue!18, draw=blue!60!black] (0.45,0.92) rectangle (1.3,1.32);
+\node[font=\tiny, text=blue!60!black, fill=white, inner sep=0.6pt, anchor=south west]
+    at (1.35,1.38) {panel solar};
+\draw[black!60, thick] (1.28,-0.05) -- (2.1,-0.75);
+\draw[black!60, thick] (2.1,-0.75) -- (2.1,-1.55);
+\draw[fill=orange!35, draw=orange!80!black] (1.93,-1.55) rectangle (2.27,-1.88);
+\node[font=\scriptsize\bfseries] at (0,0.03) {Rover};
+\node[note] at (2.85,-1.25) {taladro\\muestreo};
+
+\node[ok] (success) at (0,2.05) {$F'$: ciclo sin fallas\\$P(F')=0.92$};
+\node[fail] (jam) at (-3.55,0.65) {$A$: atasco\\mecánico $0.04$};
+\node[fail] (heat) at (3.55,0.65) {$B$: sobrecarga\\térmica $0.03$};
+\node[fail] (bus) at (0,-2.95) {$C$: pérdida de\\comunicación $0.01$};
+
+\draw[line, green!45!black] (body) -- (success);
+\draw[warn] (body.west) -- (jam.east);
+\draw[warn] (body.east) -- (heat.west);
+\draw[warn] (body.south) -- (bus.north);
+
+\draw[green!45!black, line width=4pt] (-2.8,2.85) -- (2.25,2.85);
+\draw[red!70!black, line width=4pt] (2.25,2.85) -- (2.69,2.85);
+\node[font=\tiny, green!40!black] at (-0.25,3.1) {92\% operación nominal};
+\node[font=\tiny, red!70!black] at (2.47,3.1) {8\% falla};
+
+\node[note, text=black!70] at (0,-3.75) {Los tres modos de falla compiten como causas raíz mutuamente excluyentes;\\su unión forma el evento total de falla $F=A\cup B\cup C$.};
+
+\end{tikzpicture}
+\caption{Escena conceptual de un ciclo de perforación de un rover marciano. La barra superior resume la confiabilidad del ciclo: la mayor parte corresponde al evento complementario $F'$ (operación nominal), mientras que el segmento rojo agrupa los modos de falla $A$, $B$ y $C$.}
+\end{figure}
