@@ -1,0 +1,198 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage[margin=2cm]{geometry}
+\usepackage{float}
+\usepackage{parskip}
+
+
+\begin{document}
+
+\section*{Problemset 2 -- Soluciones}
+
+%==============================================================
+\section{Problema 1: Variable aleatoria discreta}
+
+Se presenta una tabla de distribución de probabilidad de una variable aleatoria discreta $X$. Se pide:
+
+\begin{enumerate}[label=\alph*)]
+    \item Describir la función de masa de probabilidad (FMP) de $X$ y representarla gráficamente.
+    \item Describir la función de distribución acumulada (FDA) de $X$ y representarla gráficamente.
+    \item Calcular la probabilidad indicada.
+    \item Calcular $E(X)$ y $\operatorname{Var}(X)$.
+    \item Comparar los resultados obtenidos para distintas variables.
+    \item Describir la distribución de probabilidades de $X$ y comparar.
+\end{enumerate}
+
+\subsection{Solución}
+
+\textbf{a)} La función de masa de probabilidad (FMP) de una variable aleatoria discreta $X$ se define como
+$$p(x) = P(X = x), \quad \text{para cada valor posible } x,$$
+con las condiciones $p(x)\geq 0$ para todo $x$ y $\displaystyle\sum_x p(x) = 1$.
+
+Se representa mediante una gráfica lineal: sobre cada valor $x$ con $p(x)>0$ se coloca un punto a altura $p(x)$.
+
+\textbf{b)} La función de distribución acumulada se define como
+$$F(x) = P(X \leq x) = \sum_{t \leq x} p(t).$$
+Es una función escalonada, no decreciente, con $\lim_{x\to -\infty}F(x)=0$ y $\lim_{x\to\infty}F(x)=1$.
+
+\textbf{d)} El valor esperado y la varianza se calculan como
+$$E(X) = \sum_x x\, p(x),$$
+$$\operatorname{Var}(X) = E(X^2) - [E(X)]^2 = \sum_x x^2\, p(x) - \left[\sum_x x\, p(x)\right]^2.$$
+
+\textbf{e) y f)} Se comparan los resultados de $E(X)$, $\operatorname{Var}(X)$ y la forma de la distribución entre las distintas variables o escenarios planteados, verificando que las sumas de probabilidades sean 1 y que las propiedades se cumplan.
+
+%==============================================================
+\section{Problema 2: Variable aleatoria continua}
+
+Sea $X$ una variable aleatoria continua con función de densidad de probabilidad dada. Se pide:
+
+\begin{enumerate}[label=\alph*)]
+    \item Describir la función de densidad de probabilidad (FDP) de $X$ y representarla gráficamente.
+    \item Describir la función de distribución acumulada (FDA) de $X$ y representarla gráficamente.
+    \item Calcular la probabilidad indicada.
+    \item Calcular $E(X)$ y $\operatorname{Var}(X)$.
+    \item Comparar con los resultados de otra variable $N$.
+    \item Describir la distribución de $X$ y comparar con $N$.
+\end{enumerate}
+
+\subsection{Solución}
+
+\textbf{a)} La función de densidad de probabilidad $f(x)$ debe satisfacer:
+$$f(x) \geq 0 \quad \forall\, x, \qquad \int_{-\infty}^{\infty} f(x)\,dx = 1.$$
+Para cualquier intervalo $[a,b]$:
+$$P(a \leq X \leq b) = \int_a^b f(x)\,dx.$$
+
+\textbf{b)} La FDA se obtiene integrando la FDP:
+$$F(x) = P(X \leq x) = \int_{-\infty}^{x} f(t)\,dt.$$
+Es una función continua, no decreciente, con $F(-\infty)=0$ y $F(+\infty)=1$.
+
+\textbf{d)} Para una variable continua:
+$$E(X) = \int_{-\infty}^{\infty} x\, f(x)\,dx,$$
+$$E(X^2) = \int_{-\infty}^{\infty} x^2\, f(x)\,dx,$$
+$$\operatorname{Var}(X) = E(X^2) - [E(X)]^2.$$
+
+\textbf{e) y f)} Se comparan $E(X)$, $\operatorname{Var}(X)$ y la forma de la distribución de $X$ con los de $N$, verificando si tienen la misma estructura distribucional.
+
+%==============================================================
+\section{Problema 3: Distribución y comparación}
+
+Se plantea un problema sobre una distribución de probabilidad específica y se pide comparar con otra distribución o variable.
+
+\subsection{Solución}
+
+Se identifican los parámetros de la distribución, se calculan $E(X)$, $\operatorname{Var}(X)$ y se comparan con los de la otra variable o distribución indicada, verificando si las propiedades distribucionales coinciden.
+
+%==============================================================
+\section{Problema 4: Intervalos de confianza}
+
+Se plantea un problema sobre la construcción de un intervalo de confianza para un parámetro poblacional.
+
+\subsection{Solución}
+
+Dependiendo del contexto (media, proporción, varianza), se construye el intervalo de confianza apropiado:
+
+Para una media $\mu$ con $\sigma$ conocida:
+$$\bar{x} \pm z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}}.$$
+
+Para una media $\mu$ con $\sigma$ desconocida:
+$$\bar{x} \pm t_{\alpha/2,\, n-1}\,\frac{s}{\sqrt{n}}.$$
+
+Para una proporción $p$:
+$$\hat{p} \pm z_{\alpha/2}\,\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}.$$
+
+%==============================================================
+\section{Problema 5: Comparación de dos poblaciones}
+
+Se plantea un problema de comparación de dos poblaciones o de prueba de hipótesis sobre la diferencia de medias o proporciones.
+
+\subsection{Solución}
+
+Para comparar dos medias $\mu_1$ y $\mu_2$ con muestras independientes:
+
+\textbf{Estadístico de prueba (muestras grandes):}
+$$Z = \frac{\bar{X} - \bar{Y}}{\sqrt{\dfrac{S_1^2}{m} + \dfrac{S_2^2}{n}}}.$$
+
+\textbf{Prueba $t$ con dos muestras (varianzas desconocidas):}
+$$T = \frac{\bar{X} - \bar{Y}}{\sqrt{\dfrac{S_1^2}{m} + \dfrac{S_2^2}{n}}},$$
+con grados de libertad aproximados dados por la fórmula de Welch--Satterthwaite.
+
+\textbf{Intervalo de confianza para $\mu_1 - \mu_2$:}
+$$(\bar{x} - \bar{y}) \pm t_{\alpha/2,\,\nu}\,\sqrt{\frac{s_1^2}{m} + \frac{s_2^2}{n}},$$
+donde $\nu$ son los grados de libertad aproximados.
+
+\textbf{Para datos apareados:} se trabaja con las diferencias $d_i = x_i - y_i$ y se aplica una prueba $t$ de una muestra a las diferencias:
+$$T = \frac{\bar{d}}{s_d / \sqrt{n}},$$
+con $n-1$ grados de libertad.
+
+\section{Problema 6: Estrellas variables}
+
+En un cúmulo estelar se han identificado $N=14$ estrellas variables, de las cuales $10$ son de tipo Cefeidas y $4$ son de tipo RR~Lyrae. Se seleccionan $n=5$ estrellas al azar (sin reemplazo) para un estudio.
+
+\begin{enumerate}[label=\alph*)]
+    \item ¿Cuál es la media (valor esperado) del número de estrellas de tipo RR~Lyrae en la muestra?
+    \item Determine la probabilidad de que el número de Cefeidas entre las $5$ estrellas observadas exceda su valor medio en más de una desviación estándar.
+    \item Suponga que ahora se tiene un conjunto de $300$ estrellas variables, de las cuales $30$ son de tipo Cefeidas. Si se escogen $4$ estrellas al azar, ¿cuál es la probabilidad de que al menos $1$ estrella sea Cefeidas? Analice la posibilidad de utilizar una distribución diferente a la hipergeométrica y explique.
+\end{enumerate}
+
+\subsection{Solución}
+
+El experimento consiste en extraer $n$ estrellas sin reemplazo de una población finita de $N$ estrellas, donde $M$ son de un tipo de interés. Esto corresponde a una distribución hipergeométrica. Según Devore (sección 3.5), si $X$ es el número de ``éxitos'' en la muestra, entonces:
+$$X \sim \text{Hipergeométrica}(n, M, N), \qquad P(X=x)=h(x;n,M,N)=\frac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}$$
+
+\subsection*{Inciso a)}
+
+Sea $X_{RR}$ el número de estrellas RR~Lyrae en la muestra de $n=5$. Aquí $N=14$, $M=4$ (RR~Lyrae), $n=5$.
+
+La esperanza de una variable hipergeométrica es (Devore, sección 3.5):
+$$E(X_{RR})=n\cdot\frac{M}{N}=5\cdot\frac{4}{14}=\frac{20}{14}=\frac{10}{7}\approx 1.4286$$
+
+Por tanto, en promedio se esperan aproximadamente $1.43$ estrellas RR~Lyrae en la muestra de $5$.
+
+\subsection*{Inciso b)}
+
+Ahora sea $X_{C}$ el número de Cefeidas en la muestra. Aquí $N=14$, $M=10$ (Cefeidas), $n=5$.
+
+\textbf{Valor esperado:}
+$$E(X_C)=n\cdot\frac{M}{N}=5\cdot\frac{10}{14}=\frac{50}{14}=\frac{25}{7}\approx 3.5714$$
+
+\textbf{Varianza:} La varianza de la hipergeométrica incluye el factor de corrección por población finita:
+$$V(X_C)=n\cdot\frac{M}{N}\cdot\left(1-\frac{M}{N}\right)\cdot\frac{N-n}{N-1}$$
+$$V(X_C)=5\cdot\frac{10}{14}\cdot\frac{4}{14}\cdot\frac{9}{13}=\frac{5\cdot 10\cdot 4\cdot 9}{14\cdot 14\cdot 13}=\frac{1800}{2548}\approx 0.7064$$
+
+La desviación estándar es:
+$$\sigma_{X_C}=\sqrt{0.7064}\approx 0.8405$$
+
+Se pide:
+$$P\!\left(X_C > E(X_C)+\sigma_{X_C}\right)=P(X_C > 3.5714+0.8405)=P(X_C>4.412)$$
+
+Como $X_C$ solo toma valores enteros $\{0,1,2,3,4,5\}$, se tiene:
+$$P(X_C>4.412)=P(X_C=5)$$
+
+Calculamos:
+$$P(X_C=5)=\frac{\binom{10}{5}\binom{4}{0}}{\binom{14}{5}}=\frac{252\cdot 1}{2002}=\frac{252}{2002}\approx 0.1259$$
+
+Por tanto, la probabilidad de que el número de Cefeidas exceda su valor medio en más de una desviación estándar es aproximadamente $0.126$.
+
+\subsection*{Inciso c)}
+
+Ahora $N=300$, $M=30$ (Cefeidas), $n=4$. Sea $Y$ el número de Cefeidas en la muestra.
+
+\textbf{Cálculo exacto (hipergeométrica):}
+$$P(Y\geq 1)=1-P(Y=0)=1-\frac{\binom{270}{4}}{\binom{300}{4}}$$
+
+$$P(Y=0)=\frac{\binom{270}{4}}{\binom{300}{4}}=\frac{270\cdot 269\cdot 268\cdot 267}{300\cdot 299\cdot 298\cdot 297}$$
+
+$$P(Y=0)=\frac{270}{300}\cdot\frac{269}{299}\cdot\frac{268}{298}\cdot\frac{267}{297}\approx 0.9\cdot 0.8997\cdot 0.8993\cdot 0.8990\approx 0.6520$$
+
+$$P(Y\geq 1)\approx 1-0.6520=0.3480$$
+
+\textbf{Aproximación binomial:} Dado que $n/N=4/300\approx 0.013<0.05$, se cumple la regla empírica (Devore, sección 3.5) que permite aproximar la hipergeométrica por una binomial con $p=M/N=30/300=0.1$:
+$$Y\approx \text{Bin}(4,\,0.1)$$
+$$P(Y\geq 1)=1-P(Y=0)=1-(0.9)^4=1-0.6561=0.3439$$
+
+\textbf{Análisis:} La aproximación binomial ($0.3439$) es muy cercana al valor exacto hipergeométrico ($0.3480$), con una diferencia menor a $0.005$. Esto es consistente con la regla empírica: cuando $n/N<0.05$, el muestreo sin reemplazo se comporta casi como muestreo con reemplazo, y la distribución binomial es una aproximación adecuada. La ventaja de la aproximación binomial es su simplicidad computacional, ya que no requiere calcular coeficientes binomiales grandes.
+
+\end{document}
