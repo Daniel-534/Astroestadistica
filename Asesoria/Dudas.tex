@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage[margin=2cm]{geometry}
+
+\title{Problemas seleccionados para asesoría}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\section{Error Radial en el Elipse de Aterrizaje de un Rover}
+
+Análisis de desempeño de navegación y los márgenes de error en las misiones a Marte (\textit{Modern Spacecraft Guidance, Navigation, and Control}, Capítulo sobre \textit{Entry, Descent, and Landing Systems}).
+
+
+Cuando un rover es lanzado hacia la superficie marciana, el punto de impacto real rara vez coincide con el punto de referencia (target). Definimos la variable aleatoria continua $X$ como el error radial de aterrizaje, es decir, la distancia euclidiana (en kilómetros) desde el centro del elipse de aterrizaje designado hasta el punto de impacto real.
+
+Debido a que los errores en los ejes ortogonales (Norte y Este) suelen modelarse como variables normales independientes con media cero y misma varianza, la distancia radial resultante $X$ sigue una Distribución de Rayleigh. La Función de Densidad de Probabilidad (FDP) del error radial es:
+$$ f(x) = \begin{cases} \frac{x}{\sigma^2} e^{-x^2 / (2\sigma^2)} & \text{para } x \ge 0 \\ 0 & \text{en otro caso} \end{cases} $$
+donde $\sigma$ es el parámetro de escala que representa la dispersión característica del sistema de navegación.
+
+\begin{enumerate}[a)]
+    \item Derive la Función de Distribución Acumulativa (FDA) del error radial $X$.
+    \item En la literatura de Guiado, Navegación y Control (GNC), el CEP (Circular Error Probable) es la métrica estándar de precisión. Se define como el radio del círculo centrado en el target que contiene el 50\% de las probabilidades de impacto. Calcule el CEP para esta distribución. Para realizar el cálculo, denote el radio CEP por $r_{\mathrm{CEP}}$, plantee la ecuación $F(r_{\mathrm{CEP}})=0.5$ usando la FDA obtenida en el inciso anterior y despeje $r_{\mathrm{CEP}}$ en términos de $\sigma$.
+    \item Las zonas de seguridad para evitar terrenos peligrosos (como cráteres o pendientes pronunciadas) suelen definirse como un radio de $3\sigma$ desde el centro. Calcule la probabilidad de que el rover aterrice fuera de esta zona segura.
+    \item Supongamos que los sensores de a bordo detectan anomalías durante el descenso, y se sabe con certeza que el rover ha aterrizado a más de $1\sigma$ del centro (es decir, ya está fuera de la zona de error nominal). Calcule la probabilidad condicional de que el error radial supere los $2\sigma$.
+    \item Preguntas conceptuales sobre el modelo:
+    \begin{itemize}
+        \item ¿Cuál es el significado físico y estadístico del parámetro $\sigma$ en el contexto del sistema de navegación del rover?
+        \item ¿Por qué es matemática y físicamente apropiado utilizar la distribución de Rayleigh para modelar el error radial bajo las suposiciones dadas?
+        \item ¿Qué representa operacionalmente el CEP para el equipo de ingeniería de la misión?
+    \end{itemize}
+\end{enumerate}
+
+
+\section{Propagación de Error en el Sistema de Magnitudes Fotométricas}
+
+En la astronomía observacional, la relación entre el flujo físico medido por un detector y la magnitud aparente reportada en los catálogos es altamente no lineal. Inspirados en los principios de fotometría y propagación de errores (\textit{Astronomical Measurement}, Capítulo sobre \textit{Photometry and Magnitudes}), analizaremos un problema complejo de transformación de variables aleatorias continuas.
+
+La magnitud aparente $m$ de una fuente astrofísica se define en función de su flujo medido $f$ mediante la ecuación:
+$$ m = -2.5 \log_{10}(f) + C $$
+donde $C$ es el punto cero fotométrico (una constante instrumental). 
+
+Supongamos que, debido a las características de ruido de un detector en el límite de sensibilidad o a la distribución estadística de una población de fuentes débiles, el flujo $f$ sigue una distribución exponencial con parámetro de tasa $\lambda > 0$. La función de densidad de probabilidad del flujo es:
+$$ g(f) = \lambda e^{-\lambda f}, \quad \text{para } f > 0 $$
+
+Para los cálculos puede utilizar la identidad
+$$
+\log_{10}(f)=\frac{\ln(f)}{\ln(10)}
+$$
+y definir la constante de escala $k=2.5/\ln(10)$. También puede emplear los siguientes resultados, donde $\gamma\approx 0.5772$ es la constante de Euler--Mascheroni:
+$$
+\int_{0}^{\infty}e^{-x}\,dx=1, \qquad
+\int_{0}^{\infty}\ln(x)e^{-x}\,dx=-\gamma,
+$$
+$$
+\int_{0}^{\infty}(\ln x)^2e^{-x}\,dx
+=\gamma^2+\frac{\pi^2}{6}.
+$$
+
+\begin{enumerate}[a)]
+    \item Reescriba la magnitud aparente en términos del logaritmo natural y de la constante $k$.
+    \item Calcule el valor esperado $E(m)$. Plantee la integral correspondiente y realice el cambio de variable $x=\lambda f$, teniendo en cuenta que $\ln(f)=\ln(x)-\ln(\lambda)$.
+    \item Calcule la varianza $V(m)$. Puede utilizar la definición $V(m)=E[(m-E(m))^2]$, el cambio de variable del inciso anterior y las identidades integrales proporcionadas.
+    \item Sustituya $k=2.5/\ln(10)$ en la expresión obtenida para $V(m)$ y determine su valor numérico aproximado.
+    \item Preguntas conceptuales sobre el modelo:
+    \begin{itemize}
+        \item ¿Cómo influyen el parámetro de tasa $\lambda$ y el punto cero instrumental $C$ en el valor esperado de la magnitud?
+        \item ¿Depende la varianza de la magnitud de $\lambda$ o de $C$? Justifique su respuesta a partir del resultado obtenido.
+        \item ¿Qué interpretación física tiene la transformación logarítmica del flujo en el sistema de magnitudes fotométricas?
+    \end{itemize}
+\end{enumerate}
+
+\end{document}
