@@ -32,12 +32,12 @@ Un evento astronómico raro ocurrirá en una ventana de observación específica
 \begin{enumerate}[a.]
 	\item $(10\%)$ Sean  $T_1$ y $T_2$ los tiempos de inicio de los observadores $1$ y $2$ respectivamente. Escriba las funciones de distribución de probabilidad para $T_1$ y $T_2$ y su función de densidad conjunta.
 	\item $(5\%)$ Haga una representación gráfica de $(t_1,t_2)$ para la que los observadores pueden estar observando simultáneamente.
-	\item $(15\%)$ ¿Cuál es la probabilidad de que ambos observadores esten observando simultáneamente en algún instante?
+	\item $(15\%)$ ¿Cuál es la probabilidad de que ambos observadores estén observando simultáneamente en algún instante?
 \end{enumerate}
 
 \subsection{Solución}
 \begin{enumerate}[a.]
-\item Bajo la interpretación indicada, cada observador puede iniciar en cualquier instante de la hora de observación, incluso si parte de su intervalo queda fuera de la ventana. Por tanto:
+\item Tomamos el inicio de la ventana como $t=0$ y medimos los tiempos en minutos. Interpretamos que cada observador puede iniciar en cualquier instante de la hora de observación, incluso si parte de su intervalo queda fuera de la ventana. Por tanto:
 $$T_1 \sim \mathrm{Unif}(0,60), \qquad T_2 \sim \mathrm{Unif}(0,60),$$
 e independientes.
 
@@ -88,90 +88,85 @@ $$[T_1,T_1+10]\cap[T_2,T_2+20]\neq\varnothing.$$
 Esto equivale a exigir simultáneamente
 $$T_1 \le T_2+20 \qquad \text{y} \qquad T_2 \le T_1+10,$$
 o, de manera equivalente,
-$$T_2 \ge T_1-10, \qquad T_2 \le T_1+20,$$
+$$T_2 \ge T_1-20, \qquad T_2 \le T_1+10,$$
 junto con el soporte $0\le T_1\le 60$, $0\le T_2\le 60$.
 
-Gráficamente, en el plano $(t_1,t_2)$, la región de simultaneidad es la intersección del cuadrado $[0,60]\times[0,60]$ con la franja delimitada por las rectas $t_2=t_1-10$ y $t_2=t_1+20$:
+\input{Figuras/intervalos_observacion.tex}
 
-\begin{center}
-\shorthandoff{<>}
-\begin{tikzpicture}[scale=0.09]
-  % axes
-  \draw[->] (-3,0) -- (67,0) node[below right] {$t_1$ (min)};
-  \draw[->] (0,-3) -- (0,67) node[above left] {$t_2$ (min)};
+Para comprobar el sentido de estos límites, distinguimos quién inicia primero. Si $T_2\ge T_1$, el observador 1 debe seguir observando cuando comienza el 2, por lo que $T_2-T_1\le 10$. Si $T_2\le T_1$, el observador 2 debe seguir observando cuando comienza el 1, por lo que $T_1-T_2\le 20$. Así, el límite superior es $t_2=t_1+10$ y el inferior es $t_2=t_1-20$; las duraciones no se intercambian.
 
-  % support square
-  \draw[thick] (0,0) rectangle (60,60);
+Además, cuando hay traslape, ambos están observando en el instante $\max\{T_1,T_2\}$, que pertenece a $[0,60]$. Por ello, permitir que una sesión termine después del minuto $60$ no introduce coincidencias que ocurran exclusivamente fuera de la ventana.
 
-  % boundary lines of the band
-  \draw[blue, thick] (10,0) -- (60,50)
-    node[pos=0.92, below right, fill=white, inner sep=1pt] {$t_2=t_1-10$};
-  \draw[red, thick] (0,20) -- (40,60)
-    node[pos=0.78, above left, fill=white, inner sep=1pt] {$t_2=t_1+20$};
 
-  % feasible region: (0,0)-(10,0)-(60,50)-(60,60)-(40,60)-(0,20)
-  \fill[gray!25] (0,0) -- (10,0) -- (60,50) -- (60,60) -- (40,60) -- (0,20) -- cycle;
+Gráficamente, en el plano $(t_1,t_2)$, la región de simultaneidad es la intersección del cuadrado $[0,60]\times[0,60]$ con la franja delimitada por las rectas $t_2=t_1-20$ y $t_2=t_1+10$:
 
-  % vertices
-  \foreach \x/\y in {0/0,10/0,60/50,60/60,40/60,0/20}{
-    \fill (\x,\y) circle (1.15);
-  }
+Los vértices de esta región, recorridos en orden, son
+$$
+(0,0),\ (20,0),\ (60,40),\ (60,60),\ (50,60),\ (0,10).
+$$
 
-  % vertex labels (offset to avoid overlap)
-  \node[below left]  at (0,0)   {$(0,0)$};
-  \node[below]       at (10,0)  {$(10,0)$};
-  \node[right]       at (60,50) {$(60,50)$};
-  \node[above right] at (60,60) {$(60,60)$};
-  \node[above]       at (40,60) {$(40,60)$};
-  \node[left]        at (0,20)  {$(0,20)$};
+\input{Figuras/region_simultaneidad.tex}
 
-  % region label
-  \node[fill=white, inner sep=1.2pt] at (26,31) {Región de simultaneidad};
-\end{tikzpicture}
-\shorthandon{<>}
-\end{center}
+\item \textbf{Justificación de la equivalencia geométrica.}
+Como los tiempos de inicio son independientes y uniformes en $[0,60]$, su densidad conjunta es constante:
+$$
+f_{T_1,T_2}(t_1,t_2)=\frac{1}{3600},
+\qquad (t_1,t_2)\in S=[0,60]\times[0,60].
+$$
+Por definición, la probabilidad de que el par $(T_1,T_2)$ pertenezca a una región medible $D\subseteq S$ se obtiene integrando la densidad conjunta sobre ella. Al ser constante, puede extraerse de la integral:
+$$
+P\bigl((T_1,T_2)\in D\bigr)
+=\iint_D f_{T_1,T_2}(t_1,t_2)\,dt_1\,dt_2
+=\frac{1}{3600}\iint_D 1\,dt_1\,dt_2
+=\frac{\text{Área}(D)}{3600}.
+$$
+Así, la probabilidad es el cociente entre el área de la región favorable y el área total del cuadrado, $\text{Área}(S)=60\cdot60=3600$. Esta equivalencia se debe a la uniformidad de la densidad conjunta; no es válida en general para una densidad no constante.
 
-\item Como $(T_1,T_2)$ es uniforme sobre el cuadrado $[0,60]\times[0,60]$, la probabilidad buscada es el área de la región sombreada dividida entre $60\cdot 60$.
+\textbf{Región de simultaneidad.}
+Los intervalos de observación se intersectan si y sólo si
+$$
+T_1\le T_2+20
+\quad\text{y}\quad
+T_2\le T_1+10,
+$$
+es decir, si $T_1-20\le T_2\le T_1+10$. Por tanto, la región favorable es
+$$
+D=\bigl\{(t_1,t_2)\in S: t_1-20\le t_2\le t_1+10\bigr\}.
+$$
 
-Para un $t_1$ fijo, los valores admisibles de $t_2$ satisfacen:
-$$\max\{0,t_1-10\}\le t_2 \le \min\{60,t_1+20\}.$$
-Luego la ``altura'' de la región (en dirección $t_2$) es
-$$h(t_1)=\min\{60,t_1+20\}-\max\{0,t_1-10\}.$$
-
-Partimos según los puntos donde cambian los recortes: $t_1=10$ (cuando $t_1-10$ cruza $0$) y $t_1=40$ (cuando $t_1+20$ cruza $60$).
-
+\textbf{Cálculo del área mediante el complemento.}
+En lugar de dividir la región sombreada en varias partes, restamos del cuadrado los dos triángulos donde no hay simultaneidad:
 \begin{itemize}
-\item Si $0\le t_1\le 10$:
-$$h(t_1)=(t_1+20)-0=t_1+20.$$
-\item Si $10\le t_1\le 40$:
-$$h(t_1)=(t_1+20)-(t_1-10)=30.$$
-\item Si $40\le t_1\le 60$:
-$$h(t_1)=60-(t_1-10)=70-t_1.$$
+\item Si $t_2>t_1+10$, el segundo observador comienza después de que el primero haya terminado. La recta $t_2=t_1+10$ corta al cuadrado en $(0,10)$ y $(50,60)$. La región excluida es un triángulo rectángulo con vértices $(0,10)$, $(0,60)$ y $(50,60)$, cuyos catetos miden $50$ minutos. Su área es
+$$A_1=\frac{1}{2}(60-10)^2=1250.$$
+\item Si $t_2<t_1-20$, el primero comienza después de que el segundo haya terminado. La recta $t_2=t_1-20$ corta al cuadrado en $(20,0)$ y $(60,40)$. La región excluida es un triángulo rectángulo con vértices $(20,0)$, $(60,0)$ y $(60,40)$, cuyos catetos miden $40$ minutos. Su área es
+$$A_2=\frac{1}{2}(60-20)^2=800.$$
 \end{itemize}
-
-El área de simultaneidad es entonces
+Estas dos regiones son disjuntas y abarcan todos los casos sin traslape. Las rectas frontera tienen área, y por tanto probabilidad, cero, de modo que incluir o excluir los casos en que los intervalos sólo comparten un extremo no altera el resultado. En consecuencia,
 $$
-A=\int_0^{10}(t_1+20)\,dt_1+\int_{10}^{40}30\,dt_1+\int_{40}^{60}(70-t_1)\,dt_1.
+\text{Área}(D)=3600-1250-800=1550,
 $$
-Calculamos cada término:
+y la probabilidad buscada es
 $$
-\int_0^{10}(t_1+20)\,dt_1=\left[\frac{t_1^2}{2}+20t_1\right]_0^{10}=50+200=250,
-$$
-$$
-\int_{10}^{40}30\,dt_1=30(30)=900,
-$$
-$$
-\int_{40}^{60}(70-t_1)\,dt_1=\left[70t_1-\frac{t_1^2}{2}\right]_{40}^{60}=(4200-1800)-(2800-800)=400.
-$$
-Por tanto,
-$$A=250+900+400=1550.$$
-
-El área total del cuadrado es $60\cdot 60=3600$, y como la densidad conjunta es constante en dicho cuadrado, se sigue que
-$$
-P(\text{simultaneidad})=\frac{A}{3600}=\frac{1550}{3600}=\frac{31}{72}\approx 0.431.
+\boxed{P(\text{simultaneidad})=\frac{1550}{3600}=\frac{31}{72}\approx 0.4306.}
 $$
 
-\textit{Interpretación:} si ambos inician en un instante aleatorio de la hora (sin exigir que su sesión completa quede dentro), la probabilidad de que sus intervalos de observación se traslapen en algún instante es $31/72$, un valor menor que $1/2$ porque ahora es posible que alguno empiece muy cerca del final de la hora, reduciendo la oportunidad de coincidencia.
+\textbf{Comprobación por integración directa.}
+Para cada $t_1\in[0,60]$, la sección vertical de la región correcta satisface
+$$
+\max\{0,t_1-20\}\le t_2\le\min\{60,t_1+10\}.
+$$
+El límite inferior cambia en $t_1=20$ y el superior en $t_1=50$. Por tanto,
+\begin{align*}
+\text{Área}(D)
+&=\int_0^{20}(t_1+10)\,dt_1
+ +\int_{20}^{50}30\,dt_1
+ +\int_{50}^{60}(80-t_1)\,dt_1\\
+&=400+900+250=1550,
+\end{align*}
+lo que confirma tanto la región representada como la probabilidad obtenida por el complemento.
+
+\textit{Interpretación:} bajo el supuesto de que ambos pueden iniciar en cualquier instante de la hora, la probabilidad de que coincidan observando en algún instante es aproximadamente $43.06\%$. Se calcula la probabilidad de traslape de sus intervalos, no la de registrar ambos el evento astronómico, para la cual haría falta modelar también el instante en que ocurre.
 \end{enumerate}
 
 \section{Problema 2: Estructura galáctica}
@@ -198,55 +193,88 @@ donde $R_0>0$ y $\alpha >0$ son constantes.
 \subsection{Solución}
 
 \begin{enumerate}[a.]
-\item Dado
+\item \textbf{Valores de $Z$ que producen un mismo valor de $R$.}
+La variable $Z$ tiene densidad
 $$
-f_Z(z)=\frac{1}{2h}e^{-|z|/h},\qquad z\in\mathbb{R},
+f_Z(z)=\frac{1}{2h}e^{-|z|/h},\qquad z\in\mathbb{R},\quad h>0,
 $$
-y la transformación
-$$
-R=R_0+\alpha Z^2,\qquad R_0>0,\ \alpha>0,
-$$
-se tiene que el soporte de $R$ es $R\in[R_0,\infty)$.
+y se transforma mediante $R=R_0+\alpha Z^2$, con $R_0>0$ y $\alpha>0$. Como $Z^2\ge0$, necesariamente $R\ge R_0$. Por tanto, el soporte de $R$ es $[R_0,\infty)$ y su densidad es cero para $r<R_0$.
 
-Para $r<R_0$, claramente $P(R\le r)=0$. Para $r\ge R_0$,
+Para cada $r>R_0$, despejamos $z$ en la relación dada:
 $$
-P(R\le r)=P(R_0+\alpha Z^2\le r)=P\!\left(Z^2\le \frac{r-R_0}{\alpha}\right)
-= P\!\left(|Z|\le \sqrt{\frac{r-R_0}{\alpha}}\right).
+r=R_0+\alpha z^2
+\quad\Longleftrightarrow\quad
+z^2=\frac{r-R_0}{\alpha}.
 $$
-Sea
+Existen dos valores de $z$ que producen el mismo $r$, uno positivo y otro negativo:
 $$
-a(r)=\sqrt{\frac{r-R_0}{\alpha}}\ge 0.
+z_1(r)=\sqrt{\frac{r-R_0}{\alpha}},
+\qquad
+z_2(r)=-\sqrt{\frac{r-R_0}{\alpha}}.
 $$
-Entonces
+
+\input{Figuras/altura_transformacion.tex}
+
+\textbf{Ecuación para construir la densidad $g(r)$.}
+Como tanto $z_1(r)$ como $z_2(r)$ producen el mismo valor de $r$, debemos sumar sus contribuciones. La fórmula de transformación de densidades es
 $$
-F_R(r)=P(-a(r)\le Z\le a(r))=\int_{-a(r)}^{a(r)}\frac{1}{2h}e^{-|z|/h}\,dz
-=2\int_{0}^{a(r)}\frac{1}{2h}e^{-z/h}\,dz
-=\int_{0}^{a(r)}\frac{1}{h}e^{-z/h}\,dz.
+\boxed{
+g(r)=f_Z\bigl(z_1(r)\bigr)\left|\frac{dz_1}{dr}\right|
+     +f_Z\bigl(z_2(r)\bigr)\left|\frac{dz_2}{dr}\right|,
+\qquad r>R_0.}
 $$
-Así,
+Cada factor $|dz_i/dr|$ es el Jacobiano correspondiente: convierte una pequeña longitud en la variable $r$ en la longitud correspondiente en $z$. Se toma su valor absoluto porque las longitudes y las contribuciones a la probabilidad son no negativas. A continuación calculamos los factores de esta ecuación.
+
+\textbf{Cálculo de los Jacobianos.}
+Derivamos primero la relación $r=R_0+\alpha z^2$:
 $$
-F_R(r)=\left[-e^{-z/h}\right]_{0}^{a(r)}=1-e^{-a(r)/h}
-=1-\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right),\qquad r\ge R_0.
-$$
-Derivando obtenemos la densidad $g(r)=f_R(r)=F_R'(r)$ para $r>R_0$:
-$$
-g(r)=\frac{d}{dr}\left(1-\exp\!\left[-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right]\right)
-=\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right)\cdot
-\frac{1}{h}\cdot \frac{d}{dr}\left(\sqrt{\frac{r-R_0}{\alpha}}\right).
+\frac{dr}{dz}=2\alpha z
+\quad\Longrightarrow\quad
+\left|\frac{dz}{dr}\right|=\frac{1}{2\alpha|z|},
+\qquad z\ne0.
 $$
 Como
 $$
-\frac{d}{dr}\left(\sqrt{\frac{r-R_0}{\alpha}}\right)=\frac{1}{2\sqrt{\alpha(r-R_0)}},
+|z_1(r)|=|z_2(r)|=\sqrt{\frac{r-R_0}{\alpha}},
 $$
-se sigue que
+los dos Jacobianos son iguales:
 $$
+\left|\frac{dz_1}{dr}\right|
+=\left|\frac{dz_2}{dr}\right|
+=\frac{1}{2\alpha\sqrt{(r-R_0)/\alpha}}
+=\frac{1}{2\sqrt{\alpha(r-R_0)}},
+\qquad r>R_0.
+$$
+
+\textbf{Sustitución en la ecuación de $g(r)$.}
+La densidad de $Z$ depende de $|z|$, de modo que
+$$
+f_Z\bigl(z_1(r)\bigr)=f_Z\bigl(z_2(r)\bigr)
+=\frac{1}{2h}\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right).
+$$
+Por tanto, los dos términos de la ecuación de $g(r)$ son iguales. Al sustituir las densidades y los Jacobianos, obtenemos
+\begin{align*}
+g(r)
+&=2\left[\frac{1}{2h}\exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right)\right]
+  \frac{1}{2\sqrt{\alpha(r-R_0)}}\\
+&=\frac{1}{2h\sqrt{\alpha(r-R_0)}}
+  \exp\!\left(-\frac{1}{h}\sqrt{\frac{r-R_0}{\alpha}}\right),
+\qquad r>R_0.
+\end{align*}
+En consecuencia, la densidad buscada puede escribirse como
+$$
+\boxed{
 g(r)=
 \begin{cases}
-\dfrac{1}{2h\sqrt{\alpha(r-R_0)}}\exp\!\left(-\dfrac{1}{h}\sqrt{\dfrac{r-R_0}{\alpha}}\right), & r\ge R_0,\\[4mm]
-0, & r<R_0.
-\end{cases}
+\dfrac{1}{2h\sqrt{\alpha(r-R_0)}}
+\exp\!\left(-\dfrac{1}{h}\sqrt{\dfrac{r-R_0}{\alpha}}\right), & r>R_0,\\[4mm]
+0, & r\le R_0.
+\end{cases}}
 $$
-\textit{Observación:} la singularidad integrable $1/\sqrt{r-R_0}$ en $r=R_0$ es esperable por tratarse de la imagen de una transformación cuadrática $Z^2$.
+
+\textit{Observación sobre $r=R_0$:} este valor corresponde únicamente a $z=0$, donde no se puede aplicar la expresión anterior del Jacobiano. Aunque la densidad crece sin límite al acercarse a $R_0$ por la derecha, su integral es finita, como se comprobará en el siguiente inciso. Además, $P(R=R_0)=P(Z=0)=0$, porque $Z$ es continua. Por ello, asignar $g(R_0)=0$ no altera ninguna probabilidad.
+
+\input{Figuras/densidad_radio.tex}
 
 \item Verificamos la normalización:
 $$
@@ -335,6 +363,8 @@ $$
 
 \textit{Interpretación:} aun con una eficiencia alta ($0.9$) el porcentaje de falsos positivos a posteriori no es despreciable porque la prevalencia de planetas ($15\%$) es relativamente baja.
 
+\input{Figuras/bayes_frecuencias.tex}
+
 \item Ahora se aplica un segundo método independiente con las mismas características. Sea $D_2$ el evento ``el método 2 clasifica como con planeta''. Se asume independencia condicional dado el estado real:
 $$
 P(D_1\cap D_2\mid P)=P(D_1\mid P)P(D_2\mid P),\qquad
@@ -364,7 +394,48 @@ P(\bar P\mid D_1\cap D_2)=\frac{0.0025(0.85)}{0.123625}
 =\frac{17}{989}\approx 0.01719.
 $$
 
+También podemos obtener este resultado de manera secuencial, aprovechando la información del primer positivo. En una actualización bayesiana, las probabilidades posteriores obtenidas al incorporar una observación se utilizan como punto de partida para incorporar la siguiente. En este caso, el estado que queremos conocer sigue siendo el mismo: si la estrella tiene o no un planeta detectable.
+
+Del inciso a sabemos que
+$$
+P(\bar P\mid D_1)=\frac{17}{71},
+\qquad
+P(P\mid D_1)=1-\frac{17}{71}=\frac{54}{71}.
+$$
+Estas probabilidades ya incluyen la información de $D_1$ y sustituyen a las probabilidades iniciales $0.85$ y $0.15$ al actualizar con el segundo positivo. La independencia condicional permite escribir
+$$
+P(D_2\mid \bar P,D_1)=P(D_2\mid\bar P)=0.05,
+\qquad
+P(D_2\mid P,D_1)=P(D_2\mid P)=0.9.
+$$
+Es decir, una vez fijado si la estrella tiene o no planeta, conocer el primer resultado no modifica las probabilidades de respuesta del segundo método.
+
+Aplicando Bayes dentro del conjunto de estrellas con un primer resultado positivo, obtenemos
+$$
+P(\bar P\mid D_1\cap D_2)
+=\frac{P(D_2\mid\bar P)P(\bar P\mid D_1)}
+{P(D_2\mid\bar P)P(\bar P\mid D_1)+P(D_2\mid P)P(P\mid D_1)}.
+$$
+El denominador es $P(D_2\mid D_1)$: la probabilidad de obtener el segundo positivo cuando ya se conoce el primero. Al sustituir los valores anteriores,
+$$
+P(\bar P\mid D_1\cap D_2)
+=\frac{0.05\left(\frac{17}{71}\right)}
+{0.05\left(\frac{17}{71}\right)+0.9\left(\frac{54}{71}\right)}.
+$$
+Multiplicando el numerador y el denominador por $71$ y simplificando, resulta
+\begin{align*}
+P(\bar P\mid D_1\cap D_2)
+&=\frac{0.05(17)}{0.05(17)+0.9(54)}
+ =\frac{0.85}{0.85+48.6}\\
+&=\frac{0.85}{49.45}
+ =\frac{85}{4945}
+ =\frac{17}{989}\approx0.01719.
+\end{align*}
+Así, actualizar con el primer positivo y luego con el segundo conduce al mismo resultado que considerar ambos positivos conjuntamente: la probabilidad de que la estrella no tenga planeta después de las dos detecciones es aproximadamente $1.72\%$.
+
 \textit{Interpretación:} exigir confirmación por dos métodos reduce drásticamente la probabilidad de falso positivo (de $\approx 0.239$ a $\approx 0.017$), porque la probabilidad de doble falso positivo bajo $\bar P$ es $0.05^2$.
+
+\input{Figuras/bayes_confirmacion.tex}
 
 \item (Equivalencia secuencial vs simultánea bajo independencia condicional)
 
