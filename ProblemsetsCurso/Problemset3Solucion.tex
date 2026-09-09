@@ -437,6 +437,41 @@ cxy, & 0<x<4,\;1<y<5,\\
     \item Hallar $P(X+Y<3)$.
 \end{enumerate}
 
+\subsection{Solución}
+
+\textbf{a) Constante de normalización.} La integral de la densidad sobre su soporte debe ser 1:
+\[
+1=\int_0^4\int_1^5 cxy\,dy\,dx
+=c\left[\frac{x^2}{2}\right]_0^4\left[\frac{y^2}{2}\right]_1^5
+=96c
+\quad\Rightarrow\quad \boxed{c=\frac{1}{96}}.
+\]
+
+\textbf{b) Probabilidad en el rectángulo indicado.}
+\[
+P(1<X<2,\,2<Y<3)
+=\int_1^2\int_2^3\frac{xy}{96}\,dy\,dx
+=\frac{1}{96}\cdot\frac{3}{2}\cdot\frac{5}{2}
+=\boxed{\frac{5}{128}\approx 0.0391}.
+\]
+
+\textbf{c) Probabilidad de $X\ge 3$ y $Y\le 2$.} Al intersectar el evento con el soporte, integramos entre $3$ y $4$ para $x$, y entre $1$ y $2$ para $y$:
+\[
+P(X\ge 3,\,Y\le 2)
+=\int_3^4\int_1^2\frac{xy}{96}\,dy\,dx
+=\frac{1}{96}\cdot\frac{7}{2}\cdot\frac{3}{2}
+=\boxed{\frac{7}{128}\approx 0.0547}.
+\]
+
+\textbf{d) Probabilidad de $X+Y<3$.} Dentro del soporte, la región es $0<x<2$ y $1<y<3-x$. Por tanto,
+\begin{align*}
+P(X+Y<3)
+&=\int_0^2\int_1^{3-x}\frac{xy}{96}\,dy\,dx\\
+&=\frac{1}{192}\int_0^2 x\bigl[(3-x)^2-1\bigr]\,dx\\
+&=\frac{1}{192}\left[4x^2-2x^3+\frac{x^4}{4}\right]_0^2
+=\boxed{\frac{1}{48}\approx 0.0208}.
+\end{align*}
+
 \section{Problema 8}
 \textbf{Tiempo de telescopio.} Sean $X_1$, $X_2$ y $X_3$ el tiempo de telescopio (en horas) solicitado por noche en 3 observatorios diferentes. Suponga que éstas son variables aleatorias independientes y que siguen distribuciones normales con medias $\mu_1$, $\mu_2$ y $\mu_3$, y desviaciones estándar $\sigma_1$, $\sigma_2$ y $\sigma_3$, respectivamente.
 
@@ -446,6 +481,95 @@ cxy, & 0<x<4,\;1<y<5,\\
     \item Usando los valores de $\mu_i$ y $\sigma_i$ en (a), calcule e interprete $P(-10\le X_1-0{,}5X_2-0{,}5X_3\le 5)$.
     \item Si $\mu_1=40$, $\mu_2=50$, $\mu_3=60$, $\sigma_1^2=10$, $\sigma_2^2=12$ y $\sigma_3^2=14$, calcule $P(X_1+X_2+X_3\le 160)$ y $P(X_1+X_2\ge 2X_3)$.
 \end{enumerate}
+
+\subsection{Solución}
+
+Una combinación lineal de variables normales independientes también es normal. En particular, si $L=a_1X_1+a_2X_2+a_3X_3$, entonces
+\[
+E(L)=\sum_{i=1}^3 a_i\mu_i,
+\qquad
+\operatorname{Var}(L)=\sum_{i=1}^3 a_i^2\sigma_i^2.
+\]
+Los coeficientes se elevan al cuadrado al calcular la varianza, incluso si son negativos. Usaremos la notación $N(\mu,\sigma^2)$, cuyo segundo parámetro es la \textbf{varianza}, y $\Phi(z)=P(Z\le z)$ para $Z\sim N(0,1)$. Las distribuciones obtenidas son exactas; solo redondeamos los resultados numéricos.
+
+\textbf{a) Tiempo total solicitado.}
+Para $T_o=X_1+X_2+X_3$, la independencia permite sumar las varianzas:
+\[
+E(T_o)=60+60+60=180,\qquad
+\operatorname{Var}(T_o)=15+15+15=45.
+\]
+Así, $T_o\sim N(180,45)$ y su desviación estándar es $\sqrt{45}$ horas. Estandarizando dentro de cada probabilidad,
+\begin{align*}
+P(T_o\le 200)
+&=P\left(\frac{T_o-180}{\sqrt{45}}\le\frac{200-180}{\sqrt{45}}\right)\\
+&=\Phi\left(\frac{20}{\sqrt{45}}\right)
+\approx\boxed{0.998565},\\[4pt]
+P(150\le T_o\le 200)
+&=P\left(\frac{150-180}{\sqrt{45}}\le Z\le\frac{200-180}{\sqrt{45}}\right)\\
+&=\Phi\left(\frac{20}{\sqrt{45}}\right)-\Phi\left(\frac{-30}{\sqrt{45}}\right)
+\approx\boxed{0.998562}.
+\end{align*}
+
+\textbf{b) Tiempo promedio entre los tres observatorios.}
+Definimos $\bar{X}=(X_1+X_2+X_3)/3=T_o/3$. Por tanto,
+\[
+E(\bar{X})=\frac{180}{3}=60,\qquad
+\operatorname{Var}(\bar{X})=\frac{45}{3^2}=5,
+\qquad \bar{X}\sim N(60,5).
+\]
+Usamos la desviación estándar $\sqrt{5}$ para estandarizar:
+\begin{align*}
+P(\bar{X}\ge 55)
+&=P\left(\frac{\bar{X}-60}{\sqrt{5}}\ge\frac{55-60}{\sqrt{5}}\right)\\
+&=1-\Phi\left(\frac{-5}{\sqrt{5}}\right)
+\approx\boxed{0.9873},\\[4pt]
+P(58\le\bar{X}\le 62)
+&=P\left(\frac{58-60}{\sqrt{5}}\le Z\le\frac{62-60}{\sqrt{5}}\right)\\
+&=\Phi\left(\frac{2}{\sqrt{5}}\right)-\Phi\left(\frac{-2}{\sqrt{5}}\right)
+\approx\boxed{0.6289}.
+\end{align*}
+
+\textbf{c) Diferencia respecto al promedio de los otros dos observatorios.}
+Sea $D=X_1-0.5X_2-0.5X_3=X_1-(X_2+X_3)/2$. Sus parámetros son
+\begin{align*}
+E(D)&=60-0.5(60)-0.5(60)=0,\\
+\operatorname{Var}(D)&=15+(-0.5)^2(15)+(-0.5)^2(15)=22.5.
+\end{align*}
+Entonces $D\sim N(0,22.5)$ y
+\begin{align*}
+P(-10\le D\le 5)
+&=P\left(\frac{-10}{\sqrt{22.5}}\le\frac{D}{\sqrt{22.5}}\le\frac{5}{\sqrt{22.5}}\right)\\
+&=\Phi\left(\frac{5}{\sqrt{22.5}}\right)-\Phi\left(\frac{-10}{\sqrt{22.5}}\right)
+\approx\boxed{0.8366}.
+\end{align*}
+La probabilidad es aproximadamente $83.66\%$: el tiempo solicitado por el primer observatorio está entre 10 horas por debajo y 5 horas por encima del promedio de los tiempos solicitados por los otros dos.
+
+\textbf{d) Observatorios con parámetros diferentes.}
+Ahora las medias son $40$, $50$ y $60$, y las varianzas son $10$, $12$ y $14$, respectivamente. Para la suma $S=X_1+X_2+X_3$,
+\[
+E(S)=40+50+60=150,\qquad
+\operatorname{Var}(S)=10+12+14=36.
+\]
+Así, $S\sim N(150,36)$ y su desviación estándar es $6$:
+\[
+P(X_1+X_2+X_3\le 160)
+=P\left(\frac{S-150}{6}\le\frac{160-150}{6}\right)
+=\Phi\left(\frac{10}{6}\right)
+\approx\boxed{0.9522}.
+\]
+Para la segunda probabilidad, trasladamos $2X_3$ al lado izquierdo y definimos $W=X_1+X_2-2X_3$. Entonces,
+\[
+E(W)=40+50-2(60)=-30,\qquad
+\operatorname{Var}(W)=10+12+(-2)^2(14)=78.
+\]
+Como $W\sim N(-30,78)$,
+\begin{align*}
+P(X_1+X_2\ge 2X_3)
+&=P(W\ge 0)\\
+&=P\left(\frac{W-(-30)}{\sqrt{78}}\ge\frac{0-(-30)}{\sqrt{78}}\right)\\
+&=1-\Phi\left(\frac{30}{\sqrt{78}}\right)
+\approx\boxed{0.000341}.
+\end{align*}
 
 \section{Problema 9}
 \textbf{Halo de galaxias.} Suponga que el tamaño esperado del halo de galaxias espirales tipo-a (Sa) es 105 kly (kilo años luz) y su desviación estándar es 8 kly. Para una tipo-b (Sb), suponga un tamaño del halo esperado y desviación estándar de 100 kly y 6 kly, respectivamente. Sea $\bar{X}$ el valor medio muestral del tamaño del halo en una muestra aleatoria de 40 galaxias Sa, y sea $\bar{Y}$ lo mismo pero para 35 galaxias Sb.
@@ -457,7 +581,71 @@ cxy, & 0<x<4,\;1<y<5,\\
     \item Calcule $P(\bar{X}-\bar{Y}\ge 10)$. Si observa que $\bar{X}-\bar{Y}\ge 10$, ¿dudaría de que $\mu_1-\mu_2=5$?
 \end{enumerate}
 
+\subsection{Solución}
 
+Suponemos observaciones independientes dentro de cada muestra y que las muestras de galaxias Sa y Sb son independientes entre sí. Usaremos $N(\mu,\sigma^2)$, donde el segundo parámetro es la varianza, y $\Phi$ para la función de distribución acumulada de la normal estándar.
+
+\textbf{a) Distribuciones de las medias muestrales.}
+Por el teorema central del límite, usamos aproximaciones normales para las medias de las muestras de tamaños $40$ y $35$. Sus medias y varianzas son
+\[
+E(\bar{X})=105,\qquad
+\operatorname{Var}(\bar{X})=\frac{8^2}{40}=1.6,
+\]
+\[
+E(\bar{Y})=100,\qquad
+\operatorname{Var}(\bar{Y})=\frac{6^2}{35}=\frac{36}{35}.
+\]
+Por tanto,
+\[
+\boxed{\bar{X}\approx N(105,1.6)},\qquad
+\boxed{\bar{Y}\approx N\left(100,\frac{36}{35}\right)}.
+\]
+Estas son aproximaciones, pues el enunciado no establece que las poblaciones sean normales; su precisión depende de la forma de las distribuciones poblacionales.
+
+\textbf{b) Distribución de la diferencia.}
+Sea $D=\bar{X}-\bar{Y}$. La media de la diferencia es la diferencia de las medias:
+\[
+E(D)=105-100=5.
+\]
+Por independencia, las varianzas se \textbf{suman}, aunque estemos restando las variables:
+\[
+\operatorname{Var}(D)
+=\operatorname{Var}(\bar{X})+(-1)^2\operatorname{Var}(\bar{Y})
+=\frac{64}{40}+\frac{36}{35}
+=\frac{92}{35}.
+\]
+En consecuencia,
+\[
+\boxed{D\approx N\left(5,\frac{92}{35}\right)},\qquad
+\sigma_D=\sqrt{\frac{92}{35}}\approx 1.6213\text{ kly}.
+\]
+
+\textbf{c) Probabilidad de una diferencia entre $-1$ y $1$ kly.}
+Restamos la media $5$ y dividimos entre $\sigma_D$ en los tres miembros de la desigualdad. La variable $Z=(D-5)/\sigma_D$ es aproximadamente normal estándar:
+\begin{align*}
+P(-1\le\bar{X}-\bar{Y}\le 1)
+&=P(-1\le D\le 1)\\
+&=P\left(\frac{-1-5}{\sqrt{92/35}}
+\le\frac{D-5}{\sqrt{92/35}}
+\le\frac{1-5}{\sqrt{92/35}}\right)\\
+&\approx\Phi\left(\frac{-4}{\sqrt{92/35}}\right)
+-\Phi\left(\frac{-6}{\sqrt{92/35}}\right)\\
+&\approx\boxed{0.006702}.
+\end{align*}
+Los límites estandarizados son aproximadamente $-3.7008$ y $-2.4672$. La probabilidad buscada es aproximadamente $0.6702\%$.
+
+\textbf{d) Probabilidad de una diferencia de al menos $10$ kly.}
+Con la misma distribución aproximada,
+\begin{align*}
+P(\bar{X}-\bar{Y}\ge 10)
+&=P(D\ge 10)\\
+&=P\left(\frac{D-5}{\sqrt{92/35}}\ge\frac{10-5}{\sqrt{92/35}}\right)\\
+&\approx 1-\Phi\left(\frac{5}{\sqrt{92/35}}\right)\\
+&\approx\boxed{0.001021}.
+\end{align*}
+El límite estandarizado es aproximadamente $3.0840$, y la probabilidad es apenas $0.1021\%$.
+
+\textbf{Interpretación.} Sí, observar $\bar{X}-\bar{Y}\ge 10$ daría motivos para dudar de que $\mu_1-\mu_2=5$: bajo esa suposición y el modelo utilizado, una diferencia de al menos $10$ kly sería muy poco frecuente. El resultado aportaría evidencia de una diferencia poblacional mayor que $5$ kly, aunque no demostraría por sí solo que la suposición es falsa. Esta conclusión está sujeta a la independencia y a la precisión de la aproximación normal, especialmente en las colas.
 
 \end{document}
 
