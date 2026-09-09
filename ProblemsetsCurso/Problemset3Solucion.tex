@@ -25,25 +25,7 @@
 
 \begin{document}
 
-\begin{titlepage}
-  \centering
-  {\Large Universidad de Antioquia\par}
-  \vspace{2cm}
-  {\huge\bfseries Astroestadística\par}
-  \vspace{0.4cm}
-  {\Large Solución al problemset 3 \par}
-  \vspace{2.5cm}
-  {\large Autor:\par}
-  \vspace{0.2cm}
-  {\large Daniel Soto Villada\par}
-  {\large Estudiante de Astronomía\par}
-  \vfill
-  {\large \today\par}
-\end{titlepage}
-
-\newpage
 \tableofcontents
-\newpage
 
 
 \section{Problema 1}
@@ -294,22 +276,97 @@ De acuerdo con la proposición de la página 428 de Devore, si $X_1, X_2, \dots,
     \item \textbf{Desviación estándar de $\bar{X}$ (Error estándar):} $\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{2}{\sqrt{11}}$.
 \end{itemize}
 
+\textbf{¿Por qué se divide entre $\sqrt{n}$?}
+La media muestral es la suma de los tiempos dividida entre el número de estudiantes:
+\[
+\bar{X}=\frac{X_1+X_2+\cdots+X_n}{n}.
+\]
+Suponemos que los tiempos son independientes y que todos tienen la misma varianza $\operatorname{Var}(X_i)=\sigma^2$. Usamos dos propiedades: al multiplicar una variable por una constante $a$, su varianza se multiplica por $a^2$; y, para variables independientes, la varianza de una suma es la suma de sus varianzas. Entonces,
+\begin{align*}
+\operatorname{Var}(\bar{X})
+&=\operatorname{Var}\left(\frac{1}{n}\sum_{i=1}^{n}X_i\right)\\
+&=\frac{1}{n^2}\operatorname{Var}\left(\sum_{i=1}^{n}X_i\right)
+&&\text{(el factor $1/n$ sale al cuadrado)}\\
+&=\frac{1}{n^2}\sum_{i=1}^{n}\operatorname{Var}(X_i)
+&&\text{(por la independencia)}\\
+&=\frac{1}{n^2}\underbrace{(\sigma^2+\cdots+\sigma^2)}_{n\text{ términos}}\\
+&=\frac{n\sigma^2}{n^2}=\frac{\sigma^2}{n}.
+\end{align*}
+La desviación estándar es la raíz cuadrada de la varianza. Por eso,
+\[
+\sigma_{\bar{X}}=\sqrt{\operatorname{Var}(\bar{X})}
+=\sqrt{\frac{\sigma^2}{n}}
+=\frac{\sigma}{\sqrt{n}}.
+\]
+En resumen, \textbf{la varianza del promedio se divide entre $n$, mientras que su desviación estándar se divide entre $\sqrt{n}$}. No dividimos la desviación estándar entre $n$ porque, al sumar observaciones independientes, se suman sus varianzas, no sus desviaciones estándar.
+
+En este caso, $n=11$ y $\sigma=2$ minutos, de modo que
+\[
+\operatorname{Var}(\bar{X})=\frac{2^2}{11}=\frac{4}{11}\text{ minutos}^2,
+\qquad
+\sigma_{\bar{X}}=\sqrt{\frac{4}{11}}=\frac{2}{\sqrt{11}}\text{ minutos}.
+\]
+Intuitivamente, al promediar tiempos independientes, las desviaciones por encima y por debajo de la media tienden a compensarse, por lo que el promedio varía menos que un tiempo individual. Esta fórmula no requiere normalidad, pero sí las condiciones de independencia y varianza común utilizadas aquí; sin independencia aparecerían términos de covarianza.
+
 Calculamos el valor numérico de la desviación estándar de la media:
 $$\sigma_{\bar{X}} = \frac{2}{3.3166} \approx 0.6030 \text{ minutos.}$$
 
 \textbf{3. Estandarización y cálculo de la probabilidad:}
-Para hallar $P(\bar{X} \le 11)$, estandarizamos la variable utilizando el valor $Z$:
-$$Z = \frac{\bar{X} - \mu_{\bar{X}}}{\sigma_{\bar{X}}}$$
-Sustituimos los valores:
-$$z = \frac{11 - 10}{2/\sqrt{11}} = \frac{1}{0.6030} \approx 1.6583$$
+Queremos hallar $P(\bar{X} \le 11)$, donde $\bar{X}$ es el promedio conjunto de los 11 estudiantes. Para usar la tabla normal estándar, transformamos la desigualdad que está \textbf{dentro de la probabilidad}. No cambiamos el evento: lo escribimos de una forma equivalente.
 
-Buscamos esta probabilidad en la \textbf{Tabla A.3 (Áreas de la curva normal estándar)} proporcionada en el apéndice del libro:
+\begin{align*}
+P(\bar{X}\le 11)
+&=P(\bar{X}-\mu_{\bar{X}}\le 11-\mu_{\bar{X}})\\
+&=P\left(\frac{\bar{X}-\mu_{\bar{X}}}{\sigma_{\bar{X}}}
+\le\frac{11-\mu_{\bar{X}}}{\sigma_{\bar{X}}}\right)\\
+&=P\left(\frac{\bar{X}-10}{2/\sqrt{11}}
+\le\frac{11-10}{2/\sqrt{11}}\right)\\
+&=P\left(Z\le\frac{\sqrt{11}}{2}\right)\\
+&\approx P(Z\le 1.6583).
+\end{align*}
+
+\textbf{Paso 4: evaluar la probabilidad acumulada.}
+La igualdad $\Phi(z)=P(Z\le z)$ se justifica por la \textbf{definición de función de distribución acumulada}. Para cualquier variable aleatoria $W$, esta función se define como
+\[
+F_W(w)=P(W\le w).
+\]
+Es decir, a cada límite numérico $w$ le asigna la probabilidad de que la variable no lo supere. Si $W$ es continua y tiene densidad $f_W$, esa probabilidad se obtiene integrando la densidad:
+\[
+F_W(w)=\int_{-\infty}^{w}f_W(t)\,dt.
+\]
+En este problema, al estandarizar la media muestral obtenemos
+\[
+Z=\frac{\bar{X}-10}{2/\sqrt{11}}\sim N(0,1).
+\]
+La densidad de esta normal estándar se denota por $\varphi$ (phi minúscula) y es
+\[
+\varphi(t)=\frac{1}{\sqrt{2\pi}}e^{-t^2/2}.
+\]
+Su función de distribución acumulada $F_Z$ se denota convencionalmente por $\Phi$ (phi mayúscula). Por eso,
+\[
+\Phi(z)=F_Z(z)=P(Z\le z)
+=\int_{-\infty}^{z}\varphi(t)\,dt.
+\]
+Aquí $Z$ es la variable aleatoria y $z$ es un límite numérico fijo. El evento $Z\le z$ incluye todos los valores a la izquierda de ese límite; de ahí que la integral empiece en $-\infty$ y termine en $z$. La densidad $\varphi(z)$ es la altura de la curva, mientras que $\Phi(z)$ es el área acumulada y, por tanto, una probabilidad. Esta igualdad es una definición de notación, no una aproximación.
+
+Aplicando esta definición al límite $z=\sqrt{11}/2$, obtenemos
+\[
+P(\bar{X}\le 11)
+=\Phi\left(\frac{\sqrt{11}}{2}\right)
+=\int_{-\infty}^{\sqrt{11}/2}\frac{1}{\sqrt{2\pi}}e^{-t^2/2}\,dt.
+\]
+Esta integral se evalúa numéricamente o mediante una tabla normal. No restamos el área de 1 porque buscamos el área a la izquierda del límite, no la probabilidad de excederlo.
+
+En la \textbf{Tabla A.3 (Áreas de la curva normal estándar)}, los valores cercanos son:
 \begin{itemize}
     \item Para $z = 1.65$, el área es $0.9505$.
     \item Para $z = 1.66$, el área es $0.9515$.
 \end{itemize}
-Interpolando para $z \approx 1.6583$, o utilizando el valor más cercano ($1.66$):
-$$P(\bar{X} \le 11) = \Phi(1.6583) \approx \mathbf{0.9514}$$
+Redondeando el límite a $1.66$, la tabla da aproximadamente $0.9515$. Evaluando la función acumulada con el límite sin redondear obtenemos un resultado más preciso:
+\[
+P(\bar{X}\le 11)=\Phi\left(\frac{\sqrt{11}}{2}\right)
+\approx 0.9513728\approx\mathbf{0.9514}.
+\]
 
 \textbf{Interpretación:}
 La probabilidad de que el promedio de tiempo empleado por los 11 estudiantes en sus ajustes de matrícula no exceda los 11 minutos es del \textbf{95.14\%}. Esto indica que es sumamente probable que el promedio se mantenga cerca de la media poblacional (10 minutos), dada la baja variabilidad de la media muestral al aumentar el número de observaciones.
