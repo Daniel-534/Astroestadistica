@@ -194,6 +194,8 @@ $$
 F=\frac{L}{4\pi R^2},\qquad R>0.
 $$
 
+\input{Figuras2/esfera_flujo_estelar.tex}
+
 \begin{enumerate}[a)]
     \item Demuestre que la función de densidad de probabilidad de la distancia $R$ es
     $$
@@ -246,6 +248,8 @@ g_R(r)=
 \end{cases}}
 $$
 El factor $r^2$ tiene una interpretación geométrica: una capa esférica de radio $r$ y espesor pequeño $dr$ tiene volumen aproximadamente $4\pi r^2\,dr$. Las capas más alejadas del centro contienen más volumen por unidad de distancia.
+
+\input{Figuras2/densidad_distancia_estelar.tex}
 
 \item La relación entre distancia y flujo es
 $$
@@ -345,6 +349,8 @@ E[F]
 =\frac{3L}{4\pi r_{\max}^2}.
 $$
 Aunque el flujo puede ser arbitrariamente grande, su media es finita. La probabilidad de encontrar una estrella muy cerca del centro es suficientemente pequeña para que la integral del valor esperado converja.
+
+\input{Figuras2/densidad_flujo_estelar.tex}
 \end{enumerate}
 
 \section{Problema 3: Conteo de estrellas mediante un proceso de Poisson}
@@ -401,6 +407,8 @@ P\bigl(N(50\,\mathrm{pc})\ge1\bigr)
 \end{align*}
 Por tanto, un segmento de $50\,\mathrm{pc}$ no alcanza la probabilidad del $90\%$ requerida en el siguiente inciso.
 
+\input{Figuras2/poisson_conteo.tex}
+
 \item Para una longitud general $L$, la probabilidad de encontrar al menos una estrella es
 $$
 P\bigl(N(L)\ge1\bigr)=1-e^{-\lambda L}.
@@ -425,6 +433,8 @@ P\bigl(N(L_{\min})\ge1\bigr)
 =1-e^{-\ln 10}=1-\frac{1}{10}=0.90.
 $$
 Si la longitud se expresa con dos decimales y se desea garantizar el umbral, debe redondearse hacia arriba a $57.57\,\mathrm{pc}$. Si sólo se permiten longitudes enteras en pársecs, se necesitan $58\,\mathrm{pc}$.
+
+\input{Figuras2/poisson_longitud.tex}
 
 \item La homogeneidad significa que cualquier segmento de una misma longitud contiene el mismo número esperado de estrellas, independientemente de su ubicación. Al ampliar la longitud observada, se añade una región con la misma densidad lineal media, sin favorecer unas posiciones sobre otras.
 
