@@ -1,0 +1,448 @@
+ \documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Parcial 1 V2}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt} % linea horizontal
+
+
+\begin{document}
+
+\section{Problema 1: Detección de supernovas según el tipo de galaxia}
+
+Durante una campaña de observación se estudia una muestra de $1200$ galaxias, de las cuales $600$ son espirales (S), $360$ son elípticas (E) y $240$ son irregulares (Irr). Estas categorías son mutuamente excluyentes y abarcan toda la muestra.
+
+Un sistema automático analiza cada galaxia y emite exactamente uno de dos reportes: \textit{``hay supernova''} o \textit{``no hay supernova''}. Estos resultados son mutuamente excluyentes y complementarios. Cuando el sistema reporta ``hay supernova'', se registra una \textit{candidata a supernova}. El reporte del sistema no necesariamente coincide con la presencia o ausencia real de una supernova.
+
+Para cada tipo de galaxia se conocen las siguientes probabilidades, correspondientes al período de observación:
+\begin{itemize}
+    \item \textbf{Con supernova:} probabilidad de que una galaxia de ese tipo albergue una supernova durante el período de observación.
+    \item \textbf{Reporta ``hay supernova'', dado que sí hay:} probabilidad de que el sistema reporte una candidata al analizar una galaxia de ese tipo que realmente alberga una supernova.
+    \item \textbf{Reporta ``no hay supernova'', dado que no hay:} probabilidad de que el sistema reporte ausencia de supernova al analizar una galaxia de ese tipo que realmente no alberga una supernova.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Tipo de galaxia & Cantidad & Con supernova & \shortstack{Reporta ``hay''\\dado que sí hay} & \shortstack{Reporta ``no hay''\\dado que no hay} \\
+\midrule
+Espiral (S)     & $600$ & $25\%$ & $80\%$ & $4\%$ \\
+Elíptica (E)    & $360$ & $12\%$ & $75\%$ & $3\%$ \\
+Irregular (Irr) & $240$ & $35\%$ & $65\%$ & $6\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Por ejemplo, en las galaxias espirales, el $80\%$ se refiere a reportar ``hay supernova'' entre las que sí tienen supernova, mientras que el $4\%$ se refiere a reportar ``no hay supernova'' entre las que no tienen supernova. Las dos últimas columnas corresponden a condiciones distintas, por lo que sus porcentajes no tienen que sumar el $100\%$. Los reportes ``hay'' y ``no hay'' son complementarios cuando se considera el mismo tipo de galaxia y el mismo estado real.
+
+\input{Figuras2/arbol_espirales.tex}
+
+\begin{enumerate}[a)]
+    \item Para cada uno de los tres tipos de galaxia, ¿cuál es la probabilidad de que el sistema reporte una candidata a supernova al analizar una galaxia seleccionada al azar entre las de ese tipo?
+    \item Si se selecciona una galaxia al azar de la muestra completa, de modo que todas las galaxias tengan la misma probabilidad de ser elegidas, ¿cuál es la probabilidad de que el sistema reporte una candidata a supernova en ella?
+    \item Si el sistema reporta una candidata a supernova en una galaxia seleccionada al azar de la muestra completa, ¿cuál es la probabilidad de que dicha galaxia sea:
+    \begin{enumerate}[i.]
+        \item espiral;
+        \item elíptica;
+        \item irregular?
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Solución}
+
+Usamos la misma notación del árbol: $A$ es el evento ``la galaxia alberga una supernova'' y $A'$ es su complemento; $B$ es el evento ``el sistema reporta una candidata a supernova'' y $B'$ es el evento ``el sistema reporta que no hay supernova''. Los eventos $S$, $E$ e $\mathrm{Irr}$ indican que la galaxia es espiral, elíptica o irregular, respectivamente.
+
+Es importante distinguir la presencia real de una supernova, $A$, del reporte de una candidata, $B$. Los incisos a y b preguntan por el reporte del sistema, que puede ocurrir tanto si hay supernova como si no la hay.
+
+\begin{enumerate}[a)]
+\item Para calcular la probabilidad de reporte en cada tipo de galaxia, consideramos los dos estados reales posibles: con supernova y sin supernova. Estos estados son mutuamente excluyentes y abarcan todos los casos. Por probabilidad total, para cualquiera de los tipos $G\in\{S,E,\mathrm{Irr}\}$,
+$$
+P(B\mid G)
+=P(B\mid A,G)P(A\mid G)
+ +P(B\mid A',G)P(A'\mid G).
+$$
+En términos del árbol, multiplicamos las probabilidades a lo largo de cada recorrido que termina en $B$ y sumamos los dos resultados.
+
+La tabla proporciona $P(A\mid G)$ y $P(B\mid A,G)$ directamente. Para obtener los otros dos factores usamos los complementos
+$$
+P(A'\mid G)=1-P(A\mid G),
+\qquad
+P(B\mid A',G)=1-P(B'\mid A',G).
+$$
+Así, los porcentajes $4\%$, $3\%$ y $6\%$ de la última columna no se utilizan directamente como probabilidades de reportar una candidata: corresponden al reporte contrario entre las galaxias sin supernova.
+
+Para las galaxias espirales,
+$$
+P(A'\mid S)=1-0.25=0.75,
+\qquad
+P(B\mid A',S)=1-0.04=0.96.
+$$
+Por tanto,
+$$
+P(B\mid S)=0.80(0.25)+0.96(0.75)=0.20+0.72
+=\boxed{0.92=92\%}.
+$$
+El primer término corresponde a galaxias con supernova en las que el sistema reporta una candidata; el segundo, a galaxias sin supernova en las que también se produce ese reporte.
+
+Para las galaxias elípticas,
+$$
+P(A'\mid E)=1-0.12=0.88,
+\qquad
+P(B\mid A',E)=1-0.03=0.97,
+$$
+y entonces
+$$
+P(B\mid E)=0.75(0.12)+0.97(0.88)=0.09+0.8536
+=\boxed{0.9436=94.36\%}.
+$$
+
+Para las galaxias irregulares,
+$$
+P(A'\mid\mathrm{Irr})=1-0.35=0.65,
+\qquad
+P(B\mid A',\mathrm{Irr})=1-0.06=0.94,
+$$
+de modo que
+$$
+P(B\mid\mathrm{Irr})=0.65(0.35)+0.94(0.65)=0.2275+0.611
+=\boxed{0.8385=83.85\%}.
+$$
+
+\item Al seleccionar una galaxia al azar de la muestra completa, cada tipo tiene una probabilidad proporcional a su cantidad de galaxias:
+$$
+P(S)=\frac{600}{1200}=0.50,
+\qquad
+P(E)=\frac{360}{1200}=0.30,
+\qquad
+P(\mathrm{Irr})=\frac{240}{1200}=0.20.
+$$
+No asignamos probabilidad $1/3$ a cada tipo, porque se elige uniformemente una galaxia, no una de las tres categorías.
+
+Como los tipos son mutuamente excluyentes y abarcan toda la muestra, aplicamos nuevamente la ley de probabilidad total, ahora sobre el tipo de galaxia:
+\begin{align*}
+P(B)
+&=P(B\mid S)P(S)+P(B\mid E)P(E)
+  +P(B\mid\mathrm{Irr})P(\mathrm{Irr})\\
+&=0.92(0.50)+0.9436(0.30)+0.8385(0.20)\\
+&=0.46+0.28308+0.16770\\
+&=\boxed{0.91078=91.078\%}.
+\end{align*}
+Esta es la probabilidad de que el sistema reporte una candidata en una galaxia elegida al azar de toda la muestra. No es la probabilidad de que esa galaxia tenga realmente una supernova. El valor elevado es consistente con los datos: incluso entre las galaxias sin supernova, el sistema reporta ``hay'' con probabilidades de $96\%$, $97\%$ y $94\%$, según el tipo.
+
+\item Ahora sabemos que el sistema reportó una candidata, es decir, que ocurrió $B$. Buscamos la probabilidad del tipo de galaxia condicionada a esa información. Por el teorema de Bayes,
+$$
+P(G\mid B)=\frac{P(B\mid G)P(G)}{P(B)},
+\qquad G\in\{S,E,\mathrm{Irr}\}.
+$$
+El numerador es la probabilidad de que una galaxia sea del tipo indicado y genere un reporte de candidata; el denominador incluye los reportes de los tres tipos.
+
+\begin{enumerate}[i.]
+\item Para una galaxia espiral,
+$$
+P(S\mid B)=\frac{0.92(0.50)}{0.91078}
+=\frac{0.46}{0.91078}
+\approx\boxed{0.505062\quad(50.5062\%)}.
+$$
+\item Para una galaxia elíptica,
+$$
+P(E\mid B)=\frac{0.9436(0.30)}{0.91078}
+=\frac{0.28308}{0.91078}
+\approx\boxed{0.310811\quad(31.0811\%)}.
+$$
+\item Para una galaxia irregular,
+$$
+P(\mathrm{Irr}\mid B)=\frac{0.8385(0.20)}{0.91078}
+=\frac{0.16770}{0.91078}
+\approx\boxed{0.184128\quad(18.4128\%)}.
+$$
+\end{enumerate}
+
+Como comprobación, usando los valores sin redondear,
+$$
+P(S\mid B)+P(E\mid B)+P(\mathrm{Irr}\mid B)
+=\frac{0.46+0.28308+0.16770}{0.91078}=1.
+$$
+Estas probabilidades describen el tipo de galaxia en la que se reportó la candidata; no presuponen que el reporte corresponda a una supernova real.
+\end{enumerate}
+
+\section{Problema 2: Distribución de distancias y flujo estelar}
+
+Las posiciones de las estrellas de una población están distribuidas uniformemente en el volumen de una esfera. La probabilidad de encontrar una estrella seleccionada al azar en una región de la esfera es proporcional al volumen de esa región.
+
+Un observador se encuentra en el centro de la esfera. Sea $R$ la distancia entre el observador y una estrella seleccionada al azar de esta población. No se impone una distancia mínima positiva entre las estrellas y el observador.
+
+Suponga que todas las estrellas tienen la misma luminosidad constante $L>0$, emiten de manera isotrópica y que no hay absorción de la radiación. El flujo recibido por el observador es entonces la variable aleatoria
+$$
+F=\frac{L}{4\pi R^2},\qquad R>0.
+$$
+
+\begin{enumerate}[a)]
+    \item Demuestre que la función de densidad de probabilidad de la distancia $R$ es
+    $$
+    g_R(r)=
+    \begin{cases}
+        \dfrac{3r^2}{r_{\max}^3}, & 0<r\le r_{\max},\\[2mm]
+        0, & \text{en otro caso}.
+    \end{cases}
+    $$
+    \item Obtenga la función de densidad de probabilidad del flujo, $h_F(f)$, a partir de la transformación entre $R$ y $F$.
+
+    \textit{Indicación:} utilice la fórmula de transformación de densidades e incluya el valor absoluto del Jacobiano correspondiente.
+    \item Determine el rango de valores posibles del flujo. Identifique el flujo mínimo $F_{\min}$ y establezca si existe un flujo máximo finito $F_{\max}$.
+    \item Verifique explícitamente que la densidad $h_F(f)$ está normalizada, integrándola sobre su rango de valores.
+    \item Calcule el valor esperado del flujo, $E[F]$, en términos de $L$ y $r_{\max}$.
+\end{enumerate}
+
+\subsection{Solución}
+
+Denotamos por $r_{\max}>0$ el radio de la esfera. La uniformidad corresponde a la posición de las estrellas en el volumen, no a la distancia $R$: regiones de igual volumen tienen igual probabilidad, pero intervalos radiales de igual longitud no contienen necesariamente el mismo volumen.
+
+\begin{enumerate}[a)]
+\item Para $0\le r\le r_{\max}$, el evento $R\le r$ significa que la estrella se encuentra dentro de una esfera de radio $r$, concéntrica con la esfera original. Como la probabilidad es proporcional al volumen,
+$$
+P(R\le r)
+=\frac{\frac{4\pi}{3}r^3}{\frac{4\pi}{3}r_{\max}^3}
+=\frac{r^3}{r_{\max}^3}.
+$$
+Por tanto, la función de distribución acumulada de $R$ es
+$$
+F_R(r)=
+\begin{cases}
+0, & r<0,\\[1mm]
+\dfrac{r^3}{r_{\max}^3}, & 0\le r\le r_{\max},\\[2mm]
+1, & r>r_{\max}.
+\end{cases}
+$$
+Derivando en el interior del intervalo obtenemos
+$$
+g_R(r)=\frac{dF_R(r)}{dr}=\frac{3r^2}{r_{\max}^3},
+\qquad 0<r<r_{\max}.
+$$
+El valor de una densidad en un punto aislado no modifica ninguna probabilidad, por lo que podemos escribirla como se pide en el enunciado:
+$$
+\boxed{
+g_R(r)=
+\begin{cases}
+\dfrac{3r^2}{r_{\max}^3}, & 0<r\le r_{\max},\\[2mm]
+0, & \text{en otro caso}.
+\end{cases}}
+$$
+El factor $r^2$ tiene una interpretación geométrica: una capa esférica de radio $r$ y espesor pequeño $dr$ tiene volumen aproximadamente $4\pi r^2\,dr$. Las capas más alejadas del centro contienen más volumen por unidad de distancia.
+
+\item La relación entre distancia y flujo es
+$$
+f=\frac{L}{4\pi r^2}.
+$$
+Para $r>0$ esta función es estrictamente decreciente y cada valor admisible de $f$ corresponde a una única distancia positiva:
+$$
+r(f)=\sqrt{\frac{L}{4\pi f}}
+=\left(\frac{L}{4\pi}\right)^{1/2}f^{-1/2}.
+$$
+Antes de calcular la derivada, escribimos la ecuación que permite construir la densidad del flujo:
+$$
+h_F(f)=g_R\bigl(r(f)\bigr)\left|\frac{dr}{df}\right|.
+$$
+El valor absoluto del Jacobiano convierte los intervalos de flujo en intervalos de distancia con longitud positiva. Derivando la expresión de $r(f)$,
+$$
+\frac{dr}{df}
+=-\frac{1}{2}\left(\frac{L}{4\pi}\right)^{1/2}f^{-3/2},
+\qquad
+\left|\frac{dr}{df}\right|
+=\frac{1}{2}\left(\frac{L}{4\pi}\right)^{1/2}f^{-3/2}.
+$$
+Además, al evaluar la densidad radial en $r(f)$,
+$$
+g_R\bigl(r(f)\bigr)
+=\frac{3}{r_{\max}^3}\left(\frac{L}{4\pi f}\right).
+$$
+Sustituyendo ambos factores en la fórmula de transformación,
+\begin{align*}
+h_F(f)
+&=\frac{3}{r_{\max}^3}\left(\frac{L}{4\pi}\right)f^{-1}
+  \frac{1}{2}\left(\frac{L}{4\pi}\right)^{1/2}f^{-3/2}\\
+&=\frac{3}{2r_{\max}^3}\left(\frac{L}{4\pi}\right)^{3/2}f^{-5/2}.
+\end{align*}
+Esta expresión es válida cuando $0<r(f)\le r_{\max}$, lo que equivale a $f\ge L/(4\pi r_{\max}^2)$. En consecuencia,
+$$
+\boxed{
+h_F(f)=
+\begin{cases}
+\dfrac{3}{2r_{\max}^3}\left(\dfrac{L}{4\pi}\right)^{3/2}f^{-5/2},
+& f\ge\dfrac{L}{4\pi r_{\max}^2},\\[3mm]
+0, & \text{en otro caso}.
+\end{cases}}
+$$
+
+\item Como el flujo disminuye al aumentar la distancia, el menor flujo corresponde al borde de la esfera, $r=r_{\max}$:
+$$
+\boxed{F_{\min}=\frac{L}{4\pi r_{\max}^2}.}
+$$
+Por otro lado, no se impone una distancia mínima positiva. Al acercarse al centro,
+$$
+\lim_{r\to0^+}\frac{L}{4\pi r^2}=+\infty.
+$$
+Por tanto, \textbf{no existe un flujo máximo finito}: el flujo no está acotado superiormente y su rango es
+$$
+\boxed{F\in[F_{\min},\infty).}
+$$
+El símbolo $+\infty$ indica que se pueden obtener flujos arbitrariamente grandes, no que una estrella a distancia positiva tenga flujo infinito. El evento $R=0$ tiene probabilidad cero y no modifica la distribución obtenida.
+
+\item Usando el flujo mínimo, la densidad toma la forma más compacta
+$$
+h_F(f)=\frac{3}{2}F_{\min}^{3/2}f^{-5/2},
+\qquad f\ge F_{\min},
+$$
+porque $F_{\min}^{3/2}=(L/(4\pi))^{3/2}/r_{\max}^3$. La densidad es no negativa y su integral sobre todo el rango es
+\begin{align*}
+\int_{-\infty}^{\infty}h_F(f)\,df
+&=\frac{3}{2}F_{\min}^{3/2}\int_{F_{\min}}^\infty f^{-5/2}\,df\\
+&=\frac{3}{2}F_{\min}^{3/2}
+  \left[-\frac{2}{3}f^{-3/2}\right]_{F_{\min}}^\infty\\
+&=\frac{3}{2}F_{\min}^{3/2}
+  \left(\frac{2}{3}F_{\min}^{-3/2}\right)\\
+&=1.
+\end{align*}
+Aquí se utilizó que $f^{-3/2}\to0$ cuando $f\to\infty$. Por tanto, $h_F(f)$ está correctamente normalizada.
+
+\item Por definición, el valor esperado del flujo es
+\begin{align*}
+E[F]
+&=\int_{F_{\min}}^\infty f\,h_F(f)\,df\\
+&=\frac{3}{2}F_{\min}^{3/2}\int_{F_{\min}}^\infty f^{-3/2}\,df\\
+&=\frac{3}{2}F_{\min}^{3/2}
+  \left[-2f^{-1/2}\right]_{F_{\min}}^\infty\\
+&=\frac{3}{2}F_{\min}^{3/2}\left(2F_{\min}^{-1/2}\right)
+=3F_{\min}.
+\end{align*}
+Sustituyendo el valor de $F_{\min}$, concluimos que
+$$
+\boxed{E[F]=\frac{3L}{4\pi r_{\max}^2}.}
+$$
+
+Podemos comprobarlo directamente a partir de la distancia, sin utilizar la densidad transformada:
+$$
+E[F]
+=\int_0^{r_{\max}}\frac{L}{4\pi r^2}\,g_R(r)\,dr
+=\frac{3L}{4\pi r_{\max}^3}\int_0^{r_{\max}}dr
+=\frac{3L}{4\pi r_{\max}^2}.
+$$
+Aunque el flujo puede ser arbitrariamente grande, su media es finita. La probabilidad de encontrar una estrella muy cerca del centro es suficientemente pequeña para que la integral del valor esperado converja.
+\end{enumerate}
+
+\section{Problema 3: Conteo de estrellas mediante un proceso de Poisson}
+
+En un modelo unidimensional, las posiciones de las estrellas a lo largo de una dirección de observación se describen mediante un proceso homogéneo de Poisson. En promedio, se encuentran $4$ estrellas por cada $100\,\mathrm{pc}$ de longitud, donde $\mathrm{pc}$ denota pársec.
+
+La tasa media de estrellas por unidad de longitud es constante y los números de estrellas en segmentos que no se superponen son independientes. Sea $N(L)$ el número de estrellas presentes en un segmento de longitud $L>0$.
+
+\begin{enumerate}[a)]
+    \item Calcule la probabilidad de encontrar exactamente $2$ estrellas en un segmento de $50\,\mathrm{pc}$ de longitud.
+    \item Calcule la probabilidad de encontrar al menos una estrella en un segmento de $50\,\mathrm{pc}$ de longitud.
+    \item Determine la longitud mínima $L$ que debe observarse para que la probabilidad de encontrar al menos una estrella sea mayor o igual al $90\%$. Exprese el resultado en pársecs.
+    \item Explique físicamente por qué, bajo este modelo, el número esperado de estrellas $E[N(L)]$ aumenta linealmente con la longitud $L$ del segmento observado.
+\end{enumerate}
+
+\subsection{Solución}
+
+La tasa media de estrellas por unidad de longitud es
+$$
+\lambda=\frac{4}{100\,\mathrm{pc}}=0.04\,\mathrm{pc}^{-1}.
+$$
+En un proceso homogéneo de Poisson, el número de estrellas en un segmento de longitud $L$ tiene distribución
+$$
+N(L)\sim\operatorname{Poisson}(\mu_L),
+\qquad \mu_L=\lambda L.
+$$
+La tasa $\lambda$ se mide por unidad de longitud, mientras que $\mu_L$ es el número esperado de estrellas en el segmento completo. Su función de probabilidad es
+$$
+P\bigl(N(L)=k\bigr)=\frac{(\lambda L)^k}{k!}e^{-\lambda L},
+\qquad k=0,1,2,\ldots
+$$
+
+\begin{enumerate}[a)]
+\item Para un segmento de $50\,\mathrm{pc}$, el parámetro de la distribución es
+$$
+\mu_{50\,\mathrm{pc}}=(0.04\,\mathrm{pc}^{-1})(50\,\mathrm{pc})=2.
+$$
+Por tanto, sustituyendo $k=2$ en la función de probabilidad,
+$$
+P\bigl(N(50\,\mathrm{pc})=2\bigr)
+=\frac{2^2}{2!}e^{-2}
+=2e^{-2}
+\approx\boxed{0.270671\quad(27.0671\%)}.
+$$
+Que el número esperado sea $2$ no significa que siempre se encuentren dos estrellas: el conteo fluctúa y la probabilidad de obtener exactamente ese número es aproximadamente $27.07\%$.
+
+\item El evento ``al menos una estrella'' es el complemento de ``ninguna estrella''. Así evitamos sumar las probabilidades de todos los valores $k\ge1$:
+\begin{align*}
+P\bigl(N(50\,\mathrm{pc})\ge1\bigr)
+&=1-P\bigl(N(50\,\mathrm{pc})=0\bigr)\\
+&=1-\frac{2^0}{0!}e^{-2}\\
+&=1-e^{-2}
+\approx\boxed{0.864665\quad(86.4665\%)}.
+\end{align*}
+Por tanto, un segmento de $50\,\mathrm{pc}$ no alcanza la probabilidad del $90\%$ requerida en el siguiente inciso.
+
+\item Para una longitud general $L$, la probabilidad de encontrar al menos una estrella es
+$$
+P\bigl(N(L)\ge1\bigr)=1-e^{-\lambda L}.
+$$
+Exigimos que esta probabilidad sea mayor o igual que $0.90$:
+\begin{align*}
+1-e^{-\lambda L}\ge0.90
+&\quad\Longleftrightarrow\quad e^{-\lambda L}\le0.10\\
+&\quad\Longleftrightarrow\quad -\lambda L\le\ln(0.10)\\
+&\quad\Longleftrightarrow\quad L\ge\frac{-\ln(0.10)}{\lambda}
+=\frac{\ln 10}{\lambda}.
+\end{align*}
+Al dividir por $-\lambda<0$, se invierte el sentido de la desigualdad. Además, $1-e^{-\lambda L}$ es estrictamente creciente en $L$, pues su derivada es $\lambda e^{-\lambda L}>0$. Por ello, la longitud mínima se obtiene cuando se cumple la igualdad:
+$$
+\boxed{L_{\min}=\frac{\ln 10}{0.04\,\mathrm{pc}^{-1}}
+=25\ln 10\,\mathrm{pc}
+\approx57.5646\,\mathrm{pc}.}
+$$
+En efecto, para esta longitud exacta,
+$$
+P\bigl(N(L_{\min})\ge1\bigr)
+=1-e^{-\ln 10}=1-\frac{1}{10}=0.90.
+$$
+Si la longitud se expresa con dos decimales y se desea garantizar el umbral, debe redondearse hacia arriba a $57.57\,\mathrm{pc}$. Si sólo se permiten longitudes enteras en pársecs, se necesitan $58\,\mathrm{pc}$.
+
+\item La homogeneidad significa que cualquier segmento de una misma longitud contiene el mismo número esperado de estrellas, independientemente de su ubicación. Al ampliar la longitud observada, se añade una región con la misma densidad lineal media, sin favorecer unas posiciones sobre otras.
+
+Si dividimos un segmento de longitud $L$ en $m$ partes iguales, cada parte tiene longitud $L/m$ y un conteo $N_j$. El conteo total es la suma de los conteos parciales y, por linealidad de la esperanza,
+$$
+E[N(L)]
+=E\!\left[\sum_{j=1}^{m}N_j\right]
+=\sum_{j=1}^{m}E[N_j]
+=\sum_{j=1}^{m}\lambda\frac{L}{m}
+=\lambda L.
+$$
+Así,
+$$
+\boxed{E[N(L)]=(0.04\,\mathrm{pc}^{-1})L.}
+$$
+Duplicar la longitud duplica el número esperado de estrellas; triplicarla lo triplica. Esta proporcionalidad se refiere al promedio, no al conteo exacto de una observación particular. La independencia de los conteos en segmentos disjuntos forma parte del modelo de Poisson, aunque la linealidad de la esperanza no requiere independencia.
+\end{enumerate}
+
+\bibliographystyle{plainurl}
+\bibliography{bibliografia} 
+\end{document}
