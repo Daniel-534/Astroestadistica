@@ -66,7 +66,81 @@ Por ejemplo, en las galaxias espirales, el $80\%$ se refiere a reportar ``hay su
     \end{enumerate}
 \end{enumerate}
 
-\subsection{Solución}
+\subsection{Solución intuitiva con el árbol}
+
+Para leer el árbol basta recordar dos ideas: \textbf{multiplicar al recorrer un camino y sumar los caminos que terminan en el reporte que buscamos}. Una candidata es un reporte de ``hay supernova'', no necesariamente una supernova real.
+
+\begin{enumerate}[a)]
+\item \textbf{¿Qué porcentaje de cada tipo genera un reporte de candidata?}
+
+Miremos primero las espirales. El árbol tiene dos caminos que terminan en ``hay supernova'':
+\begin{itemize}
+    \item La galaxia tiene supernova y el sistema dice ``hay'': tomamos el $80\%$ del $25\%$ que sí tiene supernova.
+    \item La galaxia no tiene supernova y el sistema también dice ``hay'': tomamos el $96\%$ del $75\%$ que no tiene supernova.
+\end{itemize}
+El $96\%$ aparece porque, entre las espirales sin supernova, sólo el $4\%$ recibe el reporte ``no hay''; el resto recibe ``hay''.
+
+Al multiplicar en cada camino y sumar sus aportes,
+$$
+\underbrace{0.25\times0.80}_{\text{tiene y reporta ``hay''}}
++\underbrace{0.75\times0.96}_{\text{no tiene y reporta ``hay''}}
+=0.20+0.72=\boxed{0.92=92\%}.
+$$
+Es decir, de cada $100$ espirales, en promedio se reportan $92$ candidatas: $20$ corresponden a galaxias con supernova y $72$ a galaxias sin supernova.
+
+Para los otros tipos se lee el árbol de la misma manera. Primero completamos los porcentajes que faltan:
+\begin{itemize}
+    \item En las elípticas, el $88\%$ no tiene supernova. Entre éstas, el $97\%$ recibe el reporte ``hay'', pues el $3\%$ recibe ``no hay''.
+    \item En las irregulares, el $65\%$ no tiene supernova. Entre éstas, el $94\%$ recibe el reporte ``hay'', pues el $6\%$ recibe ``no hay''.
+\end{itemize}
+Así obtenemos
+\begin{align*}
+\text{Elípticas:}\quad
+&0.12\times0.75+0.88\times0.97
+=0.09+0.8536=\boxed{0.9436=94.36\%},\\[2mm]
+\text{Irregulares:}\quad
+&0.35\times0.65+0.65\times0.94
+=0.2275+0.611=\boxed{0.8385=83.85\%}.
+\end{align*}
+En cada caso sumamos los dos caminos que terminan en ``hay'', sin importar si realmente existe una supernova.
+
+\item \textbf{¿Qué ocurre al elegir entre las $1200$ galaxias?}
+
+Ahora debemos tener en cuenta cuántas galaxias hay de cada tipo. Las espirales representan $600/1200=50\%$ de la muestra; las elípticas, $360/1200=30\%$; y las irregulares, $240/1200=20\%$.
+
+Podemos imaginar que agregamos al inicio del árbol la elección del tipo de galaxia. Multiplicamos la proporción de cada tipo por su probabilidad de reportar una candidata:
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Tipo & Fracción de la muestra & Reporta candidata & Aporte al total \\
+\midrule
+Espiral & $0.50$ & $0.92$ & $0.50\times0.92=0.46$ \\
+Elíptica & $0.30$ & $0.9436$ & $0.30\times0.9436=0.28308$ \\
+Irregular & $0.20$ & $0.8385$ & $0.20\times0.8385=0.16770$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Cada aporte representa elegir una galaxia de ese tipo \textit{y} obtener un reporte de candidata. Sumando los tres aportes,
+$$
+0.46+0.28308+0.16770=\boxed{0.91078=91.078\%}.
+$$
+No promediamos los tres porcentajes con el mismo peso: hay más espirales que elípticas o irregulares.
+
+\item \textbf{Si ya se reportó una candidata, ¿de qué tipo de galaxia proviene?}
+
+Ahora miramos solamente los casos que terminaron en ``hay''. Su total es $0.91078$, y la última columna de la tabla nos dice cuánto aporta cada tipo. Para conocer la proporción de un tipo dentro de esos reportes, dividimos \textbf{su aporte entre el total de reportes}:
+\begin{align*}
+\text{Espiral:}\quad
+&\frac{0.46}{0.91078}\approx\boxed{50.5062\%},\\[2mm]
+\text{Elíptica:}\quad
+&\frac{0.28308}{0.91078}\approx\boxed{31.0811\%},\\[2mm]
+\text{Irregular:}\quad
+&\frac{0.16770}{0.91078}\approx\boxed{18.4128\%}.
+\end{align*}
+Los tres resultados suman el $100\%$, salvo el pequeño efecto del redondeo. Nos dicen cómo se reparten las candidatas reportadas entre los tipos de galaxia, no cuántas son supernovas reales.
+\end{enumerate}
+
+\subsection{Solución mediante probabilidad total y Bayes}
 
 Usamos la misma notación del árbol: $A$ es el evento ``la galaxia alberga una supernova'' y $A'$ es su complemento; $B$ es el evento ``el sistema reporta una candidata a supernova'' y $B'$ es el evento ``el sistema reporta que no hay supernova''. Los eventos $S$, $E$ e $\mathrm{Irr}$ indican que la galaxia es espiral, elíptica o irregular, respectivamente.
 
@@ -370,23 +444,24 @@ La tasa media de estrellas por unidad de longitud es constante y los números de
 
 La tasa media de estrellas por unidad de longitud es
 $$
-\lambda=\frac{4}{100\,\mathrm{pc}}=0.04\,\mathrm{pc}^{-1}.
+\alpha=\frac{4}{100\,\mathrm{pc}}=0.04\,\mathrm{pc}^{-1}.
 $$
 En un proceso homogéneo de Poisson, el número de estrellas en un segmento de longitud $L$ tiene distribución
 $$
-N(L)\sim\operatorname{Poisson}(\mu_L),
-\qquad \mu_L=\lambda L.
+N(L)\sim\operatorname{Poisson}(\lambda_L),
+\qquad \lambda_L=\alpha L.
 $$
-La tasa $\lambda$ se mide por unidad de longitud, mientras que $\mu_L$ es el número esperado de estrellas en el segmento completo. Su función de probabilidad es
+La tasa $\alpha$ se mide por unidad de longitud, mientras que $\lambda_L$ es el número esperado de estrellas en el segmento completo. Su función de probabilidad es
 $$
-P\bigl(N(L)=k\bigr)=\frac{(\lambda L)^k}{k!}e^{-\lambda L},
+P\bigl(N(L)=k\bigr)=\frac{\lambda_L^k}{k!}e^{-\lambda_L}
+=\frac{(\alpha L)^k}{k!}e^{-\alpha L},
 \qquad k=0,1,2,\ldots
 $$
 
 \begin{enumerate}[a)]
 \item Para un segmento de $50\,\mathrm{pc}$, el parámetro de la distribución es
 $$
-\mu_{50\,\mathrm{pc}}=(0.04\,\mathrm{pc}^{-1})(50\,\mathrm{pc})=2.
+\lambda_{50\,\mathrm{pc}}=(0.04\,\mathrm{pc}^{-1})(50\,\mathrm{pc})=2.
 $$
 Por tanto, sustituyendo $k=2$ en la función de probabilidad,
 $$
@@ -411,17 +486,17 @@ Por tanto, un segmento de $50\,\mathrm{pc}$ no alcanza la probabilidad del $90\%
 
 \item Para una longitud general $L$, la probabilidad de encontrar al menos una estrella es
 $$
-P\bigl(N(L)\ge1\bigr)=1-e^{-\lambda L}.
+P\bigl(N(L)\ge1\bigr)=1-e^{-\alpha L}.
 $$
 Exigimos que esta probabilidad sea mayor o igual que $0.90$:
 \begin{align*}
-1-e^{-\lambda L}\ge0.90
-&\quad\Longleftrightarrow\quad e^{-\lambda L}\le0.10\\
-&\quad\Longleftrightarrow\quad -\lambda L\le\ln(0.10)\\
-&\quad\Longleftrightarrow\quad L\ge\frac{-\ln(0.10)}{\lambda}
-=\frac{\ln 10}{\lambda}.
+1-e^{-\alpha L}\ge0.90
+&\quad\Longleftrightarrow\quad e^{-\alpha L}\le0.10\\
+&\quad\Longleftrightarrow\quad -\alpha L\le\ln(0.10)\\
+&\quad\Longleftrightarrow\quad L\ge\frac{-\ln(0.10)}{\alpha}
+=\frac{\ln 10}{\alpha}.
 \end{align*}
-Al dividir por $-\lambda<0$, se invierte el sentido de la desigualdad. Además, $1-e^{-\lambda L}$ es estrictamente creciente en $L$, pues su derivada es $\lambda e^{-\lambda L}>0$. Por ello, la longitud mínima se obtiene cuando se cumple la igualdad:
+Al dividir por $-\alpha<0$, se invierte el sentido de la desigualdad. Además, $1-e^{-\alpha L}$ es estrictamente creciente en $L$, pues su derivada es $\alpha e^{-\alpha L}>0$. Por ello, la longitud mínima se obtiene cuando se cumple la igualdad:
 $$
 \boxed{L_{\min}=\frac{\ln 10}{0.04\,\mathrm{pc}^{-1}}
 =25\ln 10\,\mathrm{pc}
@@ -443,8 +518,8 @@ $$
 E[N(L)]
 =E\!\left[\sum_{j=1}^{m}N_j\right]
 =\sum_{j=1}^{m}E[N_j]
-=\sum_{j=1}^{m}\lambda\frac{L}{m}
-=\lambda L.
+=\sum_{j=1}^{m}\alpha\frac{L}{m}
+=\alpha L.
 $$
 Así,
 $$
