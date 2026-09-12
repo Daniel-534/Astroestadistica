@@ -338,6 +338,9 @@ Antes de calcular la derivada, escribimos la ecuación que permite construir la 
 $$
 h_F(f)=g_R\bigl(r(f)\bigr)\left|\frac{dr}{df}\right|.
 $$
+
+\input{Figuras2/transformacion_jacobiano.tex}
+
 El valor absoluto del Jacobiano convierte los intervalos de flujo en intervalos de distancia con longitud positiva. Derivando la expresión de $r(f)$,
 $$
 \frac{dr}{df}
@@ -513,12 +516,13 @@ Si la longitud se expresa con dos decimales y se desea garantizar el umbral, deb
 
 \item La homogeneidad significa que cualquier segmento de una misma longitud contiene el mismo número esperado de estrellas, independientemente de su ubicación. Al ampliar la longitud observada, se añade una región con la misma densidad lineal media, sin favorecer unas posiciones sobre otras.
 
-Si dividimos un segmento de longitud $L$ en $m$ partes iguales, cada parte tiene longitud $L/m$ y un conteo $N_j$. El conteo total es la suma de los conteos parciales y, por linealidad de la esperanza,
+Si dividimos un segmento de longitud $L$ en $m$ partes iguales, cada parte tiene longitud $L/m$ y un conteo $N_j$. Como la media de una distribución de Poisson es su parámetro, $E[N_j]=\alpha(L/m)$ para cada parte. El conteo total es la suma de los conteos parciales y, por linealidad de la esperanza,
 $$
 E[N(L)]
 =E\!\left[\sum_{j=1}^{m}N_j\right]
 =\sum_{j=1}^{m}E[N_j]
 =\sum_{j=1}^{m}\alpha\frac{L}{m}
+=m\left(\alpha\frac{L}{m}\right)
 =\alpha L.
 $$
 Así,

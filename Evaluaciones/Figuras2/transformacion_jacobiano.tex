@@ -1,0 +1,57 @@
+\begin{figure}[H]
+\centering
+\shorthandoff{<>}
+\begin{tikzpicture}[font=\small,>=latex]
+  \node[anchor=west,font=\bfseries] at (0,5.15)
+    {Los dos intervalos representan las mismas estrellas};
+  \node[anchor=east,text=teal!70!black] at (1.7,4.2) {Flujo};
+  \draw[->,black!55] (2,4.2) -- (10.6,4.2) node[right] {$f$};
+  \draw[teal!65,line width=5pt] (3,4.2) -- (8,4.2);
+  \fill[teal!75!black] (3,4.2) circle (2.5pt);
+  \fill[teal!75!black] (8,4.2) circle (2.5pt);
+  \node[above=5pt] at (3,4.2) {$f$};
+  \node[above=5pt] at (8,4.2) {$f+\Delta f$};
+  \node[above=5pt,text=teal!70!black] at (5.5,4.2) {ancho $\Delta f$};
+
+  \draw[->,dashed,black!45] (3,4.02) -- (7,2.38);
+  \draw[->,dashed,black!45] (8,4.02) -- (4,2.38);
+  \node[anchor=west,align=left,text=black!65] at (8.4,3.25)
+    {Mayor flujo,\\menor distancia};
+
+  \node[anchor=east,text=orange!80!black] at (1.7,2.2) {Distancia};
+  \draw[->,black!55] (2,2.2) -- (10.6,2.2) node[right] {$r$};
+  \draw[orange!70,line width=5pt] (4,2.2) -- (7,2.2);
+  \fill[orange!85!black] (4,2.2) circle (2.5pt);
+  \fill[orange!85!black] (7,2.2) circle (2.5pt);
+  \node[below=5pt] at (4,2.2) {$r(f+\Delta f)$};
+  \node[below=5pt] at (7,2.2) {$r(f)$};
+  \node[above=5pt,text=orange!80!black,fill=white,inner sep=2pt] at (5.5,2.2) {ancho $\Delta r>0$};
+
+  \node[align=center,text=black!75] at (5.5,1.1)
+    {$\Delta r=r(f)-r(f+\Delta f)
+      \;\approx\;\left|\dfrac{dr}{df}\right|\Delta f$};
+
+  \node[anchor=north,align=center,text width=5.3cm] at (2.7,0.3)
+    {\textbf{¿Dónde evaluar la densidad?}\\[5pt]
+     El flujo $f$ corresponde a la distancia $r(f)$.\\[5pt]
+     Por eso se usa $g_R\bigl(r(f)\bigr)$.};
+  \node[anchor=north,align=center,text width=5.3cm] at (8.6,0.3)
+    {\textbf{¿Por qué multiplicar?}\\[5pt]
+     Los intervalos tienen distinto ancho.\\[5pt]
+     El factor $|dr/df|$ convierte $\Delta f$ en $\Delta r$.};
+
+  \node[align=center] at (5.5,-2.9)
+    {Misma probabilidad $\approx$ densidad $\times$ ancho\\[8pt]
+     $\underbrace{h_F(f)\,\Delta f}_{\text{intervalo de flujo}}
+     \;\approx\;
+     \underbrace{g_R\bigl(r(f)\bigr)\,\Delta r}_{\text{intervalo de distancia}}$};
+  \node[align=center] at (5.5,-4.85)
+    {Sustituir $\Delta r$, dividir por $\Delta f$ y tomar $\Delta f\to0$:\\[8pt]
+     $\displaystyle\boxed{h_F(f)=
+       \underbrace{g_R\bigl(r(f)\bigr)}_{\text{composición}}
+       \underbrace{\left|\frac{dr}{df}\right|}_{\text{cambio de ancho}}}$};
+\end{tikzpicture}
+\shorthandon{<>}
+\caption{Justificación de la transformación de densidades para $f=L/(4\pi r^2)$. Los intervalos coloreados corresponden exactamente al mismo evento y tienen la misma probabilidad, aunque sus anchos sean distintos. Las aproximaciones densidad por ancho se vuelven exactas en el límite de intervalos pequeños, en el interior del dominio. Como $r(f)$ decrece, los extremos invierten su orden y $dr/df<0$; su valor absoluto proporciona un ancho positivo. El dibujo es esquemático y los ejes tienen escalas diferentes.}
+\label{fig:transformacion-jacobiano}
+\end{figure}
