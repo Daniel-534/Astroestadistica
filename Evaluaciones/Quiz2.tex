@@ -14,11 +14,12 @@
 \usepackage{booktabs}
 \usepackage{mathrsfs}
 \usepackage{tikz}
+\usepackage{xcolor}
 
 % cabecera
 \pagestyle{fancy}
 \fancyhead[l]{Astroestadística}
-\fancyhead[c]{Quiz 2 ???}
+\fancyhead[c]{Quiz 2}
 \fancyhead[r]{\today}
 \fancyfoot[c]{\thepage}
 \renewcommand{\headrulewidth}{0.2pt} % linea horizontal
@@ -37,40 +38,50 @@ Seleccione la opción correcta en cada pregunta.
     \item Un procedimiento para generar un conjunto de valores posibles para un parámetro poblacional desconocido.
     \item Una aproximación mediante pruebas de hipótesis a un parámetro poblacional desconocido.
     \item Cálculo de un intervalo en el que puede estar un parámetro poblacional desconocido.
-    \item Un único valor que sirve como estimación de un parámetro poblacional desconocido.
+    \item \textcolor{red}{Un único valor que sirve como estimación de un parámetro poblacional desconocido.}
 \end{enumerate}
+\smallskip
+\textit{Justificación:} Una estimación puntual asigna un solo valor al parámetro desconocido a partir de los datos muestrales.
 
 \item ¿Qué propiedad no se asocia generalmente con los estimadores puntuales?
 \begin{enumerate}[a)]
     \item Consistencia
     \item Insesgadez
-    \item Simetría
+    \item \textcolor{red}{Simetría}
     \item Eficiencia
 \end{enumerate}
+\smallskip
+\textit{Justificación:} Consistencia, insesgadez y eficiencia son propiedades habituales de los estimadores; la simetría no lo es en general.
 
 \item Para una muestra independiente e idénticamente distribuida, la función de likelihood es:
 \begin{enumerate}[a)]
     \item La suma de densidades
     \item El logaritmo de las densidades
     \item La media de densidades
-    \item El producto de densidades individuales
+    \item \textcolor{red}{El producto de densidades individuales}
 \end{enumerate}
+\smallskip
+\textit{Justificación:} Por independencia, la densidad conjunta y, por tanto, la función de verosimilitud es el producto de las densidades individuales.
 
 \item ¿Cuál de los siguientes enunciados describe mejor el concepto de estimador eficiente?
 \begin{enumerate}[a)]
     \item Es un estimador cuyo resultado tiende al parámetro poblacional a medida que el tamaño de la muestra aumenta.
     \item Es un estimador insesgado y consistente.
     \item Es el estimador con mínima varianza, sea insesgado o no.
-    \item Es un estimador insesgado que minimiza la varianza entre todos los estimadores insesgados.
+    \item \textcolor{red}{Es un estimador insesgado que minimiza la varianza entre todos los estimadores insesgados.}
 \end{enumerate}
+\smallskip
+\textit{Justificación:} Un estimador eficiente alcanza la menor varianza posible dentro de la clase de estimadores insesgados.
 
 \item Sea $X_1, \dots, X_n \sim \text{Uniforme}(0, \theta)$. El estimador por momentos de $\theta$ es:
 \begin{enumerate}[a)]
     \item $(1/n) \sum X_i$
     \item $\max(X_i)$
     \item $((n+1)/n) \max(X_i)$
-    \item $2 (1/n) \sum X_i$
+    \item \textcolor{red}{$2 (1/n) \sum X_i$}
 \end{enumerate}
+\smallskip
+\textit{Justificación:} Como $E[X]=\theta/2$, al igualar el primer momento poblacional con la media muestral se obtiene $\widehat{\theta}_{\mathrm{MM}}=2\overline{X}$.
 
 \end{enumerate}
 \bibliographystyle{plainurl}
