@@ -1,0 +1,76 @@
+\begin{tikzpicture}
+    \node[diagram/terminal] (inicio) at (0,0) {Inicio};
+    \node[diagram/process, text width=4.5cm] (parametros) at (0,-1.4)
+        {$p=0.002$, $n=100$, fijar $N$\\
+         $j\gets1$; \texttt{exitos} $\gets0$};
+    \node[diagram/process] (reiniciar) at (0,-3)
+        {\texttt{noche} $\gets0$\\\texttt{detecciones} $\gets0$};
+    \node[diagram/decision] (faltan) at (0,-5.3)
+        {¿\texttt{noche}\\$<100$?};
+    \node[diagram/process] (noche) at (0,-7.2)
+        {\texttt{noche} $\gets$ \texttt{noche} $+1$\\
+         Generar $U\sim\operatorname{Unif}[0,1)$};
+    \node[diagram/decision, text width=1.55cm] (detectar) at (0,-9.05)
+        {\mbox{¿$U<p$?}};
+    \node[diagram/process, text width=2.6cm] (deteccion) at (3.7,-9.05)
+        {Incrementar en 1\\\texttt{detecciones}};
+    \coordinate (unirnoches) at (0,-10.55);
+    \node[diagram/output, text width=3.5cm] (guardar) at (7.5,-5.3)
+        {Periodo de 100 noches completo\\$Y\gets\texttt{detecciones}$};
+    \node[diagram/decision, text width=1.7cm] (almenosuna) at (7.5,-7.25)
+        {\mbox{¿$Y\geq1$?}};
+    \node[diagram/process, text width=3.5cm] (exito) at (7.5,-9.05)
+        {\texttt{exitos} $\gets$ \texttt{exitos} $+1$};
+    \coordinate (unirexperimentos) at (7.5,-10.55);
+    \node[diagram/decision, text width=1.55cm] (repetir) at (7.5,-11.95)
+        {\mbox{¿$j<N$?}};
+    \node[diagram/process, text width=2.8cm] (siguiente) at (7.5,-3)
+        {Nueva repetición\\$j\gets j+1$};
+    \node[diagram/output, text width=3.6cm] (estimar) at (7.5,-13.9)
+        {Estimar $P(Y\geq1)$\\
+         $\widehat P=\texttt{exitos}/N$};
+    \node[diagram/terminal] (fin) at (7.5,-15.4) {Fin};
+
+    \begin{scope}[on background layer]
+        \filldraw[diagram/night region]
+            (-3.6,-3.85) rectangle (5.3,-10.95);
+    \end{scope}
+    \node[diagram/group label, anchor=north west, align=left] at (-3.4,-4)
+        {CICLO DE\\100 NOCHES};
+
+    \draw[diagram/arrow] (inicio) -- (parametros);
+    \draw[diagram/arrow] (parametros) -- (reiniciar);
+    \draw[diagram/arrow] (reiniciar) -- (faltan);
+    \draw[diagram/night arrow] (faltan) --
+        node[diagram/edge label, right] {Sí} (noche);
+    \draw[diagram/night arrow] (noche) -- (detectar);
+    \draw[diagram/night arrow] (detectar) --
+        node[diagram/edge label, above] {Sí} (deteccion);
+    \draw[diagram/night line] (detectar.south) --
+        node[diagram/edge label, right] {No} (unirnoches);
+    \draw[diagram/night line] (deteccion.south) |- (unirnoches);
+    \fill[diagramGreen] (unirnoches) circle (1.6pt);
+    \draw[diagram/night arrow] (unirnoches) -- (-3.05,-10.55)
+        -- node[diagram/edge label, sloped, above] {Siguiente noche}
+        (-3.05,-5.3) -- (faltan.west);
+    \draw[diagram/arrow] (faltan.east) --
+        node[diagram/edge label, above] {No: se completó $n=100$} (guardar.west);
+    \draw[diagram/arrow] (guardar) -- (almenosuna);
+    \draw[diagram/arrow] (almenosuna) --
+        node[diagram/edge label, right] {Sí} (exito);
+    \draw[diagram/line] (almenosuna.east) --
+        node[diagram/edge label, above] {No} (10,-7.25)
+        -- (10,-10.55) -- (unirexperimentos);
+    \draw[diagram/line] (exito) -- (unirexperimentos);
+    \fill[diagramInk] (unirexperimentos) circle (1.6pt);
+    \draw[diagram/arrow] (unirexperimentos) -- (repetir);
+    \draw[diagram/repeat arrow] (repetir.east) --
+        node[diagram/edge label, above] {Sí} (11.2,-11.95)
+        -- node[diagram/edge label, sloped, below] {Otra simulación}
+        (11.2,-3) -- (siguiente.east);
+    \draw[diagram/repeat arrow] (siguiente.west) -- (reiniciar.east);
+    \draw[diagram/arrow] (repetir) --
+        node[diagram/edge label, right] {No: se completó $N$}
+        (estimar);
+    \draw[diagram/arrow] (estimar) -- (fin);
+\end{tikzpicture}
