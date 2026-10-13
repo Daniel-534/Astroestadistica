@@ -1,0 +1,88 @@
+\documentclass[a4paper]{article}
+
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+% cabecera
+\pagestyle{fancy}
+\fancyhead[l]{Astroestadística}
+\fancyhead[c]{Quiz 3}
+\fancyhead[r]{\today}
+\fancyfoot[c]{\thepage}
+\renewcommand{\headrulewidth}{0.2pt}
+
+\begin{document}
+
+\section{Quiz de Probabilidad y Estadística}
+
+Seleccione la opción correcta en cada pregunta.
+
+\begin{enumerate}
+
+\item Se obtiene un intervalo de confianza del 95\% para la media poblacional de la magnitud absoluta de cierto tipo de estrellas: $[-3.42,-2.85]$. ¿Qué indica este nivel de confianza?
+\begin{enumerate}[a)]
+    \item Existe una probabilidad de 0.95 de que la media esté entre $-3.42$ y $-2.85$.
+    \item Hay un 5\% de probabilidad de que una estrella tenga una magnitud absoluta fuera del intervalo.
+    \item El 95\% de las estrellas de la población tiene magnitud absoluta entre $-3.42$ y $-2.85$.
+    \item \textcolor{red}{El 95\% de los intervalos construidos de esta manera contiene la media real.}
+\end{enumerate}
+\smallskip
+\textit{Justificación:} En el enfoque frecuentista, el 95\% describe la proporción de intervalos que contendrían la media real en muestreos repetidos.
+
+\item Si un intervalo de confianza para la media de una población es $[50,60]$, ¿cuál es el error estándar si el nivel de confianza es del 95\% y la distribución es simétrica?
+\begin{enumerate}[a)]
+    \item \textcolor{red}{$2.55$}
+    \item $5$
+    \item No se puede determinar con esta información.
+    \item $10$
+\end{enumerate}
+\smallskip
+\textit{Justificación:} El margen de error es $5$; usando el valor crítico normal aproximado de $1.96$ para un 95\%, el error estándar es $5/1.96 \approx 2.55$.
+
+\item Se desea estimar la media de una variable astronómica mediante un intervalo de confianza. Manteniendo fijo el nivel de confianza y la variabilidad poblacional, ¿qué sucede aproximadamente con el ancho del intervalo al cuadruplicar el tamaño de muestra?
+\begin{enumerate}[a)]
+    \item \textcolor{red}{Se reduce a la mitad.}
+    \item Se cuadruplica.
+    \item Se reduce a la cuarta parte.
+    \item No cambia.
+\end{enumerate}
+\smallskip
+\textit{Justificación:} El error estándar es proporcional a $1/\sqrt{n}$; al cuadruplicar $n$, el ancho del intervalo se reduce a la mitad.
+
+\item Un investigador calcula un intervalo de confianza para la media de una población y cambia el nivel de confianza del 90\% al 99\%, manteniendo todo lo demás constante. ¿Qué ocurrirá con el intervalo?
+\begin{enumerate}[a)]
+    \item Tendrá el mismo ancho, pero cambiará su centro.
+    \item Será más estrecho porque disminuye el nivel de significancia.
+    \item \textcolor{red}{Será más ancho porque se requiere mayor probabilidad de cobertura.}
+    \item Será más estrecho porque aumenta la precisión.
+\end{enumerate}
+\smallskip
+\textit{Justificación:} Para aumentar la confianza se necesita un mayor valor crítico y, por tanto, un intervalo más ancho.
+
+\item Se dispone de una muestra de 12 estrellas y se desea estimar la media de una población aproximadamente normal. La desviación estándar poblacional es desconocida. ¿Cuál distribución es apropiada para construir un intervalo de confianza para $\mu$?
+\begin{enumerate}[a)]
+    \item \textcolor{red}{$t$ de Student con 11 grados de libertad.}
+    \item $t$ de Student con 12 grados de libertad.
+    \item Chi-cuadrado con 11 grados de libertad.
+    \item Normal estándar, independientemente del tamaño de muestra.
+\end{enumerate}
+\smallskip
+\textit{Justificación:} Con desviación estándar poblacional desconocida y una muestra normal de tamaño $n=12$, se usa la distribución $t$ con $n-1=11$ grados de libertad.
+
+\end{enumerate}
+\bibliographystyle{plainurl}
+\bibliography{bibliografia}
+\end{document}
