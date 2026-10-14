@@ -198,9 +198,6 @@ P(X=x) = \binom{x-1}{r-1}p^r(1-p)^{x-r}
 
 El soporte de esta variable es $x=r,r+1,r+2,\ldots$. Estas condiciones y la función de masa corresponden al modelo binomial negativo \citep[sec.~3.5, p.~119]{devore2008}.
 
-\paragraph{Precisión sobre la definición.}
-Devore cuenta el número de fallos anteriores al éxito número $r$. En esta tarea, $X$ cuenta el total de noches, es decir, fallos más $r$ éxitos. El libro reconoce ambas convenciones \citep[p.~119]{devore2008}.
-
 \Needspace{10\baselineskip}
 \subsection*{Inciso d}
 
@@ -210,7 +207,7 @@ Devore cuenta el número de fallos anteriores al éxito número $r$. En esta tar
 
 \paragraph{Solución.}
 
-En el cuaderno se construyen histogramas normalizados con \texttt{density=True}, usando intervalos de $100$ noches. Sobre cada histograma se superpone la función de masa teórica de la Binomial Negativa,
+En el notebook se construyen histogramas normalizados con \texttt{density=True}, usando intervalos de $100$ noches. Sobre cada histograma se superpone la función de masa teórica de la Binomial Negativa,
 \[
     P(X=x)=\binom{x-1}{r-1}p^r(1-p)^{x-r},
 \]
@@ -376,9 +373,9 @@ La distribución de Poisson resultante tiene un único parámetro $\lambda$, que
 \lambda = np
 \]
 
-Como regla práctica de Devore, esta aproximación puede utilizarse cuando $n \geq 50$ y $np \leq 5$ (``eventos raros en muchos ensayos'') \citep[p.~122]{devore2008}.
+Esta aproximación puede utilizarse cuando $n \geq 50$ y $np \leq 5$ (``eventos raros en muchos ensayos'') \citep[p.~122]{devore2008}.
 
-En nuestro contexto astroestadístico, los eventos de microlente gravitacional son extremadamente raros ($p = 0.002$), lo que hace de la Poisson un modelo natural para aproximar la Binomial en estos casos.
+En nuestro contexto astroestadístico, los eventos de microlente gravitacional son muy raros ($p = 0.002$), lo que hace de la Poisson un modelo natural para aproximar la Binomial en estos casos.
 
 \Needspace{10\baselineskip}
 \subsection*{Inciso i}
@@ -436,7 +433,7 @@ A continuación, contrastamos los tres enfoques utilizados a lo largo de la tare
 \lstset{basicstyle=\ttfamily\scriptsize, aboveskip=0.5em, belowskip=0.5em}
 \section{Código de simulación y cálculos}
 
-Los siguientes bloques recogen el núcleo de los procedimientos del cuaderno, omitiendo las instrucciones de medición de tiempo y construcción de la figura. La figura incluida en el informe es la salida original, no una regeneración. El cuaderno no fija una semilla aleatoria; por ello, una nueva ejecución producirá valores empíricos distintos de los aquí reportados.
+Los siguientes bloques recogen el núcleo de los procedimientos del notebook.
 
 \subsection{Tiempo de espera hasta tres detecciones}
 
