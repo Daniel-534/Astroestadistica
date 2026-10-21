@@ -1,0 +1,260 @@
+\documentclass[12pt]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\inputfigura}[1]{\IfFileExists{Parcial2/Figuras/#1.tex}{\input{Parcial2/Figuras/#1.tex}}{\input{Figuras/#1.tex}}}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{UNIVERSIDAD DE ANTIOQUIA}}\\[0.2cm]
+    {\large \textbf{Astroestadística}}\\[0.1cm]
+    \textbf{Problemas para Evaluación \#2}
+\end{center}
+
+\vspace{0.5cm}
+
+\section*{Punto 1: Conceptos de estimación e hipótesis}
+
+\subsection*{Enunciado}
+Responda las siguientes preguntas:
+\begin{enumerate}[label=(\alph*)]
+    \item ¿Cuáles son las características de un buen estimador? Descríbalas.
+    \item ¿Cómo se define la función de Likelihood? Suponga una muestra independiente e idénticamente distribuida.
+    \item ¿En qué consiste la estimación por momentos?
+    \item En una prueba de hipótesis, ¿qué es el valor-$p$ y cómo se relaciona con la regla de decisión?
+\end{enumerate}
+
+\subsection*{Solución}
+\begin{enumerate}[label=(\alph*)]
+    \item Un buen estimador busca acercarse al parámetro verdadero y variar poco entre muestras. Algunas propiedades importantes son:
+    \begin{itemize}
+        \item \textbf{Insesgadez:} $E(\hat{\theta})=\theta$; en promedio, el estimador coincide con el valor del parámetro.
+        \item \textbf{Consistencia:} $\hat{\theta}$ se acerca a $\theta$ al aumentar el tamaño muestral; formalmente, para todo $\varepsilon>0$, $P(|\hat{\theta}-\theta|>\varepsilon)\to0$ cuando $n\to\infty$.
+        \item \textbf{Eficiencia:} entre estimadores comparables, suele preferirse el que tiene menor varianza. Por ejemplo, al comparar estimadores insesgados, menor $\operatorname{Var}(\hat{\theta})$ significa mayor precisión.
+    \end{itemize}
+
+    \item Dada una muestra i.i.d. $x_1,x_2,\ldots,x_n$ con función de densidad o masa $f(x\mid\theta)$, la función de verosimilitud es la función del parámetro $\theta$ que se obtiene al fijar los datos observados:
+    $$
+    L(x_1,x_2,\ldots,x_n\mid\theta)
+    =\prod_{i=1}^{n}f(x_i\mid\theta)
+    =f(x_1\mid\theta)f(x_2\mid\theta)\cdots f(x_n\mid\theta).
+    $$
+    El producto se debe a la independencia de las observaciones. La verosimilitud muestra qué valores de $\theta$ describen mejor los datos, pero no es por sí misma una distribución de probabilidad de $\theta$.
+
+    \item La estimación por momentos consiste en igualar momentos poblacionales con los momentos muestrales correspondientes y resolver las ecuaciones para obtener los parámetros desconocidos. Para el momento de orden $k$, se igualan
+    $$
+    E(X^k)=\frac{1}{n}\sum_{i=1}^{n}x_i^k.
+    $$
+    Si hay varios parámetros desconocidos, se utilizan tantos momentos como ecuaciones sean necesarias para determinarlos.
+
+    \item El valor-$p$ es la probabilidad, suponiendo cierta $H_0$, de obtener un resultado tan extremo o más extremo que el observado, de acuerdo con la hipótesis alternativa. No es la probabilidad de que $H_0$ sea cierta.
+
+    Para una prueba de nivel $\alpha$, se rechaza $H_0$ si el valor-$p$ es menor o igual que $\alpha$; en caso contrario, no se rechaza. Si $F$ es la función de distribución acumulada bajo $H_0$, entonces:
+    \begin{itemize}
+        \item Cola derecha ($\theta>\theta_0$): $\text{Valor-}p=1-F(Z_{\mathrm{obs}})$.
+        \item Cola izquierda ($\theta<\theta_0$): $\text{Valor-}p=F(Z_{\mathrm{obs}})$.
+        \item Dos colas: si los límites observados de la región extrema son $Z_{\mathrm{obs}}^{-}$ y $Z_{\mathrm{obs}}^{+}$, el valor-$p$ es
+        $$
+        F(Z_{\mathrm{obs}}^{-})+1-F(Z_{\mathrm{obs}}^{+}).
+        $$
+        Para una distribución simétrica y una prueba bilateral usual, esto se reduce a $2[1-F(|Z_{\mathrm{obs}}|)]$.
+    \end{itemize}
+\end{enumerate}
+
+\section*{Punto 2: Biofirmas}
+
+\subsection*{Enunciado}
+Investigadores de la UdeA estudian la presencia de una molécula atmosférica $S$ en exoplanetas rocosos, que puede asociarse a procesos biológicos como la fotosíntesis. Sin embargo, procesos abióticos también pueden producirla. Se comparan dos muestras independientes:
+\begin{itemize}
+    \item \textbf{Planetas dentro de la zona de habitabilidad (HZ):} $n_1=16$, $\bar{x}_1=2.85\,\mathrm{ppm}$ y $s_1=0.50\,\mathrm{ppm}$.
+    \item \textbf{Planetas fuera de la zona de habitabilidad:} $n_2=20$, $\bar{x}_2=2.35\,\mathrm{ppm}$ y $s_2=0.45\,\mathrm{ppm}$.
+\end{itemize}
+Responda:
+\begin{enumerate}[label=(\alph*)]
+    \item En el contexto del problema, ¿qué representa un error de tipo I y qué representa uno de tipo II?
+    \item Realice una prueba de hipótesis para determinar si los planetas en HZ presentan, en promedio, concentraciones mayores de $S$ que los planetas fuera de ella. Utilice $\alpha=0.05$.
+    \item Suponga que la diferencia verdadera entre las concentraciones promedio es $\mu_1-\mu_2=0.30\,\mathrm{ppm}$ y que la desviación estándar poblacional común es $\sigma=0.48\,\mathrm{ppm}$. Calcule la probabilidad de error de tipo II ($\beta$) y la potencia de la prueba.
+\end{enumerate}
+
+\subsection*{Solución}
+\begin{enumerate}[label=(\alph*)]
+    \item Un \textbf{error de tipo I} consiste en concluir que la concentración promedio en HZ es mayor cuando en realidad no lo es. Un \textbf{error de tipo II} consiste en no detectar que la concentración promedio en HZ es mayor cuando en realidad sí lo es. Estos errores describen decisiones sobre los promedios y no prueban ni descartan por sí solos la existencia de vida.
+
+    \item Definimos las variables y los parámetros:
+    \[
+    \begin{aligned}
+    X_1&:\text{ concentración de }S\text{ en planetas HZ},\\
+    X_2&:\text{ concentración de }S\text{ en planetas fuera de HZ}.
+    \end{aligned}
+    \]
+    $$
+    \mu_1=E(X_1),\qquad \mu_2=E(X_2),\qquad
+    \Delta=\mu_1-\mu_2.
+    $$
+    La pregunta es si $\mu_1>\mu_2$. Planteamos las hipótesis
+    $$
+    H_0:\mu_1-\mu_2=0=\Delta_0,
+    \qquad
+    H_a:\mu_1-\mu_2>0.
+    $$
+    La hipótesis nula compuesta incluye los casos $\mu_1-\mu_2\leq0$; para construir la prueba unilateral evaluamos su frontera, $\Delta_0=0$.
+
+    Usamos el estadístico $T$ con los datos de las dos muestras. Aquí $S_1=0.50\,\mathrm{ppm}$ y $S_2=0.45\,\mathrm{ppm}$ son las desviaciones estándar muestrales, y $\hat{\mu}_1=\bar{x}_1$, $\hat{\mu}_2=\bar{x}_2$. El error estándar estimado de la diferencia es
+    \begin{align*}
+    SE
+    &=\sqrt{\frac{S_1^2}{n_1}+\frac{S_2^2}{n_2}}\\
+    &=\sqrt{\frac{0.50^2}{16}+\frac{0.45^2}{20}}\\
+    &=\sqrt{\frac{0.25}{16}+\frac{0.2025}{20}}\\
+    &=\sqrt{0.015625+0.010125}\\
+    &=\sqrt{0.02575}\\
+    &\approx0.16047\,\mathrm{ppm}.
+    \end{align*}
+
+    El estadístico de prueba es
+    $$
+    T=\frac{\hat{\mu}_1-\hat{\mu}_2-\Delta_0}
+    {\sqrt{\dfrac{S_1^2}{n_1}+\dfrac{S_2^2}{n_2}}}
+    =\frac{\bar{x}_1-\bar{x}_2-\Delta_0}{SE}.
+    $$
+    Sustituyendo las medias y el error estándar:
+    \begin{align*}
+    t_{\mathrm{obs}}
+    &=\frac{2.85-2.35-0}{0.16047}\\
+    &=\frac{0.50}{0.16047}\\
+    &\approx3.116.
+    \end{align*}
+
+    Usamos la aproximación solicitada para los grados de libertad:
+    $$
+    \nu\approx n_1+n_2-2=16+20-2=34.
+    $$
+    Para una prueba de cola derecha con $\alpha=0.05$, el valor crítico satisface $P(t_{34}>t_{0.05,34})=0.05$. De la distribución $t$:
+    $$
+    t_{0.05,34}\approx1.691.
+    $$
+    Como $t_{\mathrm{obs}}=3.116>1.691$, rechazamos $H_0$. El valor-$p$ unilateral es
+    $$
+    p=P(t_{34}\geq3.116)\approx0.00186<0.05.
+    $$
+    Ambos criterios conducen a la misma decisión: hay evidencia estadística de que la concentración promedio de $S$ es mayor en los planetas HZ.
+
+    \inputfigura{prueba_t}
+
+    \item Para calcular $\beta$ utilizamos la información nueva del enunciado: la desviación estándar poblacional común es conocida, $\sigma=0.48\,\mathrm{ppm}$. La diferencia verdadera indicada es
+    $$
+    \mu_1-\mu_2=\Delta'=0.30\,\mathrm{ppm}.
+    $$
+    La desviación estándar del estimador de la diferencia de medias es
+    \begin{align*}
+    \sigma_{\hat{\Delta}}
+    &=\sigma_{\bar{x}_1-\bar{x}_2}\\
+    &=\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}\\
+    &=\sqrt{\frac{0.48^2}{16}+\frac{0.48^2}{20}}\\
+    &=0.48\sqrt{\frac{1}{16}+\frac{1}{20}}\\
+    &\approx0.16099\,\mathrm{ppm}.
+    \end{align*}
+
+    Para una prueba unilateral de nivel $\alpha=0.05$, el valor crítico normal es $Z_{\alpha}=1.645$. La región de rechazo puede escribirse en la escala de $\hat{\Delta}$ como $\hat{\Delta}>c$, donde
+    \begin{align*}
+    c
+    &=\Delta_0+Z_{\alpha}\sigma_{\hat{\Delta}}\\
+    &=0+1.645(0.16099)\\
+    &\approx0.2648\,\mathrm{ppm}.
+    \end{align*}
+    Por tanto, el error de tipo II ocurre si no se rechaza $H_0$, es decir, si $\hat{\Delta}\leq c$ cuando la diferencia verdadera es $\Delta'$:
+    \begin{align*}
+    \beta(\Delta')
+    &=P(\hat{\Delta}\leq c\mid\Delta=\Delta')\\
+    &=P\left(\frac{\hat{\Delta}-\Delta_0}{\sigma_{\hat{\Delta}}}
+      \leq Z_{\alpha}\;\middle|\;\Delta=\Delta'\right)\\
+    &=P\left(\hat{\Delta}\leq Z_{\alpha}\sigma_{\hat{\Delta}}+\Delta_0
+      \;\middle|\;\Delta=\Delta'\right)\\
+    &=P\left(\hat{\Delta}-\Delta'
+      \leq Z_{\alpha}\sigma_{\hat{\Delta}}+\Delta_0-\Delta'
+      \;\middle|\;\Delta=\Delta'\right)\\
+    &=P\left(\frac{\hat{\Delta}-\Delta'}{\sigma_{\hat{\Delta}}}
+      \leq Z_{\alpha}+\frac{\Delta_0-\Delta'}{\sigma_{\hat{\Delta}}}
+      \;\middle|\;\Delta=\Delta'\right)\\
+    &=\Phi\left(Z_{\alpha}+\frac{\Delta_0-\Delta'}{\sigma_{\hat{\Delta}}}\right)\\
+    &=\Phi\left(1.645-\frac{0.30}{0.16099}\right)\\
+    &\approx\Phi(-0.2186)\\
+    &\approx0.4135.
+    \end{align*}
+    En consecuencia, la potencia de la prueba es
+    $$
+    1-\beta=1-0.4135=0.5865.
+    $$
+    Bajo la diferencia supuesta de $0.30\,\mathrm{ppm}$, la prueba tiene aproximadamente $41.35\%$ de probabilidad de no rechazar $H_0$ y $58.65\%$ de probabilidad de rechazarla.
+
+    \inputfigura{beta_potencia}
+\end{enumerate}
+
+\section*{Punto 3: Binarias eclipsantes}
+
+\subsection*{Enunciado}
+Algunas bajas en la curva de luz de una estrella pueden atribuirse a un tránsito planetario. Sin embargo, una estrella compañera que pasa por delante o por detrás de la otra también puede producir estos cambios; este fenómeno se conoce como binaria eclipsante. En una muestra de $88$ curvas reportadas como tránsitos, se encontró que $31$ eran binarias eclipsantes.
+\begin{enumerate}[label=(\alph*)]
+    \item Calcule e interprete un intervalo de confianza (IC) del $95\%$ para la proporción real de binarias eclipsantes entre todas las curvas reportadas como tránsitos bajo estas circunstancias.
+    \item ¿Qué tamaño de muestra se requiere para que el ancho deseado del IC aproximado del $95\%$ sea como máximo $0.04$, independientemente de los resultados de la muestra?
+\end{enumerate}
+
+\subsection*{Solución}
+\begin{enumerate}[label=(\alph*)]
+    \item Sea $p$ la proporción poblacional de curvas que corresponden a binarias eclipsantes. En la muestra, $x=31$ de las $n=88$ curvas son binarias eclipsantes, por lo que
+    $$
+    \hat{p}=\frac{x}{n}=\frac{31}{88}\approx0.35227.
+    $$
+    Calculamos un intervalo de confianza de Wilson del $95\%$. Con $z_{0.975}=1.96$, los límites se obtienen mediante
+    $$
+    \frac{\hat{p}+z^2/(2n)}{1+z^2/n}
+    \;\pm\;
+    \frac{z}{1+z^2/n}
+    \sqrt{\frac{\hat{p}(1-\hat{p})}{n}+\frac{z^2}{4n^2}}.
+    $$
+    Sustituimos $\hat{p}=31/88\approx0.35227$, $n=88$ y $z=1.96$. El centro del intervalo es
+    $$
+    \frac{0.35227+1.96^2/(2\cdot88)}{1+1.96^2/88}
+    \approx0.35845,
+    $$
+    y el semiancho es
+    $$
+    \frac{1.96}{1+1.96^2/88}
+    \sqrt{\frac{0.35227(1-0.35227)}{88}+\frac{1.96^2}{4\cdot88^2}}
+    \approx0.09789.
+    $$
+    Así, el intervalo de confianza es
+    $$
+    \boxed{IC_{95\%}(p)\approx[0.26056,\,0.45634]}.
+    $$
+    En porcentaje, va aproximadamente de $26.06\%$ a $45.63\%$. Su interpretación es que el procedimiento usado produce intervalos que contienen la proporción poblacional en aproximadamente el $95\%$ de las muestras repetidas; el $95\%$ no representa una probabilidad asignada a $p$ después de observar este intervalo.
+
+    \inputfigura{intervalo_binomial}
+
+    \item El ancho máximo deseado es $0.04$, de modo que el margen de error debe satisfacer $E=0.04/2=0.02$. Para la aproximación normal al $95\%$,
+    $$
+    E=z_{0.975}\sqrt{\frac{p(1-p)}{n}}.
+    $$
+    Como $p$ es desconocido y el tamaño de muestra no debe depender de los resultados, usamos el peor caso $p(1-p)\leq1/4$, que ocurre en $p=0.5$. Entonces,
+    \begin{align*}
+    1.96\sqrt{\frac{0.25}{n}}&\leq0.02,\\
+    \frac{1.96^2(0.25)}{n}&\leq0.02^2,\\
+    n&\geq\frac{1.96^2(0.25)}{0.02^2}=2401.
+    \end{align*}
+    Redondeando hacia arriba al entero, el tamaño mínimo requerido es
+    $$
+    \boxed{n_{\min}=2401.}
+    $$
+    Este resultado usa la aproximación normal y el caso más conservador $p=0.5$; el ancho obtenido con otro método de intervalo puede variar.
+
+    \inputfigura{tamano_muestra}
+\end{enumerate}
+
+\end{document}
