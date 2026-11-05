@@ -1,0 +1,109 @@
+\section{Clase 2}
+\subsection{Muestreo por aceptación y rechazo}
+
+\subsubsection{La idea geométrica}
+
+El método de aceptación y rechazo permite generar observaciones de una
+distribución objetivo cuando es más fácil generar observaciones de otra
+distribución. La idea es proponer valores con una distribución conocida y
+conservar cada propuesta con una probabilidad que favorezca las regiones donde
+la distribución objetivo tiene mayor densidad.
+
+Hay una distinción importante en la notación. Denotemos por $f(x)$ la densidad
+objetivo y por $q(x)$ la densidad de propuesta, ambas normalizadas. Se busca una
+constante $M\geq 1$ tal que
+\[
+    f(x)\leq Mq(x)\qquad\text{para todo }x.
+\]
+La función $h(x)=Mq(x)$ es la envolvente, y el cociente
+\[
+    \frac{f(x)}{h(x)}=\frac{f(x)}{Mq(x)}
+\]
+es una probabilidad válida de aceptación. En particular, se genera $x$ según
+$q$ (no según la envolvente sin normalizar) y se acepta si
+$U\leq f(x)/(Mq(x))$, donde $U\sim\mathcal{U}(0,1)$. Si se llama $g$ a la
+propuesta, la envolvente correspondiente es $Mg$; de ese modo se evita
+confundir una densidad normalizada con una cota que puede tener área mayor que
+uno.
+
+\subsubsection{Ejemplo: generar observaciones con densidad $f(x)=2x$}
+
+Consideremos la densidad objetivo
+\[
+    f(x)=2x,\quad 0\leq x\leq 1,
+    \qquad f(x)=0\text{ fuera de }[0,1].
+\]
+Su integral en $[0,1]$ es uno. Elegimos como propuesta la uniforme
+$q(x)=1$ en ese intervalo. Como $f(x)\leq 2q(x)$, podemos tomar $M=2$; la
+envolvente es $h(x)=Mq(x)=2$. Para cada propuesta $x\sim\mathcal{U}(0,1)$, la
+regla se reduce a
+\[
+    \text{aceptar }x\quad\Longleftrightarrow\quad
+    U\leq\frac{f(x)}{Mq(x)}=x,
+    \qquad U\sim\mathcal{U}(0,1).
+\]
+Por ejemplo, si la propuesta es $x=0.7$, se acepta cuando $U\leq0.7$; si es
+$x=0.2$, se acepta cuando $U\leq0.2$. Las propuestas cercanas a uno tienen
+mayor probabilidad de sobrevivir, tal como requiere la forma creciente de
+$f$.
+
+Una corrida ilustrativa puede dar estos resultados: para $(x,U)=(0.16,0.18)$
+se rechaza, pues $0.18>0.16$; para $(0.32,0.11)$ se acepta, pues
+$0.11\leq0.32$; para $(0.70,0.55)$ se acepta, y para $(0.86,0.90)$ se
+rechaza. En cada intento se genera una propuesta nueva; los valores aceptados
+se guardan hasta reunir la cantidad deseada.
+\input{Figuras/FigurasClase2/envolvente_rechazo}
+
+\subsubsection{Procedimiento paso a paso}
+
+Para obtener $N$ observaciones aceptadas:
+\begin{enumerate}
+    \item Especificar la densidad objetivo $f$ y una propuesta $q$ fácil de
+    simular.
+    \item Encontrar $M$ tal que $f(x)\leq Mq(x)$ en todo el soporte.
+    \item Generar una propuesta $x\sim q$.
+    \item Generar $U\sim\mathcal{U}(0,1)$, independiente de $x$.
+    \item Aceptar y guardar $x$ si $U\leq f(x)/(Mq(x))$; en caso contrario,
+    descartarlo.
+    \item Repetir desde el paso 3 hasta reunir $N$ valores aceptados.
+\end{enumerate}
+
+En el ejemplo, el paso de aceptación es $U\leq x$. Si se realizan $n$
+propuestas, se espera aceptar aproximadamente $n/M=n/2$; por tanto, para
+reunir $N$ valores aceptados se necesitan, en promedio, cerca de $2N$
+propuestas. Algunas propuestas se descartan, pero los valores que se guardan
+siguen la densidad $f$.
+
+\input{Figuras/FigurasClase2/puntos_propuestos_y_decision}
+
+\subsubsection{La relación con estimar áreas}
+
+La misma regla se puede leer geométricamente: las propuestas uniformes caen
+en un rectángulo de área $|R|$, y se aceptan las que caen bajo la curva. Si la
+región bajo una función no negativa tiene área $A$, entonces, al generar $n$
+puntos uniformes en el rectángulo y contar $N_0$ puntos aceptados,
+\[
+    \frac{N_0}{n}\approx\frac{A}{|R|},
+    \qquad\text{así que}\qquad
+    A\approx |R|\frac{N_0}{n}.
+\]
+Cuando el rectángulo tiene área uno, esto se simplifica a
+$A\approx N_0/n$. En el ejemplo, el rectángulo envolvente tiene área $2$ y la
+región bajo $f$ tiene área $1$, de modo que la fracción aceptada se aproxima a
+$1/2$. Cuantas más propuestas se generen, más estable tiende a ser esta
+estimación.
+
+\input{Figuras/FigurasClase2/estimacion_geometrica_area}
+
+\subsubsection{¿Por qué funciona?}
+
+Una propuesta $x$ tiene densidad $q(x)$ y se acepta con probabilidad
+$f(x)/(Mq(x))$. Por lo tanto, la densidad conjunta de propuestas aceptadas
+es proporcional a
+\[
+    q(x)\frac{f(x)}{Mq(x)}=\frac{f(x)}{M}.
+\]
+Al normalizar esta expresión se obtiene precisamente $f(x)$. La probabilidad
+de aceptación total es $1/M$ cuando $f$ y $q$ son densidades normalizadas.
+Conviene elegir una envolvente ajustada: si $M$ es innecesariamente grande,
+se rechazan más propuestas y el algoritmo se vuelve menos eficiente.

@@ -1,0 +1,14 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=6cm,y=1.8cm]
+  \draw[->] (-0.03,0) -- (1.04,0) node[right] {$u$};
+  \draw[->] (0,0) -- (0,3.45) node[above] {$F^{-1}(u)$};
+  \draw[thick,red!70!black,domain=0.01:0.96,samples=90] plot (\x,{-ln(1-\x)});
+  \draw[dashed] (0.7,0) -- (0.7,1.204) -- (0,1.204);
+  \fill[red!70!black] (0.7,1.204) circle (1.5pt);
+  \node[below] at (0.7,0) {$0.7$};
+  \node[left] at (0,1.204) {$1.204$};
+  \node[anchor=west] at (0.12,3.1) {$F^{-1}(u)=-\ln(1-u)$};
+\end{tikzpicture}
+\caption{La FDA inversa transforma cualquier $U$ uniforme en un valor exponencial. Aquí se muestra de nuevo $U=0.7$.}\label{fig:clase1-inversa}
+\end{figure}

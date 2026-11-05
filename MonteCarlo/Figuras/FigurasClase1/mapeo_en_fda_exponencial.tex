@@ -1,0 +1,14 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=2.1cm,y=3.0cm]
+  \draw[->] (-0.08,0) -- (3.35,0) node[right] {$x$};
+  \draw[->] (0,0) -- (0,1.12) node[above] {$F(x)$};
+  \draw[thick,blue!70!black,domain=0:3,samples=80] plot (\x,{1-exp(-\x)});
+  \draw[dashed] (0,0.7) -- (1.204,0.7) -- (1.204,0);
+  \fill[blue!70!black] (1.204,0.7) circle (1.5pt);
+  \node[left] at (0,0.7) {$U=0.7$};
+  \node[below] at (1.204,0) {$X=-\ln(0.3)\approx1.204$};
+  \node[blue!70!black,anchor=west] at (2.1,0.82) {$F(x)=1-e^{-x}$};
+\end{tikzpicture}
+\caption{Para una exponencial de tasa $\lambda=1$, el valor uniforme $U=0.7$ se traza hasta la FDA y determina el cuantil $X=F^{-1}(0.7)$.}\label{fig:clase1-mapeo-fda}
+\end{figure}

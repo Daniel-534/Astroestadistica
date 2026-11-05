@@ -1,0 +1,109 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2cm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Astroestadística}
+\fancyhead[R]{Semestre 2026\text{-}2}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\begin{document}
+\section*{Quiz 1: transformación inversa}
+
+\textbf{Nombre:} \rule{7cm}{0.4pt}\hfill
+\textbf{Puntaje:} \rule{1.5cm}{0.4pt} / 10
+
+Cada pregunta vale 1 punto. Marque una sola opción por pregunta.
+
+\begingroup
+\setlength{\parskip}{0pt}
+\begin{multicols}{2}
+\begin{enumerate}
+    \item Sea $\widetilde f(x)=x$ para $0\leq x\leq2$ y cero fuera de ese
+    intervalo. ¿Cuál es la densidad normalizada?
+    \begin{enumerate}
+        \item $f(x)=x$ en $[0,2]$.
+        \item $f(x)=x/2$ en $[0,2]$.
+        \item $f(x)=2x$ en $[0,2]$.
+    \end{enumerate}
+
+    \item Una variable tiene densidad $f(x)=3x^2$ para $0\leq x\leq1$.
+    ¿Cuál es su función de distribución acumulada en ese intervalo?
+    \begin{enumerate}
+        \item $F(x)=x^3$.
+        \item $F(x)=x^2$.
+        \item $F(x)=3x$.
+    \end{enumerate}
+
+    \item Para la densidad de la pregunta anterior, se genera $U=1/8$.
+    ¿Qué valor produce el método de transformación inversa?
+    \begin{enumerate}
+        \item $X=1/4$.
+        \item $X=1/2$.
+        \item $X=3/4$.
+    \end{enumerate}
+
+    \item La densidad de $X$ es $f(x)=1/4$ para $0\leq x\leq4$ y cero fuera
+    del intervalo. ¿Cuánto vale $F(3)$?
+    \begin{enumerate}
+        \item $1/4$.
+        \item $3/4$.
+        \item $1$.
+    \end{enumerate}
+
+    \item Una FDA es $F(x)=x/5$ para $0\leq x\leq5$. Si el generador uniforme
+    devuelve $U=0.4$, ¿cuál es la observación transformada?
+    \begin{enumerate}
+        \item $X=0.4$.
+        \item $X=2$.
+        \item $X=4.6$.
+    \end{enumerate}
+
+    \item Una variable discreta toma los valores $-2$, $1$ y $5$ con
+    probabilidades $0.25$, $0.50$ y $0.25$, respectivamente. ¿Qué valor se
+    obtiene si $U=0.6$?
+    \begin{enumerate}
+        \item $X=-2$.
+        \item $X=1$.
+        \item $X=5$.
+    \end{enumerate}
+
+    \item Si la FDA tiene tramos constantes, ¿qué definición permite obtener
+    correctamente sus cuantiles?
+    \begin{enumerate}
+        \item $F^{-1}(u)=\inf\{x:F(x)\geq u\}$.
+        \item $F^{-1}(u)=1/F(u)$.
+        \item $F^{-1}(u)$ es siempre la derivada de $F(u)$.
+    \end{enumerate}
+
+    \item Se transforman dos uniformes independientes, $U_1$ y $U_2$, usando
+    la misma función inversa. ¿Qué se puede afirmar de $X_1$ y $X_2$?
+    \begin{enumerate}
+        \item Son independientes.
+        \item Siempre toman el mismo valor.
+        \item Una observación determina necesariamente la otra.
+    \end{enumerate}
+
+    \item La FDA objetivo se puede evaluar, pero no se puede despejar su inversa
+    de forma explícita. ¿Qué procedimiento es apropiado para obtener $X$ a
+    partir de $U$?
+    \begin{enumerate}
+        \item Resolver numéricamente $F(x)=U$, por ejemplo, con bisección.
+        \item Reemplazar $F(x)$ por la densidad $f(x)$.
+        \item Usar $X=F(U)$ sin comprobar la transformación.
+    \end{enumerate}
+
+    \item Para una variable generada correctamente por transformación inversa,
+    se sabe que $F(4)=0.92$. ¿Qué representa este valor?
+    \begin{enumerate}
+        \item $\Pr(X=4)=0.92$ necesariamente.
+        \item $\Pr(X\leq4)=0.92$.
+        \item $\Pr(X>4)=0.92$.
+    \end{enumerate}
+\end{enumerate}
+\end{multicols}
+\endgroup
+\end{document}
