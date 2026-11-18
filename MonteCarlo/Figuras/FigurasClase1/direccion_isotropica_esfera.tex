@@ -1,0 +1,25 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Stealth]
+  \draw[thick,blue!55!black] (0,0) circle (1.65);
+  \draw[->] (0,-1.9) -- (0,1.95) node[above] {$z$};
+  \draw[->] (-1.9,0) -- (1.95,0) node[right] {$x$};
+  \draw[dashed,gray!75] (-1.45,0)
+    arc[start angle=180,end angle=360,x radius=1.45,y radius=0.38];
+  \draw[thick,gray!75] (1.45,0)
+    arc[start angle=0,end angle=180,x radius=1.45,y radius=0.38];
+  \draw[->,purple!80!black,thick] (0.8,0)
+    arc[start angle=0,end angle=42,x radius=0.8,y radius=0.25];
+  \node[purple!80!black] at (0.92,0.30) {$\varphi$};
+  \draw[->,orange!85!black,thick] (0,0) -- (1.15,1.18);
+  \fill[orange!85!black] (1.15,1.18) circle (2pt);
+  \node[above right] at (1.15,1.18) {$P$};
+  \node[above left] at (0.58,0.62) {$R$};
+  \draw[->,orange!85!black] (0,0.68)
+    arc[start angle=90,end angle=46,radius=0.68];
+  \node[orange!85!black] at (0.27,0.78) {$\theta$};
+  \node[below left] at (0,0) {$O$};
+\end{tikzpicture}
+\caption{Coordenadas esféricas para una dirección sobre la esfera: $\theta$ es el ángulo polar y $\varphi$ el azimut alrededor del eje $z$.}
+\label{fig:direccion-isotropica-esfera}
+\end{figure}

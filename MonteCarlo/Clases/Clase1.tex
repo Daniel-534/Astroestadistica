@@ -97,6 +97,97 @@ operación usando la curva inversa.
 \input{Figuras/FigurasClase1/mapeo_en_fda_exponencial}
 \input{Figuras/FigurasClase1/curva_inversa_exponencial}
 
+\subsubsection{Ejemplo 3: direcciones isotrópicas en la esfera celeste}
+
+\textbf{Enunciado.} Para simular la dirección de una fuente astronómica
+isotrópica, genere un punto uniforme sobre la superficie de una esfera de
+radio $R$. Use coordenadas esféricas con ángulo polar $\theta$ medido desde
+el eje $z$ y ángulo azimutal $\varphi$.
+
+El área total de la esfera es $4\pi R^2$. La probabilidad de caer en un
+parche pequeño es su área dividida por el área total:
+\[
+    dP=\frac{dA}{4\pi R^2}
+    =\frac{R^2\sin\theta\,d\theta\,d\varphi}{4\pi R^2}
+    =\frac{\sin\theta}{4\pi}\,d\theta\,d\varphi.
+\]
+Por definición, el coeficiente de $d\theta\,d\varphi$ es la densidad conjunta:
+\[
+    f_{\Theta,\Phi}(\theta,\varphi)=\frac{\sin\theta}{4\pi},
+    \qquad 0\leq\theta\leq\pi,\quad 0\leq\varphi<2\pi.
+\]
+
+Para obtener la densidad de $\Theta$, integramos sobre todos los azimuts:
+\[
+    f_\Theta(\theta)
+    =\int_0^{2\pi}f_{\Theta,\Phi}(\theta,\varphi)\,d\varphi
+    =\int_0^{2\pi}\frac{\sin\theta}{4\pi}\,d\varphi
+    =\frac{\sin\theta}{4\pi}(2\pi)
+    =\frac{1}{2}\sin\theta.
+\]
+Análogamente, la densidad azimutal se obtiene integrando sobre los ángulos
+polares:
+\[
+    f_\Phi(\varphi)
+    =\int_0^\pi\frac{\sin\theta}{4\pi}\,d\theta
+    =\frac{1}{4\pi}\bigl[-\cos\theta\bigr]_0^\pi
+    =\frac{2}{4\pi}
+    =\frac{1}{2\pi}.
+\]
+Integramos cada densidad desde el límite inferior de su intervalo para hallar
+las funciones de distribución acumulada:
+\[
+    F_\Theta(\theta)
+    =\int_0^\theta\frac{1}{2}\sin t\,dt
+    =\left[-\frac{1}{2}\cos t\right]_0^\theta
+    =\frac{1-\cos\theta}{2},
+    \qquad
+    F_\Phi(\varphi)
+    =\int_0^\varphi\frac{1}{2\pi}\,ds
+    =\frac{\varphi}{2\pi}.
+\]
+
+Ahora sustituimos uniformes independientes $U_1,U_2\sim\mathcal{U}(0,1)$ en
+las funciones acumuladas y despejamos cada ángulo:
+\[
+    U_1=F_\Theta(\theta)=\frac{1-\cos\theta}{2}
+    \quad\Longrightarrow\quad
+    2U_1=1-\cos\theta
+    \quad\Longrightarrow\quad
+    \cos\theta=1-2U_1
+    \quad\Longrightarrow\quad
+    \theta=\arccos(1-2U_1),
+\]
+\[
+    U_2=F_\Phi(\varphi)=\frac{\varphi}{2\pi}
+    \quad\Longrightarrow\quad
+    \varphi=2\pi U_2.
+\]
+En coordenadas cartesianas, la conversión es
+\[
+    \vec{r}
+    =\bigl(R\sin\theta\cos\varphi,\,
+           R\sin\theta\sin\varphi,\,R\cos\theta\bigr).
+\]
+Por ejemplo, si $(U_1,U_2)=(0.25,0.5)$, la sustitución da
+\[
+    \theta=\arccos(1-2(0.25))=\arccos(0.5)=\frac{\pi}{3},
+    \qquad
+    \varphi=2\pi(0.5)=\pi.
+\]
+Al reemplazar estos ángulos en las coordenadas cartesianas,
+\[
+    \vec{r}
+    =\left(R\sin\frac{\pi}{3}\cos\pi,\,
+            R\sin\frac{\pi}{3}\sin\pi,\,
+            R\cos\frac{\pi}{3}\right)
+    =\left(-\frac{\sqrt{3}R}{2},0,\frac{R}{2}\right).
+\]
+No se debe generar $\theta$ uniformemente: el factor $\sin\theta$ compensa
+que las franjas de área son mayores cerca del ecuador.
+
+\input{Figuras/FigurasClase1/direccion_isotropica_esfera}
+
 \subsubsection{Distribuciones discretas e inversas no explícitas}
 
 Para una variable discreta con valores $x_1<x_2<\cdots<x_k$ y probabilidades
