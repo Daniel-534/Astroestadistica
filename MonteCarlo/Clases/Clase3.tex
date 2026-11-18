@@ -54,16 +54,30 @@ El promedio de las estimaciones de eliminación individual es
 El punto en el subíndice $(-\cdot)$ indica el promedio sobre el índice
 $i=1,\ldots,n$ de la observación que se omite.
 
-Se utiliza para estimar el sesgo del estimador de muestra completa. La
-estimación jackknife del sesgo es
+Se utiliza para estimar el sesgo del estimador de muestra completa.
+La estimación jackknife del sesgo se simplifica así:
 \[
+\begin{aligned}
     \widehat{\operatorname{bias}}_{J}(\widehat\theta_n)
-    =(n-1)\left(
-        \overline{\widehat\theta}_{(-\cdot)}-\widehat\theta_n
-    \right)
-    =\frac{n-1}{n}\sum_{i=1}^{n}
-        \left(\widehat\theta_{(-i)}-\widehat\theta_n\right).
+    &=\frac{n-1}{n}\sum_{i=1}^{n}
+      \left(\widehat\theta_{(-i)}-\widehat\theta_n\right)\\
+    &=\frac{n-1}{n}\left(
+      \sum_{i=1}^{n}\widehat\theta_{(-i)}
+      -\sum_{i=1}^{n}\widehat\theta_n\right)\\
+    &=\frac{n-1}{n}\left(
+      \sum_{i=1}^{n}\widehat\theta_{(-i)}-n\widehat\theta_n\right)\\
+    &=(n-1)\left(
+      \frac{1}{n}\sum_{i=1}^{n}\widehat\theta_{(-i)}
+      -\widehat\theta_n\right)\\
+    &=(n-1)\left(
+      \overline{\widehat\theta}_{(-\cdot)}-\widehat\theta_n\right).
+\end{aligned}
 \]
+En la tercera línea usamos que $\widehat\theta_n$ no depende de $i$; por eso,
+$\sum_{i=1}^{n}\widehat\theta_n=n\widehat\theta_n$. Luego, la definición del
+promedio jackknife permite escribir
+$\frac{1}{n}\sum_{i=1}^{n}\widehat\theta_{(-i)}=
+\overline{\widehat\theta}_{(-\cdot)}$.
 El factor $n-1$ ajusta la diferencia entre el promedio de estimadores
 calculados con $n-1$ datos y el estimador calculado con los $n$ datos
 originales. Si el sesgo estimado es positivo, la corrección reduce la
@@ -145,70 +159,142 @@ construcción.
 
 \subsubsection{Distribución empírica y muestras bootstrap}
 
-La distribución empírica de la muestra observada $\vec{x}$ es
+Continuemos con la muestra $\vec{x}=(2,4,7,9)$, de tamaño $n=4$, y usemos
+la media como estadístico. Su distribución empírica es
 \[
     \widehat F_n(t)=\frac{1}{n}\sum_{i=1}^{n}\mathbf 1(x_i\leq t).
 \]
-Asigna probabilidad $1/n$ a cada observación. Para construir la réplica
-bootstrap $b$, se extraen $n$ valores independientemente de esta distribución,
-condicionando en la muestra original:
+Para entender la fórmula, $t$ es un valor de corte que elegimos, e $i$ recorre
+los datos observados uno por uno. La indicadora vale $1$ si $x_i\leq t$ y vale
+$0$ si $x_i>t$. Por ejemplo, para calcular $\widehat F_4(5)$, ponemos $t=5$
+y sustituimos cada observación en el lugar de $x_i$:
+\begin{center}
+\begin{tabular}{@{}cccc@{}}
+    \toprule
+    Índice $i$ & Dato $x_i$ & Comparación $x_i\leq5$ & Indicadora\\
+    \midrule
+    1 & 2 & $2\leq5$ & 1\\
+    2 & 4 & $4\leq5$ & 1\\
+    3 & 7 & $7\leq5$ & 0\\
+    4 & 9 & $9\leq5$ & 0\\
+    \midrule
+    & & Suma & 2\\
+    \bottomrule
+\end{tabular}
+\end{center}
+Entonces dividimos la suma entre el tamaño muestral $n=4$:
+\[
+    \widehat F_4(5)=\frac{1+1+0+0}{4}=\frac{2}{4}=\frac{1}{2}.
+\]
+Es decir, la mitad de los datos observados es menor o igual que $5$. El $5$
+no reemplaza ningún dato: solo es el corte contra el que comparamos cada
+$x_i$. Para esta muestra, la función completa es
+\[
+    \widehat F_4(t)=
+    \begin{cases}
+        0, & t<2,\\
+        1/4, & 2\leq t<4,\\
+        1/2, & 4\leq t<7,\\
+        3/4, & 7\leq t<9,\\
+        1, & t\geq9.
+    \end{cases}
+\]
+
+Generar un dato bootstrap es otra operación: se sortea un índice al azar entre
+$1,2,3,4$ y se devuelve el dato que ocupa esa posición. Cada índice tiene
+probabilidad $1/4$. Por ejemplo, si los índices sorteados son
+$(1,3,3,4)$, los datos seleccionados son
+$(x_1,x_3,x_3,x_4)=(2,7,7,9)$. El índice $3$ puede salir dos veces porque el
+muestreo es \emph{con reemplazo}: después de seleccionar un dato, este sigue
+disponible para volver a salir. Así se forma una réplica de tamaño cuatro.
+
+Para ilustrar varias réplicas, tomemos $B=4$:
+\begin{center}
+\begin{tabular}{@{}cl@{}}
+    \toprule
+    Réplica $b$ & Datos seleccionados $\vec{X}_b^*$\\
+    \midrule
+    1 & $(2,7,7,9)$\\
+    2 & $(2,2,4,9)$\\
+    3 & $(4,4,7,9)$\\
+    4 & $(2,4,7,7)$\\
+    \bottomrule
+\end{tabular}
+\end{center}
+La primera réplica contiene dos copias de $7$ y no contiene $4$. En notación,
+las extracciones son independientes dado que la muestra original se mantiene
+fija:
 \[
     X_{bj}^*\mid\vec{x}\overset{\mathrm{iid}}{\sim}\widehat F_n,
     \qquad j=1,\ldots,n,\quad b=1,\ldots,B.
 \]
-Aquí $B$ es el número de réplicas y
+A cada réplica se le aplica el mismo estadístico que a la muestra original:
 \[
     \vec{X}_b^*=(X_{b1}^*,\ldots,X_{bn}^*),
-    \qquad \widehat\theta_b^*=T_n(\vec{X}_b^*),
-    \qquad b=1,\ldots,B.
+    \qquad \widehat\theta_b^*=T_n(\vec{X}_b^*).
 \]
-El asterisco identifica cantidades bootstrap. Como el muestreo es con
-reemplazo, una observación puede aparecer más de una vez y otra puede no
-aparecer en una réplica. La muestra original se mantiene fija; se vuelve a
-muestrear de $\widehat F_n$ para cada réplica.
+El asterisco indica que la cantidad se calculó con una réplica bootstrap.
 
 \input{Figuras/FigurasClase3/muestras_bootstrap}
 
 \subsubsection{Distribución empírica de las estimaciones}
 
-Las estimaciones $\widehat\theta_1^*,\ldots,\widehat\theta_B^*$ forman una
-distribución empírica en la escala del estimador. Para distinguirla de la
-distribución empírica de los datos $\widehat F_n$, la denotamos por
+Con las réplicas de la tabla y usando la media, se obtienen
 \[
-    \widehat F_{\mathrm{boot},B}(t)
-    =\frac{1}{B}\sum_{b=1}^{B}
-      \mathbf 1(\widehat\theta_b^*\leq t).
+    \widehat\theta_1^*=\frac{2+7+7+9}{4}=6.25,\qquad
+    \widehat\theta_2^*=\frac{2+2+4+9}{4}=4.25,
 \]
-Un histograma de estas estimaciones permite visualizar su centro y su
-dispersión. Esta distribución aproxima la variabilidad del estimador bajo
-remuestreo desde $\widehat F_n$; no es la distribución exacta del parámetro
-ni reemplaza la distribución muestral teórica cuando esta se conoce.
+\[
+    \widehat\theta_3^*=\frac{4+4+7+9}{4}=6,\qquad
+    \widehat\theta_4^*=\frac{2+4+7+7}{4}=5.
+\]
+Estas cuatro estimaciones forman la distribución empírica bootstrap. Para
+separarla de $\widehat F_n$, que cuenta datos originales, la escribimos como
+\[
+    \widehat F_{\mathrm{boot},4}(t)
+    =\frac{1}{4}\sum_{b=1}^{4}\mathbf 1(\widehat\theta_b^*\leq t)
+    =
+    \begin{cases}
+        0, & t<4.25,\\
+        1/4, & 4.25\leq t<5,\\
+        1/2, & 5\leq t<6,\\
+        3/4, & 6\leq t<6.25,\\
+        1, & t\geq6.25.
+    \end{cases}
+\]
+Por ejemplo, $\widehat F_{\mathrm{boot},4}(5)=2/4$: dos de las cuatro medias
+bootstrap son menores o iguales que $5$. La figura muestra de forma
+esquemática la variabilidad de estas estimaciones.
 
 \input{Figuras/FigurasClase3/distribucion_bootstrap}
 
 \subsubsection{Centro, sesgo y error estándar bootstrap}
 
-El promedio de las estimaciones bootstrap es
+El promedio de las estimaciones bootstrap resume su centro. En este ejemplo,
 \[
-    \overline{\widehat\theta}^{\,*}_B
-    =\frac{1}{B}\sum_{b=1}^{B}\widehat\theta_b^*.
+    \overline{\widehat\theta}^{\,*}_4
+    =\frac{1}{4}\sum_{b=1}^{4}\widehat\theta_b^*
+    =\frac{6.25+4.25+6+5}{4}=5.375.
 \]
-Este promedio estima el valor esperado del estimador bajo la distribución
-empírica. A partir de las réplicas se estiman el sesgo y el error estándar:
+La media de la muestra original es
+$\widehat\theta_4=(2+4+7+9)/4=5.5$, así que el sesgo bootstrap estimado es
 \[
-    \widehat{\operatorname{bias}}_{B}(\widehat\theta_n)
-    =\overline{\widehat\theta}^{\,*}_B-\widehat\theta_n,
-    \qquad
-    \widehat{\operatorname{SE}}_{B}(\widehat\theta_n)
-    =\sqrt{\frac{1}{B-1}\sum_{b=1}^{B}
-      \left(\widehat\theta_b^*-
-      \overline{\widehat\theta}^{\,*}_B\right)^2}.
+    \widehat{\operatorname{bias}}_4(\widehat\theta_4)
+    =\overline{\widehat\theta}^{\,*}_4-\widehat\theta_4
+    =5.375-5.5=-0.125.
 \]
-El estimador original $\widehat\theta_n$ sigue siendo el valor calculado con
-los datos observados; $\overline{\widehat\theta}^{\,*}_B$ se usa para resumir
-la distribución bootstrap y estimar el sesgo. En general, aumentar $B$
-reduce el error Monte Carlo de estos resúmenes, aunque no agrega observaciones
-nuevas a la muestra original.
+El error estándar mide la dispersión de las estimaciones bootstrap alrededor
+de su promedio:
+\[
+    \widehat{\operatorname{SE}}_4(\widehat\theta_4)
+    =\sqrt{\frac{\sum_{b=1}^{4}
+       (\widehat\theta_b^*-5.375)^2}{4-1}}
+    =\sqrt{\frac{41}{48}}\approx0.924.
+\]
+En una aplicación real se suelen generar muchas más de cuatro réplicas; aquí
+el número pequeño permite ver y calcular cada paso. El promedio, el sesgo y el
+error estándar resumen las réplicas, no reemplazan la estimación original
+$\widehat\theta_4$ ni describen directamente la distribución del parámetro.
 
 \subsection{Comparación y recomendaciones}
 
