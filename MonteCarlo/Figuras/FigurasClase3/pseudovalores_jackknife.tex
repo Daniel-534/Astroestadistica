@@ -1,0 +1,20 @@
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  caja/.style={draw,rounded corners,align=center,text width=3.0cm,minimum height=1.05cm},
+  flecha/.style={-{Stealth[length=2.2mm]},thick}]
+  \node[caja,fill=blue!7] (original) at (0,0)
+    {Muestra completa\\$\widehat\theta_n$};
+  \node[caja,fill=orange!10] (loo) at (4.3,0)
+    {Réplicas jackknife\\$\widehat\theta_{(-1)},\ldots,\widehat\theta_{(-n)}$};
+  \node[caja,fill=green!10] (pseudo) at (8.6,0)
+    {Pseudovalores\\$P_i=n\widehat\theta_n-(n-1)\widehat\theta_{(-i)}$};
+  \node[caja,fill=purple!9] (corrected) at (12.9,0)
+    {Corrección\\$\widehat\theta_{J,\mathrm{corr}}=\dfrac{1}{n}\sum_{i=1}^{n}P_i$};
+  \draw[flecha] (original) -- (loo);
+  \draw[flecha] (loo) -- (pseudo);
+  \draw[flecha] (pseudo) -- (corrected);
+\end{tikzpicture}
+\caption{De la muestra completa y las réplicas jackknife se construyen pseudovalores; su promedio es el estimador corregido.}
+\label{fig:pseudovalores-jackknife}
+\end{figure}

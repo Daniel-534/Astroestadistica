@@ -1,0 +1,451 @@
+\section{Clase 4}
+
+
+\subsection{Prueba de Kolmogórov--Smirnov}
+
+\subsubsection{Función de distribución empírica}
+
+Sean $X_1,\ldots,X_{n_1}$ y $Y_1,\ldots,Y_{n_2}$ dos muestras independientes, con funciones de distribución $F$ y $G$. Sus funciones de distribución empíricas (ECDF, por sus siglas en inglés) son
+\[
+  \widehat F_{n_1}(t)=\frac{1}{n_1}\sum_{i=1}^{n_1}\mathbf{1}(X_i\le t),
+  \qquad
+  \widehat G_{n_2}(t)=\frac{1}{n_2}\sum_{j=1}^{n_2}\mathbf{1}(Y_j\le t),
+\]
+donde la función indicadora vale $1$ si se cumple la condición y $0$ en caso contrario. En la prueba de una muestra se compara $\widehat F_n$ con una distribución de referencia $F_0$.
+
+\begin{center}
+\begin{tabularx}{0.88\linewidth}{@{}lX@{}}
+  \toprule
+  Hipótesis nula & $H_0:F(t)=G(t)$ para todo $t$ (las dos muestras tienen la misma distribución).\\
+  Hipótesis alternativa & $H_a:F(t)\ne G(t)$ para algún $t$.\\
+  \bottomrule
+\end{tabularx}
+\end{center}
+
+El estadístico de dos muestras mide la mayor distancia vertical entre las ECDF:
+\[
+  D_{n_1,n_2}=\sup_{t\in\mathbb R}\left|\widehat F_{n_1}(t)-\widehat G_{n_2}(t)\right|.
+\]
+En una muestra, $D_n=\sup_t|\widehat F_n(t)-F_0(t)|$. Como las ECDF son funciones escalonadas, basta evaluar la diferencia en los valores observados.
+
+\subsubsection{Ejemplo: cálculo de la distancia máxima observada}
+
+Considere $X=\{1,2,5\}$ y $Y=\{3,4,6\}$. La tabla muestra las ECDF en los valores ordenados del conjunto combinado:
+\[
+\begin{array}{c|c|c|c}
+  t & \widehat F_3(t) & \widehat G_3(t) & |\widehat F_3(t)-\widehat G_3(t)|\\
+  \hline
+  1 & 1/3 & 0   & 1/3\\
+  2 & 2/3 & 0   & 2/3\\
+  3 & 2/3 & 1/3 & 1/3\\
+  4 & 2/3 & 2/3 & 0\\
+  5 & 1   & 2/3 & 1/3\\
+  6 & 1   & 1   & 0
+\end{array}
+\]
+Por tanto, $D_{\mathrm{obs}}=2/3$. La separación máxima ocurre en $t=2$.
+
+\begin{center}
+\begin{tikzpicture}[x=0.85cm,y=3.2cm,>=Stealth]
+  \draw[->] (0,0) -- (6.7,0) node[right] {$t$};
+  \draw[->] (0,0) -- (0,1.18) node[above] {ECDF};
+  \foreach \y/\lab in {0.333/{1/3},0.667/{2/3},1/{1}} {
+    \draw[gray!35] (0,\y) -- (6.55,\y);
+    \node[left] at (0,\y) {$\lab$};
+  }
+  \foreach \x in {1,2,3,4,5,6} \draw (\x,0) -- (\x,-0.025) node[below=2pt] {$\x$};
+  \draw[very thick,blue] (0,0) -- (1,0) -- (1,0.333) -- (2,0.333) -- (2,0.667) -- (5,0.667) -- (5,1) -- (6,1) -- (6,1.08);
+  \draw[very thick,orange!85!black] (0,0) -- (3,0) -- (3,0.333) -- (4,0.333) -- (4,0.667) -- (6,0.667) -- (6,1) -- (6.25,1);
+  \draw[dashed,red,thick] (2,0) -- (2,0.667);
+  \node[blue,anchor=west] at (4.25,1.11) {$\widehat F_3$};
+  \node[orange!85!black,anchor=west] at (4.25,0.54) {$\widehat G_3$};
+  \node[red,anchor=west] at (2.12,0.84) {$D_{\mathrm{obs}}=2/3$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Permutación exacta y valor p}
+
+Para el ejemplo $X=\{1,3,5\}$ y $Y=\{2,4,6\}$, las ECDF se alternan y $D_{\mathrm{obs}}=1/3$. Bajo $H_0$, si las observaciones son independientes e intercambiables bajo la distribución común, se pueden reasignar las seis observaciones a dos grupos de tamaño tres. Hay
+\[
+  {\binom{6}{3}}=20
+\]
+reasignaciones posibles de las etiquetas de grupo. Al enumerarlas, se obtiene:
+\begin{center}
+\begin{tabular}{@{}ccc@{}}
+  \toprule
+  Valor de $D$ & Número de asignaciones & Frecuencia\\
+  \midrule
+  $1/3$ & 2  & $2/20$\\
+  $2/3$ & 16 & $16/20$\\
+  $1$   & 2  & $2/20$\\
+  \bottomrule
+\end{tabular}
+\end{center}
+El valor $p$ exacto se define como la probabilidad, bajo $H_0$, de obtener un estadístico al menos tan grande como el observado:
+\[
+  p=\Pr(D\ge D_{\mathrm{obs}}\mid H_0)
+   =\frac{\#\{\text{reasignaciones con }D\ge D_{\mathrm{obs}}\}}
+          {\#\{\text{reasignaciones totales}\}}.
+\]
+En este caso $p=20/20=1$. La permutación requiere independencia de las muestras y etiquetas intercambiables bajo la hipótesis nula; con observaciones empatadas, se ajusta la enumeración a los empates.
+
+\subsubsection{Teorema de Kolmogórov}
+
+Para una muestra de tamaño $n$ de una distribución continua $F$, bajo $H_0$,
+\[
+  \sqrt n\,D_n \xrightarrow{d} K,
+  \qquad
+  K=\sup_{0\le u\le 1}|B(u)|,
+\]
+donde $B(u)$ es un puente browniano y $K$ tiene la distribución de Kolmogórov. Su función de distribución es
+\[
+  F_K(x)=\Pr(K\le x)
+  =1-2\sum_{k=1}^{\infty}(-1)^{k-1}e^{-2k^2x^2},
+  \qquad x>0.
+\]
+La función de cola, también llamada función de supervivencia o CDF complementaria, es $Q_{\mathrm{KS}}(x)=1-F_K(x)$. Así, el valor $p$ asintótico de una muestra es
+\[
+  p_{\mathrm{asint}}=Q_{\mathrm{KS}}(\sqrt n\,D_{\mathrm{obs}}).
+\]
+Para dos muestras, se usa el tamaño efectivo
+\[
+  n_{\mathrm{eff}}=\frac{n_1n_2}{n_1+n_2},
+  \qquad
+  p_{\mathrm{asint}}\approx Q_{\mathrm{KS}}
+  (\sqrt{n_{\mathrm{eff}}}\,D_{\mathrm{obs}}).
+\]
+Esta aproximación es útil para muestras grandes; en muestras pequeñas se prefiere el valor $p$ exacto cuando está disponible.
+
+\begin{center}
+\begin{tikzpicture}[x=3.2cm,y=3.0cm,>=Stealth]
+  \draw[->] (0,0) -- (2.15,0) node[right] {$x$};
+  \draw[->] (0,0) -- (0,1.12) node[above] {$F_K(x)$};
+  \foreach \x/\lab in {0.5/{0.5},1/{1.0},1.5/{1.5},2/{2.0}}
+    \draw (\x,0) -- (\x,-0.025) node[below=2pt] {$\lab$};
+  \foreach \y/\lab in {0.25/{0.25},0.5/{0.50},0.75/{0.75},1/{1.00}} {
+    \draw[gray!35] (0,\y) -- (2.05,\y);
+    \node[left=2pt] at (0,\y) {$\lab$};}
+  \draw[very thick,teal!70!black] plot[smooth] coordinates {
+    (0,0) (0.2,0.000) (0.4,0.005) (0.6,0.136) (0.8,0.456)
+    (1.0,0.730) (1.2,0.888) (1.4,0.964) (1.6,0.990)
+    (1.8,0.998) (2.0,1.000)
+  };
+  \node[anchor=west,teal!70!black] at (1.1,0.45) {$F_K$};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Introducción a la estadística bayesiana}
+
+\subsubsection{Teorema de Bayes}
+
+Si $A_1,\ldots,A_m$ son eventos disjuntos y exhaustivos, y $\Pr(B)>0$, entonces
+\[
+  \Pr(A_j\mid B)=
+  \frac{\Pr(B\mid A_j)\Pr(A_j)}
+       {\displaystyle\sum_{i=1}^{m}\Pr(B\mid A_i)\Pr(A_i)}.
+\]
+En inferencia bayesiana, $A_j$ puede representar el modelo $M(\theta_j)$ y $B$ los datos observados $x$. Por tanto,
+\[
+  \Pr(M(\theta_j)\mid x)=
+  \frac{\Pr(x\mid M(\theta_j))\Pr(M(\theta_j))}
+       {\displaystyle\sum_{i=1}^{m}\Pr(x\mid M(\theta_i))\Pr(M(\theta_i))}.
+\]
+
+\begin{center}
+\begin{tabularx}{0.96\linewidth}{@{}lX@{}}
+  \toprule
+  Cantidad & Significado\\
+  \midrule
+  $\Pr(M(\theta_j)\mid x)$ & Posterior: probabilidad del modelo después de observar los datos.\\
+  $\Pr(x\mid M(\theta_j))$ & Verosimilitud (likelihood): compatibilidad de los datos con el modelo.\\
+  $\Pr(M(\theta_j))$ & Prior: información sobre el modelo antes de observar los datos.\\
+  $\sum_i\Pr(x\mid M(\theta_i))\Pr(M(\theta_i))$ & Evidencia o probabilidad marginal de los datos; normaliza la posterior.\\
+  \bottomrule
+\end{tabularx}
+\end{center}
+
+En un modelo con parámetro continuo $\theta$, la versión en densidades es
+\[
+  \pi(\theta\mid x)=\frac{L(x\mid\theta)\,\pi(\theta)}{m(x)},
+  \qquad
+  \pi(\theta\mid x)\propto L(x\mid\theta)\,\pi(\theta),
+\]
+donde $L(x\mid\theta)$ es la verosimilitud, $\pi(\theta)$ el prior y $m(x)$ la constante que hace que la posterior integre uno.
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth,box/.style={draw,rounded corners,align=center,minimum width=2.6cm,minimum height=0.9cm}]
+  \node[box] (prior) at (0,0) {Prior\\$\pi(\theta)$};
+  \node[box] (data) at (4.3,-1.2) {Datos y modelo\\$L(x\mid\theta)$};
+  \node[box] (posterior) at (8.6,0) {Posterior\\$\pi(\theta\mid x)$};
+  \draw[->,thick] (prior.east) -- (posterior.west);
+  \draw[->,thick] (data.north east) -- (posterior.south west);
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Ejemplo: proporción binomial y prior Beta}
+
+Sea $X\mid\theta\sim\operatorname{Binomial}(n,\theta)$ y supongamos que se observan $x$ éxitos. La verosimilitud es
+\[
+  L(\theta\mid x)={\binom{n}{x}}\theta^x(1-\theta)^{n-x}.
+\]
+Si se adopta el prior uniforme $\theta\sim\operatorname{Uniforme}(0,1)$, entonces $\pi(\theta)=1$ para $0<\theta<1$, y
+\[
+  \pi(\theta\mid x)\propto\theta^x(1-\theta)^{n-x}.
+\]
+Esta es la forma de una distribución Beta:
+\[
+  \theta\mid x\sim\operatorname{Beta}(x+1,n-x+1).
+\]
+Más generalmente, con prior $\theta\sim\operatorname{Beta}(\alpha,\beta)$,
+\[
+  \theta\mid x\sim\operatorname{Beta}(x+\alpha,n-x+\beta).
+\]
+La familia Beta es conjugada para la verosimilitud binomial: la posterior conserva la misma familia y solo actualiza sus parámetros.
+
+\begin{center}
+\begin{tabularx}{0.96\linewidth}{@{}lX@{}}
+  \toprule
+  Tipo de prior & Uso\\
+  \midrule
+  Informativo & Incorpora conocimiento previo relevante sobre $\theta$.\\
+  No informativo & Busca aportar poca información previa; su definición depende del modelo y debe justificarse.\\
+  \bottomrule
+\end{tabularx}
+\end{center}
+
+Como ilustración, si $n=10$ y $x=3$ con prior uniforme, la posterior es $\operatorname{Beta}(4,8)$. La curva siguiente muestra su forma; el eje horizontal representa $\theta$.
+
+\begin{center}
+\begin{tikzpicture}[x=5.4cm,y=1.15cm,>=Stealth]
+  \draw[->] (0,0) -- (1.08,0) node[right] {$\theta$};
+  \draw[->] (0,0) -- (0,1.25) node[above] {densidad (escala relativa)};
+  \foreach \x/\lab in {0.2/{0.2},0.4/{0.4},0.6/{0.6},0.8/{0.8},1/{1.0}}
+    \draw (\x,0) -- (\x,-0.025) node[below=2pt] {$\lab$};
+  \draw[gray!35] (0,1) -- (1.02,1);
+  \draw[very thick,purple!80!black,domain=0.001:0.999,samples=100,smooth]
+    plot (\x,{(\x)^3*(1-\x)^7/(0.3^3*0.7^7)});
+  \draw[dashed] (0.3,0) -- (0.3,1);
+  \node[above right] at (0.31,0.93) {modo $=0.3$};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Estimador de Bayes y MAP}
+
+El estimador MAP (\emph{maximum a posteriori}) es el valor del parámetro que maximiza la densidad posterior:
+\[
+  \widehat\theta_{\mathrm{MAP}}
+  =\operatorname*{arg\,max}_{\theta}\pi(\theta\mid x).
+\]
+Se interpreta como el modo de la distribución posterior. Para una posterior $\operatorname{Beta}(a,b)$ con $a,b>1$, el modo es $(a-1)/(a+b-2)$; por ejemplo, el modo de $\operatorname{Beta}(4,8)$ es $3/10$.
+
+
+\subsection{Ejercicio integrador resuelto}
+
+\subsubsection*{Enunciado}
+
+Una investigadora quiere comparar dos grupos independientes de mediciones. Los datos, ya ordenados conjuntamente y sin empates, son
+\[
+  X=\{1,2,3,4\},\qquad Y=\{5,6,7,8\}.
+\]
+Use la prueba bilateral de Kolmogórov--Smirnov y nivel de significación $\alpha=0.05$. En un segundo estudio, se lanza una moneda $12$ veces y se observan $8$ caras. Para analizar la probabilidad de cara $\theta$, considere los modelos $M_0:\theta=1/2$ y $M_1:\theta\sim\operatorname{Uniforme}(0,1)$, con probabilidades previas iguales $\Pr(M_0)=\Pr(M_1)=1/2$.
+
+Resuelva primero cada apartado antes de consultar la solución.
+
+\paragraph*{A. Comparación de distribuciones}
+\begin{enumerate}
+  \item Identifique los tamaños muestrales y escriba $H_0$ y $H_a$. ¿Qué supuesto sobre las muestras permite usar la permutación de etiquetas?
+  \item Construya una tabla para $t=1,\ldots,8$ con $\widehat F_4(t)$, $\widehat G_4(t)$ y $|\widehat F_4(t)-\widehat G_4(t)|$. Recuerde que las ECDF cuentan observaciones menores o iguales que $t$.
+  \item Calcule $D_{\mathrm{obs}}$. ¿En qué valor de $t$ se alcanza la máxima separación? Dibuje las dos ECDF y señale esa separación.
+  \item Bajo $H_0$, ¿cuántas formas distintas hay de asignar cuatro de las ocho observaciones al grupo $X$? Explique por qué se usa una combinación.
+  \item Cada asignación determina un valor de $D$. Complete la distribución exacta contando cuántas asignaciones producen $D=1/4,1/2,3/4$ y $1$; compruebe que los conteos suman el total del apartado anterior.
+  \item Calcule el valor $p$ exacto bilateral. Concluya la prueba usando $\alpha=0.05$ y explique la conclusión en palabras.
+  \item Calcule $n_{\mathrm{eff}}$ y el valor $p$ asintótico con la distribución de Kolmogórov. Compare ambos valores y señale cuál conviene priorizar para estas muestras.
+  \item Explique por qué un valor $p$ no es la probabilidad de que $H_0$ sea verdadera.
+\end{enumerate}
+
+\paragraph*{B. Inferencia bayesiana para la moneda}
+\begin{enumerate}
+  \setcounter{enumi}{8}
+  \item Escriba la verosimilitud binomial de los datos observados y calcule $\Pr(x=8\mid M_0)$.
+  \item Bajo $M_1$, use el prior uniforme para hallar la distribución posterior de $\theta$. Identifique sus parámetros y escriba su densidad salvo por la constante de normalización.
+  \item Calcule la media posterior y el estimador MAP. ¿Qué representa cada uno?
+  \item Calcule $\Pr(\theta>1/2\mid x,M_1)$. Interprete el resultado sin confundirlo con una probabilidad posterior del modelo.
+  \item ¿Cuál es la probabilidad predictiva de cara en el lanzamiento número $13$?
+  \item Repita la actualización con un prior $\operatorname{Beta}(2,2)$. Halle la posterior y su MAP; compare con el caso uniforme.
+  \item Usando las probabilidades previas de los modelos, calcule $\Pr(M_0\mid x)$ y $\Pr(M_1\mid x)$. Para ello, obtenga primero la evidencia $\Pr(x=8\mid M_1)$ integrando sobre $\theta$.
+  \item Calcule el factor de Bayes $BF_{10}$ y explique cómo puede ocurrir que $\Pr(\theta>1/2\mid x,M_1)$ sea alta mientras que los datos favorezcan ligeramente a $M_0$ frente a $M_1$.
+\end{enumerate}
+
+\subsubsection*{Solución desarrollada}
+
+\paragraph*{A. Comparación de distribuciones}
+\begin{enumerate}
+  \item Los tamaños son $n_1=n_2=4$. Las hipótesis bilaterales son
+  \[
+    H_0:F(t)=G(t)\ \text{para todo }t,
+    \qquad
+    H_a:F(t)\ne G(t)\ \text{para algún }t.
+  \]
+  Se supone que las muestras son independientes y que, bajo $H_0$, las ocho observaciones son intercambiables entre las etiquetas de grupo. La ausencia de empates simplifica la enumeración.
+  \item La tabla de ECDF es
+  \[
+  \begin{array}{c|c|c|c}
+    t & \widehat F_4(t) & \widehat G_4(t) & |\widehat F_4(t)-\widehat G_4(t)|\\
+    \hline
+    1 & 1/4 & 0   & 1/4\\
+    2 & 1/2 & 0   & 1/2\\
+    3 & 3/4 & 0   & 3/4\\
+    4 & 1   & 0   & 1\\
+    5 & 1   & 1/4 & 3/4\\
+    6 & 1   & 1/2 & 1/2\\
+    7 & 1   & 3/4 & 1/4\\
+    8 & 1   & 1   & 0
+  \end{array}
+  \]
+  \item La mayor diferencia es $D_{\mathrm{obs}}=1$, alcanzada en $t=4$. Las ECDF no se superponen entre las observaciones de ambos grupos: antes de $5$, la ECDF de $X$ ya vale uno y la de $Y$ aún vale cero.
+
+  \begin{center}
+  \begin{tikzpicture}[x=0.62cm,y=2.25cm,>=Stealth]
+    \draw[->] (0,0) -- (8.5,0) node[right] {$t$};
+    \draw[->] (0,0) -- (0,1.16) node[above] {ECDF};
+    \foreach \y/\lab in {0.25/{1/4},0.5/{1/2},0.75/{3/4},1/{1}} {
+      \draw[gray!30] (0,\y) -- (8.25,\y);
+      \node[left] at (0,\y) {$\lab$};
+    }
+    \foreach \x in {1,2,3,4,5,6,7,8}
+      \draw (\x,0) -- (\x,-0.025) node[below=2pt] {$\x$};
+    \draw[very thick,blue] (0,0) -- (1,0) -- (1,0.25) -- (2,0.25) -- (2,0.5) -- (3,0.5) -- (3,0.75) -- (4,0.75) -- (4,1) -- (8,1);
+    \draw[very thick,orange!85!black] (0,0) -- (5,0) -- (5,0.25) -- (6,0.25) -- (6,0.5) -- (7,0.5) -- (7,0.75) -- (8,0.75) -- (8,1);
+    \draw[dashed,red,thick] (4,0) -- (4,1);
+    \node[blue,anchor=west] at (5,1.08) {$\widehat F_4$};
+    \node[orange!85!black,anchor=west] at (5,0.42) {$\widehat G_4$};
+    \node[red,anchor=west] at (4.15,0.87) {$D_{\mathrm{obs}}=1$};
+  \end{tikzpicture}
+  \end{center}
+
+  \item Se eligen cuatro posiciones de las ocho para asignarlas al grupo $X$; el orden dentro de cada grupo no importa. Por eso,
+  \[
+    \binom{8}{4}=\frac{8!}{4!\,4!}=70.
+  \]
+  \item Contando las secuencias de cuatro etiquetas $X$ y cuatro etiquetas $Y$, la distribución exacta es
+  \begin{center}
+  \begin{tabular}{@{}ccc@{}}
+    \toprule
+    $D$ & Asignaciones & Probabilidad\\
+    \midrule
+    $1/4$ & 16 & $16/70$\\
+    $1/2$ & 38 & $38/70$\\
+    $3/4$ & 14 & $14/70$\\
+    $1$   & 2  & $2/70$\\
+    \midrule
+    Total & 70 & 1\\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  La suma $16+38+14+2=70$ verifica que se incluyeron todas las asignaciones.
+  \item El valor $p$ bilateral cuenta los resultados tan extremos como el observado, es decir $D\ge1$. Solo dos asignaciones alcanzan $D=1$, de modo que
+  \[
+    p_{\mathrm{exacto}}=\frac{2}{70}=\frac{1}{35}\approx0.0286.
+  \]
+  Como $p_{\mathrm{exacto}}<0.05$, se rechaza $H_0$ al nivel del $5\%$. Los datos aportan evidencia de que las distribuciones difieren; la prueba no identifica por sí sola la causa de la diferencia.
+  \item El tamaño efectivo es
+  \[
+    n_{\mathrm{eff}}=\frac{4\cdot4}{4+4}=2,
+    \qquad
+    \sqrt{n_{\mathrm{eff}}}\,D_{\mathrm{obs}}=\sqrt2.
+  \]
+  Por tanto,
+  \[
+    p_{\mathrm{asint}}=Q_{\mathrm{KS}}(\sqrt2)
+    =2\sum_{k=1}^{\infty}(-1)^{k-1}e^{-4k^2}
+    \approx2e^{-4}\approx0.0366.
+  \]
+  También es menor que $0.05$, aunque difiere del valor exacto. Con muestras tan pequeñas conviene priorizar el valor exacto.
+  \item El valor $p$ es una probabilidad calculada suponiendo $H_0$; no es $\Pr(H_0\mid\text{datos})$. Para obtener una probabilidad posterior de una hipótesis se requiere especificar modelos y probabilidades previas, como en la comparación bayesiana siguiente.
+\end{enumerate}
+
+\paragraph*{B. Inferencia bayesiana para la moneda}
+\begin{enumerate}
+  \setcounter{enumi}{8}
+  \item Para $x=8$ caras en $n=12$ lanzamientos,
+  \[
+    L(\theta\mid x)=\binom{12}{8}\theta^8(1-\theta)^4
+    =495\theta^8(1-\theta)^4.
+  \]
+  Bajo $M_0$, $\theta=1/2$, así que
+  \[
+    \Pr(x=8\mid M_0)=495(1/2)^{12}=\frac{495}{4096}\approx0.12085.
+  \]
+  \item Bajo $M_1$, el prior uniforme equivale a $\operatorname{Beta}(1,1)$. La conjugación Beta--binomial da
+  \[
+    \theta\mid x,M_1\sim\operatorname{Beta}(9,5),
+    \qquad
+    \pi(\theta\mid x,M_1)=6435\,\theta^8(1-\theta)^4,
+    \quad 0<\theta<1.
+  \]
+  La constante $6435=1/B(9,5)$ normaliza la densidad.
+  \item La media posterior y el MAP son, respectivamente,
+  \[
+    \mathbb E[\theta\mid x,M_1]=\frac{9}{14}\approx0.643,
+    \qquad
+    \widehat\theta_{\mathrm{MAP}}=\frac{9-1}{9+5-2}=\frac{2}{3}\approx0.667.
+  \]
+  La media es el promedio posterior del parámetro; el MAP es el valor donde la densidad posterior alcanza su máximo.
+  \item Para parámetros enteros de la Beta, la probabilidad de cola puede expresarse como una suma binomial:
+  \[
+    \Pr(\theta>1/2\mid x,M_1)
+    =\frac{\sum_{j=0}^{8}\binom{13}{j}}{2^{13}}
+    =\frac{7099}{8192}\approx0.867.
+  \]
+  Condicionado a $M_1$, la mayor parte de la posterior está por encima de $1/2$; esto no es todavía la probabilidad de que el modelo $M_1$ sea verdadero.
+  \item La predicción posterior para el siguiente lanzamiento es la media posterior:
+  \[
+    \Pr(\text{cara en el lanzamiento 13}\mid x,M_1)=\frac{9}{14}\approx0.643.
+  \]
+  \item Con prior $\operatorname{Beta}(2,2)$, la posterior es
+  \[
+    \theta\mid x\sim\operatorname{Beta}(8+2,4+2)=\operatorname{Beta}(10,6),
+    \qquad
+    \widehat\theta_{\mathrm{MAP}}=\frac{10-1}{10+6-2}=\frac{9}{14}\approx0.643.
+  \]
+  El prior más concentrado en torno a $1/2$ acerca la estimación MAP a $1/2$ en comparación con el prior uniforme.
+  \item La evidencia bajo $M_1$ integra la verosimilitud sobre el prior:
+  \[
+    \Pr(x=8\mid M_1)=\int_0^1 495\theta^8(1-\theta)^4\,d\theta
+    =495B(9,5)=\frac{1}{13}.
+  \]
+  Con probabilidades previas iguales, el factor $1/2$ se cancela al normalizar:
+  \[
+    \Pr(M_0\mid x)=\frac{495/4096}{495/4096+1/13}
+    =\frac{6435}{10531}\approx0.611,
+    \qquad
+    \Pr(M_1\mid x)=\frac{4096}{10531}\approx0.389.
+  \]
+  \item El factor de Bayes a favor de $M_1$ frente a $M_0$ es
+  \[
+    BF_{10}=\frac{\Pr(x\mid M_1)}{\Pr(x\mid M_0)}
+    =\frac{1/13}{495/4096}=\frac{4096}{6435}\approx0.636.
+  \]
+  Los resultados responden preguntas diferentes: $\Pr(\theta>1/2\mid x,M_1)$ condiciona en $M_1$, mientras que $BF_{10}$ compara la evidencia promedio de los dos modelos. El modelo continuo $M_1$ distribuye su prior sobre muchos valores de $\theta$, por lo que una buena región posterior no implica automáticamente mayor evidencia marginal que el modelo puntual $M_0$.
+
+  La forma de la posterior y su modo se muestran a continuación.
+  \begin{center}
+  \begin{tikzpicture}[x=5.0cm,y=1.25cm,>=Stealth]
+    \draw[->] (0,0) -- (1.08,0) node[right] {$\theta$};
+    \draw[->] (0,0) -- (0,1.18) node[above] {densidad relativa};
+    \foreach \x/\lab in {0.25/{1/4},0.5/{1/2},0.75/{3/4},1/{1}}
+      \draw (\x,0) -- (\x,-0.025) node[below=2pt] {$\lab$};
+    \draw[gray!30] (0,1) -- (1.02,1);
+    \draw[very thick,purple!80!black] plot[smooth] coordinates {
+      (0,0) (0.1,0.00001) (0.2,0.0022) (0.3,0.0327) (0.4,0.176)
+      (0.5,0.507) (0.6,0.893) (0.6667,1) (0.7,0.970)
+      (0.8,0.557) (0.9,0.089) (0.99,0.00002) (1,0)
+    };
+    \draw[dashed,red] (0.5,0) -- (0.5,0.42);
+    \draw[dashed,blue] (0.6667,0) -- (0.6667,1);
+    \node[anchor=west,purple!80!black] at (0.72,0.78) {$\operatorname{Beta}(9,5)$};
+    \node[above left,blue] at (0.65,1) {MAP};
+  \end{tikzpicture}
+  \end{center}
+\end{enumerate}
+

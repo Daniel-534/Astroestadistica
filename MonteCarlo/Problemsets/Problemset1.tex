@@ -1,0 +1,183 @@
+\documentclass[11pt]{article}
+\usepackage[margin=2cm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyhdr}
+\usepackage[numbers]{natbib}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Astroestadística}
+\fancyhead[R]{Semestre 2026-2}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5\baselineskip}
+
+\begin{document}
+\section*{Problemset 1: transformación inversa}
+
+Los problemas están ordenados para construir el método paso a paso. En los
+problemas 1--6 se trabajará con una misma densidad; después se aplicarán la
+inversa generalizada y la inversión numérica. Muestre los cálculos y justifique
+sus respuestas.
+
+\begin{enumerate}
+    \item Considere la función no normalizada
+    \[
+        \widetilde f(x)=\begin{cases}x+2,&0\leq x\leq2,\\0,&\text{en otro caso.}\end{cases}
+    \]
+    Calcule su constante de normalización $c=\int_{-\infty}^{\infty}\widetilde
+    f(x)\,dx$ y escriba la densidad normalizada $f(x)=\widetilde f(x)/c$.
+
+    \textbf{Solución.} La función es distinta de cero únicamente entre $0$ y
+    $2$, por lo que
+    \[
+        c=\int_0^2(x+2)\,dx
+        =\left[\frac{x^2}{2}+2x\right]_0^2=6.
+    \]
+    En consecuencia,
+    \[
+        f(x)=\begin{cases}
+            \dfrac{x+2}{6},&0\leq x\leq2,\\
+            0,&\text{en otro caso.}
+        \end{cases}
+    \]
+    La normalización es necesaria antes de aplicar la transformación a una
+    distribución objetivo; véase la discusión de transformaciones en
+    \cite[Sec.~7.2]{press1992numerical}.
+
+    \item A partir de la densidad normalizada del problema 1, derive la función
+    de distribución acumulada $F(x)$ para todo $x\in\mathbb{R}$. Compruebe
+    que $F(0)=0$ y $F(2)=1$.
+
+    \textbf{Solución.} Integramos la densidad desde el extremo izquierdo del
+    soporte. Incluyendo los tramos fuera del soporte,
+    \[
+        F(x)=\begin{cases}
+            0,&x<0,\\[2pt]
+            \displaystyle\int_0^x\frac{t+2}{6}\,dt
+            =\dfrac{x^2+4x}{12},&0\leq x\leq2,\\[6pt]
+            1,&x>2.
+        \end{cases}
+    \]
+    Se verifica que $F(0)=0$ y $F(2)=(4+8)/12=1$. La relación entre
+    transformaciones y distribuciones objetivo se presenta en
+    \cite[Sec.~7.2]{press1992numerical}.
+
+    \item Despeje $x$ de la ecuación $u=F(x)$ en el intervalo $0\leq x\leq2$.
+    Escriba la función inversa $F^{-1}(u)$ para $0\leq u\leq1$ y verifique
+    que sus valores quedan dentro del soporte de la distribución.
+
+    \textbf{Solución.} En el soporte, $u=(x^2+4x)/12$. Reordenando y
+    resolviendo la ecuación cuadrática,
+    \[
+        x^2+4x-12u=0,
+        \qquad x=-2\pm\sqrt{4+12u}.
+    \]
+    Se toma la raíz positiva porque la otra es negativa en el intervalo
+    considerado. Así,
+    \[
+        F^{-1}(u)=-2+\sqrt{4+12u},\qquad 0\leq u\leq1.
+    \]
+    Como esta expresión es creciente, sus extremos son $F^{-1}(0)=0$ y
+    $F^{-1}(1)=2$; por tanto, siempre cae en el soporte. La transformación de
+    uniformes para obtener distribuciones se trata en
+    \cite[Sec.~7.2]{press1992numerical}.
+
+    \item Use la transformación inversa para generar una observación cuando
+    $U=0.75$. Dé el resultado exacto y una aproximación con tres cifras
+    decimales. Explique qué operación se aplica al número uniforme.
+
+    \textbf{Solución.} Se sustituye el uniforme en la inversa del problema 3:
+    \[
+        X=F^{-1}(0.75)=-2+\sqrt{4+12(0.75)}
+        =\sqrt{13}-2\approx1.606.
+    \]
+    Es decir, se transforma el número uniforme evaluando la función inversa de
+    la FDA. Este es el principio de transformación descrito en
+    \cite[Sec.~7.2]{press1992numerical}.
+
+    \item Usando la FDA obtenida en el problema 2, calcule
+    $\Pr(0.5<X\leq1.5)$. Exprese la respuesta como fracción y como número
+    decimal.
+
+    \textbf{Solución.} Como $X$ es continua,
+    \[
+        \Pr(0.5<X\leq1.5)=F(1.5)-F(0.5)
+        =\frac{(1.5)^2+4(1.5)}{12}
+         -\frac{(0.5)^2+4(0.5)}{12}
+        =\frac{33}{48}-\frac{9}{48}
+        =\frac12=0.5.
+    \]
+    Se ha usado la FDA obtenida al integrar la densidad; la transformación
+    asociada a la distribución objetivo se discute en
+    \cite[Sec.~7.2]{press1992numerical}.
+
+    \item Encuentre la mediana $m$ de esta distribución, es decir, el valor que
+    satisface $F(m)=0.5$. Interprete el resultado en términos de probabilidad.
+
+    \textbf{Solución.} Sustituimos $u=0.5$ en la inversa:
+    \[
+        m=F^{-1}(0.5)=-2+\sqrt{4+6}=\sqrt{10}-2
+        \approx1.162.
+    \]
+    Por definición, $F(m)=0.5$: la mitad de la probabilidad se encuentra a
+    cada lado de la mediana, es decir, $\Pr(X\leq m)=0.5$. La transformación
+    inversa se aborda en \cite[Sec.~7.2]{press1992numerical}.
+
+    \item Sea ahora $Y$ una variable discreta con
+    \[
+        \Pr(Y=-1)=0.2,\qquad \Pr(Y=2)=0.35,\qquad \Pr(Y=6)=0.45.
+    \]
+    Escriba su inversa generalizada $F_Y^{-1}(u)$ como una función por tramos.
+    Luego determine el valor de $Y$ que se obtiene para $U=0.4$ y para $U=0.9$.
+
+    \textbf{Solución.} Las probabilidades acumuladas en los puntos de soporte
+    son $0.2$, $0.2+0.35=0.55$ y $1$. Usando la convención
+    $F_Y^{-1}(u)=\inf\{y:F_Y(y)\geq u\}$,
+    \[
+        F_Y^{-1}(u)=\begin{cases}
+            -1,&0<u\leq0.2,\\
+            2,&0.2<u\leq0.55,\\
+            6,&0.55<u\leq1.
+        \end{cases}
+    \]
+    Por tanto, $F_Y^{-1}(0.4)=2$ y $F_Y^{-1}(0.9)=6$. Los intervalos se
+    determinan directamente de la FDA discreta del enunciado; para el
+    principio general de transformar uniformes véase
+    \cite[Sec.~7.2]{press1992numerical}.
+
+    \item Considere la densidad
+    \[
+        g(x)=\begin{cases}
+            \dfrac{3}{4}(1+x^2),&0\leq x\leq1,\\
+            0,&\text{en otro caso.}
+        \end{cases}
+    \]
+    Su FDA en $[0,1]$ es $G(x)=\frac{3}{4}\bigl(x+\frac{x^3}{3}\bigr)$.
+    Para generar una observación cuando $U=0.5$, plantee la ecuación que debe
+    resolverse y use bisección para aproximar $G^{-1}(0.5)$ al centésimo.
+    Indique por qué aquí conviene una inversión numérica.
+
+    \textbf{Solución.} Igualamos la FDA a $0.5$ y simplificamos:
+    \[
+        \frac34\left(x+\frac{x^3}{3}\right)=\frac12
+        \quad\Longleftrightarrow\quad x^3+3x-2=0.
+    \]
+    Sea $h(x)=x^3+3x-2$. Como $h(0)=-2$ y $h(1)=2$, hay una raíz en
+    $[0,1]$. La bisección conserva en cada paso el subintervalo cuyos extremos
+    dan signos opuestos. Tras nueve pasos se obtiene, por ejemplo,
+    \[
+        0.595703125\leq x_*\leq0.59765625,
+    \]
+    de modo que al centésimo $G^{-1}(0.5)\approx0.60$ (más precisamente,
+    $x_*\approx0.59607$). La ecuación cúbica no tiene aquí una inversa
+    práctica para el cálculo manual, por lo que la bisección ofrece una
+    aproximación controlada. El método de bisección se explica en
+    \cite[Sec.~9.1]{press1992numerical}.
+\end{enumerate}
+
+\bibliographystyle{plainnat}
+\bibliography{referencias}
+
+\end{document}
